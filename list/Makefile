@@ -10,9 +10,14 @@ CC = clang++
 OBJ_DIR = ./objs_$(NAME)/
 
 CFLAGS += -std=c++98
+CFLAGS += -g3
 CFLAGS += -Wall
 CFLAGS += -Wextra
 # CFLAGS += -fPIC
+
+ifeq ($(noassert), 1)
+	CFLAGS += -DNDEBUG=1
+endif
 
 ifeq ($(unused), 1)
 	CFLAGS += -Wno-unused
@@ -58,7 +63,7 @@ ifeq ($(debug_mode), 1)
 	CFLAGS += -D DEBUG_MODE=1
 endif
 
-HEADER += ./List.hpp
+HEADER += ./list.hpp
 
 SRCS += ./main.cpp
 
@@ -96,7 +101,7 @@ re : fclean
 f : all
 	@echo
 	@echo
-	@./$(NAME)
+	@./$(NAME) | cat -n
 
 cmp: all
 	./$(NAME) > output.log

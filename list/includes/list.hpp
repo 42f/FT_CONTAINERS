@@ -6,6 +6,7 @@
 # include <string>
 # include <iterator>
 # include <limits>
+# include <algorithm>
 
 
 #ifndef DEBUG_MODE
@@ -22,8 +23,22 @@ namespace ft	{
 			node<T>	*prev;
 			T		data;
 
-			node( void ) : next(&(*this)), prev(&(*this)) {};
-			node( T const & val ) : next(&(*this)), prev(&(*this)), data(val) {};
+			node( void ) : next(this), prev(this) {
+
+				if (DEBUG_MODE)
+					std::cout << "CONSTRUCTOR --> " << __func__ << std::endl;
+
+			};
+			node( T const & val ) : next(this), prev(this), data(val) {
+
+				if (DEBUG_MODE)
+				{
+					std::cout << "CONSTRUCTOR with Param--> " << __func__ << std::endl;
+					std::cout << __func__ << " this: " << this << std::endl;
+					std::cout << __func__ << " prev: " << prev << std::endl;
+					std::cout << __func__ << " next: " << next << std::endl;
+				}
+			};
 
 			~node( void )	{
 				if (DEBUG_MODE)
@@ -58,13 +73,15 @@ namespace ft	{
 					if (position->prev != position)
 					{
 						prev = position->prev;
-						position->prev->next = this;
+						prev->next = this;
 					}
 					position->prev = this;
 				}
 				if (DEBUG_MODE)
 				{
 					std::cout << __func__ << " at position: " << position << std::endl;
+					std::cout << __func__ << " prev = " << prev << std::endl;
+					std::cout << __func__ << " next = " << next << std::endl;
 					putNodeInfos(*this);
 				}
 			};
@@ -72,10 +89,14 @@ namespace ft	{
 			void
 			unhook( void )	{
 
-				if (prev != this)
-					prev->next = next;
-				if (next != this)
+				if (prev != this && next != this)	{
 					next->prev = prev;
+					prev->next = next;
+				}
+				else if (prev == this)
+					next->prev = next;
+				else if (next == this)
+					prev->next = prev;
 			};
 
 			static void	putNodeInfos(node<T> const &n) {
@@ -92,6 +113,7 @@ namespace ft	{
 	class iterator : public std::iterator< std::bidirectional_iterator_tag, T >
 	{
 		public:
+			iterator( void ) :_ptr(NULL) {}
 			iterator(node<T>* src) :_ptr(src) {}
 			iterator(const iterator& itSrc) : _ptr(itSrc._ptr) {}
 
@@ -122,12 +144,12 @@ namespace ft	{
 
 			T &	operator*() { return _ptr->data; }
 
-		private:
+		// private:
 			node<T> *			_ptr;
 
 			// iterator &	operator=(const iterator& rhs)  {
 			// 	if (this != &rhs)
-			// 		this->p = rhs.p;
+			// 		_ptr = rhs.ptr;
 			// 	return *this;
 			// }
 	};
@@ -140,6 +162,9 @@ namespace ft	{
 		public:
 			typedef node<T>							node;
 			typedef iterator<T>						iterator;
+			typedef std::reverse_iterator<iterator> reverse_iterator;
+			// typedef const_iterator<T>						const_iterator;
+			// typedef std::const_reverse_iterator<iterator>	const_reverse_iterator;
 			typedef T								value_type;
 			typedef size_t							size_type;
 			typedef std::ptrdiff_t					difference_type;
@@ -152,13 +177,16 @@ namespace ft	{
 			/**
 			 * @brief Default Constructor
 			*/
-			explicit list( void ) : _size(0) {
+			explicit list( allocator_type const & userAlloc = allocator_type() ) : _size(0), _alloc(userAlloc) {
 
-				_tail = createNode(value_type());
+				_tail = getNode(value_type());
 				_head = _tail;
 				if (DEBUG_MODE)	{
 					std::cout << std::endl;
 					std::cout << "CONSTRUCTOR --> default " << __func__ << std::endl;
+					std::cout << "\t_head --> " << _head << std::endl;
+					std::cout << "\t_tail --> " << _tail << std::endl;
+					std::cout << "\t_size --> " << _size << std::endl;
 				}
 			};
 
@@ -166,22 +194,25 @@ namespace ft	{
 			 * @brief fill Constructor
 			*/
 			explicit list( size_type n, value_type const & val = value_type(),
-			allocator_type const & userAlloc = allocator_type() ) : _size(n), _alloc(userAlloc)	{
+				allocator_type const & userAlloc = allocator_type() ) : _size(0), _alloc(userAlloc)	{
 
-				_tail = createNode(val);
+				_tail = getNode(val);
 				_head = _tail;
 				for (; n > 0; --n)
-				{
-					createNode(val)->hook(_head);
-					_head = _head->prev;
-				}
-				if (DEBUG_MODE)
-				{
-					std::cout << "_head --> " << _head << std::endl;
-					std::cout << "_tail --> " << _tail << std::endl;
-					std::cout << "_size --> " << _size << std::endl;
-				}
+					push_back(val);
 			};
+
+
+//do insert first
+			// template <class InputIterator>
+			// list (InputIterator first, InputIterator last,
+			// 	 allocator_type const & userAlloc = allocator_type() ) : _size(0), _alloc(userAlloc)	{
+
+			// 	while( first != last )	{
+			// 		this->push_back(*first);
+			// 		first++;
+			// 	}
+			// };
 
 			/**
 			 * @brief Copy Constructor
@@ -201,79 +232,231 @@ namespace ft	{
 			~list( void )	{
 
 				if (_size != 0)	{
-					node *	cursor = _head;
-					for (size_type i = 0; i < _size; i++)
+					node *	cursor = _tail;
+					for (size_type i = 0; cursor != _head; i++)
 					{
-						if (cursor->next != cursor)	{
-							cursor = cursor->next;
-							_alloc.deallocate(cursor->prev, 1);
-						}
-						else	{
-							_alloc.deallocate(cursor, 1);
-							break ;
-						}
+						cursor = cursor->prev;
+						_alloc.destroy(cursor->next);
+						_alloc.deallocate(cursor->next, 1);
 					}
+					_alloc.destroy(_head);
+					_alloc.deallocate(_head, 1);
 				}
 				if (DEBUG_MODE)
 					std::cout << "DESTRUCTOR --> " << __func__ << std::endl;
 			};
+
+
+
+
+
+
+
+
+
+
 
 			size_type			max_size( void ) const	{ return size_type(-1) / sizeof(node);  };
 			bool				empty( void ) const		{ return (_size == 0); };
 			size_type			size( void ) const 		{ return (_size); };
 			iterator			begin( void ) const		{ return (_head); };
 			iterator			end( void ) const 		{ return (_tail); };
-			// reverse_iterator	rbegin( void ) const	{ return (_tail); };
-			// reverse_iterator	rend( void ) const 		{ return (_head); };
+			reverse_iterator	rbegin( void ) const	{ return reverse_iterator(end()); };
+			reverse_iterator	rend( void ) const 		{ return reverse_iterator(begin()); };
 			reference			front( void ) const		{ return (_head->data); };
 			reference			back( void ) const 		{ return (_tail->data); };
 
-			void				pop_back ( void )	{
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			void
+			pop_back( void )	{
 
 				if (_size > 0)	{
-					node * tmpTail = _tail->prev;
-					_tail->unhook();
-					delete _tail;					// ?
-					_tail = tmpTail;
-					_size--;
+					node * cursor = _tail->prev;
+					if (cursor == _head)
+						_head = _tail;
+					cursor->unhook();
+					_alloc.destroy(cursor);
+					_alloc.deallocate(cursor, 1);
+					decSize();
 				}
 			};
 
-			void				push_back (const value_type& val)	{
+			void
+			push_back (value_type const & val)	{
 
-				if (_size > 0 && _size < max_size())	{
-					node *	newTail = createNode(val);
-					_tail->hook(newTail);
-					_tail = newTail;
-					_size++;
-				}
-				else if (_size == 0)
-				{
-					_tail->data = val;
-					_size++;
+				insert(end(), val);
+			};
+
+			void
+			pop_front( void )	{
+
+				if (_size > 0)	{
+					node * cursor = _head->next;
+					_head->unhook();
+					_alloc.destroy(_head);
+					_alloc.deallocate(_head, 1);
+					_head = cursor;
+					decSize();
 				}
 			};
+
+			void
+			push_front (value_type const & val)	{
+
+				insert(begin(), val);
+			};
+
+
+
+
+
+
+
+			/**
+			 * @brief assign range
+			*/
+			// template <class InputIterator>
+  			// void assign (InputIterator first, InputIterator last)	{
+
+
+			//   };
+			// void assign (size_type n, const value_type& val)	{
+
+			// 	iterator it = begin();
+			// 	for (iterator it = begin(); it != end(); ++it, --n)
+			// 		*it = val;
+			// 	if (n > 0)
+			// 		isnert(end(), n, val);
+			// 	else
+			// 		erase(it, end());
+			// };
+
+
+
+
+
+
+			/**
+			 * @brief insert single element
+			*/
+			iterator insert(iterator position, const value_type& val)	{
+
+				node *	newNode = getNode(val);
+				if (_size < max_size())	{
+					if (_head == _tail || position == begin())
+						_head = newNode;
+					newNode->hook(position._ptr);
+					incSize();
+				}
+				return newNode;
+			}
+
+			/**
+			 * @brief insert n elements of val
+			*/
+			void insert (iterator position, size_type n, const value_type& val)	{
+
+				for(; n > 0; --n)	{
+					insert(position, val);
+				}
+			};
+
+			/**
+			 * @brief insert range of elements
+			*/
+			template <class InputIterator>
+			void
+			insert (iterator position, InputIterator first,
+			InputIterator last)	{
+
+				/**
+				 * check here if argument are integer or iterators and dispatch
+				 * to the right overload
+				*/
+				typename std::__is_integer<InputIterator>::__type	integer;
+				insert_dispatch(position, first, last, integer);
+			};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 		protected:
 			node *		_head;
 			node *		_tail;
 			size_type		_size;
 			allocator_type	_alloc;
+
+			template<typename integer>
+			void
+			insert_dispatch(iterator position, integer n, integer x,
+			std::__true_type)	{
+				insert(position, static_cast<size_type>(n),
+					static_cast<value_type>(x));
+			}
+
+			template<typename InputIterator>
+			void
+			insert_dispatch(iterator position, InputIterator first,
+			InputIterator last, std::__false_type)	{
+				for (; first != last; ++first)	{
+					insert(position, first);
+				}
+			}
+
 		private:
 
-			node * createNode(value_type const & val)	{
+			void	incSize( void )	{ _size++; }
+			void	decSize( void )	{ _size--; }
 
-				node * pNewNode;
+			node * getNode(value_type const & val)	{
+
+				node * newNode;
 				try	{
-					pNewNode = _alloc.allocate(1);
-					_alloc.construct(pNewNode, val);
+					newNode = _alloc.allocate(1);
+					_alloc.construct(newNode, val);
+					newNode->next = newNode;
+					newNode->prev = newNode;
 				}
 				catch(const std::exception& e) {
 					// delete liste ?
 
 					std::cerr << e.what() << std::endl;
 				}
-				return pNewNode;
+				if (DEBUG_MODE)
+					std::cout << "Create " << val << " @ " << newNode << std::endl;
+				return newNode;
 			};
 	};
 

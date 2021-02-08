@@ -74,5 +74,31 @@
 			"__functional_03": "cpp",
 			"memory_resource": "cpp"
 		}
-	}
+	},
+	"launch": {
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "FT_CONTAINER_LIST - vm",
+                "type": "cppdbg",
+                "request": "launch",
+                "program": "${workspaceRoot}/list/ft_container_list",
+                "miDebuggerServerAddress": "localhost:9091",
+                "args": [],
+                "stopAtEntry": false,
+                "cwd": "${workspaceRoot}/list",
+                "environment": [],
+                "externalConsole": true,
+                "linux": {
+                    "MIMode": "gdb"
+                },
+                "osx": {
+                    "MIMode": "gdb"
+                },
+                "windows": {
+                    "MIMode": "gdb"
+                }
+            }
+        ]
+    }
 }

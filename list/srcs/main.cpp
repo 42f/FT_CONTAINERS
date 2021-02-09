@@ -17,48 +17,145 @@
 # define TITLE    "\n\033[31m\033[7m"
 #endif
 
+#ifndef ERROR_TITLE
+# define ERROR_TITLE    "\n\033[41m\033[5m\t"
+#endif
+
 #ifndef SUBTITLE
 # define SUBTITLE    "\n\033[7m"
 #endif
 
+#ifndef PRINT_TITLE
+# define PRINT_TITLE    "\n\033[44m\t"
+#endif
+
+#ifndef TESTOK_TITLE
+# define TESTOK_TITLE    "\n\033[102m\t"
+#endif
+
+# define PRINT		true
+# define NOPRINT	false
+
+
+class ex{
+public:
+
+	int a;
+	ex( void ) : a(21) {};
+
+	ex & operator=( ex const & rhs )	{
+		if ( this != &rhs )
+		{
+			this->a = rhs.a;
+		}
+		return *this;
+	}
+
+};
+
+std::ostream &			operator<<( std::ostream & o, ex const & i )
+{
+	o << i.a;
+	return o;
+}
 
 template< typename T>
-void	putList( ft::list<T> const & lst)	{
+void	putList( ft::list<T> const & lst, int errorPos = -1 )	{
 
-	std::cout << SUBTITLE << "[ size of list ]" << RESET_COLOR << std::endl;
+	std::cout << PRINT_TITLE << "[ FT::LIST ]" << RESET_COLOR << std::endl;
+	std::cout << PRINT_TITLE << "[ size of list ]" << RESET_COLOR << std::endl;
 	std::cout << lst.size();
-	std::cout << SUBTITLE << "[ read iterator from begin to  begin to end + 2 ]" << RESET_COLOR << std::endl;
+	std::cout << PRINT_TITLE << "[ read iterator from begin to  begin to end + 2 ]" << RESET_COLOR << std::endl;
 	typename ft::list<T>::iterator it = lst.begin();
 	typename ft::list<T>::iterator ite = lst.end();
 
-	for (; it != ite; it++)
-		std::cout << *it << " -> " << &(*it) << std::endl;
-// 	std::cout << *it << " -> " << &(*it) << std::endl;
-// 	it++;
-// 	std::cout << *it << " -> " << &(*it) << std::endl;
-// 	it++;
-// 	std::cout << *it << " -> " << &(*it) << std::endl;
+	for (int i = 0; it != ite; it++, i++)
+	{
+		if (i == errorPos)
+			std::cout << ERROR_TITLE << "[" << i << "] " <<*it << " -> " << &(*it) << RESET_COLOR << std::endl;
+		else
+			std::cout << "[" << i << "] " <<*it << " -> " << &(*it) << std::endl;
+	}
 }
 
 template< typename T>
-void	putList( std::list<T> const & lst)	{
+void	putList( std::list<T> const & lst, int errorPos = -1 )	{
 
-	std::cout << SUBTITLE << "[ size of list ]" << RESET_COLOR << std::endl;
+	std::cout << PRINT_TITLE << "[ STD::LIST ]" << RESET_COLOR << std::endl;
+	std::cout << PRINT_TITLE << "[ size of list ]" << RESET_COLOR << std::endl;
 	std::cout << lst.size();
-	std::cout << SUBTITLE << "[ read iterator from begin to  begin to end + 2 ]" << RESET_COLOR << std::endl;
+	std::cout << PRINT_TITLE << "[ read iterator from begin to  begin to end + 2 ]" << RESET_COLOR << std::endl;
 	typename std::list<T>::const_iterator it = lst.begin();
 	typename std::list<T>::const_iterator ite = lst.end();
 
-	for (; it != ite; it++)
-		std::cout << *it << " -> " << &(*it) << std::endl;
-	// std::cout << *it << " -> " << &(*it) << std::endl;
-	// it++;
-	// std::cout << *it << " -> " << &(*it) << std::endl;
-	// it++;
-	// std::cout << *it << " -> " << &(*it) << std::endl;
+	for (int i = 0; it != ite; it++, i++)
+	{
+		if (i == errorPos)
+			std::cout << ERROR_TITLE << "[" << i << "] " <<*it << " -> " << &(*it) << RESET_COLOR << std::endl;
+		else
+			std::cout << "[" << i << "] " <<*it << " -> " << &(*it) << std::endl;
+	}
 }
 
-void handler(int sig) {
+template< typename T>
+void	testList( ft::list<T> const & ft_lst, std::list<T> const &std_lst, bool print )	{
+
+	typename ft::list<T>::iterator	ft_it = ft_lst.begin();
+	typename ft::list<T>::iterator	ft_ite = ft_lst.end();
+
+	typename std::list<T>::const_iterator	std_it = std_lst.begin();
+	typename std::list<T>::const_iterator	std_ite = std_lst.end();
+
+	if (print == true)
+	{
+		putList<T>(ft_lst);
+		putList<T>(std_lst);
+	}
+
+	int i = 0;
+	while (ft_it != ft_ite && std_it != std_ite)	{
+
+		if(*ft_it != *std_it)	{
+			if (print == false)
+			{
+				putList<T>(ft_lst, i);
+				putList<T>(std_lst, i);
+			}
+			std::cout << ERROR_TITLE << "ERROR !" << RESET_COLOR << std::endl;
+			std::cout << TITLE <<"iterator at pos " << i << ": ft (" << *ft_it << ") ";
+			std::cout << "std (" << *std_it << ") Diff ! " << RESET_COLOR << std::endl;
+			abort();
+		}
+		i++;
+		ft_it++;
+		std_it++;
+	}
+	if (ft_it != ft_ite || std_it != std_ite)	{
+		if (print == false)
+		{
+			putList<T>(ft_lst);
+			putList<T>(std_lst);
+		}
+		std::cout << ERROR_TITLE << "ERROR !" << RESET_COLOR << std::endl;
+		std::cout << TITLE <<"Diff in list after iterating thought it." << RESET_COLOR << std::endl;
+		abort();
+	}
+
+	if(ft_lst.size() != std_lst.size())	{
+		if (print == false)
+		{
+			putList<T>(ft_lst);
+			putList<T>(std_lst);
+		}
+		std::cout << ERROR_TITLE << "ERROR !" << RESET_COLOR << std::endl;
+		std::cout << TITLE <<"size: ft (" << ft_lst.size() << ") std (" << std_lst.size() << ") Diff ! " << RESET_COLOR << std::endl;
+		abort();
+	}
+	if (print == true)
+		std::cout << TESTOK_TITLE << "[ TEST PASSED ]" << RESET_COLOR << std::endl;
+}
+
+void 	handler(int sig) {
   void *array[10];
   size_t size;
 
@@ -201,27 +298,6 @@ int		test_push_back_push_front_pop_back_pop_front( void )	{
 	}
 	return (0);
 }
-
-class ex {
-public:
-	int a;
-	ex( void ) : a(21) {};
-
-	ex & operator=( ex const & rhs )	{
-		if ( this != &rhs )
-		{
-			this->a = rhs.a;
-		}
-		return *this;
-	}
-};
-
-std::ostream &			operator<<( std::ostream & o, ex const & i )
-{
-	o << i.a;
-	return o;
-}
-
 int		test_instantiation( void )	{
 
 	{
@@ -328,39 +404,92 @@ int		test_reverseIterator( void )	{
 	return(0);
 }
 
-int	test_sandbox( void )	{
-	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " ~~~~~~~~~~~" << RESET_COLOR << std::endl;
+int		test_insert_erase( void )	{
+	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with std::string ~~~~~~~~~~~" << RESET_COLOR << std::endl;
 	{
-		ft::list<int>	l0;
+		ft::list<std::string>	ftl0;
+		std::list<std::string>	stdl0;
 
-		l0.insert(l0.end(), 20, 42);
+		std::string	val("helloworld");
 
-		l0.push_back(99);
-		l0.push_front(2121);
+		std::cout << SUBTITLE << "[ Insert with insert(iterator, size_t, value_type) ]" << RESET_COLOR << std::endl;
+		ftl0.insert(ftl0.end(), 5, val);
+		ftl0.push_front("the Begining...");
+		ftl0.push_back("the End...");
 
-		putList<int>(l0);
-		// l0.push_back(42);
-		// l0.push_back(42);
-		// l0.push_back(42);
-		// l0.push_back(42);
+		stdl0.insert(stdl0.end(), 5, val);
+		stdl0.push_front("the Begining...");
+		stdl0.push_back("the End...");
 
-		// ft::list<int>	l1;
+		testList(ftl0, stdl0, NOPRINT);
 
-		// l1.insert(l1.begin(), l0.begin(), l0.end());
+		ft::list<std::string>	ftl1;
+		std::list<std::string>	stdl1;
 
-		// putList<int>(l1);
+		std::cout << SUBTITLE << "[ Insert with insert(iterator, iterator, iterator) ]" << RESET_COLOR << std::endl;
+		ftl1.insert(ftl1.begin(), ftl0.begin(), ftl0.end());
+		stdl1.insert(stdl1.begin(), stdl0.begin(), stdl0.end());
+
+		testList(ftl1, stdl1, NOPRINT);
+
+		std::cout << SUBTITLE << "[ Erase with erase(iterator) ]" << RESET_COLOR << std::endl;
+		for (int i = 0; i < 3; i++)
+		{
+			ftl1.erase(--ftl1.end());
+			stdl1.erase(--stdl1.end());
+		}
+		ftl1.erase(ftl1.begin());
+		stdl1.erase(stdl1.begin());
+
+		testList(ftl1, stdl1, PRINT);
+		std::cout << SUBTITLE << "[ Erase with erase(iterator, iterator) ]" << RESET_COLOR << std::endl;
+		for (int i = 0; i < 3; i++)
+		{
+			ftl1.erase(--ftl1.end());
+			stdl1.erase(--stdl1.end());
+		}
+		ftl1.erase(ftl1.begin(), ftl1.end());
+		stdl1.erase(stdl1.begin(), stdl1.end());
+
+		testList(ftl1, stdl1, PRINT);
+
 	}
+	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with int ~~~~~~~~~~~" << RESET_COLOR << std::endl;
+	{
+		ft::list<int>	ftl0;
+		std::list<int>	stdl0;
 
+		int	val = 42;
+
+		std::cout << SUBTITLE << "[ Insert with insert(iterator, size_t, value_type) ]" << RESET_COLOR << std::endl;
+		ftl0.insert(ftl0.end(), 5, val);
+		ftl0.push_front(0);
+		ftl0.push_back(99);
+
+		stdl0.insert(stdl0.end(), 5, val);
+		stdl0.push_front(0);
+		stdl0.push_back(99);
+
+		testList(ftl0, stdl0, NOPRINT);
+
+		ft::list<int>	ftl1;
+		std::list<int>	stdl1;
+
+		std::cout << SUBTITLE << "[ Insert with insert(iterator, iterator, iterator) ]" << RESET_COLOR << std::endl;
+		ftl1.insert(ftl1.begin(), ftl0.begin(), ftl0.end());
+		stdl1.insert(stdl1.begin(), stdl0.begin(), stdl0.end());
+
+		testList(ftl1, stdl1, NOPRINT);
+	}
 	return (0);
 }
 
 int		main( void )	{
 
-	// signal(SIGABRT, handler);
 	// test_instantiation();
 	// test_push_back_push_front_pop_back_pop_front();
 	// test_Capacities();
-	test_sandbox();
+	test_insert_erase();
 	// test_reverseIterator();
 	// test_operatorEqual();
 	return (0);

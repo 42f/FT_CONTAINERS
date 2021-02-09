@@ -375,27 +375,54 @@ namespace ft	{
 				}
 			};
 
+			iterator
+			erase (iterator position)	{
+
+std::cout << __func__ << " called it " << std::endl;
+				node * cursor = position._ptr;
+				node * returnCursor = cursor->next;
+				if (_size > 0)	{
+					if (cursor == _head)
+						_head = _head->next;
+					cursor->unhook();
+					_alloc.destroy(cursor);
+					_alloc.deallocate(cursor, 1);
+					decSize();
+				}
+				return returnCursor;
+			};
+
+			iterator
+			erase (iterator first, iterator last)	{
+
+				node * returnCursor = last._ptr;
+				for (; first != last; first++)
+					erase(first);
+				return returnCursor;
+			};
+
+
 			/**
 			 * @brief insert range of elements
+			 * check here if arguments of type InputIterator are integer
+			 * or iterators and dispatch to the right overload.
+			 * Cf. /usr/include/c++/7/bits/cpp_type_traits.h line 136
+			 * for implementation. Basicly __is_integer is a template function
+			 * which, by default containts __false_type as __type, unless
+			 * it is one of the integer types so it contains __true_type
+			 * Here we create integet wich will be of type __true_type
+			 * or __false_type, and by calling inster_dispatch with it, the right
+			 * overload is called.
+			 * insert_dispatch taking __true_type will execute code for
 			*/
 			template <class InputIterator>
 			void
 			insert (iterator position, InputIterator first,
 			InputIterator last)	{
 
-				/**
-				 * check here if argument are integer or iterators and dispatch
-				 * to the right overload
-				*/
 				typename std::__is_integer<InputIterator>::__type	integer;
 				insert_dispatch(position, first, last, integer);
 			};
-
-
-
-
-
-
 
 
 
@@ -420,10 +447,10 @@ namespace ft	{
 
 			template<typename integer>
 			void
-			insert_dispatch(iterator position, integer n, integer x,
+			insert_dispatch(iterator position, integer n, integer val,
 			std::__true_type)	{
 				insert(position, static_cast<size_type>(n),
-					static_cast<value_type>(x));
+					static_cast<value_type>(val));
 			}
 
 			template<typename InputIterator>
@@ -431,7 +458,7 @@ namespace ft	{
 			insert_dispatch(iterator position, InputIterator first,
 			InputIterator last, std::__false_type)	{
 				for (; first != last; ++first)	{
-					insert(position, first);
+					insert(position, *first);
 				}
 			}
 

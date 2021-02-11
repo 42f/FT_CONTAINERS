@@ -45,10 +45,17 @@ namespace ft	{
 					std::cout << "DESTRUCTOR --> " << __func__ << std::endl;
 			};
 
-			// static void
-			// swap(node& x, node& y)	{
+			static void
+			swap(node& x, node& y)	{
 
-			// };
+				node	*posx = x.next;
+				node	*posy = y.next;
+				y.unhook();
+				y.hook(posx);
+				x.unhook();
+				x.hook(posy);
+
+			};
 
 			// void
 			// transfer(node * const first, node * const last)	{
@@ -89,6 +96,9 @@ namespace ft	{
 			void
 			unhook( void )	{
 
+			if (DEBUG_MODE)
+				putNodeInfos(*this);
+
 				if (prev != this && next != this)	{
 					next->prev = prev;
 					prev->next = next;
@@ -97,8 +107,11 @@ namespace ft	{
 					next->prev = next;
 				else if (next == this)
 					prev->next = prev;
+			if (DEBUG_MODE)
+				putNodeInfos(*this);
 			};
 
+			// ---------------------------------------------------------------------------------------TO REMOVE
 			static void	putNodeInfos(node<T> const &n) {
 				std::cout << std::endl;
 				std::cout << "--NODE: " << &n << std::endl;
@@ -203,15 +216,14 @@ namespace ft	{
 			};
 
 
-//do insert first
+			/**
+			 * @brief Range Constructor
+			*/
 			// template <class InputIterator>
 			// list (InputIterator first, InputIterator last,
 			// 	 allocator_type const & userAlloc = allocator_type() ) : _size(0), _alloc(userAlloc)	{
 
-			// 	while( first != last )	{
-			// 		this->push_back(*first);
-			// 		first++;
-			// 	}
+			// 		insert(begin(), first, last);
 			// };
 
 			/**
@@ -219,9 +231,13 @@ namespace ft	{
 			*/
 			explicit list( list const & src ) : _size(0) {
 
-				if (*this != src){
-						// copy
-				}
+				_tail = getNode(value_type());
+				_head = _tail;
+				_alloc = src._alloc;
+
+				// if (*this != src){						//								ADD BACK
+				if (src.size() > 0)
+					assign(src.begin(), src.end());
 
 				if (DEBUG_MODE)	{
 					std::cout << std::endl;
@@ -231,14 +247,8 @@ namespace ft	{
 
 			~list( void )	{
 
-				if (_size != 0)	{
-					node *	cursor = _tail;
-					for (size_type i = 0; cursor != _head; i++)
-					{
-						cursor = cursor->prev;
-						_alloc.destroy(cursor->next);
-						_alloc.deallocate(cursor->next, 1);
-					}
+				clear();
+				if (_head != NULL)	{
 					_alloc.destroy(_head);
 					_alloc.deallocate(_head, 1);
 				}
@@ -256,7 +266,7 @@ namespace ft	{
 
 
 
-			size_type			max_size( void ) const	{ return size_type(-1) / sizeof(node);  };
+			size_type			max_size( void ) const	{ return _alloc.max_size();  };
 			bool				empty( void ) const		{ return (_size == 0); };
 			size_type			size( void ) const 		{ return (_size); };
 			iterator			begin( void ) const		{ return (_head); };
@@ -268,86 +278,25 @@ namespace ft	{
 
 
 
+			list&
+			operator= (const list& x)	{
 
-
-
-
-
-
-
-
-
-
-
-
-
-			void
-			pop_back( void )	{
-
-				if (_size > 0)	{
-					node * cursor = _tail->prev;
-					if (cursor == _head)
-						_head = _tail;
-					cursor->unhook();
-					_alloc.destroy(cursor);
-					_alloc.deallocate(cursor, 1);
-					decSize();
-				}
+				// if (*this != x)											// to add back !
+					assign(x.begin(), x.end());
+				return *this;
 			};
 
 			void
-			push_back (value_type const & val)	{
-
-				insert(end(), val);
-			};
+			pop_back( void )						{ erase(--end()); };
+			void
+			push_back (value_type const & val)		{ insert(end(), val); };
+			void
+			pop_front( void )						{ erase(begin()); };
+			void
+			push_front (value_type const & val)		{ insert(begin(), val); };
 
 			void
-			pop_front( void )	{
-
-				if (_size > 0)	{
-					node * cursor = _head->next;
-					_head->unhook();
-					_alloc.destroy(_head);
-					_alloc.deallocate(_head, 1);
-					_head = cursor;
-					decSize();
-				}
-			};
-
-			void
-			push_front (value_type const & val)	{
-
-				insert(begin(), val);
-			};
-
-
-
-
-
-
-
-			/**
-			 * @brief assign range
-			*/
-			// template <class InputIterator>
-  			// void assign (InputIterator first, InputIterator last)	{
-
-
-			//   };
-			// void assign (size_type n, const value_type& val)	{
-
-			// 	iterator it = begin();
-			// 	for (iterator it = begin(); it != end(); ++it, --n)
-			// 		*it = val;
-			// 	if (n > 0)
-			// 		isnert(end(), n, val);
-			// 	else
-			// 		erase(it, end());
-			// };
-
-
-
-
+			clear( void )	{ erase(begin(), end()); };
 
 
 			/**
@@ -370,37 +319,13 @@ namespace ft	{
 			*/
 			void insert (iterator position, size_type n, const value_type& val)	{
 
-				for(; n > 0; --n)	{
-					insert(position, val);
+				if (n + _size <= max_size())
+				{
+					for(; n > 0; --n)	{
+						insert(position, val);
+					}
 				}
 			};
-
-			iterator
-			erase (iterator position)	{
-
-std::cout << __func__ << " called it " << std::endl;
-				node * cursor = position._ptr;
-				node * returnCursor = cursor->next;
-				if (_size > 0)	{
-					if (cursor == _head)
-						_head = _head->next;
-					cursor->unhook();
-					_alloc.destroy(cursor);
-					_alloc.deallocate(cursor, 1);
-					decSize();
-				}
-				return returnCursor;
-			};
-
-			iterator
-			erase (iterator first, iterator last)	{
-
-				node * returnCursor = last._ptr;
-				for (; first != last; first++)
-					erase(first);
-				return returnCursor;
-			};
-
 
 			/**
 			 * @brief insert range of elements
@@ -424,18 +349,81 @@ std::cout << __func__ << " called it " << std::endl;
 				insert_dispatch(position, first, last, integer);
 			};
 
+			iterator
+			erase (iterator position)	{
+
+				node * cursor = position._ptr;
+				node * returnCursor = cursor->next;
+				if (_size > 0)	{
+					if (cursor == _head)
+						_head = _head->next;
+					cursor->unhook();
+					_alloc.destroy(cursor);
+					_alloc.deallocate(cursor, 1);
+					decSize();
+				}
+				return returnCursor;
+			};
+
+			iterator
+			erase (iterator first, iterator last)	{
+
+				iterator tmpCursor = first;
+				while (first != last)
+				{
+					tmpCursor = first;
+					first++;
+					erase(tmpCursor);
+				}
+				return last;
+			};
 
 
+			void
+			resize (size_type n, value_type val = value_type())	{
 
+				if (n < _size)	{
+					typename ft::list<T>::iterator it = begin();
+					for(size_type i = 0; i < n; i++)
+						it++;
+					erase(it, end());
+				}
+				else if (n > _size)
+					insert(end(), n - _size, val);
+			};
 
+			void
+			swap (list& src)	{
 
+				node *		_headTmp = src._head;
+				node *		_tailTmp = src._tail;
+				size_type	_sizeTmp = src._size;
 
+				src._head = _head;
+				src._tail = _tail;
+				src._size = _size;
 
+				_head = _headTmp;
+				_tail = _tailTmp;
+				_size = _sizeTmp;
+			};
 
+			/**
+			 * @brief Here we use the same technic as for insert : the type
+			 *  integer is  used to call the right overload.
+			*/
+			template <class InputIterator>
+			void assign (InputIterator first, InputIterator last)	{
 
+				typename std::__is_integer<InputIterator>::__type	integer;
+				assign_dispatch(first, last, integer);
+			};
 
+			void assign(size_type n, const value_type& val)	{
 
-
+				clear();
+				insert(begin(), n, val);
+			};
 
 
 
@@ -444,6 +432,19 @@ std::cout << __func__ << " called it " << std::endl;
 			node *		_tail;
 			size_type		_size;
 			allocator_type	_alloc;
+
+			template <class InputIterator>
+			void assign_dispatch (InputIterator first, InputIterator last, std::__false_type)	{
+
+				clear();
+				insert(begin(), first, last);
+			};
+
+			template<typename integer>
+			void assign_dispatch (integer n, integer val, std::__true_type)	{
+
+				assign(static_cast<size_type>(n), static_cast<value_type>(val));
+			};
 
 			template<typename integer>
 			void
@@ -477,7 +478,7 @@ std::cout << __func__ << " called it " << std::endl;
 					newNode->prev = newNode;
 				}
 				catch(const std::exception& e) {
-					// delete liste ?
+					//			------------------------------------------------- delete liste ?
 
 					std::cerr << e.what() << std::endl;
 				}
@@ -487,6 +488,13 @@ std::cout << __func__ << " called it " << std::endl;
 			};
 	};
 
-}
+	template <class T, class Alloc >
+	void
+	swap (list<T,Alloc>& x, list<T,Alloc>& y)	{
+
+		x.swap(y);
+	};
+
+} // ft namespace
 
 #endif /* *****BVALETTE****** LIST_H */

@@ -57,11 +57,24 @@ namespace ft	{
 
 			};
 
-			// void
-			// transfer(node * const first, node * const last)	{
+			void
+			transfer(node * const first, node * const last)	{
 
+				if (first != last)	{
+					node *	beforeLast = last->prev;
+					if (first->prev != first)	{
+						first->prev->next = last;
+						last->prev = first->prev;
+						first->prev = first;
+					}
+					else
+						last->prev = last;
 
-			// };
+					beforeLast->next = beforeLast;
+				}
+				if (DEBUG_MODE >= 3)
+					putNodeInfos(*this);
+			};
 
 			void
 			reverse( void )	{
@@ -76,14 +89,44 @@ namespace ft	{
 			hook(node * const position)	{
 
 				if (position != NULL)	{
-					next = position;
+
 					if (position->prev != position)
 					{
-						prev = position->prev;
-						prev->next = this;
+						this->prev = position->prev;
+						this->prev->next = this;
 					}
-					position->prev = this;
-				}
+					if (this->next == this)
+					{
+						this->next = position;
+						position->prev = this;
+					}
+					else	{
+						node * cursor = this;
+						while (cursor->next != cursor)
+							cursor = cursor->next;
+						cursor->next = position;
+						position->prev = cursor;
+					}
+
+//previous version
+				// if (position != NULL)	{
+				// 	next = position;
+				// 	if (position->prev != position)
+				// 	{
+				// 		prev = position->prev;
+				// 		prev->next = this;
+				// 	}
+				// 	// if (this->next == this)
+				// 		position->prev = this;
+				// 	// else
+				// 	// {
+				// 	// 	node * cursor = this;
+				// 	// 	while (cursor->next != cursor)
+				// 	// 		cursor = cursor->next;
+				// 	// 	position->prev = cursor;
+				// 	}
+				// // }
+
 				if (DEBUG_MODE >= 3)
 				{
 					std::cout << __func__ << " at position: " << position << std::endl;
@@ -91,7 +134,9 @@ namespace ft	{
 					std::cout << __func__ << " next = " << next << std::endl;
 					putNodeInfos(*this);
 				}
-			};
+			}
+
+		};
 
 			void
 			unhook( void )	{
@@ -107,6 +152,8 @@ namespace ft	{
 					next->prev = next;
 				else if (next == this)
 					prev->next = prev;
+				this->next = this;
+				this->prev = this;
 			if (DEBUG_MODE >= 3)
 				putNodeInfos(*this);
 			};
@@ -118,7 +165,10 @@ namespace ft	{
 				std::cout << "data -> " << n.data << " @ " << &(n.data) << std::endl;
 				std::cout << "prev -> " << n.prev << std::endl;
 				std::cout << "next -> " << n.next << std::endl;
-				std::cout << std::endl;
+				if (n.next != &(n))
+					putNodeInfos(*n.next);
+				else
+					std::cout << std::endl;
 			};
 		}; // ----------------- Class node
 
@@ -411,6 +461,58 @@ namespace ft	{
 				insert(begin(), n, val);
 			};
 
+		/**
+		 *	@brief entire list (1)
+		*/
+			void
+			splice (iterator position, list& x)	{
+
+				splice(position, x, x.begin(), x.end());
+			};
+
+		/**
+		 *	@brief single element (2)
+		*/
+			void
+			splice (iterator position, list& x, iterator i)	{
+
+				if (x.size() > 0)	{
+					i._ptr->unhook();
+					i._ptr->hook(position._ptr);
+					if (position == _head)
+						_head = i._ptr;
+					if (x.size() == 1)
+						x._head = x._tail;
+					this->incSize();
+				}
+				x.decSize();
+			};
+
+		/**
+		 *	@brief element range (3)
+		*/
+			void
+			splice (iterator position, list& x, iterator first, iterator last)	{
+
+				size_type sizeSplice = std::distance(first, last);
+				first._ptr->transfer(first._ptr, last._ptr);
+				first._ptr->hook(position._ptr);
+				x.decSize(sizeSplice);
+				this->incSize(sizeSplice);
+				// if (first._ptr == _head)
+				// 	_head = last._ptr;
+				// if (x.size() == 1)
+				// 		x._head = x._tail;
+			};
+
+
+
+
+
+
+
+
+
 
 
 		protected:
@@ -421,8 +523,8 @@ namespace ft	{
 
 		private:
 
-			void	incSize( void )	{ _size++; }
-			void	decSize( void )	{ _size--; }
+			void	incSize( size_type n = 1 )	{ _size += n; }
+			void	decSize( size_type n = 1 )	{ _size -= n; }
 
 			template <class InputIterator>
 			void

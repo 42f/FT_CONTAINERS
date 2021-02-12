@@ -61,6 +61,12 @@ endif
 
 ifeq ($(debug_mode), 1)
 	CFLAGS += -D DEBUG_MODE=1
+else ifeq ($(debug_mode), 2)
+	CFLAGS += -D DEBUG_MODE=2
+else ifeq ($(debug_mode), 3)
+	CFLAGS += -D DEBUG_MODE=3
+else ifeq ($(debug_mode), 4)
+	CFLAGS += -D DEBUG_MODE=4
 endif
 
 HEADER += ./list.hpp

@@ -1,3 +1,13 @@
+/**
+ * Compilation may change DEBUG_MODE setting to
+ *
+ * 	DEBUG_MODE=0 -> no special output
+ * 	DEBUG_MODE=1 -> continue after test a failed (abort otherwise)
+ * 				 	+ minimal informations (mainly constructor/destructor calls)
+ * 	DEBUG_MODE=2 -> more indepth infos
+*/
+
+
 #include "list.hpp"
 
 #include <algorithm>
@@ -98,7 +108,7 @@ std::ostream &			operator<<( std::ostream & o, ex const & i )
 
 template< typename T>
 void
-putList( ft::list<T> const & lst, int errorPos = -1 )	{
+putList( ft::list<T> const & lst, size_t errorPos = -1 )	{
 
 	std::cout << PRINT_TITLE << "[ FT::LIST ]" << RESET_COLOR << std::endl;
 	std::cout << PRINT_TITLE << "[ size of list ]" << RESET_COLOR << " -> ";
@@ -106,7 +116,7 @@ putList( ft::list<T> const & lst, int errorPos = -1 )	{
 	typename ft::list<T>::iterator it = lst.begin();
 	typename ft::list<T>::iterator ite = lst.end();
 
-	for (int i = 0; lst.size() > 0 && it != ite; it++, i++)
+	for (size_t i = 0; lst.size() > 0 && i < lst.size() && it != ite; it++, i++)
 	{
 		if (i == errorPos)
 			std::cout << ERROR_SOURCE << "ft: [" << i << "] " << RESET_COLOR << *it << " -> " << &(*it) << std::endl;
@@ -117,7 +127,7 @@ putList( ft::list<T> const & lst, int errorPos = -1 )	{
 
 template< typename T>
 void
-putList( std::list<T> const & lst, int errorPos = -1 )	{
+putList( std::list<T> const & lst, size_t errorPos = -1 )	{
 
 	std::cout << PRINT_TITLE << "[ STD::LIST ]" << RESET_COLOR << std::endl;
 	std::cout << PRINT_TITLE << "[ size of list ]" << RESET_COLOR << " -> ";
@@ -125,7 +135,7 @@ putList( std::list<T> const & lst, int errorPos = -1 )	{
 	typename std::list<T>::const_iterator it = lst.begin();
 	typename std::list<T>::const_iterator ite = lst.end();
 
-	for (int i = 0; lst.size() > 0 && it != ite; it++, i++)
+	for (size_t i = 0; lst.size() > 0 && i < lst.size() && it != ite; it++, i++)
 	{
 		if (i == errorPos)
 			std::cout << ERROR_SOURCE << "std: [" << i << "] " << RESET_COLOR << *it << " -> " << &(*it) << std::endl;
@@ -164,7 +174,8 @@ testList( ft::list<T> const & ft_lst, std::list<T> const &std_lst, bool print, s
 		}
 		std::cout << TITLE <<"size: ft (" << ft_lst.size() << ") std (" << std_lst.size() << ") Diff ! " << RESET_COLOR << std::endl;
 		std::cout << ERROR_TITLE << "ERROR !" << RESET_COLOR << std::endl;
-		abort();
+		if (DEBUG_MODE < 1)
+			abort();
 	}
 
 	if (ft_lst.size() > 0)
@@ -186,7 +197,8 @@ testList( ft::list<T> const & ft_lst, std::list<T> const &std_lst, bool print, s
 				std::cout << TITLE <<"iterator at pos " << i << ": ft (" << *ft_it << ") ";
 				std::cout << ERROR_TITLE << "ERROR !" << RESET_COLOR << std::endl;
 				std::cout << "std (" << *std_it << ") Diff ! " << RESET_COLOR << std::endl;
-				abort();
+		if (DEBUG_MODE < 1)
+					abort();
 			}
 			i++;
 			ft_it++;
@@ -200,7 +212,8 @@ testList( ft::list<T> const & ft_lst, std::list<T> const &std_lst, bool print, s
 			}
 			std::cout << TITLE <<"Diff in list after iterating thought it." << RESET_COLOR << std::endl;
 			std::cout << ERROR_TITLE << "ERROR !" << RESET_COLOR << std::endl;
-			abort();
+		if (DEBUG_MODE < 1)
+				abort();
 		}
 	}
 	if (print == true)
@@ -940,6 +953,128 @@ test_relational_operators( void )	{
 	return(0);
 }
 
+int
+test_splice( void )	{
+	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with int ~~~~~~~~~~~" << RESET_COLOR << std::endl;
+	// {
+	// 	std::cout << SUBTITLE << "[ list 0 with 5 HelloWorld, list 1 with 5 Bye! ]" << RESET_COLOR << std::endl;
+
+	// 	ft::list<std::string>	ftl0(5, "HelloWorld!");
+	// 	ft::list<std::string>	ftl1(5, "bye!");
+	// 	std::list<std::string>	stdl0(5, "HelloWorld!");
+	// 	std::list<std::string>	stdl1(5, "bye!");
+
+	// 	testList(ftl0, stdl0, NOPRINT);
+	// 	testList(ftl1, stdl1, NOPRINT);
+	// 	std::cout << SUBTITLE << "[ splice (single element(2) version):transfer second element of list 0 to the first position of list 1 ]" << RESET_COLOR << std::endl;
+	// 	ft::list<std::string>::iterator		ft_itl0 = ++ftl0.begin();
+	// 	std::list<std::string>::iterator	std_itl0 = ++stdl0.begin();
+
+	// 	void * ft_ptr_splicedElem = &(*ft_itl0);
+	// 	void * std_ptr_splicedElem = &(*std_itl0);
+
+	// 	ftl1.splice(ftl1.begin(), ftl0, ft_itl0);
+	// 	stdl1.splice(stdl1.begin(), stdl0, std_itl0);
+
+	// 	testList(ftl0, stdl0, NOPRINT);
+	// 	testList(ftl1, stdl1, NOPRINT);
+
+	// 	std::cout << SUBTITLE << "[ check the address of the spliced element, it should remain similar ]" << RESET_COLOR << std::endl;
+	// 	testBool( ft_ptr_splicedElem ==  &(*ftl1.begin()),__LINE__);
+	// 	testBool( std_ptr_splicedElem ==  &(*stdl1.begin()),__LINE__);
+	// 	std::cout << SUBTITLE << "[ check if previously list 0 iterator does iterate on list 1 now ]" << RESET_COLOR << std::endl;
+	// 	testBool( *(++ft_itl0) == "bye!" , __LINE__);
+	// 	testBool( *(++std_itl0) == "bye!" , __LINE__);
+	// }
+	// {
+	// 	std::cout << SUBTITLE << "[ list 0 with 5 HelloWorld, list 1 with 5 Bye! ]" << RESET_COLOR << std::endl;
+
+	// 	ft::list<std::string>	ftl0(5, "HelloWorld!");
+	// 	ft::list<std::string>	ftl1(5, "bye!");
+	// 	std::list<std::string>	stdl0(5, "HelloWorld!");
+	// 	std::list<std::string>	stdl1(5, "bye!");
+
+	// 	testList(ftl0, stdl0, NOPRINT);
+	// 	testList(ftl1, stdl1, NOPRINT);
+	// 	std::cout << SUBTITLE << "[ splice (single element(2) version):transfer the LAST element of list 0 to the first position of list 1 ]" << RESET_COLOR << std::endl;
+	// 	ft::list<std::string>::iterator		ft_itl0 = --ftl0.end();
+	// 	std::list<std::string>::iterator	std_itl0 = --stdl0.end();
+
+	// 	void * ft_ptr_splicedElem = &(*ft_itl0);
+	// 	void * std_ptr_splicedElem = &(*std_itl0);
+
+	// 	ftl1.splice(ftl1.begin(), ftl0, ft_itl0);
+	// 	stdl1.splice(stdl1.begin(), stdl0, std_itl0);
+
+	// 	testList(ftl0, stdl0, NOPRINT);
+	// 	testList(ftl1, stdl1, NOPRINT);
+
+	// 	std::cout << SUBTITLE << "[ check the address of the spliced element, it should remain similar ]" << RESET_COLOR << std::endl;
+	// 	testBool( ft_ptr_splicedElem ==  &(*ftl1.begin()),__LINE__);
+	// 	testBool( std_ptr_splicedElem ==  &(*stdl1.begin()),__LINE__);
+
+	// }
+	// {
+	// 	std::cout << SUBTITLE << "[ list 0 with 1 HelloWorld, list 1 with 1 Bye! ]" << RESET_COLOR << std::endl;
+
+	// 	ft::list<std::string>	ftl0(1, "HelloWorld!");
+	// 	ft::list<std::string>	ftl1(1, "bye!");
+	// 	std::list<std::string>	stdl0(1, "HelloWorld!");
+	// 	std::list<std::string>	stdl1(1, "bye!");
+
+	// 	testList(ftl0, stdl0,  NOPRINT);
+	// 	testList(ftl1, stdl1,  NOPRINT);
+	// 	std::cout << SUBTITLE << "[ splice (single element(2) version):transfer the first (and only) element from list 0 to list 1 begin ]" << RESET_COLOR << std::endl;
+	// 	ft::list<std::string>::iterator		ft_itl0 = ftl0.begin();
+	// 	std::list<std::string>::iterator	std_itl0 = stdl0.begin();
+
+	// 	void * ft_ptr_splicedElem = &(*ft_itl0);
+	// 	void * std_ptr_splicedElem = &(*std_itl0);
+
+	// 	ftl1.splice(ftl1.begin(), ftl0, ft_itl0);
+	// 	stdl1.splice(stdl1.begin(), stdl0, std_itl0);
+
+	// 	testList(ftl0, stdl0,  NOPRINT);
+	// 	testList(ftl1, stdl1,  NOPRINT);
+
+	// 	std::cout << SUBTITLE << "[ check the address of the spliced element, it should remain similar ]" << RESET_COLOR << std::endl;
+	// 	testBool( ft_ptr_splicedElem ==  &(*ftl1.begin()),__LINE__);
+	// 	testBool( std_ptr_splicedElem ==  &(*stdl1.begin()),__LINE__);
+	// }
+	{
+		std::cout << SUBTITLE << "[ list 0 with 1 HelloWorld, list 1 with 1 Bye! ]" << RESET_COLOR << std::endl;
+
+		ft::list<std::string>	ftl0(8, "HelloWorld!");
+		ft::list<std::string>	ftl1(8, "bye!");
+		std::list<std::string>	stdl0(8, "HelloWorld!");
+		std::list<std::string>	stdl1(8, "bye!");
+
+		testList(ftl0, stdl0,  NOPRINT);
+		testList(ftl1, stdl1,  NOPRINT);
+		std::cout << SUBTITLE << "[ splice (range(3) version):transfer list 0 elements from begin to begin + 4 to list 1 ]" << RESET_COLOR << std::endl;
+		ft::list<std::string>::iterator		ft_itl0 = ftl0.begin();
+		std::list<std::string>::iterator	std_itl0 = stdl0.begin();
+		ft::list<std::string>::iterator		ft_it_end_l0 = ftl0.begin();
+		std::list<std::string>::iterator	std_it_end_l0 = stdl0.begin();
+		for (int i = 0; i < 4; ++i)	{
+			ft_it_end_l0++;
+			std_it_end_l0++;
+		}
+
+		testList(ftl0, stdl0,  PRINT);
+		testList(ftl1, stdl1,  PRINT);
+		ftl1.splice(++ftl1.begin(), ftl0, ++ft_itl0, ft_it_end_l0);
+	// putList(stdl0);
+	// putList(stdl1);
+		stdl1.splice(++stdl1.begin(), stdl0, ++std_itl0, std_it_end_l0);
+	// putList(stdl0);
+	// putList(stdl1);
+		testList(ftl0, stdl0,  PRINT);
+		testList(ftl1, stdl1,  PRINT);
+
+	}
+	return (0);
+}
 
 int
 main( void )	{
@@ -957,8 +1092,8 @@ main( void )	{
 	// test_assign();
 	// test_member_swap();
 	// test_nonmember_swap();
-	test_relational_operators();
-
+	// test_relational_operators();
+	test_splice();
 
 	std::cout << SUBTITLE << "ALL TESTS PASSED ~~~~~~>  " << RESET_COLOR;
 	testBool(true);

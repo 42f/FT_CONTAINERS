@@ -69,7 +69,6 @@ namespace ft	{
 					}
 					else
 						last->prev = last;
-
 					beforeLast->next = beforeLast;
 				}
 				if (DEBUG_MODE >= 3)
@@ -107,25 +106,6 @@ namespace ft	{
 						cursor->next = position;
 						position->prev = cursor;
 					}
-
-//previous version
-				// if (position != NULL)	{
-				// 	next = position;
-				// 	if (position->prev != position)
-				// 	{
-				// 		prev = position->prev;
-				// 		prev->next = this;
-				// 	}
-				// 	// if (this->next == this)
-				// 		position->prev = this;
-				// 	// else
-				// 	// {
-				// 	// 	node * cursor = this;
-				// 	// 	while (cursor->next != cursor)
-				// 	// 		cursor = cursor->next;
-				// 	// 	position->prev = cursor;
-				// 	}
-				// // }
 
 				if (DEBUG_MODE >= 3)
 				{
@@ -479,7 +459,7 @@ namespace ft	{
 				if (x.size() > 0)	{
 					i._ptr->unhook();
 					i._ptr->hook(position._ptr);
-					if (position == _head)
+					if (position._ptr == _head)
 						_head = i._ptr;
 					if (x.size() == 1)
 						x._head = x._tail;
@@ -494,15 +474,19 @@ namespace ft	{
 			void
 			splice (iterator position, list& x, iterator first, iterator last)	{
 
-				size_type sizeSplice = std::distance(first, last);
-				first._ptr->transfer(first._ptr, last._ptr);
-				first._ptr->hook(position._ptr);
-				x.decSize(sizeSplice);
-				this->incSize(sizeSplice);
-				// if (first._ptr == _head)
-				// 	_head = last._ptr;
-				// if (x.size() == 1)
-				// 		x._head = x._tail;
+				if (x.size() > 0)	{
+
+					size_type sizeSplice = std::distance(first, last);
+
+					first._ptr->transfer(first._ptr, last._ptr);
+					first._ptr->hook(position._ptr);
+					if (position._ptr == _head)
+						_head = first._ptr;
+					this->incSize(sizeSplice);
+					x.decSize(sizeSplice);
+					if (x.size() == 0)
+						x._head = x._tail;
+				}
 			};
 
 

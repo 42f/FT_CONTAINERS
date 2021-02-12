@@ -333,40 +333,58 @@ int
 test_instantiation( void )	{
 
 	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " ~~~~~~~~~~~" << RESET_COLOR << std::endl;
+	std::cout << TITLE << "~~~~ To see constructor calls, compile with " << RESET_COLOR << "-> make debug_mode=1 re f "<< std::endl;
 	{
-		// std::cout << SUBTITLE << "[ DEFAULT CONSTRUCTOR ]" << RESET_COLOR << std::endl;
-		// {
-		// 	ft::list<std::string>	ftl0;
-		// 	std::list<std::string>	stdl0;
-		// 	testList(ftl0, stdl0, PRINT);
-		// 	ft::list<float>		ftl1;
-		// 	std::list<float>	stdl1;
-		// 	testList(ftl1, stdl1, PRINT);
-		// }
-		// std::cout << SUBTITLE << "[ FILL CONSTRUCTOR with value ]" << RESET_COLOR << std::endl;
-		// {
-		// 	ft::list<int>	ftl0(5, 123);
-		// 	std::list<int>	stdl0(5, 123);
-		// 	testList(ftl0, stdl0, PRINT);
-		// }
-		// std::cout << SUBTITLE << "[ FILL CONSTRUCTOR without value ]" << RESET_COLOR << std::endl;
-		// {
-		// 	ft::list<int>	ftl0(5);
-		// 	std::list<int>	stdl0(5);
-		// 	testList(ftl0, stdl0, PRINT);
-		// }
-		// std::cout << SUBTITLE << "[ FILL CONSTRUCTOR without value and with classExample which has a default value ]" << RESET_COLOR << std::endl;
-		// {
-		// 	ft::list<exampleClass>	ftl0(5);
-		// 	std::list<exampleClass>	stdl0(5);
-		// 	testList(ftl0, stdl0, PRINT);
-		// }
-		// std::cout << SUBTITLE << "[ RANGE CONSTRUCTOR ]" << RESET_COLOR << std::endl;
-		// {
-			// ft::list<float>	ftl0(100, 123);
-			// std::list<float>	stdl0(100, 123);
-			// testList(ftl0, stdl0, NOPRINT);
-		// }
+		std::cout << SUBTITLE << "[ DEFAULT CONSTRUCTOR ]" << RESET_COLOR << std::endl;
+		{
+			ft::list<std::string>	ftl0;
+			std::list<std::string>	stdl0;
+			testList(ftl0, stdl0, NOPRINT);
+			ft::list<float>		ftl1;
+			std::list<float>	stdl1;
+			testList(ftl1, stdl1, NOPRINT);
+		}
+
+		std::cout << SUBTITLE << "[ FILL CONSTRUCTOR with value ]" << RESET_COLOR << std::endl;
+		{
+			ft::list<int>	ftl0(5, 123);
+			std::list<int>	stdl0(5, 123);
+			testList(ftl0, stdl0, NOPRINT);
+		}
+		std::cout << SUBTITLE << "[ FILL CONSTRUCTOR with value explicitly casted ]" << RESET_COLOR << std::endl;
+		{
+			ft::list<int>	ftl0(static_cast<size_t>(5),123);
+			std::list<int>	stdl0(static_cast<size_t>(5),123);
+			testList(ftl0, stdl0, NOPRINT);
+		}
+		std::cout << SUBTITLE << "[ FILL CONSTRUCTOR without value ]" << RESET_COLOR << std::endl;
+		{
+			ft::list<int>	ftl0(5);
+			std::list<int>	stdl0(5);
+			testList(ftl0, stdl0, NOPRINT);
+		}
+		std::cout << SUBTITLE << "[ FILL CONSTRUCTOR without value and with classExample which has a default value ]" << RESET_COLOR << std::endl;
+		{
+			ft::list<exampleClass>	ftl0(5);
+			std::list<exampleClass>	stdl0(5);
+			testList(ftl0, stdl0, NOPRINT);
+		}
+
+
+		std::cout << SUBTITLE << "[ RANGE CONSTRUCTOR test: list0 with fill and list1 with range ctor from list0 iterators ]" << RESET_COLOR << std::endl;
+		{
+			ft::list<int>	ftl0(5, 123);
+			std::list<int>	stdl0(5, 123);
+			std::cout << SUBTITLE << "->>\t\t[ RANGE CONSTRUCTOR with value ]" << RESET_COLOR << std::endl;
+			ft::list<int>	ftl1(ftl0.begin(), ++ftl0.begin());
+			std::list<int>	stdl1(stdl0.begin(), ++stdl0.begin());
+			testList(ftl0, stdl0, NOPRINT);
+			testList(ftl1, stdl1, NOPRINT);
+
+		}
+
+
+
 		// std::cout << SUBTITLE << "[ COPY CONSTRUCTOR from list with 5 elements]" << RESET_COLOR << std::endl;
 		// {
 		// 	ft::list<int>		ftl0(5, 123);
@@ -760,9 +778,173 @@ test_assign( void )	{
 }
 
 int
+test_relational_operators( void )	{
+	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with int ~~~~~~~~~~~" << RESET_COLOR << std::endl;
+	{
+		std::cout << SUBTITLE << "[ Preliminary test on parameters ]" << RESET_COLOR << std::endl;
+
+		std::list<float> std_a;
+		std_a.push_back(10);
+		std_a.push_back(20);
+		std_a.push_back(30);
+		std::list<float> std_b;
+		std_b.push_back(10.42f);
+		std_b.push_back(20);
+		std_b.push_back(30.33f);
+
+		testBool(std_a != std_b, __LINE__);
+
+		std::cout << SUBTITLE << "[ Same values, same calls for ft ]" << RESET_COLOR << std::endl;
+
+		ft::list<float> ft_a;
+		ft_a.push_back(10);
+		ft_a.push_back(20);
+		ft_a.push_back(30);
+		ft::list<float> ft_b;
+		ft_b.push_back(10.42f);
+		ft_b.push_back(20);
+		ft_b.push_back(30.33f);
+
+		testBool(ft_a != ft_b, __LINE__);
+	}
+	{
+		std::cout << SUBTITLE << "[ Batch 1: All relational called for std ]" << RESET_COLOR << std::endl;
+		std::list<int> std_a;
+		std_a.push_back(10);
+		std_a.push_back(20);
+		std_a.push_back(30);
+		std::list<int> std_b;
+		std_b.push_back(10);
+		std_b.push_back(20);
+		std_b.push_back(30);
+		std::list<int> std_c;
+		std_c.push_back(30);
+		std_c.push_back(20);
+		std_c.push_back(10);
+
+		testBool(std_a == std_b, __LINE__);
+		testBool(std_b != std_c, __LINE__);
+		testBool(std_b < std_c, __LINE__);
+		testBool(std_c > std_b, __LINE__);
+		testBool(std_a <= std_b, __LINE__);
+		testBool(std_a >= std_b, __LINE__);
+
+		std::cout << SUBTITLE << "[ Same values, same calls for ft ]" << RESET_COLOR << std::endl;
+
+		ft::list<int> ft_a;
+		ft_a.push_back(10);
+		ft_a.push_back(20);
+		ft_a.push_back(30);
+		ft::list<int> ft_b;
+		ft_b.push_back(10);
+		ft_b.push_back(20);
+		ft_b.push_back(30);
+		ft::list<int> ft_c;
+		ft_c.push_back(30);
+		ft_c.push_back(20);
+		ft_c.push_back(10);
+
+		testBool(ft_a == ft_b, __LINE__);
+		testBool(ft_b != ft_c, __LINE__);
+		testBool(ft_b < ft_c, __LINE__);
+		testBool(ft_c > ft_b, __LINE__);
+		testBool(ft_a <= ft_b, __LINE__);
+		testBool(ft_a >= ft_b, __LINE__);
+	}
+	{
+		std::cout << SUBTITLE << "[ Batch 2: All relational called for std ]" << RESET_COLOR << std::endl;
+		std::list<int> std_a;
+		std_a.push_back(10);
+		std_a.push_back(20);
+		std_a.push_back(30);
+		std::list<int> std_b;
+		std_b.push_back(10);
+		std_b.push_back(20);
+		std_b.push_back(20);
+		std_b.push_back(30);
+		std::list<int> std_c;
+		std_c.push_back(30);
+		std_c.push_back(20);
+		std_c.push_back(10);
+
+		testBool(!(std_a == std_b), __LINE__);
+		testBool(std_b != std_c, __LINE__);
+		testBool(std_b < std_c, __LINE__);
+		testBool(std_c > std_b, __LINE__);
+		testBool(!(std_a <= std_b), __LINE__);
+		testBool(std_a >= std_b, __LINE__);
+
+		std::cout << SUBTITLE << "[ Same values, same calls for ft ]" << RESET_COLOR << std::endl;
+
+		ft::list<int> ft_a;
+		ft_a.push_back(10);
+		ft_a.push_back(20);
+		ft_a.push_back(30);
+		ft::list<int> ft_b;
+		ft_b.push_back(10);
+		ft_b.push_back(20);
+		ft_b.push_back(20);
+		ft_b.push_back(30);
+		ft::list<int> ft_c;
+		ft_c.push_back(30);
+		ft_c.push_back(20);
+		ft_c.push_back(10);
+
+		testBool(!(ft_a == ft_b), __LINE__);
+		testBool(ft_b != ft_c, __LINE__);
+		testBool(ft_b < ft_c, __LINE__);
+		testBool(ft_c > ft_b, __LINE__);
+		testBool(!(ft_a <= ft_b), __LINE__);
+		testBool(ft_a >= ft_b, __LINE__);
+	}
+	{
+		std::cout << SUBTITLE << "[ Batch 3: All relational called for std ]" << RESET_COLOR << std::endl;
+		std::list<int> std_a;
+		std_a.push_back(10);
+		std_a.push_back(20);
+		std_a.push_back(30);
+		std::list<int> std_b;
+		std_b.push_back(10);
+		std_b.push_back(20);
+		std_b.push_back(30);
+		std_b.push_back(30);
+		std::list<int> std_c;
+
+		testBool((std_a != std_b), __LINE__);
+		testBool(std_b != std_c, __LINE__);
+		testBool(!(std_b < std_c), __LINE__);
+		testBool(!(std_c > std_b), __LINE__);
+		testBool((std_a <= std_b), __LINE__);
+		testBool(std_a < std_b, __LINE__);
+
+		std::cout << SUBTITLE << "[ Same values, same calls for ft ]" << RESET_COLOR << std::endl;
+
+		ft::list<int> ft_a;
+		ft_a.push_back(10);
+		ft_a.push_back(20);
+		ft_a.push_back(30);
+		ft::list<int> ft_b;
+		ft_b.push_back(10);
+		ft_b.push_back(20);
+		ft_b.push_back(30);
+		ft_b.push_back(30);
+		ft::list<int> ft_c;
+
+		testBool((ft_a != ft_b), __LINE__);
+		testBool(ft_b != ft_c, __LINE__);
+		testBool(!(ft_b < ft_c), __LINE__);
+		testBool(!(ft_c > ft_b), __LINE__);
+		testBool((ft_a <= ft_b), __LINE__);
+		testBool(ft_a < ft_b, __LINE__);
+	}
+	return(0);
+}
+
+
+int
 main( void )	{
 
-	test_instantiation();
+	// test_instantiation();
 
 	// test_push_back_push_front_pop_back_pop_front();
 	// test_clear();
@@ -775,6 +957,7 @@ main( void )	{
 	// test_assign();
 	// test_member_swap();
 	// test_nonmember_swap();
+	test_relational_operators();
 
 
 	std::cout << SUBTITLE << "ALL TESTS PASSED ~~~~~~>  " << RESET_COLOR;

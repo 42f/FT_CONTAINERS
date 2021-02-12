@@ -10,7 +10,7 @@
 
 
 #ifndef DEBUG_MODE
-# define DEBUG_MODE false
+# define DEBUG_MODE 0
 #endif
 
 namespace ft	{
@@ -25,13 +25,13 @@ namespace ft	{
 
 			node( void ) : next(this), prev(this) {
 
-				if (DEBUG_MODE)
-					std::cout << "CONSTRUCTOR --> " << __func__ << std::endl;
+				if (DEBUG_MODE >= 2)
+					std::cout << "CONSTRUCTOR --> default " << __func__ << std::endl;
 
 			};
 			node( T const & val ) : next(this), prev(this), data(val) {
 
-				if (DEBUG_MODE)
+				if (DEBUG_MODE >= 3)
 				{
 					std::cout << "CONSTRUCTOR with Param--> " << __func__ << std::endl;
 					std::cout << __func__ << " this: " << this << std::endl;
@@ -41,7 +41,7 @@ namespace ft	{
 			};
 
 			~node( void )	{
-				if (DEBUG_MODE)
+				if (DEBUG_MODE >= 2)
 					std::cout << "DESTRUCTOR --> " << __func__ << std::endl;
 			};
 
@@ -84,7 +84,7 @@ namespace ft	{
 					}
 					position->prev = this;
 				}
-				if (DEBUG_MODE)
+				if (DEBUG_MODE >= 3)
 				{
 					std::cout << __func__ << " at position: " << position << std::endl;
 					std::cout << __func__ << " prev = " << prev << std::endl;
@@ -96,7 +96,7 @@ namespace ft	{
 			void
 			unhook( void )	{
 
-			if (DEBUG_MODE)
+			if (DEBUG_MODE >= 3)
 				putNodeInfos(*this);
 
 				if (prev != this && next != this)	{
@@ -107,7 +107,7 @@ namespace ft	{
 					next->prev = next;
 				else if (next == this)
 					prev->next = prev;
-			if (DEBUG_MODE)
+			if (DEBUG_MODE >= 3)
 				putNodeInfos(*this);
 			};
 
@@ -120,7 +120,7 @@ namespace ft	{
 				std::cout << "next -> " << n.next << std::endl;
 				std::cout << std::endl;
 			};
-	};
+		}; // ----------------- Class node
 
 	template< typename T, class Alloc = std::allocator<T> >
 	class iterator : public std::iterator< std::bidirectional_iterator_tag, T >
@@ -165,7 +165,7 @@ namespace ft	{
 			// 		_ptr = rhs.ptr;
 			// 	return *this;
 			// }
-	};
+	}; //----------------- Class iterator
 
 
 	template< typename T, typename alloc = std::allocator<T> >
@@ -192,15 +192,10 @@ namespace ft	{
 			*/
 			explicit list( allocator_type const & userAlloc = allocator_type() ) : _size(0), _alloc(userAlloc) {
 
+				if (DEBUG_MODE >= 1)
+					std::cout << "CONSTRUCTOR --> DEFAULT " << __func__ << std::endl;
 				_tail = getNode(value_type());
 				_head = _tail;
-				if (DEBUG_MODE)	{
-					std::cout << std::endl;
-					std::cout << "CONSTRUCTOR --> default " << __func__ << std::endl;
-					std::cout << "\t_head --> " << _head << std::endl;
-					std::cout << "\t_tail --> " << _tail << std::endl;
-					std::cout << "\t_size --> " << _size << std::endl;
-				}
 			};
 
 			/**
@@ -209,28 +204,35 @@ namespace ft	{
 			explicit list( size_type n, value_type const & val = value_type(),
 				allocator_type const & userAlloc = allocator_type() ) : _size(0), _alloc(userAlloc)	{
 
-				_tail = getNode(val);
-				_head = _tail;
-				for (; n > 0; --n)
-					push_back(val);
+				if (DEBUG_MODE >= 1)
+					std::cout << "CONSTRUCTOR --> fill " << __func__ << std::endl;
+
+				initFillList(n, val);
 			};
 
 
 			/**
 			 * @brief Range Constructor
 			*/
-			// template <class InputIterator>
-			// list (InputIterator first, InputIterator last,
-			// 	 allocator_type const & userAlloc = allocator_type() ) : _size(0), _alloc(userAlloc)	{
+			template <class InputIterator>
+			list (InputIterator first, InputIterator last,
+				 allocator_type const & userAlloc = allocator_type() ) : _size(0), _alloc(userAlloc)	{
 
-			// 		insert(begin(), first, last);
-			// };
+				typename std::__is_integer<InputIterator>::__type	integer;
+				if (DEBUG_MODE >= 1)
+					std::cout << "CONSTRUCTOR --> range pre dispatcher ! " << __func__ << std::endl;
+
+				list_constructor_dispatch(first, last, userAlloc, integer);
+
+			};
 
 			/**
 			 * @brief Copy Constructor
 			*/
 			explicit list( list const & src ) : _size(0) {
 
+				if (DEBUG_MODE >= 1)
+					std::cout << "CONSTRUCTOR --> copy " << __func__ << std::endl;
 				_tail = getNode(value_type());
 				_head = _tail;
 				_alloc = src._alloc;
@@ -239,10 +241,6 @@ namespace ft	{
 				if (src.size() > 0)
 					assign(src.begin(), src.end());
 
-				if (DEBUG_MODE)	{
-					std::cout << std::endl;
-					std::cout << "CONSTRUCTOR --> copy " << __func__ << std::endl;
-				}
 			};
 
 			~list( void )	{
@@ -252,19 +250,9 @@ namespace ft	{
 					_alloc.destroy(_head);
 					_alloc.deallocate(_head, 1);
 				}
-				if (DEBUG_MODE)
+				if (DEBUG_MODE >= 1)
 					std::cout << "DESTRUCTOR --> " << __func__ << std::endl;
 			};
-
-
-
-
-
-
-
-
-
-
 
 			size_type			max_size( void ) const	{ return _alloc.max_size();  };
 			bool				empty( void ) const		{ return (_size == 0); };
@@ -275,8 +263,6 @@ namespace ft	{
 			reverse_iterator	rend( void ) const 		{ return reverse_iterator(begin()); };
 			reference			front( void ) const		{ return (_head->data); };
 			reference			back( void ) const 		{ return (_tail->data); };
-
-
 
 			list&
 			operator= (const list& x)	{
@@ -428,23 +414,65 @@ namespace ft	{
 
 
 		protected:
-			node *		_head;
-			node *		_tail;
+			node *			_head;
+			node *			_tail;
 			size_type		_size;
 			allocator_type	_alloc;
 
+		private:
+
+			void	incSize( void )	{ _size++; }
+			void	decSize( void )	{ _size--; }
+
 			template <class InputIterator>
-			void assign_dispatch (InputIterator first, InputIterator last, std::__false_type)	{
+			void
+			assign_dispatch (InputIterator first, InputIterator last, std::__false_type)	{
 
 				clear();
 				insert(begin(), first, last);
 			};
 
 			template<typename integer>
-			void assign_dispatch (integer n, integer val, std::__true_type)	{
+			void
+			assign_dispatch (integer n, integer val, std::__true_type)	{
 
 				assign(static_cast<size_type>(n), static_cast<value_type>(val));
 			};
+
+
+			/**
+			 * @brief Fill Constructor actual function
+			*/
+			template <class integer>
+			void
+			list_constructor_dispatch (integer n, integer const & val,
+				allocator_type const &, std::__true_type)	{
+
+				if (DEBUG_MODE >= 1)	{
+					std::cout << "dispatch --> __true_type " << __func__ << std::endl;
+					std::cout << "CONSTRUCTOR --> fill " << __func__ << std::endl;
+				}
+
+				initFillList(n, val);
+			};
+
+			/**
+			 * @brief Range Constructor actual function
+			*/
+			template <class InputIterator>
+			void
+			list_constructor_dispatch (InputIterator first, InputIterator last,
+				 allocator_type const & userAlloc, std::__false_type)	{
+
+				if (DEBUG_MODE >= 1)
+					std::cout << "CONSTRUCTOR --> range " << __func__ << std::endl;
+				_size = 0;
+				_alloc = userAlloc;
+				_tail = getNode(value_type());
+				_head = _tail;
+				insert(begin(), first, last);
+			};
+
 
 			template<typename integer>
 			void
@@ -463,12 +491,20 @@ namespace ft	{
 				}
 			}
 
-		private:
+			/**
+			 * @brief initialize the head and tail of a new list, to be
+			 * used only by constructors.
+			*/
+			void
+			initFillList(size_type n, value_type const & val)	{
 
-			void	incSize( void )	{ _size++; }
-			void	decSize( void )	{ _size--; }
+				_tail = getNode(value_type());
+				_head = _tail;
+				insert(begin(), n, val);
+			}
 
-			node * getNode(value_type const & val)	{
+			node*
+			getNode(value_type const & val)	{
 
 				node * newNode;
 				try	{
@@ -482,11 +518,11 @@ namespace ft	{
 
 					std::cerr << e.what() << std::endl;
 				}
-				if (DEBUG_MODE)
+				if (DEBUG_MODE >= 2)
 					std::cout << "Create " << val << " @ " << newNode << std::endl;
 				return newNode;
 			};
-	};
+		}; // ----------------- Class list
 
 	template <class T, class Alloc >
 	void
@@ -495,6 +531,47 @@ namespace ft	{
 		x.swap(y);
 	};
 
-} // ft namespace
+	template <class T, class Alloc>
+	bool
+	operator== (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)	{
+
+		if (lhs.size() != rhs.size())
+			return false;
+		return (std::equal(lhs.begin(), lhs.end(), rhs.begin()));
+
+
+	};
+
+	template <class T, class Alloc>
+	bool
+	operator!= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)	{ return(!(lhs == rhs)); };
+
+
+	template <class T, class Alloc>
+	bool
+	operator<  (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)	{
+
+		return (std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+
+	};
+
+	template <class T, class Alloc>
+	bool
+	operator<= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)	{ return(!(lhs > rhs)); };
+
+	template <class T, class Alloc>
+	bool
+	operator>  (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)	{
+
+		return (std::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));
+
+	};
+
+	template <class T, class Alloc>
+	bool
+	operator>= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)	{ return(!(lhs < rhs)); };
+
+
+} // ----------------- ft namespace
 
 #endif /* *****BVALETTE****** LIST_H */

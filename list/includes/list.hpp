@@ -3,6 +3,7 @@
 
 # include <iostream>
 # include <memory>
+# include <cstddef>
 # include <string>
 # include <iterator>
 # include <limits>
@@ -156,6 +157,7 @@ namespace ft	{
 	class iterator : public std::iterator< std::bidirectional_iterator_tag, T >
 	{
 		public:
+			typedef ptrdiff_t	distance;
 			iterator( void ) :_ptr(NULL) {}
 			iterator(node<T>* src) :_ptr(src) {}
 			iterator(const iterator& itSrc) : _ptr(itSrc._ptr) {}
@@ -182,8 +184,51 @@ namespace ft	{
 				return tmp;
 			}
 
+			distance	operator- ( iterator rhs ) {
+
+				distance		ret = 0;
+				if (rhs < *this)	{
+					while (*this != rhs && rhs._ptr != rhs._ptr->next)	{
+						ret++;
+						rhs++;
+					}
+				}
+				return ret;
+			}
+
+			iterator	operator- ( distance n ) {
+
+				iterator tmpIt = *this;
+
+				while ( n > 0 )	{
+					tmpIt--;
+					n--;
+				}
+				return tmpIt;
+			}
+
+			iterator	operator+ ( distance n ) {
+
+				iterator tmpIt = *this;
+
+				while ( n > 0 )	{
+					tmpIt++;
+					n--;
+				}
+				return tmpIt;
+			}
+
 			bool 		operator==(const iterator& rhs) const { return _ptr==rhs._ptr; }
 			bool 		operator!=(const iterator& rhs) const { return _ptr!=rhs._ptr; }
+			bool 		operator<(const iterator& rhs) const {
+
+				if (*this == rhs)
+					return false;
+				iterator	tmpIt = *this;
+				while (tmpIt._ptr != tmpIt._ptr->next && tmpIt != rhs)
+					tmpIt++;
+				return (tmpIt == rhs);
+			}
 
 			T &	operator*() { return _ptr->data; }
 
@@ -216,6 +261,7 @@ namespace ft	{
 			typedef typename alloc::pointer			pointer;
 			typedef typename alloc::const_pointer	const_pointer;
 			typedef typename alloc::template rebind<node>::other	allocator_type;
+
 
 			/**
 			 * @brief Default Constructor
@@ -456,23 +502,8 @@ namespace ft	{
 			void
 			splice (iterator position, list& x, iterator it)	{
 
-				if (x.size() > 0)	{
-					iterator	tmpItNext = it;
-					tmpItNext++;
-					it._ptr->unhook();
-					it._ptr->hook(position._ptr);
-					if (position._ptr == _head)
-						_head = it._ptr;
-
-					if (it._ptr == x._head)
-						x._head = tmpItNext._ptr;
-
-					if (x.size() == 1)
-						x._head = x._tail;
-					this->incSize();
-				}
-				x.decSize();
-			};
+				splice(position, x, it, ++it);
+			}	// splice
 
 		/**
 		 *	@brief element range (3)
@@ -495,17 +526,74 @@ namespace ft	{
 					if (x.size() == 0)
 						x._head = x._tail;
 				}
-			};
+			}	// splice
 
 
+			void remove (const value_type& val)	{
+
+				iterator	itFind = begin();
+
+				while ((itFind = std::find(itFind, end(), val)) != end())
+					itFind = erase(itFind);
+			}	// remove
+
+			template <class Predicate>
+			void
+			remove_if (Predicate pred)	{
+
+				iterator	itFind = begin();
+
+				while ((itFind = std::find_if(itFind, end(), pred)) != end())
+					itFind = erase(itFind);
+			}	// remove
 
 
+			void
+			unique( void )	{ unique(equality()); }
 
+			template <class BinaryPredicate>
+			void
+			unique (BinaryPredicate binary_pred)	{
 
+				iterator	itFind = begin();
+				iterator	itEndGroup = begin();
 
+				while ((itFind = std::adjacent_find(itEndGroup, end(), binary_pred)) != end())	{
+					itEndGroup = itFind;
+					while (binary_pred(*itFind, *itEndGroup) == true && itEndGroup != end())
+						itEndGroup++;
+				 	erase(++itFind, itEndGroup);
+				}
 
+			} // unique
 
+			void merge (list& x)	{ merge(x, smaller_than()); }
 
+			template <class Compare>
+			void
+			merge (list& x, Compare comp)	{
+
+				if (*this == x)
+					return ;
+				iterator	thisCursor = this->begin();
+				while (x.empty() == false)	{
+					while (thisCursor != this->end() && comp(*x.begin(), *thisCursor) == false)	{
+						thisCursor++;
+					}
+					this->splice(thisCursor, x, x.begin());
+				}
+				if (x.empty() == false)
+					this->splice(this->end(), x);
+			} // merge
+
+			void sort() { sort(smaller_than()); }
+
+			template <class Compare>
+			void
+			sort (Compare comp)	{
+
+				std::sort(begin(), end(), comp);
+			} // sort
 
 		protected:
 			node *			_head;
@@ -517,6 +605,17 @@ namespace ft	{
 
 			void	incSize( size_type n = 1 )	{ _size += n; }
 			void	decSize( size_type n = 1 )	{ _size -= n; }
+
+			struct smaller_than {
+				bool operator() (value_type const & a, value_type const & b) const
+				{ return (a<b); }
+			};
+
+			struct equality {
+				bool operator() (value_type const & a, value_type const & b) const
+				{ return (a==b); }
+			};
+
 
 			template <class InputIterator>
 			void

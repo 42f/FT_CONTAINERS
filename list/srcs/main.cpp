@@ -10,6 +10,7 @@
 
 #include "list.hpp"
 
+#include <math.h>
 #include <algorithm>
 #include <stdio.h>
 #include <assert.h>
@@ -44,7 +45,11 @@
 #endif
 
 #ifndef PRINT_TITLE
-# define PRINT_TITLE    "\n\033[44m\t"
+# define PRINT_TITLE    "\n\033[43m\t"
+#endif
+
+#ifndef PRINT_STD_TITLE
+# define PRINT_STD_TITLE    "\n\033[44m\t"
 #endif
 
 #ifndef TESTOK_TITLE
@@ -112,7 +117,7 @@ std::ostream &			operator<<( std::ostream & o, ex const & i )
 
 template< typename T>
 void
-putList( ft::list<T> const & lst, size_t errorPos = -1 )	{
+putList( ft::list<T> const & lst, int errorPos = -1 )	{
 
 	std::cout << PRINT_TITLE << "[ FT::LIST ]" << RESET_COLOR << std::endl;
 	std::cout << PRINT_TITLE << "[ size of list ]" << RESET_COLOR << " -> ";
@@ -120,32 +125,48 @@ putList( ft::list<T> const & lst, size_t errorPos = -1 )	{
 	typename ft::list<T>::iterator it = lst.begin();
 	typename ft::list<T>::iterator ite = lst.end();
 
-	for (size_t i = 0; lst.size() > 0 && i <= lst.size() && it != ite; it++, i++)
+	int	printMax;
+
+	if (errorPos == -1 && lst.size() > 100)
+		printMax = 10;
+	else
+		printMax = static_cast<int>(lst.size());
+	for (int i = 0; lst.size() > 0 && i <= printMax && it != ite; it++, i++)
 	{
-		if (i == errorPos || i == lst.size())
+		if (i == errorPos || i == static_cast<int>(lst.size()))
 			std::cout << ERROR_SOURCE << "ft: [" << i << "] " << RESET_COLOR << *it << " -> " << &(*it) << std::endl;
 		else
 			std::cout << "ft: [" << i << "] " <<*it << " -> " << &(*it) << std::endl;
 	}
+	if (printMax != static_cast<int>(lst.size()))
+		std::cout << " !!\t List size is too large to print... stoping here." << std::endl;
 }
 
 template< typename T>
 void
-putList( std::list<T> const & lst, size_t errorPos = -1 )	{
+putList( std::list<T> const & lst, int errorPos = -1 )	{
 
-	std::cout << PRINT_TITLE << "[ STD::LIST ]" << RESET_COLOR << std::endl;
-	std::cout << PRINT_TITLE << "[ size of list ]" << RESET_COLOR << " -> ";
+	std::cout << PRINT_STD_TITLE << "[ STD::LIST ]" << RESET_COLOR << std::endl;
+	std::cout << PRINT_STD_TITLE << "[ size of list ]" << RESET_COLOR << " -> ";
 	std::cout << lst.size() << std::endl;
 	typename std::list<T>::const_iterator it = lst.begin();
 	typename std::list<T>::const_iterator ite = lst.end();
 
-	for (size_t i = 0; lst.size() > 0 && i <= lst.size() && it != ite; it++, i++)
+	int	printMax;
+
+	if (errorPos == -1 && lst.size() > 100)
+		printMax = 10;
+	else
+		printMax = static_cast<int>(lst.size());
+	for (int i = 0; lst.size() > 0 && i <= printMax && it != ite; it++, i++)
 	{
-		if (i == errorPos || i == lst.size())
+		if (i == errorPos || i == static_cast<int>(lst.size()))
 			std::cout << ERROR_SOURCE << "std: [" << i << "] " << RESET_COLOR << *it << " -> " << &(*it) << std::endl;
 		else
 			std::cout << "std: [" << i << "] " <<*it << " -> " << &(*it) << std::endl;
 	}
+	if (printMax != static_cast<int>(lst.size()))
+		std::cout << " !!\t List size is too large to print... stoping here." << std::endl;
 }
 
 bool	testBool(bool b, int const lineNo = -1 )	{
@@ -160,6 +181,7 @@ template< typename T>
 void
 testList( ft::list<T> const & ft_lst, std::list<T> const &std_lst, bool print, std::string message = "" )	{
 
+	bool	success = true;
 
 	if (message.empty() == false)
 		std::cout << SUBTITLE << message << RESET_COLOR << std::endl;
@@ -180,6 +202,8 @@ testList( ft::list<T> const & ft_lst, std::list<T> const &std_lst, bool print, s
 		std::cout << ERROR_TITLE << "ERROR !" << RESET_COLOR << std::endl;
 		if (DEBUG_MODE < 1)
 			abort();
+		else
+			success = false;
 	}
 
 	if (ft_lst.size() > 0)
@@ -201,8 +225,10 @@ testList( ft::list<T> const & ft_lst, std::list<T> const &std_lst, bool print, s
 				std::cout << TITLE <<"iterator at pos " << i << ": ft (" << *ft_it << ") " << RESET_COLOR;
 				std::cout << ERROR_TITLE << "ERROR !" << RESET_COLOR << std::endl;
 				std::cout << "std (" << *std_it << ") Diff ! " << RESET_COLOR << std::endl;
-		if (DEBUG_MODE < 1)
+				if (DEBUG_MODE < 1)
 					abort();
+				else
+					success = false;
 			}
 			i++;
 			ft_it++;
@@ -216,14 +242,18 @@ testList( ft::list<T> const & ft_lst, std::list<T> const &std_lst, bool print, s
 			}
 			std::cout << TITLE <<"Diff in list after iterating thought it." << RESET_COLOR << std::endl;
 			std::cout << ERROR_TITLE << "ERROR !" << RESET_COLOR << std::endl;
-		if (DEBUG_MODE < 1)
+			if (DEBUG_MODE < 1)
 				abort();
+			else
+				success = false;
 		}
 	}
-	if (print == true)
-		std::cout << TESTOK_TITLE << "[ TEST PASSED: no diff ]" << RESET_COLOR << " \342\234\205" << std::endl;
+	if (print == true && success == true)
+		std::cout << TESTOK_TITLE << "[ TEST PASSED: no diff ] list sizes: ft(" << ft_lst.size() <<") std(" << std_lst.size() << ")" << RESET_COLOR << " \342\234\205" << std::endl;
+	else if (success == true)
+		std::cout << "[ TEST PASSED: no diff ] list sizes: ft(" << ft_lst.size() <<") std(" << std_lst.size() << ") \342\234\205" << std::endl;
 	else
-		std::cout << "[ TEST PASSED: no diff ]" << " \342\234\205" << std::endl;
+		std::cout << ERROR_TITLE << "TEST FAILED !" << RESET_COLOR << std::endl;
 }
 
 void
@@ -1159,6 +1189,349 @@ test_splice( void )	{
 	return (0);
 }
 
+
+bool more_than_100 (const int& value) { return (value>100); }
+bool more_than_10 (const int& value) { return (value>10); }
+bool less_or_eq_10 (const int& value) { return (value<=10); }
+
+int
+test_remove_if( void )	{
+	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with ints ~~~~~~~~~~~" << RESET_COLOR << std::endl;
+	{
+		std::cout << SUBTITLE << "[ Instanciate empty list ]" << RESET_COLOR << std::endl;
+		ft::list<int>	ftl0;
+		std::list<int>	stdl0;
+		size_t			testSize = 3000000;
+		testList(ftl0, stdl0, NOPRINT);
+		std::cout << SUBTITLE << "[ remove_if with predicate: bool function returning true for value>10 ]" << RESET_COLOR << std::endl;
+		ftl0.remove_if(more_than_10);
+		stdl0.remove_if(more_than_10);
+		testList(ftl0, stdl0, NOPRINT);
+		std::cout << SUBTITLE << "[ pushback " << testSize << " random values in list (same value for ft and std list, 0 <= val < 20) ]" << RESET_COLOR << std::endl;
+
+
+		srand(reinterpret_cast<long unsigned int>(&stdl0));
+		for (size_t i = 0; i < testSize; i++)	{
+			int val = rand() % 20;
+			ftl0.push_back(val);
+			stdl0.push_back(val);
+		}
+		testList(ftl0, stdl0, NOPRINT);
+		std::cout << SUBTITLE << "[ remove_if with predicate: bool function returning true for value>100 (no element will be removed) ]" << RESET_COLOR << std::endl;
+		ftl0.remove_if(more_than_100);
+		stdl0.remove_if(more_than_100);
+		testList(ftl0, stdl0, NOPRINT);
+		std::cout << SUBTITLE << "[ remove_if with predicate: bool function returning true for value>10 ]" << RESET_COLOR << std::endl;
+		ftl0.remove_if(more_than_10);
+		stdl0.remove_if(more_than_10);
+		testList(ftl0, stdl0, NOPRINT);
+		std::cout << SUBTITLE << "[ remove_if with predicate: bool function returning true for value<=10 ]" << RESET_COLOR << std::endl;
+		ftl0.remove_if(less_or_eq_10);
+		stdl0.remove_if(less_or_eq_10);
+		testList(ftl0, stdl0, NOPRINT);
+		std::cout << SUBTITLE << "[ same as before but list 0 is now empty ]" << RESET_COLOR << std::endl;
+		ftl0.remove_if(less_or_eq_10);
+		stdl0.remove_if(less_or_eq_10);
+		testList(ftl0, stdl0, NOPRINT);
+	}
+	return (0);
+}
+
+// a binary predicate implemented as a function:
+bool same_integral_part (double first, double second)
+{ return ( int(first)==int(second) ); }
+
+// a binary predicate implemented as a class:
+struct is_near {
+  bool operator() (double first, double second)
+  { return (fabs(first-second)<5.0); }
+};
+
+int
+test_remove( void )	{
+	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with doubles ~~~~~~~~~~~" << RESET_COLOR << std::endl;
+	{
+		ft::list<double>	ftl0;
+		std::list<double>	stdl0;
+		size_t				testSize = 500000;
+
+		std::cout << SUBTITLE << "[ pushback " << testSize << " random float values in list (same value for ft and std list, 0 <= val < 5) ]" << RESET_COLOR << std::endl;
+		srand(reinterpret_cast<long unsigned int>(&stdl0));
+
+		int		divider;
+		float	val;
+		for (size_t i = 0; i < testSize; i++)	{
+			if (i < (testSize / 3) || i > (testSize / 2))	{
+				divider = rand() % 5;
+				val = static_cast<float>(rand() % 15) / ( (divider == 0) ? i + 1 : divider );
+			}
+			ftl0.push_back(val);
+			stdl0.push_back(val);
+		}
+		testList(ftl0, stdl0, NOPRINT);
+
+		std::cout << SUBTITLE << "[ unique (1) no arg ]" << RESET_COLOR << std::endl;
+		testList(ftl0, stdl0, NOPRINT);
+		stdl0.unique();
+		ftl0.unique();
+		testList(ftl0, stdl0, NOPRINT);
+
+		std::cout << SUBTITLE << "[ unique (2) with binary predicate as boolean function (same_integral_part) ]" << RESET_COLOR << std::endl;
+		stdl0.unique(same_integral_part);
+		ftl0.unique(same_integral_part);
+		testList(ftl0, stdl0, NOPRINT);
+
+		std::cout << SUBTITLE << "[ unique (2) with binary predicate as a structure (is_near()) ]" << RESET_COLOR << std::endl;
+		stdl0.unique(is_near());
+		ftl0.unique(is_near());
+		testList(ftl0, stdl0, NOPRINT);
+	}
+	return (0);
+}
+
+
+bool smaller_than ( int first, int second)	{ return ( first<second ); }
+bool greater_than ( int first, int second)	{ return ( first>second ); }
+
+int
+test_merge( void )	{
+	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with ints ~~~~~~~~~~~" << RESET_COLOR << std::endl;
+	std::cout << HEADER_TITLE << "ASCENDING ORDER with merge(2)" << RESET_COLOR << std::endl;
+	{
+		ft::list<int>		ftl0;
+		std::list<int>		stdl0;
+		ft::list<int>		ftl1;
+		std::list<int>		stdl1;
+		size_t				testSize = 10;
+
+		std::cout << SUBTITLE << "[ pushback " << testSize << " ASCENDING even values in list 0 and odd values in list 1 ]" << RESET_COLOR << std::endl;
+
+		for (size_t i = 0; i < testSize * 2; i++)	{
+			if (i % 2 == 0)	{
+				ftl0.push_back(i);
+				stdl0.push_back(i);
+			}
+			else	{
+				ftl1.push_back(i);
+				stdl1.push_back(i);
+			}
+		}
+		testList(ftl0, stdl0, NOPRINT);
+		testList(ftl1, stdl1, NOPRINT);
+		std::cout << SUBTITLE << "[ test to merge the list into itself ]" << RESET_COLOR << std::endl;
+		ftl0.merge(ftl0, greater_than);
+		stdl0.merge(stdl0, greater_than);
+		testList(ftl0, stdl0, NOPRINT);
+		testList(ftl1, stdl1, NOPRINT);
+		std::cout << SUBTITLE << "[ test to merge the list 1 into list 0 with greater_than Compare]" << RESET_COLOR << std::endl;
+		ftl0.merge(ftl1, greater_than);
+		stdl0.merge(stdl1, greater_than);
+		testList(ftl0, stdl0, NOPRINT);
+		testList(ftl1, stdl1, NOPRINT);
+	}
+	std::cout << HEADER_TITLE << "DESCENDING ORDER with merge(2)" << RESET_COLOR << std::endl;
+	{
+		ft::list<int>		ftl0;
+		std::list<int>		stdl0;
+		ft::list<int>		ftl1;
+		std::list<int>		stdl1;
+		size_t				testSize = 10;
+
+		std::cout << SUBTITLE << "[ pushback " << testSize << " DESCENDING even values in list 0 and odd values in list 1 ]" << RESET_COLOR << std::endl;
+
+		for (size_t i = testSize * 2; i > 0 ; i--)	{
+			if (i % 2 == 0)	{
+				ftl0.push_back(i);
+				stdl0.push_back(i);
+			}
+			else	{
+				ftl1.push_back(i);
+				stdl1.push_back(i);
+			}
+		}
+
+		ftl1.push_back(1000);
+		stdl1.push_back(1000);
+
+		testList(ftl0, stdl0, NOPRINT);
+		testList(ftl1, stdl1, NOPRINT);
+		std::cout << SUBTITLE << "[ test to merge the list 1 into list 0 with smaller_than Compare]" << RESET_COLOR << std::endl;
+		ftl0.merge(ftl1, smaller_than);
+		stdl0.merge(stdl1, smaller_than);
+		testList(ftl0, stdl0, NOPRINT);
+		testList(ftl1, stdl1, NOPRINT);
+	}
+	std::cout << HEADER_TITLE << "RANDOM ORDER with merge(2)" << RESET_COLOR << std::endl;
+	{
+		ft::list<int>		ftl0;
+		std::list<int>		stdl0;
+		ft::list<int>		ftl1;
+		std::list<int>		stdl1;
+		size_t				testSize = 1000000;
+
+		std::cout << SUBTITLE << "[ pushback " << testSize << " random values into list 0 and list 1 (different values)]" << RESET_COLOR << std::endl;
+
+		srand(reinterpret_cast<long unsigned int>(&stdl0));
+		for (size_t i = 0; i < testSize; i++)	{
+			int val = rand() % 20;
+			ftl0.push_back(val);
+			stdl0.push_back(val);
+			val = rand() % 40;
+			ftl1.push_back(val);
+			stdl1.push_back(val);
+		}
+		ftl0.push_back(42);
+		stdl0.push_back(42);
+		ftl0.push_back(42);
+		stdl0.push_back(42);
+
+		testList(ftl0, stdl0, NOPRINT);
+		testList(ftl1, stdl1, NOPRINT);
+		std::cout << SUBTITLE << "[ test to merge the list 1 into list 0 with greater_than Compare]" << RESET_COLOR << std::endl;
+		ftl0.merge(ftl1, greater_than);
+		stdl0.merge(stdl1, greater_than);
+		testList(ftl0, stdl0, NOPRINT);
+		testList(ftl1, stdl1, NOPRINT);
+	}
+	std::cout << HEADER_TITLE << "RANDOM ORDER - with merge(1)" << RESET_COLOR << std::endl;
+	{
+		ft::list<int>		ftl0;
+		std::list<int>		stdl0;
+		ft::list<int>		ftl1;
+		std::list<int>		stdl1;
+		size_t				testSize = 1000;
+
+		std::cout << SUBTITLE << "[ pushback " << testSize << " random values into list 0 and list 1 (different values)]" << RESET_COLOR << std::endl;
+
+		srand(reinterpret_cast<long unsigned int>(&stdl0));
+		for (size_t i = 0; i < testSize; i++)	{
+			int val = rand() % 20;
+			ftl0.push_back(val);
+			stdl0.push_back(val);
+			val = rand() % 40;
+			ftl1.push_back(val);
+			stdl1.push_back(val);
+		}
+		ftl0.push_back(42);
+		stdl0.push_back(42);
+		ftl0.push_back(42);
+		stdl0.push_back(42);
+
+		testList(ftl0, stdl0, NOPRINT);
+		testList(ftl1, stdl1, NOPRINT);
+		std::cout << SUBTITLE << "[ test to merge the list 1 into list 0 with no compare argument (merge(1)) ]" << RESET_COLOR << std::endl;
+		ftl0.merge(ftl1);
+		stdl0.merge(stdl1);
+		testList(ftl0, stdl0, NOPRINT);
+		testList(ftl1, stdl1, NOPRINT);
+	}
+	return (0);
+}
+
+
+int
+test_iterator( void )	{
+	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with ints ~~~~~~~~~~~" << RESET_COLOR << std::endl;
+	std::cout << HEADER_TITLE << "ASCENDING ORDER VALUES" << RESET_COLOR << std::endl;
+	{
+		ft::list<int>		ftl0;
+		size_t				testSize = 10;
+
+		std::cout << SUBTITLE << "[ pushback " << testSize << " ASCENDING even values in list 0 ]" << RESET_COLOR << std::endl;
+
+		for (size_t i = 0; i < testSize; i++)	{
+			ftl0.push_back(i);
+		}
+		ft::list<int>::iterator		ft_it = ftl0.begin();
+		ft::list<int>::iterator		ft_it2 = ftl0.begin();
+		ft::list<int>::iterator		ft_itend = ftl0.end();
+
+		std::cout << SUBTITLE << "[ test operator< with iterator to begin < end ]" << RESET_COLOR << std::endl;
+		testBool(ft_it < ft_itend, __LINE__);
+		std::cout << SUBTITLE << "[ loop test iterator increment vs. iterator + i ]" << RESET_COLOR << std::endl;
+		for (size_t i = 0; i < ftl0.size(); i++)
+		{
+			testBool((*ft_it == *(ft_it2 + i)), __LINE__);
+			ft_it++;
+		}
+		std::cout << SUBTITLE << "[ test operator= ]" << RESET_COLOR << std::endl;
+		ft_it2 = ft_it;
+		testBool(ft_it == ft_it2, __LINE__);
+		std::cout << SUBTITLE << "[ loop test iterator increment vs. iterator + i ]" << RESET_COLOR << std::endl;
+		for (size_t i = 0; i < ftl0.size(); i++)
+		{
+			testBool((*ft_it == *(ft_it2 - i)), __LINE__);
+			ft_it--;
+		}
+		testBool(static_cast<size_t>(ft_itend - ft_it) == ftl0.size(), __LINE__);
+	}
+	return (0);
+}
+
+
+
+int
+test_sort( void )	{
+	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with ints ~~~~~~~~~~~" << RESET_COLOR << std::endl;
+	std::cout << HEADER_TITLE << "LIST FILLED WITH A RANDOM NUMBER OF RANDOM VALUES" << RESET_COLOR << std::endl;
+	{
+		ft::list<int>		ftl0;
+		std::list<int>		stdl0;
+		srand(reinterpret_cast<long unsigned int>(&stdl0));
+		size_t				testSize = rand() % 15000;
+
+		std::cout << SUBTITLE << "[ pushback " << testSize << " random values into list 0]" << RESET_COLOR << std::endl;
+
+		for (size_t i = 0; i < testSize; i++)	{
+			int val = rand() % 10000;
+			ftl0.push_back(val);
+			stdl0.push_back(val);
+		}
+		testList(ftl0, stdl0, NOPRINT);
+		std::cout << SUBTITLE << "[ sort list 0 with greater_than Compare ]" << RESET_COLOR << std::endl;
+		ftl0.sort(greater_than);
+		stdl0.sort(greater_than);
+		testList(ftl0, stdl0, NOPRINT);
+
+		std::cout << SUBTITLE << "[ sort list 0 with not argument ]" << RESET_COLOR << std::endl;
+		ftl0.sort();
+		stdl0.sort();
+		testList(ftl0, stdl0, NOPRINT);
+	}
+	return (0);
+}
+
+
+int
+test_reverse( void )	{
+	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with ints ~~~~~~~~~~~" << RESET_COLOR << std::endl;
+	std::cout << HEADER_TITLE << "LIST FILLED WITH A RANDOM NUMBER OF RANDOM VALUES" << RESET_COLOR << std::endl;
+	{
+		ft::list<int>		ftl0;
+		std::list<int>		stdl0;
+		srand(reinterpret_cast<long unsigned int>(&stdl0));
+		size_t				testSize = 10;
+		// size_t				testSize = rand() % 10;
+
+		std::cout << SUBTITLE << "[ pushback " << testSize << " random values into list 0]" << RESET_COLOR << std::endl;
+
+		for (size_t i = 0; i < testSize; i++)	{
+			int val = rand() % 100;
+			ftl0.push_back(val);
+			stdl0.push_back(val);
+		}
+		testList(ftl0, stdl0, PRINT);
+		std::cout << SUBTITLE << "[ sort list 0 with greater_than Compare ]" << RESET_COLOR << std::endl;
+		// ftl0.reverse();
+		stdl0.reverse();
+		testList(ftl0, stdl0, PRINT);
+
+	}
+	return (0);
+}
+
+
+
 int
 main( void )	{
 
@@ -1173,15 +1546,21 @@ main( void )	{
 	// test_operatorEqual();
 	// test_resize();
 	// test_assign();
-	// test_member_swap();
-	// test_nonmember_swap();
+	test_member_swap();
+	test_nonmember_swap();
 	// test_relational_operators();
-	test_splice();
+	// test_splice();
+	// test_remove_if();
+	// test_remove();
+	// test_merge();
+	// test_sort();
+	// test_iterator();
+	// test_reverse();
 
 	if (DEBUG_MODE == 0)
 	{
 		std::cout << SUBTITLE << "ALL TESTS PASSED ~~~~~~>  " << RESET_COLOR;
-		testBool(true);
+		testBool(1 == 1);
 	}
 	return (0);
 }

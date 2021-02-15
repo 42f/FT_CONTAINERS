@@ -454,13 +454,19 @@ namespace ft	{
 		 *	@brief single element (2)
 		*/
 			void
-			splice (iterator position, list& x, iterator i)	{
+			splice (iterator position, list& x, iterator it)	{
 
 				if (x.size() > 0)	{
-					i._ptr->unhook();
-					i._ptr->hook(position._ptr);
+					iterator	tmpItNext = it;
+					tmpItNext++;
+					it._ptr->unhook();
+					it._ptr->hook(position._ptr);
 					if (position._ptr == _head)
-						_head = i._ptr;
+						_head = it._ptr;
+
+					if (it._ptr == x._head)
+						x._head = tmpItNext._ptr;
+
 					if (x.size() == 1)
 						x._head = x._tail;
 					this->incSize();
@@ -482,6 +488,8 @@ namespace ft	{
 					first._ptr->hook(position._ptr);
 					if (position._ptr == _head)
 						_head = first._ptr;
+					if (first._ptr == x._head)
+						x._head = last._ptr;
 					this->incSize(sizeSplice);
 					x.decSize(sizeSplice);
 					if (x.size() == 0)

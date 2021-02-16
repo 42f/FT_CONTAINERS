@@ -133,7 +133,7 @@ putList( ft::list<T> const & lst, int errorPos = -1 )	{
 		printMax = static_cast<int>(lst.size());
 	for (int i = 0; lst.size() > 0 && i <= printMax && it != ite; it++, i++)
 	{
-		if (i == errorPos || i == static_cast<int>(lst.size()))
+		if (i == errorPos || i > static_cast<int>(lst.size()))
 			std::cout << ERROR_SOURCE << "ft: [" << i << "] " << RESET_COLOR << *it << " -> " << &(*it) << std::endl;
 		else
 			std::cout << "ft: [" << i << "] " <<*it << " -> " << &(*it) << std::endl;
@@ -160,7 +160,7 @@ putList( std::list<T> const & lst, int errorPos = -1 )	{
 		printMax = static_cast<int>(lst.size());
 	for (int i = 0; lst.size() > 0 && i <= printMax && it != ite; it++, i++)
 	{
-		if (i == errorPos || i == static_cast<int>(lst.size()))
+		if (i == errorPos || i > static_cast<int>(lst.size()))
 			std::cout << ERROR_SOURCE << "std: [" << i << "] " << RESET_COLOR << *it << " -> " << &(*it) << std::endl;
 		else
 			std::cout << "std: [" << i << "] " <<*it << " -> " << &(*it) << std::endl;
@@ -193,7 +193,7 @@ testList( ft::list<T> const & ft_lst, std::list<T> const &std_lst, bool print, s
 	}
 
 	if(ft_lst.size() != std_lst.size())	{
-		if (print == false)
+		if (print == false && success == true)
 		{
 			putList<T>(std_lst);
 			putList<T>(ft_lst);
@@ -217,7 +217,7 @@ testList( ft::list<T> const & ft_lst, std::list<T> const &std_lst, bool print, s
 		while (ft_it != ft_ite && std_it != std_ite)	{
 
 			if(*ft_it != *std_it)	{
-				if (print == false)
+				if (print == false && success == true)
 				{
 					putList<T>(ft_lst, i);
 					putList<T>(std_lst, i);
@@ -235,7 +235,7 @@ testList( ft::list<T> const & ft_lst, std::list<T> const &std_lst, bool print, s
 			std_it++;
 		}
 		if (ft_it != ft_ite || std_it != std_ite)	{
-			if (print == false)
+			if (print == false && success == true)
 			{
 				putList<T>(ft_lst);
 				putList<T>(std_lst);
@@ -1465,6 +1465,28 @@ test_iterator( void )	{
 		}
 		testBool(static_cast<size_t>(ft_itend - ft_it) == ftl0.size(), __LINE__);
 	}
+	std::cout << HEADER_TITLE << "TEST ITERATOR ARITHMETIC" << RESET_COLOR << std::endl;
+	{
+		ft::list<int>			l;
+		l.push_back(0);
+		l.push_back(1);
+		l.push_back(2);
+		l.push_back(3);
+		l.push_back(4);
+		l.push_back(5);
+		ft::list<int>::iterator it1 = ++l.begin();
+		ft::list<int>::iterator it2 = l.begin() + 2;
+		it1++;
+		ft::list<int>::iterator ite1 = --l.end();
+		ite1--;
+		ft::list<int>::iterator ite2 = l.end() - 2;
+
+		testBool(*it1 == 2, __LINE__);
+		testBool(*ite1 == 4, __LINE__);
+		testBool(*it1 == *it2, __LINE__);
+		testBool(*ite1 == *ite2, __LINE__);
+	}
+
 	return (0);
 }
 
@@ -1505,27 +1527,55 @@ test_sort( void )	{
 int
 test_reverse( void )	{
 	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with ints ~~~~~~~~~~~" << RESET_COLOR << std::endl;
-	std::cout << HEADER_TITLE << "LIST FILLED WITH A RANDOM NUMBER OF RANDOM VALUES" << RESET_COLOR << std::endl;
+	{
+		ft::list<int>		ftl0;
+		std::list<int>		stdl0;
+		size_t				testSize = 6;
+
+
+		for (size_t i = 1; i < testSize; i++)	{
+			ftl0.push_back(i);
+			stdl0.push_back(i);
+		}
+		testList(ftl0, stdl0, NOPRINT);
+		std::cout << HEADER_TITLE << "LIST FILLED WITH "<< testSize << " DESCENDING VALUES " << RESET_COLOR << std::endl;
+		std::cout << SUBTITLE << "[ reverse with no arguments ]" << RESET_COLOR << std::endl;
+		ftl0.reverse();
+		stdl0.reverse();
+		testList(ftl0, stdl0, NOPRINT);
+		std::cout << SUBTITLE << "[ push back 1 value in list, increasing size by 1, chaging oddness ]" << RESET_COLOR << std::endl;
+		ftl0.push_back(42);
+		stdl0.push_back(42);
+		std::cout << SUBTITLE << "[ reverse with no arguments ]" << RESET_COLOR << std::endl;
+		ftl0.reverse();
+		stdl0.reverse();
+		testList(ftl0, stdl0, NOPRINT);
+	}
 	{
 		ft::list<int>		ftl0;
 		std::list<int>		stdl0;
 		srand(reinterpret_cast<long unsigned int>(&stdl0));
-		size_t				testSize = 10;
-		// size_t				testSize = rand() % 10;
+		size_t				testSize = rand() % 50000;
 
-		std::cout << SUBTITLE << "[ pushback " << testSize << " random values into list 0]" << RESET_COLOR << std::endl;
 
-		for (size_t i = 0; i < testSize; i++)	{
+		for (size_t i = 1; i < testSize; i++)	{
 			int val = rand() % 100;
 			ftl0.push_back(val);
 			stdl0.push_back(val);
 		}
-		testList(ftl0, stdl0, PRINT);
-		std::cout << SUBTITLE << "[ sort list 0 with greater_than Compare ]" << RESET_COLOR << std::endl;
-		// ftl0.reverse();
+		testList(ftl0, stdl0, NOPRINT);
+		std::cout << HEADER_TITLE << "LIST FILLED WITH "<< testSize << ", A RANDOM NUMBER OF RANDOM VALUES " << RESET_COLOR << std::endl;
+		std::cout << SUBTITLE << "[ reverse with no arguments ]" << RESET_COLOR << std::endl;
+		ftl0.reverse();
 		stdl0.reverse();
-		testList(ftl0, stdl0, PRINT);
-
+		testList(ftl0, stdl0, NOPRINT);
+		std::cout << SUBTITLE << "[ push back 1 value in list, increasing size by 1, chaging oddness ]" << RESET_COLOR << std::endl;
+		ftl0.push_back(42);
+		stdl0.push_back(42);
+		std::cout << SUBTITLE << "[ reverse with no arguments ]" << RESET_COLOR << std::endl;
+		ftl0.reverse();
+		stdl0.reverse();
+		testList(ftl0, stdl0, NOPRINT);
 	}
 	return (0);
 }
@@ -1534,6 +1584,7 @@ test_reverse( void )	{
 
 int
 main( void )	{
+
 
 	// test_instantiation();
 
@@ -1546,8 +1597,8 @@ main( void )	{
 	// test_operatorEqual();
 	// test_resize();
 	// test_assign();
-	test_member_swap();
-	test_nonmember_swap();
+	// test_member_swap();
+	// test_nonmember_swap();
 	// test_relational_operators();
 	// test_splice();
 	// test_remove_if();
@@ -1555,7 +1606,7 @@ main( void )	{
 	// test_merge();
 	// test_sort();
 	// test_iterator();
-	// test_reverse();
+	test_reverse();
 
 	if (DEBUG_MODE == 0)
 	{

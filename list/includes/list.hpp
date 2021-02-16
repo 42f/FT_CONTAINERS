@@ -49,14 +49,53 @@ namespace ft	{
 			static void
 			swap(node& x, node& y)	{
 
-				node	*posx = x.next;
-				node	*posy = y.next;
-				y.unhook();
-				y.hook(posx);
-				x.unhook();
-				x.hook(posy);
-
+				if (&x != &y)	{
+					node *posx;
+					if (&y != x.next)
+						posx = x.next;
+					else
+						posx = &x;
+					node	*posy = y.next;
+					y.unhook();
+					y.hook(posx);
+					x.unhook();
+					x.hook(posy);
+				}
 			};
+
+
+	//  void
+	//  swapy(_List_node_base& __x,
+    //                       _List_node_base& __y) _GLIBCXX_USE_NOEXCEPT
+    // {
+    //   if ( __x._M_next != &__x )
+    //     {
+    //       if ( __y._M_next != &__y )
+    //         {
+    //           // Both __x and __y are not empty.
+    //           std::swap(__x._M_next,__y._M_next);
+    //           std::swap(__x._M_prev,__y._M_prev);
+    //           __x._M_next->_M_prev = __x._M_prev->_M_next = &__x;
+    //           __y._M_next->_M_prev = __y._M_prev->_M_next = &__y;
+    //         }
+    //       else
+    //         {
+    //           // __x is not empty, __y is empty.
+    //           __y._M_next = __x._M_next;
+    //           __y._M_prev = __x._M_prev;
+    //           __y._M_next->_M_prev = __y._M_prev->_M_next = &__y;
+    //           __x._M_next = __x._M_prev = &__x;
+    //         }
+    //     }
+    //   else if ( __y._M_next != &__y )
+    //     {
+    //       // __x is empty, __y is not empty.
+    //       __x._M_next = __y._M_next;
+    //       __x._M_prev = __y._M_prev;
+    //       __x._M_next->_M_prev = __x._M_prev->_M_next = &__x;
+    //       __y._M_next = __y._M_prev = &__y;
+    //     }
+    // }
 
 			void
 			transfer(node * const first, node * const last)	{
@@ -78,7 +117,7 @@ namespace ft	{
 
 			void
 			reverse( void )	{
-
+					// wrong !!!!!!
 				node *tmp;
 				tmp = next;
 				next = prev;
@@ -594,6 +633,31 @@ namespace ft	{
 
 				std::sort(begin(), end(), comp);
 			} // sort
+
+			void
+			reverse( void )	{
+
+
+				node * lastElem = _tail->prev;
+				node * newHead = lastElem;
+				node::swap(*_head, *lastElem);
+				_head = newHead;
+
+				iterator 	it;
+				iterator 	ite;
+
+				size_t		swapSize = ((size() / 2) % 2 == 0) ?
+							((size() - 2) / 2) : ((size() - 2) / 2);
+				for (size_t i = 0; i < swapSize ; i++)	{
+
+					it = begin() + 1 + i;
+					ite = end() - 2 - i;
+					if (DEBUG_MODE >= 3)
+						std::cout << "SWAP: " <<  *it << " ; " << *ite << std::endl;
+					node::swap(*it._ptr, *ite._ptr);
+				}
+
+			} // reverse
 
 		protected:
 			node *			_head;

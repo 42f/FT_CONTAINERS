@@ -177,8 +177,11 @@ putList( std::list<T> const & lst, int errorPos = -1 )	{
 bool	testBool(bool b, int const lineNo = -1 )	{
 	if (b == true)
 		std::cout << "[ TEST PASSED: no diff ] \t \342\234\205" << std::endl;
-	else
+	else	{
 		std::cout << ERROR_TITLE << "[ FAILURE at line..." << lineNo << "]" << RESET_COLOR << " \t \342\235\214" << std::endl;
+		if (DEBUG_MODE < 1)
+			throw failedTest();
+	}
 	return (b);
 }
 
@@ -293,7 +296,7 @@ test_Capacities( void )	{
 		std::cout << "empty for std : " << std::boolalpha << std.empty() << std::endl;
 		std::cout << "empty for ft  : " << std::boolalpha << ft.empty() << std::endl;
 
-		assert(testBool(std.empty() == ft.empty()));
+		testBool(std.empty() == ft.empty(), __LINE__);
 	}
 	{
 		size_t		testSize = 5;
@@ -304,12 +307,12 @@ test_Capacities( void )	{
 		std::cout << "Size of std : " << std.size() << std::endl;
 		std::cout << "Size of ft  : " << ft.size() << std::endl;
 
-		assert(testBool(std.size() == ft.size()));
+		testBool(std.size() == ft.size(), __LINE__);
 
 		std::cout << "empty for std : " << std::boolalpha << std.empty() << std::endl;
 		std::cout << "empty for ft  : " << std::boolalpha << ft.empty() << std::endl;
 
-		assert(testBool(std.empty() == ft.empty()));
+		testBool(std.empty() == ft.empty(), __LINE__);
 	}
 	{
 		size_t		testSize = 0;
@@ -318,7 +321,7 @@ test_Capacities( void )	{
 		ft::list<float>		ft(testSize);
 		std::cout << "max_size for std : " << std.max_size() << std::endl;
 		std::cout << "max_size for ft  : " << ft.max_size() << std::endl;
-		assert(testBool(std.max_size() == ft.max_size()));
+		testBool(std.max_size() == ft.max_size(), __LINE__);
 
 	}
 	return (0);
@@ -399,7 +402,6 @@ test_instantiation( void )	{
 			std::list<float>	stdl1;
 			testList(ftl1, stdl1, NOPRINT);
 		}
-
 		std::cout << SUBTITLE << "[ FILL CONSTRUCTOR with value ]" << RESET_COLOR << std::endl;
 		{
 			ft::list<int>	ftl0(5, 123);
@@ -424,8 +426,6 @@ test_instantiation( void )	{
 			std::list<exampleClass>	stdl0(5);
 			testList(ftl0, stdl0, NOPRINT);
 		}
-
-
 		std::cout << SUBTITLE << "[ RANGE CONSTRUCTOR test: list0 with fill and list1 with range ctor from list0 iterators ]" << RESET_COLOR << std::endl;
 		{
 			ft::list<int>	ftl0(5, 123);
@@ -437,56 +437,33 @@ test_instantiation( void )	{
 			testList(ftl1, stdl1, NOPRINT);
 
 		}
+		std::cout << SUBTITLE << "[ COPY CONSTRUCTOR from list with 5 elements]" << RESET_COLOR << std::endl;
+		{
+			ft::list<int>		ftl0(5, 123);
+			std::list<int>		stdl0(5, 123);
 
+			ft::list<int>		ftl1(ftl0);
+			std::list<int>		stdl1(stdl0);
+			testList(ftl0, stdl0, NOPRINT);
+			testList(ftl1, stdl1, NOPRINT);
+			std::cout << SUBTITLE << "[ check if begin points to a new elements ]" << RESET_COLOR << std::endl;
+			testBool(&(*ftl0.begin()) != &(*ftl1.begin()), __LINE__);
+			testBool(&(*stdl0.begin()) != &(*stdl1.begin()), __LINE__);
+		}
+		std::cout << SUBTITLE << "[ COPY CONSTRUCTOR from list with no elements]" << RESET_COLOR << std::endl;
+		{
+			ft::list<int>		ftl0;
+			std::list<int>		stdl0;
 
+			ft::list<int>		ftl1(ftl0);
+			std::list<int>		stdl1(stdl0);
+			testList(ftl0, stdl0, NOPRINT);
+			testList(ftl1, stdl1, NOPRINT);
 
-		// std::cout << SUBTITLE << "[ COPY CONSTRUCTOR from list with 5 elements]" << RESET_COLOR << std::endl;
-		// {
-		// 	ft::list<int>		ftl0(5, 123);
-		// 	std::list<int>		stdl0(5, 123);
-
-		// 	ft::list<int>		ftl1(ftl0);
-		// 	std::list<int>		stdl1(stdl0);
-		// 	testList(ftl0, stdl0, NOPRINT);
-		// 	testList(ftl1, stdl1, NOPRINT);
-		// 	std::cout << SUBTITLE << "[ check if begin points to a new elements ]" << RESET_COLOR << std::endl;
-		// 	testBool(&(*ftl0.begin()) != &(*ftl1.begin()), __LINE__);
-		// 	testBool(&(*stdl0.begin()) != &(*stdl1.begin()), __LINE__);
-		// }
-		// std::cout << SUBTITLE << "[ COPY CONSTRUCTOR from list with no elements]" << RESET_COLOR << std::endl;
-		// {
-		// 	ft::list<int>		ftl0;
-		// 	std::list<int>		stdl0;
-
-		// 	ft::list<int>		ftl1(ftl0);
-		// 	std::list<int>		stdl1(stdl0);
-		// 	testList(ftl0, stdl0, NOPRINT);
-		// 	testList(ftl1, stdl1, NOPRINT);
-
-		// 	std::cout << SUBTITLE << "[ check if begin points to a new elements ]" << RESET_COLOR << std::endl;
-		// 	testBool(&(*ftl0.begin()) != &(*ftl1.begin()), __LINE__);
-		// 	testBool(&(*stdl0.begin()) != &(*stdl1.begin()), __LINE__);
-		// }
-
-
-		/**
-		 * @brief -> for iterator tester
-		*/
-			// std::list<float>			stdl0;
-			// std::list<float>::iterator	it_stdl0 = stdl0.begin();
-			// std::list<float>::iterator	ite_stdl0 = stdl0.end();
-			// if (it_stdl0 == ite_stdl0)
-			// 	std::cout << "EQUAL" << std::endl;
-			// else
-			// 	std::cout << "NOT EQUAL" << std::endl;
-			// ft::list<float>			ftl0;
-			// ft::list<float>::iterator	it_ftl0 = ftl0.begin();
-			// ft::list<float>::iterator	ite_ftl0 = ftl0.end();
-			// if (it_ftl0 == ite_ftl0)
-			// 	std::cout << "EQUAL" << std::endl;
-			// else
-			// 	std::cout << "NOT EQUAL" << std::endl;
-
+			std::cout << SUBTITLE << "[ check if begin points to a new elements ]" << RESET_COLOR << std::endl;
+			testBool(&(*ftl0.begin()) != &(*ftl1.begin()), __LINE__);
+			testBool(&(*stdl0.begin()) != &(*stdl1.begin()), __LINE__);
+		}
 	}
 	return (0);
 }
@@ -494,8 +471,8 @@ test_instantiation( void )	{
 int
 test_reverseIterator( void )	{
 	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with ints ~~~~~~~~~~~" << RESET_COLOR << std::endl;
-	std::cout << HEADER_TITLE << "ASCENDING ORDER VALUES" << RESET_COLOR << std::endl;
 	{
+	std::cout << HEADER_TITLE << "TEST REVERSE ITERATOR RELATIONAL OPERATORS" << RESET_COLOR << std::endl;
 		ft::list<int>		ftl0;
 		std::list<int>		stdl0;
 		size_t				testSize = 10;
@@ -520,58 +497,33 @@ test_reverseIterator( void )	{
 		testBool(ft_it != ft_itend && std_it != std_itend, __LINE__);
 		std::cout << SUBTITLE << "[ test operator== ]" << RESET_COLOR << std::endl;
 		testBool(ft_it == ft_it2 && std_it == std_it2, __LINE__);
-		std::cout << SUBTITLE << "[ test operator< ]" << RESET_COLOR << std::endl;
-		testBool(ft_it < ft_itend , __LINE__);
+	}
+	std::cout << HEADER_TITLE << "TEST REVERSE ITERATOR ARITHMETIC" << RESET_COLOR << std::endl;
+	{
+		ft::list<int>			l;
+		l.push_back(0);
+		l.push_back(1);
+		l.push_back(2);
+		l.push_back(3);
+		l.push_back(4);
+		l.push_back(5);
+		ft::list<int>::reverse_iterator it1 = l.rbegin();
+		ft::list<int>::reverse_iterator it2 = l.rbegin();
+		it1++;
+		it1++;
+		it2++;
+		it2++;
+		ft::list<int>::reverse_iterator ite1 = l.rend();
+		ft::list<int>::reverse_iterator ite2 = l.rend();
+		ite1--;
+		ite1--;
+		ite2--;
+		ite2--;
 
-/*
-/usr/bin/../lib/gcc/x86_64-linux-gnu/7.5.0/../../../../include/c++/7.5.0/bits/stl_iterator.h:310:25:
-
-error: invalid operands to binary expression
-      ('std::reverse_iterator<std::_List_iterator<int> >::iterator_type' (aka 'std::_List_iterator<int>')
-	   'std::reverse_iterator<std::_List_iterator<int> >::iterator_type')
-    { return __y.base() < __x.base(); }
-*/
-		// std::cout << SUBTITLE << "[ loop test iterator decrement (rend()--) ]" << RESET_COLOR << std::endl;
-		// for (size_t i = 0; i < ftl0.size(); i++)
-		// {
-		// 	std::cout << "itend = " << *ft_itend << std::endl;
-		// 	testBool(*ft_itend == static_cast<int>(i), __LINE__);
-		// 	ft_itend--;
-		// }
-		// std::cout << SUBTITLE << "[ test operator= ]" << RESET_COLOR << std::endl;
-		// ft_it2 = ft_it;
-		// testBool(ft_it == ft_it2, __LINE__);
-		// std::cout << SUBTITLE << "[ loop test iterator decrement (rbegin()++) ]" << RESET_COLOR << std::endl;
-		// putList(ftl0);
-		// ft_it = ftl0.rbegin();
-		// for (size_t i = 0; i < ftl0.size(); i++)
-		// {
-		// 	std::cout << "it = " << *ft_it << std::endl;
-		// 	testBool(*ft_it == static_cast<int>(i), __LINE__);
-		// 	ft_it++;
-		// }
-		// testBool(static_cast<size_t>(ft_itend - ft_it) == ftl0.size(), __LINE__);
-	// }
-	// std::cout << HEADER_TITLE << "TEST ITERATOR ARITHMETIC" << RESET_COLOR << std::endl;
-	// {
-	// 	ft::list<int>			l;
-	// 	l.push_back(0);
-	// 	l.push_back(1);
-	// 	l.push_back(2);
-	// 	l.push_back(3);
-	// 	l.push_back(4);
-	// 	l.push_back(5);
-	// 	ft::list<int>::iterator it1 = ++l.begin();
-	// 	ft::list<int>::iterator it2 = l.begin() + 2;
-	// 	it1++;
-	// 	ft::list<int>::iterator ite1 = --l.end();
-	// 	ite1--;
-	// 	ft::list<int>::iterator ite2 = l.end() - 2;
-
-	// 	testBool(*it1 == 2, __LINE__);
-	// 	testBool(*ite1 == 4, __LINE__);
-	// 	testBool(*it1 == *it2, __LINE__);
-	// 	testBool(*ite1 == *ite2, __LINE__);
+		testBool(*it1 == 3, __LINE__);
+		testBool(*ite1 == 1, __LINE__);
+		testBool(*it1 == *it2, __LINE__);
+		testBool(*ite1 == *ite2, __LINE__);
 	}
 	return (0);
 }
@@ -580,15 +532,25 @@ int
 test_clear( void )	{
 	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with floats ~~~~~~~~~~~" << RESET_COLOR << std::endl;
 	{
-		ft::list<float> ftl0 (10, 42.21f);
-		std::list<float> stdl0 (10, 42.21f);
+		std::cout << HEADER_TITLE << "TEST CLEAR FUNCTION with list of 1000000 floats" << RESET_COLOR << std::endl;
+		ft::list<float> ftl0 (1000000, 42.21f);
+		std::list<float> stdl0 (1000000, 42.21f);
 
 		testList(ftl0, stdl0, NOPRINT);
 		ftl0.clear();
 		stdl0.clear();
 		testList(ftl0, stdl0, NOPRINT);
+	}
+	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with floats ~~~~~~~~~~~" << RESET_COLOR << std::endl;
+	{
+		std::cout << HEADER_TITLE << "TEST CLEAR FUNCTION with empty list" << RESET_COLOR << std::endl;
+		ft::list<float> ftl0;
+		std::list<float> stdl0;
 
-
+		testList(ftl0, stdl0, NOPRINT);
+		ftl0.clear();
+		stdl0.clear();
+		testList(ftl0, stdl0, NOPRINT);
 	}
 	return (0);
 }
@@ -1624,27 +1586,27 @@ int
 main( void )	{
 
 	try {
-		// test_instantiation();
+		test_instantiation();
 
-		// test_push_back_push_front_pop_back_pop_front();
-		// test_clear();
-		// test_Capacities();
-		// test_insert_erase();
+		test_push_back_push_front_pop_back_pop_front();
+		test_clear();
+		test_Capacities();
+		test_insert_erase();
 
-		// test_operatorEqual();
-		// test_resize();
-		// test_assign();
-		// test_member_swap();
-		// test_nonmember_swap();
-		// test_relational_operators();
-		// test_splice();
-		// test_remove_if();
-		// test_remove();
-		// test_merge();
-		// test_sort();
-		// test_iterator();
+		test_operatorEqual();
+		test_resize();
+		test_assign();
+		test_member_swap();
+		test_nonmember_swap();
+		test_relational_operators();
+		test_splice();
+		test_remove_if();
+		test_remove();
+		test_merge();
+		test_sort();
+		test_iterator();
 		test_reverseIterator();
-		// test_reverse();
+		test_reverse();
 
 		if (DEBUG_MODE == 0)
 		{

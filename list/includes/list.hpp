@@ -29,7 +29,7 @@ namespace ft	{
 				if (DEBUG_MODE >= 2)
 					std::cout << "CONSTRUCTOR --> default " << __func__ << std::endl;
 
-			};
+			}
 			node( T const & val ) : next(this), prev(this), data(val) {
 
 				if (DEBUG_MODE >= 3)
@@ -39,12 +39,12 @@ namespace ft	{
 					std::cout << __func__ << " prev: " << prev << std::endl;
 					std::cout << __func__ << " next: " << next << std::endl;
 				}
-			};
+			}
 
 			~node( void )	{
 				if (DEBUG_MODE >= 2)
 					std::cout << "DESTRUCTOR --> " << __func__ << std::endl;
-			};
+			}
 
 			static void
 			swap(node& x, node& y)	{
@@ -61,7 +61,7 @@ namespace ft	{
 					x.unhook();
 					x.hook(posy);
 				}
-			};
+			}
 
 			void
 			transfer(node * const first, node * const last)	{
@@ -79,7 +79,7 @@ namespace ft	{
 				}
 				if (DEBUG_MODE >= 3)
 					putNodeInfos(*this);
-			};
+			}
 
 			void
 			hook(node * const position)	{
@@ -113,7 +113,7 @@ namespace ft	{
 				}
 			}
 
-		};
+		}
 
 			void
 			unhook( void )	{
@@ -133,9 +133,8 @@ namespace ft	{
 				this->prev = this;
 			if (DEBUG_MODE >= 3)
 				putNodeInfos(*this);
-			};
+			}
 
-			// ---------------------------------------------------------------------------------------TO REMOVE
 			static void	putNodeInfos(node<T> const &n) {
 				std::cout << std::endl;
 				std::cout << "--NODE: " << &n << std::endl;
@@ -146,7 +145,7 @@ namespace ft	{
 					putNodeInfos(*n.next);
 				else
 					std::cout << std::endl;
-			};
+			}
 		}; // ----------------- Class node
 
 	template< typename T, class Alloc = std::allocator<T> >
@@ -238,14 +237,8 @@ namespace ft	{
 
 			T &	operator*() { return _ptr->data; }
 
-		// private:
 			node<T> *			_ptr;
 
-			// iterator &	operator=(const iterator& rhs)  {
-			// 	if (this != &rhs)
-			// 		_ptr = rhs.ptr;
-			// 	return *this;
-			// }
 	}; //----------------- Class iterator
 
 
@@ -276,9 +269,8 @@ namespace ft	{
 
 				if (DEBUG_MODE >= 1)
 					std::cout << "CONSTRUCTOR --> DEFAULT " << __func__ << std::endl;
-				_tail = getNode(value_type());
-				_head = _tail;
-			};
+				initFillList(0, value_type());
+			}
 
 			/**
 			 * @brief fill Constructor
@@ -288,9 +280,8 @@ namespace ft	{
 
 				if (DEBUG_MODE >= 1)
 					std::cout << "CONSTRUCTOR --> fill " << __func__ << std::endl;
-
 				initFillList(n, val);
-			};
+			}
 
 
 			/**
@@ -303,68 +294,62 @@ namespace ft	{
 				typename std::__is_integer<InputIterator>::__type	integer;
 				if (DEBUG_MODE >= 1)
 					std::cout << "CONSTRUCTOR --> range pre dispatcher ! " << __func__ << std::endl;
-
 				list_constructor_dispatch(first, last, userAlloc, integer);
-
-			};
+			}
 
 			/**
 			 * @brief Copy Constructor
 			*/
 			explicit list( list const & src ) : _size(0) {
 
-				if (DEBUG_MODE >= 1)
-					std::cout << "CONSTRUCTOR --> copy " << __func__ << std::endl;
-				_tail = getNode(value_type());
-				_head = _tail;
-				_alloc = src._alloc;
+				if (*this != src)	{
+					if (DEBUG_MODE >= 1)
+						std::cout << "CONSTRUCTOR --> copy " << __func__ << std::endl;
 
-				// if (*this != src){						//								ADD BACK
-				if (src.size() > 0)
-					assign(src.begin(), src.end());
-
-			};
+					initFillList(0, value_type());
+					if (src.size() > 0)
+						assign(src.begin(), src.end());
+				}
+				else
+					throw std::exception();
+			}
 
 			~list( void )	{
 
-				clear();
-				if (_head != NULL)	{
-					_alloc.destroy(_head);
-					_alloc.deallocate(_head, 1);
-				}
+				clearObject();
 				if (DEBUG_MODE >= 1)
 					std::cout << "DESTRUCTOR --> " << __func__ << std::endl;
-			};
+			}
 
-			size_type			max_size( void ) const	{ return _alloc.max_size();  };
-			bool				empty( void ) const		{ return (_size == 0); };
-			size_type			size( void ) const 		{ return (_size); };
-			iterator			begin( void ) const		{ return (_head); };
-			iterator			end( void ) const 		{ return (_tail); };
-			reverse_iterator	rbegin( void ) const	{ return reverse_iterator(end()); };
-			reverse_iterator	rend( void ) const 		{ return reverse_iterator(begin()); };
-			reference			front( void ) const		{ return (_head->data); };
-			reference			back( void ) const 		{ return (_tail->data); };
+			size_type			max_size( void ) const	{ return _alloc.max_size();  }
+			bool				empty( void ) const		{ return (_size == 0); }
+			size_type			size( void ) const 		{ return (_size); }
+			iterator			begin( void ) const		{ return (_head); }
+			iterator			end( void ) const 		{ return (_tail); }
+			reverse_iterator	rbegin( void ) const	{ return reverse_iterator(end()); }
+			reverse_iterator	rend( void ) const 		{ return reverse_iterator(begin()); }
+			reference			front( void ) const		{ return (_head->data); }
+			reference			back( void ) const 		{ return (_tail->prev->data); }
 
 			list&
 			operator= (const list& x)	{
 
-				// if (*this != x)											// to add back !
+				if (*this != x)
 					assign(x.begin(), x.end());
 				return *this;
-			};
+			}
 
 			void
-			pop_back( void )						{ erase(--end()); };
+			pop_back( void )						{ erase(--end()); }
 			void
-			push_back (value_type const & val)		{ insert(end(), val); };
+			push_back (value_type const & val)		{ insert(end(), val); }
 			void
-			pop_front( void )						{ erase(begin()); };
+			pop_front( void )						{ erase(begin()); }
 			void
-			push_front (value_type const & val)		{ insert(begin(), val); };
+			push_front (value_type const & val)		{ insert(begin(), val); }
 
 			void
-			clear( void )	{ erase(begin(), end()); };
+			clear( void )	{ erase(begin(), end()); }
 
 
 			/**
@@ -393,7 +378,7 @@ namespace ft	{
 						insert(position, val);
 					}
 				}
-			};
+			}
 
 			/**
 			 * @brief insert range of elements
@@ -415,7 +400,7 @@ namespace ft	{
 
 				typename std::__is_integer<InputIterator>::__type	integer;
 				insert_dispatch(position, first, last, integer);
-			};
+			}
 
 			iterator
 			erase (iterator position)	{
@@ -431,7 +416,7 @@ namespace ft	{
 					decSize();
 				}
 				return returnCursor;
-			};
+			}
 
 			iterator
 			erase (iterator first, iterator last)	{
@@ -444,7 +429,7 @@ namespace ft	{
 					erase(tmpCursor);
 				}
 				return last;
-			};
+			}
 
 
 			void
@@ -458,7 +443,7 @@ namespace ft	{
 				}
 				else if (n > _size)
 					insert(end(), n - _size, val);
-			};
+			}
 
 			void
 			swap (list& src)	{
@@ -474,7 +459,7 @@ namespace ft	{
 				_head = _headTmp;
 				_tail = _tailTmp;
 				_size = _sizeTmp;
-			};
+			}
 
 			/**
 			 * @brief Here we use the same technic as for insert : the type
@@ -485,13 +470,13 @@ namespace ft	{
 
 				typename std::__is_integer<InputIterator>::__type	integer;
 				assign_dispatch(first, last, integer);
-			};
+			}
 
 			void assign(size_type n, const value_type& val)	{
 
 				clear();
 				insert(begin(), n, val);
-			};
+			}
 
 		/**
 		 *	@brief entire list (1)
@@ -500,7 +485,7 @@ namespace ft	{
 			splice (iterator position, list& x)	{
 
 				splice(position, x, x.begin(), x.end());
-			};
+			}
 
 		/**
 		 *	@brief single element (2)
@@ -658,14 +643,14 @@ namespace ft	{
 
 				clear();
 				insert(begin(), first, last);
-			};
+			}
 
 			template<typename integer>
 			void
 			assign_dispatch (integer n, integer val, std::__true_type)	{
 
 				assign(static_cast<size_type>(n), static_cast<value_type>(val));
-			};
+			}
 
 
 			/**
@@ -680,9 +665,8 @@ namespace ft	{
 					std::cout << "dispatch --> __true_type " << __func__ << std::endl;
 					std::cout << "CONSTRUCTOR --> fill " << __func__ << std::endl;
 				}
-
 				initFillList(n, val);
-			};
+			}
 
 			/**
 			 * @brief Range Constructor actual function
@@ -694,12 +678,10 @@ namespace ft	{
 
 				if (DEBUG_MODE >= 1)
 					std::cout << "CONSTRUCTOR --> range " << __func__ << std::endl;
-				_size = 0;
 				_alloc = userAlloc;
-				_tail = getNode(value_type());
-				_head = _tail;
+				initFillList(0, value_type());
 				insert(begin(), first, last);
-			};
+			}
 
 
 			template<typename integer>
@@ -726,15 +708,26 @@ namespace ft	{
 			void
 			initFillList(size_type n, value_type const & val)	{
 
+				_size = 0;
+				_head = _tail = NULL;
 				_tail = getNode(value_type());
 				_head = _tail;
 				insert(begin(), n, val);
 			}
 
+			void
+			clearObject( void )	{
+				clear();
+				if (_head != NULL)	{
+					_alloc.destroy(_head);
+					_alloc.deallocate(_head, 1);
+				}
+			}
+
 			node*
 			getNode(value_type const & val)	{
 
-				node * newNode;
+				node * newNode = NULL;
 				try	{
 					newNode = _alloc.allocate(1);
 					_alloc.construct(newNode, val);
@@ -742,14 +735,13 @@ namespace ft	{
 					newNode->prev = newNode;
 				}
 				catch(const std::exception& e) {
-					//			------------------------------------------------- delete liste ?
-
-					std::cerr << e.what() << std::endl;
+					clearObject();
+					throw std::exception();
 				}
 				if (DEBUG_MODE >= 2)
 					std::cout << "Create " << val << " @ " << newNode << std::endl;
 				return newNode;
-			};
+			}
 		}; // ----------------- Class list
 
 	template <class T, class Alloc >

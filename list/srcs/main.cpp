@@ -600,8 +600,6 @@ test_insert_erase( void )	{
 		ftl1.erase(ftl1.begin(), ftl1.end());
 		stdl1.erase(stdl1.begin(), stdl1.end());
 		testList(ftl1, stdl1, NOPRINT);
-
-
 	}
 	return (0);
 }
@@ -1581,6 +1579,36 @@ test_reverse( void )	{
 }
 
 
+int
+test_element_access( void )	{
+	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with ints ~~~~~~~~~~~" << RESET_COLOR << std::endl;
+	{
+		ft::list<int>		ftl0;
+		std::list<int>		stdl0;
+		size_t				testSize = 6;
+
+
+		for (size_t i = 1; i < testSize; i++)	{
+			ftl0.push_back(i);
+			stdl0.push_back(i);
+		}
+		testList(ftl0, stdl0, NOPRINT);
+		std::cout << HEADER_TITLE << "Test front() element access on list of size: "<< ftl0.size() << RESET_COLOR << std::endl;
+		testBool(ftl0.front() == stdl0.front(), __LINE__);
+		std::cout << HEADER_TITLE << "Test back() element access on list of size: "<< ftl0.size() << RESET_COLOR << std::endl;
+		testBool(ftl0.back() == stdl0.back(), __LINE__);
+
+		ft::list<int>		ftl1(1,42);
+		std::list<int>		stdl1(1,42);
+		std::cout << HEADER_TITLE << "Test front() element access on list of size: "<< ftl1.size() << RESET_COLOR << std::endl;
+		testBool(ftl1.front() == stdl1.front(), __LINE__);
+		std::cout << HEADER_TITLE << "Test back() element access on list of size: "<< ftl1.size() << RESET_COLOR << std::endl;
+		testBool(ftl1.back() == stdl1.back(), __LINE__);
+	}
+	return (0);
+}
+
+
 
 int
 main( void )	{
@@ -1607,6 +1635,7 @@ main( void )	{
 		test_iterator();
 		test_reverseIterator();
 		test_reverse();
+		test_element_access();
 
 		if (DEBUG_MODE == 0)
 		{
@@ -1616,6 +1645,10 @@ main( void )	{
 	}
 	catch ( failedTest & )	{
 		std::cout << SUBTITLE << "SOME TEST FAILED !! \t \xE2\x9D\x8C" << RESET_COLOR << std::endl;
+		return (1);
+	}
+	catch ( std::exception & e )	{
+		std::cout << SUBTITLE << "Got exception: " << e.what() << RESET_COLOR << std::endl;
 		return (1);
 	}
 	return (0);

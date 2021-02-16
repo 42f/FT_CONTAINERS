@@ -19,6 +19,12 @@ ifeq ($(noassert), 1)
 	CFLAGS += -DNDEBUG=1
 endif
 
+ifeq ($(print_all), 1)
+	CFLAGS += -D NOPRINT=1
+else
+	CFLAGS += -D NOPRINT=0
+endif
+
 ifeq ($(unused), 1)
 	CFLAGS += -Wno-unused
 endif

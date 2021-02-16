@@ -60,8 +60,11 @@
 # define PRINT		true
 #endif
 
+#ifndef PRINT
 # define NOPRINT	false
+#endif
 
+class failedTest :  public std::exception {};
 
 class exampleClass : public std::string{
 
@@ -127,7 +130,8 @@ putList( ft::list<T> const & lst, int errorPos = -1 )	{
 
 	int	printMax;
 
-	if (errorPos == -1 && lst.size() > 100)
+	// if (errorPos == -1 && lst.size() > 100)
+	if (lst.size() > 100)
 		printMax = 10;
 	else
 		printMax = static_cast<int>(lst.size());
@@ -154,7 +158,8 @@ putList( std::list<T> const & lst, int errorPos = -1 )	{
 
 	int	printMax;
 
-	if (errorPos == -1 && lst.size() > 100)
+	// if (errorPos == -1 && lst.size() > 100)
+	if (lst.size() > 100)
 		printMax = 10;
 	else
 		printMax = static_cast<int>(lst.size());
@@ -171,9 +176,9 @@ putList( std::list<T> const & lst, int errorPos = -1 )	{
 
 bool	testBool(bool b, int const lineNo = -1 )	{
 	if (b == true)
-		std::cout << "[ TEST PASSED: no diff ] \342\234\205" << std::endl;
+		std::cout << "[ TEST PASSED: no diff ] \t \342\234\205" << std::endl;
 	else
-		std::cout << ERROR_TITLE << "[ FAILURE at line..." << lineNo << "]" << RESET_COLOR << " \342\235\214" << std::endl;
+		std::cout << ERROR_TITLE << "[ FAILURE at line..." << lineNo << "]" << RESET_COLOR << " \t \342\235\214" << std::endl;
 	return (b);
 }
 
@@ -201,7 +206,8 @@ testList( ft::list<T> const & ft_lst, std::list<T> const &std_lst, bool print, s
 		std::cout << TITLE <<"size: ft (" << ft_lst.size() << ") std (" << std_lst.size() << ") Diff ! " << RESET_COLOR << std::endl;
 		std::cout << ERROR_TITLE << "ERROR !" << RESET_COLOR << std::endl;
 		if (DEBUG_MODE < 1)
-			abort();
+			throw failedTest();
+			//abort();
 		else
 			success = false;
 	}
@@ -226,7 +232,8 @@ testList( ft::list<T> const & ft_lst, std::list<T> const &std_lst, bool print, s
 				std::cout << ERROR_TITLE << "ERROR !" << RESET_COLOR << std::endl;
 				std::cout << "std (" << *std_it << ") Diff ! " << RESET_COLOR << std::endl;
 				if (DEBUG_MODE < 1)
-					abort();
+					throw failedTest();
+					//abort();
 				else
 					success = false;
 			}
@@ -243,15 +250,16 @@ testList( ft::list<T> const & ft_lst, std::list<T> const &std_lst, bool print, s
 			std::cout << TITLE <<"Diff in list after iterating thought it." << RESET_COLOR << std::endl;
 			std::cout << ERROR_TITLE << "ERROR !" << RESET_COLOR << std::endl;
 			if (DEBUG_MODE < 1)
-				abort();
+				throw failedTest();
+				//abort();
 			else
 				success = false;
 		}
 	}
 	if (print == true && success == true)
-		std::cout << TESTOK_TITLE << "[ TEST PASSED: no diff ] list sizes: ft(" << ft_lst.size() <<") std(" << std_lst.size() << ")" << RESET_COLOR << " \342\234\205" << std::endl;
+		std::cout << TESTOK_TITLE << "[ TEST PASSED: no diff ] list sizes: ft(" << ft_lst.size() <<") std(" << std_lst.size() << ")" << RESET_COLOR << "\t  \342\234\205" << std::endl;
 	else if (success == true)
-		std::cout << "[ TEST PASSED: no diff ] list sizes: ft(" << ft_lst.size() <<") std(" << std_lst.size() << ") \342\234\205" << std::endl;
+		std::cout << "[ TEST PASSED: no diff ] list sizes: ft(" << ft_lst.size() <<") std(" << std_lst.size() << ") \t \342\234\205" << std::endl;
 	else
 		std::cout << ERROR_TITLE << "TEST FAILED !" << RESET_COLOR << std::endl;
 }
@@ -485,57 +493,87 @@ test_instantiation( void )	{
 
 int
 test_reverseIterator( void )	{
-
-	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " ~~~~~~~~~~~" << RESET_COLOR << std::endl;
-
+	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with ints ~~~~~~~~~~~" << RESET_COLOR << std::endl;
+	std::cout << HEADER_TITLE << "ASCENDING ORDER VALUES" << RESET_COLOR << std::endl;
 	{
-		ft::list<int>				lst;
+		ft::list<int>		ftl0;
+		std::list<int>		stdl0;
+		size_t				testSize = 10;
 
-		lst.push_front(43);
-		lst.push_front(42);
-		lst.push_front(41);
+		std::cout << SUBTITLE << "[ pushback " << testSize << " ASCENDING even values in list 0 ]" << RESET_COLOR << std::endl;
 
-		putList<int>(lst);
+		for (size_t i = 0; i < testSize; i++)	{
+			ftl0.push_back(i);
+			stdl0.push_back(i);
+		}
+		testList(ftl0, stdl0, NOPRINT);
 
+		ft::list<int>::reverse_iterator		ft_it = ftl0.rbegin();
+		ft::list<int>::reverse_iterator		ft_it2 = ftl0.rbegin();
+		ft::list<int>::reverse_iterator		ft_itend = ftl0.rend();
 
-		std::cout << SUBTITLE << "[ begin and rbegin ]" << RESET_COLOR << std::endl;
-		ft::list<int>::iterator		it = lst.begin();
-		ft::list<int>::reverse_iterator		rit = lst.rbegin();
-		std::cout << "begin --> " << *it << " - " << &(*it) << std::endl;
-		std::cout << "rbegin -> " << *rit << " - " << &(*rit) << std::endl;
+		std::list<int>::reverse_iterator		std_it = stdl0.rbegin();
+		std::list<int>::reverse_iterator		std_it2 = stdl0.rbegin();
+		std::list<int>::reverse_iterator		std_itend = stdl0.rend();
 
-		std::cout << SUBTITLE << "[ end and rend ]" << RESET_COLOR << std::endl;
-		it = lst.end();
-		rit = lst.rend();
-		it--;
-		rit--;
-		std::cout << "end - 1 --> " << *it << " - " << &(*it) << std::endl;
-		std::cout << "rend - 1 -> " << *rit << " - " << &(*rit) << std::endl;
+		std::cout << SUBTITLE << "[ test operator!= ]" << RESET_COLOR << std::endl;
+		testBool(ft_it != ft_itend && std_it != std_itend, __LINE__);
+		std::cout << SUBTITLE << "[ test operator== ]" << RESET_COLOR << std::endl;
+		testBool(ft_it == ft_it2 && std_it == std_it2, __LINE__);
+		std::cout << SUBTITLE << "[ test operator< ]" << RESET_COLOR << std::endl;
+		testBool(ft_it < ft_itend , __LINE__);
 
+/*
+/usr/bin/../lib/gcc/x86_64-linux-gnu/7.5.0/../../../../include/c++/7.5.0/bits/stl_iterator.h:310:25:
+
+error: invalid operands to binary expression
+      ('std::reverse_iterator<std::_List_iterator<int> >::iterator_type' (aka 'std::_List_iterator<int>')
+	   'std::reverse_iterator<std::_List_iterator<int> >::iterator_type')
+    { return __y.base() < __x.base(); }
+*/
+		// std::cout << SUBTITLE << "[ loop test iterator decrement (rend()--) ]" << RESET_COLOR << std::endl;
+		// for (size_t i = 0; i < ftl0.size(); i++)
+		// {
+		// 	std::cout << "itend = " << *ft_itend << std::endl;
+		// 	testBool(*ft_itend == static_cast<int>(i), __LINE__);
+		// 	ft_itend--;
+		// }
+		// std::cout << SUBTITLE << "[ test operator= ]" << RESET_COLOR << std::endl;
+		// ft_it2 = ft_it;
+		// testBool(ft_it == ft_it2, __LINE__);
+		// std::cout << SUBTITLE << "[ loop test iterator decrement (rbegin()++) ]" << RESET_COLOR << std::endl;
+		// putList(ftl0);
+		// ft_it = ftl0.rbegin();
+		// for (size_t i = 0; i < ftl0.size(); i++)
+		// {
+		// 	std::cout << "it = " << *ft_it << std::endl;
+		// 	testBool(*ft_it == static_cast<int>(i), __LINE__);
+		// 	ft_it++;
+		// }
+		// testBool(static_cast<size_t>(ft_itend - ft_it) == ftl0.size(), __LINE__);
+	// }
+	// std::cout << HEADER_TITLE << "TEST ITERATOR ARITHMETIC" << RESET_COLOR << std::endl;
+	// {
+	// 	ft::list<int>			l;
+	// 	l.push_back(0);
+	// 	l.push_back(1);
+	// 	l.push_back(2);
+	// 	l.push_back(3);
+	// 	l.push_back(4);
+	// 	l.push_back(5);
+	// 	ft::list<int>::iterator it1 = ++l.begin();
+	// 	ft::list<int>::iterator it2 = l.begin() + 2;
+	// 	it1++;
+	// 	ft::list<int>::iterator ite1 = --l.end();
+	// 	ite1--;
+	// 	ft::list<int>::iterator ite2 = l.end() - 2;
+
+	// 	testBool(*it1 == 2, __LINE__);
+	// 	testBool(*ite1 == 4, __LINE__);
+	// 	testBool(*it1 == *it2, __LINE__);
+	// 	testBool(*ite1 == *ite2, __LINE__);
 	}
-	{
-		std::list<int>				lst;
-
-		lst.push_front(43);
-		lst.push_front(42);
-		lst.push_front(41);
-
-
-		std::cout << SUBTITLE << "[ with STD::LIST begin and rbegin ]" << RESET_COLOR << std::endl;
-		std::list<int>::iterator				it = lst.begin();
-		std::list<int>::reverse_iterator		rit = lst.rbegin();
-		std::cout << "begin --> " << *it << " - " << &(*it) << std::endl;
-		std::cout << "rbegin -> " << *rit << " - " << &(*rit) << std::endl;
-
-		std::cout << SUBTITLE << "[ with STD::LIST end and rend ]" << RESET_COLOR << std::endl;
-		it = lst.end();
-		rit = lst.rend();
-		it--;
-		rit--;
-		std::cout << "end - 1 --> " << *it << " - " << &(*it) << std::endl;
-		std::cout << "rend - 1 -> " << *rit << " - " << &(*rit) << std::endl;
-	}
-	return(0);
+	return (0);
 }
 
 int
@@ -1555,7 +1593,7 @@ test_reverse( void )	{
 		ft::list<int>		ftl0;
 		std::list<int>		stdl0;
 		srand(reinterpret_cast<long unsigned int>(&stdl0));
-		size_t				testSize = rand() % 50000;
+		size_t				testSize = rand() % 5000000;
 
 
 		for (size_t i = 1; i < testSize; i++)	{
@@ -1564,7 +1602,7 @@ test_reverse( void )	{
 			stdl0.push_back(val);
 		}
 		testList(ftl0, stdl0, NOPRINT);
-		std::cout << HEADER_TITLE << "LIST FILLED WITH "<< testSize << ", A RANDOM NUMBER OF RANDOM VALUES " << RESET_COLOR << std::endl;
+		std::cout << HEADER_TITLE << "LIST FILLED WITH "<< testSize << " VALUES, A RANDOM NUMBER OF RANDOM VALUES " << RESET_COLOR << std::endl;
 		std::cout << SUBTITLE << "[ reverse with no arguments ]" << RESET_COLOR << std::endl;
 		ftl0.reverse();
 		stdl0.reverse();
@@ -1585,33 +1623,38 @@ test_reverse( void )	{
 int
 main( void )	{
 
+	try {
+		// test_instantiation();
 
-	// test_instantiation();
+		// test_push_back_push_front_pop_back_pop_front();
+		// test_clear();
+		// test_Capacities();
+		// test_insert_erase();
 
-	// test_push_back_push_front_pop_back_pop_front();
-	// test_clear();
-	// test_Capacities();
-	// test_insert_erase();
-	// test_reverseIterator();
+		// test_operatorEqual();
+		// test_resize();
+		// test_assign();
+		// test_member_swap();
+		// test_nonmember_swap();
+		// test_relational_operators();
+		// test_splice();
+		// test_remove_if();
+		// test_remove();
+		// test_merge();
+		// test_sort();
+		// test_iterator();
+		test_reverseIterator();
+		// test_reverse();
 
-	// test_operatorEqual();
-	// test_resize();
-	// test_assign();
-	// test_member_swap();
-	// test_nonmember_swap();
-	// test_relational_operators();
-	// test_splice();
-	// test_remove_if();
-	// test_remove();
-	// test_merge();
-	// test_sort();
-	// test_iterator();
-	test_reverse();
-
-	if (DEBUG_MODE == 0)
-	{
-		std::cout << SUBTITLE << "ALL TESTS PASSED ~~~~~~>  " << RESET_COLOR;
-		testBool(1 == 1);
+		if (DEBUG_MODE == 0)
+		{
+			std::cout << SUBTITLE << "ALL TESTS PASSED ~~~~~~>  " << RESET_COLOR;
+			testBool(1 == 1);
+		}
+	}
+	catch ( failedTest & )	{
+		std::cout << SUBTITLE << "SOME TEST FAILED !! \t \xE2\x9D\x8C" << RESET_COLOR << std::endl;
+		return (1);
 	}
 	return (0);
 }

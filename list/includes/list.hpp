@@ -300,18 +300,14 @@ namespace ft	{
 			/**
 			 * @brief Copy Constructor
 			*/
-			explicit list( list const & src ) : _size(0) {
+			explicit list( list const & src ) : _head(NULL), _tail(NULL), _size(0) {
 
-				if (*this != src)	{
-					if (DEBUG_MODE >= 1)
-						std::cout << "CONSTRUCTOR --> copy " << __func__ << std::endl;
+				if (DEBUG_MODE >= 1)
+					std::cout << "CONSTRUCTOR --> copy " << __func__ << std::endl;
 
-					initFillList(0, value_type());
-					if (src.size() > 0)
-						assign(src.begin(), src.end());
-				}
-				else
-					throw std::exception();
+				initFillList(0, value_type());
+				if (src.size() > 0)
+					assign(src.begin(), src.end());
 			}
 
 			~list( void )	{
@@ -757,9 +753,9 @@ namespace ft	{
 
 		if (lhs.size() != rhs.size())
 			return false;
+		if (lhs.front() != rhs.front() || lhs.back() != rhs.back())
+			return false;
 		return (std::equal(lhs.begin(), lhs.end(), rhs.begin()));
-
-
 	};
 
 	template <class T, class Alloc>

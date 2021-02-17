@@ -79,7 +79,14 @@ HEADER += ./list.hpp
 HEADER += ./bvaletteTester.hpp
 
 SRCS += ./main.cpp
+SRCS += ./main_utils.cpp
+
+################################################################################
+######### LIST #################################################################
+################################################################################
+
 SRCS += ./main_tester_list.cpp
+
 SRCS += ./test_list_instantiation.cpp
 SRCS += ./test_list_push_back_push_front_pop_back_pop_front.cpp
 SRCS += ./test_list_clear.cpp
@@ -102,8 +109,37 @@ SRCS += ./test_list_reverseIterator.cpp
 SRCS += ./test_list_reverse.cpp
 SRCS += ./test_list_element_access.cpp
 
+################################################################################
+######### VECTOR ###############################################################
+################################################################################
+
+SRCS += ./main_tester_vector.cpp
+
+SRCS += ./test_vector_instantiation.cpp
+SRCS += ./test_vector_push_back_push_front_pop_back_pop_front.cpp
+SRCS += ./test_vector_clear.cpp
+SRCS += ./test_vector_capacities.cpp
+SRCS += ./test_vector_insert_erase.cpp
+SRCS += ./test_vector_operatorEqual.cpp
+SRCS += ./test_vector_resize.cpp
+SRCS += ./test_vector_assign.cpp
+SRCS += ./test_vector_member_swap.cpp
+SRCS += ./test_vector_nonmember_swap.cpp
+SRCS += ./test_vector_relational_operators.cpp
+SRCS += ./test_vector_splice.cpp
+SRCS += ./test_vector_remove_if.cpp
+SRCS += ./test_vector_remove.cpp
+SRCS += ./test_vector_unique.cpp
+SRCS += ./test_vector_merge.cpp
+SRCS += ./test_vector_sort.cpp
+SRCS += ./test_vector_iterator.cpp
+SRCS += ./test_vector_reverseIterator.cpp
+SRCS += ./test_vector_reverse.cpp
+SRCS += ./test_vector_element_access.cpp
+
 vpath %.cpp ./srcs
 vpath %.cpp ./srcs/list_tests
+vpath %.cpp ./srcs/vector_tests
 vpath %.hpp ./includes
 
 OBJS = $(patsubst %.cpp, $(OBJ_DIR)%.o, $(SRCS))

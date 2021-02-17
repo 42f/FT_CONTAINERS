@@ -612,7 +612,6 @@ namespace ft	{
 			} // reverse
 
 		protected:
-
 			node *			_head;
 			node *			_tail;
 			size_type		_size;

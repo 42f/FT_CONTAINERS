@@ -295,4 +295,26 @@ int	test_list_element_access( void );
  **	===========================================================================+
 */
 
+int	main_tester_vector( void );
+int	test_vector_instantiation( void );
+int	test_vector_push_back_push_front_pop_back_pop_front( void );
+int	test_vector_clear( void );
+int	test_vector_capacities( void );
+int	test_vector_insert_erase( void );
+int	test_vector_operatorEqual( void );
+int	test_vector_resize( void );
+int	test_vector_assign( void );
+int	test_vector_member_swap( void );
+int	test_vector_nonmember_swap( void );
+int	test_vector_relational_operators( void );
+int	test_vector_splice( void );
+int	test_vector_remove_if( void );
+int	test_vector_remove( void );
+int	test_vector_unique( void );
+int	test_vector_merge( void );
+int	test_vector_sort( void );
+int	test_vector_iterator( void );
+int	test_vector_reverseIterator( void );
+int	test_vector_reverse( void );
+int	test_vector_element_access( void );
 #endif

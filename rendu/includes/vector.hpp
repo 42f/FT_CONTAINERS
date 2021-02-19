@@ -38,7 +38,7 @@ namespace ft	{
 			//----------------------------------------------------------------------------------
 
 
-			typedef typename T_alloc::template rebind<T>::other	allocator_type;
+			typedef typename T_alloc::template rebind<T>::other				allocator_type;
 			typedef typename T_alloc::reference								reference;
 			typedef typename T_alloc::const_reference						const_reference;
 			typedef typename T_alloc::pointer								pointer;
@@ -56,14 +56,14 @@ namespace ft	{
 
 			vectorBase( size_t n ) : head(NULL), tail(NULL), tailStorage(NULL), alloc(allocator_type()) {
 
-				createStorage(n);
-				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> default fill " << __func__ << std::endl;
+				createStorage(n + (n>>1));
+				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> fill " << __func__ << std::endl;
 			}
 
 			vectorBase( size_t n, allocator_type const & userAlloc ) : head(NULL), tail(NULL), tailStorage(NULL), alloc(userAlloc) {
 
-				createStorage(n);
-				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> default fill with alloc " << __func__ << std::endl;
+				createStorage(n + (n>>1));
+				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> fill with alloc " << __func__ << std::endl;
 			}
 
 			~vectorBase( void )	{
@@ -235,7 +235,7 @@ namespace ft	{
 			 * construct n objects val.
 			*/
 			explicit vector( size_type n, value_type const & val = value_type(),
-				allocator_type const & userAlloc = allocator_type() ) : vectorBase(n + (n>>1), userAlloc)	{
+				allocator_type const & userAlloc = allocator_type() ) : vectorBase(n, userAlloc)	{
 
 				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> fill " << __func__ << std::endl;
 				initFillVector(n, val);
@@ -259,7 +259,7 @@ namespace ft	{
 			/**
 			 * @brief Copy Constructor
 			*/
-			explicit vector( vector const & src ) : vectorBase(src.size() * 2) {
+			explicit vector( vector const & src ) : vectorBase(src.size()) {
 
 				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> copy " << __func__ << std::endl;
 
@@ -284,6 +284,9 @@ namespace ft	{
 			reference			back( void ) 	 		{ return (*this->tail); }
 			const_reference		front( void ) const		{ return (*this->head); }
 			const_reference		back( void ) const 		{ return (*this->tail); }
+
+			size_type			capacity( void ) const	{ return (this->tailStorage - this->head); }
+
 
 			// vector&
 			// operator= (const vector& x)	{
@@ -689,6 +692,42 @@ namespace ft	{
 						std::cout << "val = " << *cursor << " @ " << cursor << std::endl;
 					for (T* cursor = this->tail; cursor != this->tailStorage; ++cursor)
 						std::cout << "after tail: val = " << cursor << std::endl;
+				}
+			}
+
+
+			/**
+			 * @brief Resize storage part only
+			*/
+			void
+			resize (size_type n, value_type val = value_type()) {
+
+				if (n > this->capacity())	{
+					iterator	oldHeadIt = begin();
+					iterator	oldTailIt = end();
+					pointer		oldHead = this->head;
+					pointer		oldTail = this->tail;
+					size_type	oldCapacity = this->capacity();
+
+					this->createStorage(n + (oldCapacity>>1));
+					fillVector(oldHeadIt, oldTailIt);
+					this->tail += n - oldCapacity;
+					for (size_t i = oldCapacity; i < n; i++)	{
+						this->alloc.construct(this->tail, val);
+					}
+					for (size_t i = 0; oldHead + i != oldTail; i++)	{
+						this->alloc.destroy(oldHead + i);
+					}
+					this->alloc.deallocate(oldHead, oldCapacity);
+				}
+				else if (n > this->size())	{
+					this->tail += n;
+				}
+				else	{
+					this->tail -= n;
+					for (;n > 0; --n)	{
+						this->alloc.destroy(this->tail + n);
+					}
 				}
 			}
 

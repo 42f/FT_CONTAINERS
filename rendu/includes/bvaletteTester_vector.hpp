@@ -16,6 +16,8 @@ putVector( ft::vector<T> const & vct, int errorPos = -1 )	{
 	std::cout << PRINT_TITLE << "[ FT::vector ]" << RESET_COLOR << std::endl;
 	std::cout << PRINT_TITLE << "[ size of vector ]" << RESET_COLOR << " -> ";
 	std::cout << vct.size() << std::endl;
+	std::cout << PRINT_TITLE << "[ size capacity vector ]" << RESET_COLOR << " -> ";
+	std::cout << vct.capacity() << std::endl;
 	typename ft::vector<T>::iterator it = vct.begin();
 	typename ft::vector<T>::iterator ite = vct.end();
 
@@ -43,6 +45,8 @@ putVector( std::vector<T> const & vct, int errorPos = -1 )	{
 	std::cout << PRINT_STD_TITLE << "[ STD::vector ]" << RESET_COLOR << std::endl;
 	std::cout << PRINT_STD_TITLE << "[ size of vector ]" << RESET_COLOR << " -> ";
 	std::cout << vct.size() << std::endl;
+	std::cout << PRINT_STD_TITLE << "[ capacity of vector ]" << RESET_COLOR << " -> ";
+	std::cout << vct.capacity() << std::endl;
 	typename std::vector<T>::const_iterator it = vct.begin();
 	typename std::vector<T>::const_iterator ite = vct.end();
 

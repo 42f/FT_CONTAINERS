@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:50:31 by bvalette          #+#    #+#             */
-/*   Updated: 2021/02/19 16:26:46 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/02/19 18:47:35 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,17 @@ test_vector_instantiation( void )	{
 	std::cout << TITLE << "~~~~ To see constructor calls, compile with " << RESET_COLOR << "-> make debug_mode=1 re f "<< std::endl;
 	{
 
-		// ft::vector<int>	ft_c0(10, 42);
-		// ft::vector<int>::iterator	it = ft_c0.begin();
-		// ft::vector<int>::iterator	ite = ft_c0.end();
-
-		// std::cout << "DISTANCE ? ---------> " << ite - it << std::endl;
-
-
-
+		{
+			std::vector<int>	c1(10, 42);
+			ft::vector<int>		c0(10, 42);
+			putVector(c1);
+			putVector(c0);
+			c1.resize(c1.capacity() + 5);
+			c0.resize(c0.capacity() + 5);
+			putVector(c1);
+			putVector(c0);
+		}
+		return (0);
 
 		std::cout << SUBTITLE << "[ DEFAULT CONSTRUCTOR ]" << RESET_COLOR << std::endl;
 		{

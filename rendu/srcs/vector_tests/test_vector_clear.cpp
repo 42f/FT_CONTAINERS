@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:49:36 by bvalette          #+#    #+#             */
-/*   Updated: 2021/02/19 14:22:40 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/02/19 15:36:14 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ test_vector_clear( void )	{
 		ft::list<float> ft_c0 (1000000, 42.21f);
 		std::list<float> std_c0 (1000000, 42.21f);
 
-		testList(ft_c0, std_c0, NOPRINT);
+		testVector(ft_c0, std_c0, NOPRINT);
 		ft_c0.clear();
 		std_c0.clear();
-		testList(ft_c0, std_c0, NOPRINT);
+		testVector(ft_c0, std_c0, NOPRINT);
 	}
 	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with floats ~~~~~~~~~~~" << RESET_COLOR << std::endl;
 	{
@@ -31,10 +31,10 @@ test_vector_clear( void )	{
 		ft::list<float> ft_c0;
 		std::list<float> std_c0;
 
-		testList(ft_c0, std_c0, NOPRINT);
+		testVector(ft_c0, std_c0, NOPRINT);
 		ft_c0.clear();
 		std_c0.clear();
-		testList(ft_c0, std_c0, NOPRINT);
+		testVector(ft_c0, std_c0, NOPRINT);
 	}
 	return (0);
 }

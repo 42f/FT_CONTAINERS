@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:52:42 by bvalette          #+#    #+#             */
-/*   Updated: 2021/02/19 14:22:40 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/02/19 15:36:14 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,18 @@ test_vector_merge( void )	{
 				std_c1.push_back(i);
 			}
 		}
-		testList(ft_c0, std_c0, NOPRINT);
-		testList(ft_c1, std_c1, NOPRINT);
+		testVector(ft_c0, std_c0, NOPRINT);
+		testVector(ft_c1, std_c1, NOPRINT);
 		std::cout << SUBTITLE << "[ test to merge the list into itself ]" << RESET_COLOR << std::endl;
 		ft_c0.merge(ft_c0, greater_than);
 		std_c0.merge(std_c0, greater_than);
-		testList(ft_c0, std_c0, NOPRINT);
-		testList(ft_c1, std_c1, NOPRINT);
+		testVector(ft_c0, std_c0, NOPRINT);
+		testVector(ft_c1, std_c1, NOPRINT);
 		std::cout << SUBTITLE << "[ test to merge the list 1 into list 0 with greater_than Compare]" << RESET_COLOR << std::endl;
 		ft_c0.merge(ft_c1, greater_than);
 		std_c0.merge(std_c1, greater_than);
-		testList(ft_c0, std_c0, NOPRINT);
-		testList(ft_c1, std_c1, NOPRINT);
+		testVector(ft_c0, std_c0, NOPRINT);
+		testVector(ft_c1, std_c1, NOPRINT);
 	}
 	std::cout << HEADER_TITLE << "DESCENDING ORDER with merge(2)" << RESET_COLOR << std::endl;
 	{
@@ -73,13 +73,13 @@ test_vector_merge( void )	{
 		ft_c1.push_back(1000);
 		std_c1.push_back(1000);
 
-		testList(ft_c0, std_c0, NOPRINT);
-		testList(ft_c1, std_c1, NOPRINT);
+		testVector(ft_c0, std_c0, NOPRINT);
+		testVector(ft_c1, std_c1, NOPRINT);
 		std::cout << SUBTITLE << "[ test to merge the list 1 into list 0 with smaller_than Compare]" << RESET_COLOR << std::endl;
 		ft_c0.merge(ft_c1, smaller_than);
 		std_c0.merge(std_c1, smaller_than);
-		testList(ft_c0, std_c0, NOPRINT);
-		testList(ft_c1, std_c1, NOPRINT);
+		testVector(ft_c0, std_c0, NOPRINT);
+		testVector(ft_c1, std_c1, NOPRINT);
 	}
 	std::cout << HEADER_TITLE << "RANDOM ORDER with merge(2)" << RESET_COLOR << std::endl;
 	{
@@ -105,13 +105,13 @@ test_vector_merge( void )	{
 		ft_c0.push_back(42);
 		std_c0.push_back(42);
 
-		testList(ft_c0, std_c0, NOPRINT);
-		testList(ft_c1, std_c1, NOPRINT);
+		testVector(ft_c0, std_c0, NOPRINT);
+		testVector(ft_c1, std_c1, NOPRINT);
 		std::cout << SUBTITLE << "[ test to merge the list 1 into list 0 with greater_than Compare]" << RESET_COLOR << std::endl;
 		ft_c0.merge(ft_c1, greater_than);
 		std_c0.merge(std_c1, greater_than);
-		testList(ft_c0, std_c0, NOPRINT);
-		testList(ft_c1, std_c1, NOPRINT);
+		testVector(ft_c0, std_c0, NOPRINT);
+		testVector(ft_c1, std_c1, NOPRINT);
 	}
 	std::cout << HEADER_TITLE << "RANDOM ORDER - with merge(1)" << RESET_COLOR << std::endl;
 	{
@@ -137,13 +137,13 @@ test_vector_merge( void )	{
 		ft_c0.push_back(42);
 		std_c0.push_back(42);
 
-		testList(ft_c0, std_c0, NOPRINT);
-		testList(ft_c1, std_c1, NOPRINT);
+		testVector(ft_c0, std_c0, NOPRINT);
+		testVector(ft_c1, std_c1, NOPRINT);
 		std::cout << SUBTITLE << "[ test to merge the list 1 into list 0 with no compare argument (merge(1)) ]" << RESET_COLOR << std::endl;
 		ft_c0.merge(ft_c1);
 		std_c0.merge(std_c1);
-		testList(ft_c0, std_c0, NOPRINT);
-		testList(ft_c1, std_c1, NOPRINT);
+		testVector(ft_c0, std_c0, NOPRINT);
+		testVector(ft_c1, std_c1, NOPRINT);
 	}
 	return (0);
 }

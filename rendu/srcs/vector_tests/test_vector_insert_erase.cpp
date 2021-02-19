@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:50:19 by bvalette          #+#    #+#             */
-/*   Updated: 2021/02/19 14:22:40 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/02/19 15:36:14 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ test_vector_insert_erase( void )	{
 		std_c0.push_front("the Begining...");
 		std_c0.push_back("the End...");
 
-		testList(ft_c0, std_c0, NOPRINT);
+		testVector(ft_c0, std_c0, NOPRINT);
 
 		ft::list<std::string>	ft_c1;
 		std::list<std::string>	std_c1;
@@ -39,7 +39,7 @@ test_vector_insert_erase( void )	{
 		ft_c1.insert(ft_c1.begin(), ft_c0.begin(), ft_c0.end());
 		std_c1.insert(std_c1.begin(), std_c0.begin(), std_c0.end());
 
-		testList(ft_c1, std_c1, NOPRINT);
+		testVector(ft_c1, std_c1, NOPRINT);
 
 		std::cout << SUBTITLE << "[ Erase with erase(iterator) ]" << RESET_COLOR << std::endl;
 		for (int i = 0; i < 3; i++)
@@ -48,15 +48,15 @@ test_vector_insert_erase( void )	{
 			std::cout << "return std= " << &(*std_c1.erase(--std_c1.end())) << std::endl;
 		}
 
-		testList(ft_c1, std_c1, NOPRINT);
+		testVector(ft_c1, std_c1, NOPRINT);
 		std::cout << SUBTITLE << "[ Erase with erase(iterator, iterator) ]" << RESET_COLOR << std::endl;
 		std::cout << "return ft  = " << &(*ft_c1.erase(ft_c1.begin(), --ft_c1.end())) << std::endl;
 		std::cout << "return std = " << &(*std_c1.erase(std_c1.begin(), --std_c1.end())) << std::endl;
 
-		testList(ft_c1, std_c1, NOPRINT);
+		testVector(ft_c1, std_c1, NOPRINT);
 		ft_c1.erase(ft_c1.begin(), ft_c1.end());
 		std_c1.erase(std_c1.begin(), std_c1.end());
-		testList(ft_c1, std_c1, NOPRINT);
+		testVector(ft_c1, std_c1, NOPRINT);
 	}
 	return (0);
 }

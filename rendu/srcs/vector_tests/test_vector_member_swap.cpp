@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:52:49 by bvalette          #+#    #+#             */
-/*   Updated: 2021/02/19 14:22:40 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/02/19 15:36:14 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ test_vector_member_swap( void )	{
 		std::cout << SUBTITLE << "[ Instanciate list0 of 3 elements value -1 ]" << RESET_COLOR << std::endl;
 		ft::list<int>	ft_c0(3, -1);
 		std::list<int>	std_c0(3, -1);
-		testList(ft_c0, std_c0, NOPRINT);
+		testVector(ft_c0, std_c0, NOPRINT);
 
 		std::cout << SUBTITLE << "[ Instanciate list1 of 3 elements value 42 + push front 0 + push back 99 ]" << RESET_COLOR << std::endl;
 		ft::list<int>	ft_c1(3, 42);
@@ -28,7 +28,7 @@ test_vector_member_swap( void )	{
 		std_c1.push_front(0);
 		ft_c1.push_back(99);
 		std_c1.push_back(99);
-		testList(ft_c1, std_c1, NOPRINT);
+		testVector(ft_c1, std_c1, NOPRINT);
 
 		std::cout << SUBTITLE << "[ instanciate iterator to begin of list 0 and list 1 ]" << RESET_COLOR << std::endl;
 
@@ -40,8 +40,8 @@ test_vector_member_swap( void )	{
 		std::cout << SUBTITLE << "[ swap 2 lists ]" << RESET_COLOR << std::endl;
 		ft_c0.swap(ft_c1);
 		std_c0.swap(std_c1);
-		testList(ft_c0, std_c0, NOPRINT, "Test list0");
-		testList(ft_c1, std_c1, NOPRINT, "Test list1");
+		testVector(ft_c0, std_c0, NOPRINT, "Test list0");
+		testVector(ft_c1, std_c1, NOPRINT, "Test list1");
 
 		std::cout << SUBTITLE << "[ test if iterator stayed valid while pointing to new values ]" << RESET_COLOR << std::endl;
 		testBool(&(*ft_it0) == &(*ft_c1.begin()), __LINE__);
@@ -52,33 +52,33 @@ test_vector_member_swap( void )	{
 		std::cout << SUBTITLE << "[ assign list 1 with 10 value 99 ]" << RESET_COLOR << std::endl;
 		ft_c1.assign(10, 99);
 		std_c1.assign(10, 99);
-		testList(ft_c1, std_c1, NOPRINT);
+		testVector(ft_c1, std_c1, NOPRINT);
 		std::cout << SUBTITLE << "[ swap 2 lists ]" << RESET_COLOR << std::endl;
 		ft_c0.swap(ft_c1);
 		std_c0.swap(std_c1);
-		testList(ft_c0, std_c0, NOPRINT, "Test list0");
-		testList(ft_c1, std_c1, NOPRINT, "Test list1");
+		testVector(ft_c0, std_c0, NOPRINT, "Test list0");
+		testVector(ft_c1, std_c1, NOPRINT, "Test list1");
 
 
 		std::cout << SUBTITLE << "[ assign list 1 with 10 value 99 ]" << RESET_COLOR << std::endl;
 		ft_c1.assign(10, 99);
 		std_c1.assign(10, 99);
-		testList(ft_c1, std_c1, NOPRINT);
+		testVector(ft_c1, std_c1, NOPRINT);
 		std::cout << SUBTITLE << "[ swap 2 lists ]" << RESET_COLOR << std::endl;
 		ft_c0.swap(ft_c1);
 		std_c0.swap(std_c1);
-		testList(ft_c0, std_c0, NOPRINT, "Test list0");
-		testList(ft_c1, std_c1, NOPRINT, "Test list1");
+		testVector(ft_c0, std_c0, NOPRINT, "Test list0");
+		testVector(ft_c1, std_c1, NOPRINT, "Test list1");
 
 		std::cout << SUBTITLE << "[ clear list0 ]" << RESET_COLOR << std::endl;
 		ft_c0.clear();
 		std_c0.clear();
-		testList(ft_c0, std_c0, NOPRINT);
+		testVector(ft_c0, std_c0, NOPRINT);
 		std::cout << SUBTITLE << "[ swap 2 lists ]" << RESET_COLOR << std::endl;
 		ft_c0.swap(ft_c1);
 		std_c0.swap(std_c1);
-		testList(ft_c0, std_c0, NOPRINT, "Test list0");
-		testList(ft_c1, std_c1, NOPRINT, "Test list1");
+		testVector(ft_c0, std_c0, NOPRINT, "Test list0");
+		testVector(ft_c1, std_c1, NOPRINT, "Test list1");
 	}
 	return (0);
 }

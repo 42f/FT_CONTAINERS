@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:01:26 by bvalette          #+#    #+#             */
-/*   Updated: 2021/02/17 10:41:01 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/02/19 16:20:20 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,6 @@ test_list_instantiation( void )	{
 			std::list<int>		stdl1(stdl0);
 			testList(ftl0, stdl0, NOPRINT);
 			testList(ftl1, stdl1, NOPRINT);
-
-			std::cout << SUBTITLE << "[ check if begin points to a new elements ]" << RESET_COLOR << std::endl;
-			testBool(&(*ftl0.begin()) != &(*ftl1.begin()), __LINE__);
-			testBool(&(*stdl0.begin()) != &(*stdl1.begin()), __LINE__);
 		}
 	}
 	return (0);

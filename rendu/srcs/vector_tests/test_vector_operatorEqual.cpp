@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:52:23 by bvalette          #+#    #+#             */
-/*   Updated: 2021/02/19 14:22:40 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/02/19 15:36:14 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,16 @@ test_vector_operatorEqual( void )	{
 		std::list<std::string>	std_c1(5, "byee");
 
 		std::cout << SUBTITLE << "[ Instanciate list 0 with 10 \"hello\" and list 1 with 5 \"byeee\" ]" << RESET_COLOR << std::endl;
-		testList(ft_c0, std_c0, NOPRINT);
-		testList(ft_c1, std_c1, NOPRINT);
+		testVector(ft_c0, std_c0, NOPRINT);
+		testVector(ft_c1, std_c1, NOPRINT);
 
 		std::cout << SUBTITLE << "[ list0=list1 ]" << RESET_COLOR << std::endl;
 
 		ft_c0 = ft_c1;
 		std_c0 = std_c1;
 
-		testList(ft_c0, std_c0, NOPRINT);
-		testList(ft_c1, std_c1, NOPRINT);
+		testVector(ft_c0, std_c0, NOPRINT);
+		testVector(ft_c1, std_c1, NOPRINT);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:50:54 by bvalette          #+#    #+#             */
-/*   Updated: 2021/02/19 14:22:40 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/02/19 15:36:14 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ test_vector_element_access( void )	{
 			ft_c0.push_back(i);
 			std_c0.push_back(i);
 		}
-		testList(ft_c0, std_c0, NOPRINT);
+		testVector(ft_c0, std_c0, NOPRINT);
 		std::cout << HEADER_TITLE << "Test front() element access on list of size: "<< ft_c0.size() << RESET_COLOR << std::endl;
 		testBool(ft_c0.front() == std_c0.front(), __LINE__);
 		std::cout << HEADER_TITLE << "Test back() element access on list of size: "<< ft_c0.size() << RESET_COLOR << std::endl;

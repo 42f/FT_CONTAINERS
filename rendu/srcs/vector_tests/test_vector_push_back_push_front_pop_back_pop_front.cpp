@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:52:18 by bvalette          #+#    #+#             */
-/*   Updated: 2021/02/19 14:22:40 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/02/19 15:36:14 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ test_vector_push_back_push_front_pop_back_pop_front( void )	{
 		std_c0.push_back("the End...");
 		std_c0.push_back("the End...");
 
-		testList(ft_c0, std_c0, NOPRINT);
+		testVector(ft_c0, std_c0, NOPRINT);
 
 		ft_c0.pop_front();
 		ft_c0.pop_back();
@@ -37,12 +37,12 @@ test_vector_push_back_push_front_pop_back_pop_front( void )	{
 		std_c0.pop_front();
 		std_c0.pop_back();
 
-		testList(ft_c0, std_c0, NOPRINT);
+		testVector(ft_c0, std_c0, NOPRINT);
 		ft_c0.pop_front();
 
 		std_c0.pop_front();
 
-		testList(ft_c0, std_c0, NOPRINT);
+		testVector(ft_c0, std_c0, NOPRINT);
 
 	}
 	return (0);

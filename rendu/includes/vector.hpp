@@ -84,24 +84,25 @@ namespace ft	{
 			pointer			tailStorage;
 			allocator_type	alloc;
 
-		private:
 
+		protected:
 			void
 			createStorage( size_t n )	{
-				this->head = this->alloc.allocate(n);
-				this->tail = this->head;
-				this->tailStorage = this->head + n;
-				if (DEBUG_MODE >= 2) {
-					std::cout << __func__ << std::endl;
-					for (size_t i = 0; head + i != tailStorage; ++i)
-					{
-						std::cout << "[" << i << "] uninitialized ";
-						std::cout << " @ " << head + i << std::endl;
+				if (n > 0)	{
+					this->head = this->alloc.allocate(n);
+					this->tail = this->head;
+					this->tailStorage = this->head + n;
+					if (DEBUG_MODE >= 2) {
+						std::cout << __func__ << std::endl;
+						for (size_t i = 0; head + i != tailStorage; ++i)	{
+							std::cout << "[" << i << "] uninitialized ";
+							std::cout << " @ " << head + i << std::endl;
+						}
 					}
 				}
-
 			}
 
+		private:
 			void
 			deleteStorage( size_t n )	{
 				this->alloc.deallocate(head, n);
@@ -125,39 +126,30 @@ namespace ft	{
 			vectorIterator(T* src) :_ptr(src) {}
 			vectorIterator(const iterator& itSrc) : _ptr(itSrc._ptr) {}
 
-	// 		iterator&	operator++( void ) {
-	// 			_ptr = _ptr->next;
-	// 			return *this;
-	// 		}
+			iterator&	operator++( void ) {
+				_ptr++;
+				return *this;
+			}
 
-	// 		iterator 	operator++( int ) {
-	// 			iterator tmp(*this);
-	// 			operator++();
-	// 			return tmp;
-	// 		}
+			iterator 	operator++( int ) {
+				iterator tmp(*this);
+				operator++();
+				return tmp;
+			}
 
-	// 		iterator&	operator--( void ) {
-	// 			_ptr = _ptr->prev;
-	// 			return *this;
-	// 		}
+			iterator&	operator--( void ) {
+				_ptr--;
+				return *this;
+			}
 
-	// 		iterator 	operator--( int ) {
-	// 			iterator tmp(*this);
-	// 			operator--();
-	// 			return tmp;
-	// 		}
+			iterator 	operator--( int ) {
+				iterator tmp(*this);
+				operator--();
+				return tmp;
+			}
 
-	// 		distance	operator- ( iterator rhs ) {
+			distance	operator- ( iterator rhs ) { return this->_ptr - rhs._ptr; }
 
-	// 			distance		ret = 0;
-	// 			if (rhs < *this)	{
-	// 				while (*this != rhs && rhs._ptr != rhs._ptr->next)	{
-	// 					ret++;
-	// 					rhs++;
-	// 				}
-	// 			}
-	// 			return ret;
-	// 		}
 
 	// 		iterator	operator- ( distance n ) {
 
@@ -191,19 +183,19 @@ namespace ft	{
 	// 			*this = *this + n;
 	// 		}
 
-	// 		bool 		operator==(const iterator& rhs) const { return _ptr==rhs._ptr; }
-	// 		bool 		operator!=(const iterator& rhs) const { return _ptr!=rhs._ptr; }
-	// 		bool 		operator<(const iterator& rhs) const {
+			bool 		operator==(const iterator& rhs) const { return _ptr==rhs._ptr; }
+			bool 		operator!=(const iterator& rhs) const { return _ptr!=rhs._ptr; }
+			// bool 		operator<(const iterator& rhs) const {
 
-	// 			if (*this == rhs)
-	// 				return false;
-	// 			iterator	tmpIt = *this;
-	// 			while (tmpIt._ptr != tmpIt._ptr->next && tmpIt != rhs)
-	// 				tmpIt++;
-	// 			return (tmpIt == rhs);
-	// 		}
+			// 	if (*this == rhs)
+			// 		return false;
+			// 	iterator	tmpIt = *this;
+			// 	while (tmpIt._ptr != tmpIt._ptr->next && tmpIt != rhs)
+			// 		tmpIt++;
+			// 	return (tmpIt == rhs);
+			// }
 
-	// 		T &	operator*() { return _ptr->data; }
+			T &	operator*() { return *_ptr; }
 
 			T *		_ptr;
 
@@ -239,41 +231,40 @@ namespace ft	{
 			}
 
 			/**
-			 * @brief fill Constructor
+			 * @brief fill Constructor, allocate at least n memory blocks and
+			 * construct n objects val.
 			*/
 			explicit vector( size_type n, value_type const & val = value_type(),
 				allocator_type const & userAlloc = allocator_type() ) : vectorBase(n + (n>>1), userAlloc)	{
 
 				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> fill " << __func__ << std::endl;
-				initFillvector(n, val);
+				initFillVector(n, val);
 			}
 
 
-		// 	/**
-		// 	 * @brief Range Constructor
-		// 	*/
-		// 	template <class InputIterator>
-		// 	vector (InputIterator first, InputIterator last,
-		// 		 allocator_type const & userAlloc = allocator_type() ) : _size(0), _alloc(userAlloc)	{
+			/**
+			 * @brief Range Constructor
+			*/
+			template <class InputIterator>
+			vector (InputIterator first, InputIterator last,
+				 allocator_type const & userAlloc = allocator_type() )
+				 : vectorBase(userAlloc)	{
 
-		// 		typename std::__is_integer<InputIterator>::__type	integer;
-		// 		if (DEBUG_MODE >= 1)
-		// 			std::cout << "CONSTRUCTOR --> range pre dispatcher ! " << __func__ << std::endl;
-		// 		vector_constructor_dispatch(first, last, userAlloc, integer);
-		// 	}
+				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> range pre dispatcher ! " << __func__ << std::endl;
 
-		// 	/**
-		// 	 * @brief Copy Constructor
-		// 	*/
-		// 	explicit vector( vector const & src ) : _head(NULL), _tail(NULL), _size(0) {
+				typename std::__is_integer<InputIterator>::__type	integer;
+				vector_constructor_dispatch(first, last, userAlloc, integer);
+			}
 
-		// 		if (DEBUG_MODE >= 1)
-		// 			std::cout << "CONSTRUCTOR --> copy " << __func__ << std::endl;
+			/**
+			 * @brief Copy Constructor
+			*/
+			explicit vector( vector const & src ) : vectorBase(src.size() * 2) {
 
-			// 	initFillvector(0, value_type());
-			// 	if (src.size() > 0)
-			// 		assign(src.begin(), src.end());
-			// }
+				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> copy " << __func__ << std::endl;
+
+				fillVector(src.begin(), src.end());
+			}
 
 			~vector( void )	{
 
@@ -282,23 +273,25 @@ namespace ft	{
 					std::cout << "DESTRUCTOR --> " << __func__ << std::endl;
 			}
 
-		// 	size_type			max_size( void ) const	{ return _alloc.max_size();  }
-		// 	bool				empty( void ) const		{ return (_size == 0); }
+			size_type			max_size( void ) const	{ return this->alloc.max_size();  }
+			bool				empty( void ) const		{ return (this->head == this->tail); }
 			size_type			size( void ) const 		{ return (this->tail - this->head); }
 			iterator			begin( void ) const		{ return (this->head); }
 			iterator			end( void ) const 		{ return (this->tail); }
-		// 	reverse_iterator	rbegin( void ) const	{ return reverse_iterator(end()); }
-		// 	reverse_iterator	rend( void ) const 		{ return reverse_iterator(begin()); }
-		// 	reference			front( void ) const		{ return (_head->data); }
-		// 	reference			back( void ) const 		{ return (_tail->prev->data); }
+			reverse_iterator	rbegin( void ) const	{ return reverse_iterator(end()); }
+			reverse_iterator	rend( void ) const 		{ return reverse_iterator(begin()); }
+			reference			front( void ) 			{ return (*this->head); }
+			reference			back( void ) 	 		{ return (*this->tail); }
+			const_reference		front( void ) const		{ return (*this->head); }
+			const_reference		back( void ) const 		{ return (*this->tail); }
 
-		// 	vector&
-		// 	operator= (const vector& x)	{
+			// vector&
+			// operator= (const vector& x)	{
 
-		// 		if (*this != x)
-		// 			assign(x.begin(), x.end());
-		// 		return *this;
-		// 	}
+			// 	if (*this != x)
+			// 		assign(x.begin(), x.end());
+			// 	return *this;
+			// }
 
 		// 	void
 		// 	pop_back( void )						{ erase(--end()); }
@@ -309,8 +302,8 @@ namespace ft	{
 		// 	void
 		// 	push_front (value_type const & val)		{ insert(begin(), val); }
 
-		// 	void
-		// 	clear( void )	{ erase(begin(), end()); }
+			// void
+			// clear( void )	{ erase(begin(), end()); }
 
 
 		// 	/**
@@ -614,35 +607,36 @@ namespace ft	{
 		// 	}
 
 
-		// 	/**
-		// 	 * @brief Fill Constructor actual function
-		// 	*/
-		// 	template <class integer>
-		// 	void
-		// 	vector_constructor_dispatch (integer n, integer const & val,
-		// 		allocator_type const &, std::__true_type)	{
+			/**
+			 * @brief Fill Constructor actual function
+			*/
+			template <class integer>
+			void
+			vector_constructor_dispatch (integer n, integer const & val,
+				allocator_type const &, std::__true_type)	{
 
-		// 		if (DEBUG_MODE >= 1)	{
-		// 			std::cout << "dispatch --> __true_type " << __func__ << std::endl;
-		// 			std::cout << "CONSTRUCTOR --> fill " << __func__ << std::endl;
-		// 		}
-		// 		initFillvector(n, val);
-		// 	}
+				if (DEBUG_MODE >= 1)	{
+					std::cout << "dispatch --> __true_type " << __func__ << std::endl;
+					std::cout << "CONSTRUCTOR --> fill " << __func__ << std::endl;
+				}
+				this->createStorage(n);
+				initFillVector(n, val);
+			}
 
-		// 	/**
-		// 	 * @brief Range Constructor actual function
-		// 	*/
-		// 	template <class InputIterator>
-		// 	void
-		// 	vector_constructor_dispatch (InputIterator first, InputIterator last,
-		// 		 allocator_type const & userAlloc, std::__false_type)	{
+			/**
+			 * @brief Range Constructor actual function
+			*/
+			template <class InputIterator>
+			void
+			vector_constructor_dispatch (InputIterator first, InputIterator last,
+				 allocator_type const &, std::__false_type)	{
 
-		// 		if (DEBUG_MODE >= 1)
-		// 			std::cout << "CONSTRUCTOR --> range " << __func__ << std::endl;
-		// 		_alloc = userAlloc;
-		// 		initFillvector(0, value_type());
-		// 		insert(begin(), first, last);
-		// 	}
+				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> range : " << __func__ << std::endl;
+
+				size_t	n = std::distance(first, last);
+				this->createStorage(n * 2);
+				fillVector(first, last);
+			}
 
 
 		// 	template<typename integer>
@@ -667,12 +661,28 @@ namespace ft	{
 			 * constructors
 			*/
 			void
-			initFillvector(size_type n, value_type const & val)	{
+			fillVector(iterator first, iterator last)	{
+
+				while (first != last)	{
+					this->alloc.construct(this->tail, *first);
+					this->tail++;
+					if (this->tail == this->tailStorage)
+						std::cout << "RESIZE HERE" << std::endl;
+					first++;
+				}
+			}
+
+			/**
+			 * @brief Construct objects at alocated memory, to be used by
+			 * constructors
+			*/
+			void
+			initFillVector(size_type n, value_type const & val)	{
 
 				this->tail = this->head + n;
-				for (; n > 0; --n)
+				for (; n > 0; --n){
 					this->alloc.construct(this->tail - n, val);
-
+				}
 				if (DEBUG_MODE >= 3)	{
 					std::cout << __func__ << std::endl;
 					for (T* cursor = this->head; cursor != this->tail; ++cursor)

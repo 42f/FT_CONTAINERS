@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:51:28 by bvalette          #+#    #+#             */
-/*   Updated: 2021/02/17 10:43:06 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/02/19 14:22:40 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,25 +17,25 @@ test_vector_reverseIterator( void )	{
 	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with ints ~~~~~~~~~~~" << RESET_COLOR << std::endl;
 	{
 	std::cout << HEADER_TITLE << "TEST REVERSE ITERATOR RELATIONAL OPERATORS" << RESET_COLOR << std::endl;
-		ft::list<int>		ftl0;
-		std::list<int>		stdl0;
+		ft::list<int>		ft_c0;
+		std::list<int>		std_c0;
 		size_t				testSize = 10;
 
 		std::cout << SUBTITLE << "[ pushback " << testSize << " ASCENDING even values in list 0 ]" << RESET_COLOR << std::endl;
 
 		for (size_t i = 0; i < testSize; i++)	{
-			ftl0.push_back(i);
-			stdl0.push_back(i);
+			ft_c0.push_back(i);
+			std_c0.push_back(i);
 		}
-		testList(ftl0, stdl0, NOPRINT);
+		testList(ft_c0, std_c0, NOPRINT);
 
-		ft::list<int>::reverse_iterator		ft_it = ftl0.rbegin();
-		ft::list<int>::reverse_iterator		ft_it2 = ftl0.rbegin();
-		ft::list<int>::reverse_iterator		ft_itend = ftl0.rend();
+		ft::list<int>::reverse_iterator		ft_it = ft_c0.rbegin();
+		ft::list<int>::reverse_iterator		ft_it2 = ft_c0.rbegin();
+		ft::list<int>::reverse_iterator		ft_itend = ft_c0.rend();
 
-		std::list<int>::reverse_iterator		std_it = stdl0.rbegin();
-		std::list<int>::reverse_iterator		std_it2 = stdl0.rbegin();
-		std::list<int>::reverse_iterator		std_itend = stdl0.rend();
+		std::list<int>::reverse_iterator		std_it = std_c0.rbegin();
+		std::list<int>::reverse_iterator		std_it2 = std_c0.rbegin();
+		std::list<int>::reverse_iterator		std_itend = std_c0.rend();
 
 		std::cout << SUBTITLE << "[ test operator!= ]" << RESET_COLOR << std::endl;
 		testBool(ft_it != ft_itend && std_it != std_itend, __LINE__);

@@ -39,7 +39,7 @@ class exampleClass : public std::string	{
 // {
 // 	o << i.a;
 // 	return o;
-// }
+// };
 
 class ex{
 public:

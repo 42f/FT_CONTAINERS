@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:50:19 by bvalette          #+#    #+#             */
-/*   Updated: 2021/02/17 10:43:06 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/02/19 14:22:40 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,47 +16,47 @@ int
 test_vector_insert_erase( void )	{
 	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with std::string ~~~~~~~~~~~" << RESET_COLOR << std::endl;
 	{
-		ft::list<std::string>	ftl0;
-		std::list<std::string>	stdl0;
+		ft::list<std::string>	ft_c0;
+		std::list<std::string>	std_c0;
 
 		std::string	val("helloworld");
 
 		std::cout << SUBTITLE << "[ Insert with insert(iterator, size_t, value_type) ]" << RESET_COLOR << std::endl;
-		ftl0.insert(ftl0.end(), 5, val);
-		ftl0.push_front("the Begining...");
-		ftl0.push_back("the End...");
+		ft_c0.insert(ft_c0.end(), 5, val);
+		ft_c0.push_front("the Begining...");
+		ft_c0.push_back("the End...");
 
-		stdl0.insert(stdl0.end(), 5, val);
-		stdl0.push_front("the Begining...");
-		stdl0.push_back("the End...");
+		std_c0.insert(std_c0.end(), 5, val);
+		std_c0.push_front("the Begining...");
+		std_c0.push_back("the End...");
 
-		testList(ftl0, stdl0, NOPRINT);
+		testList(ft_c0, std_c0, NOPRINT);
 
-		ft::list<std::string>	ftl1;
-		std::list<std::string>	stdl1;
+		ft::list<std::string>	ft_c1;
+		std::list<std::string>	std_c1;
 
 		std::cout << SUBTITLE << "[ Insert with insert(iterator, iterator, iterator) ]" << RESET_COLOR << std::endl;
-		ftl1.insert(ftl1.begin(), ftl0.begin(), ftl0.end());
-		stdl1.insert(stdl1.begin(), stdl0.begin(), stdl0.end());
+		ft_c1.insert(ft_c1.begin(), ft_c0.begin(), ft_c0.end());
+		std_c1.insert(std_c1.begin(), std_c0.begin(), std_c0.end());
 
-		testList(ftl1, stdl1, NOPRINT);
+		testList(ft_c1, std_c1, NOPRINT);
 
 		std::cout << SUBTITLE << "[ Erase with erase(iterator) ]" << RESET_COLOR << std::endl;
 		for (int i = 0; i < 3; i++)
 		{
-			std::cout << "return ft = " << &(*ftl1.erase(--ftl1.end())) << std::endl;
-			std::cout << "return std= " << &(*stdl1.erase(--stdl1.end())) << std::endl;
+			std::cout << "return ft = " << &(*ft_c1.erase(--ft_c1.end())) << std::endl;
+			std::cout << "return std= " << &(*std_c1.erase(--std_c1.end())) << std::endl;
 		}
 
-		testList(ftl1, stdl1, NOPRINT);
+		testList(ft_c1, std_c1, NOPRINT);
 		std::cout << SUBTITLE << "[ Erase with erase(iterator, iterator) ]" << RESET_COLOR << std::endl;
-		std::cout << "return ft  = " << &(*ftl1.erase(ftl1.begin(), --ftl1.end())) << std::endl;
-		std::cout << "return std = " << &(*stdl1.erase(stdl1.begin(), --stdl1.end())) << std::endl;
+		std::cout << "return ft  = " << &(*ft_c1.erase(ft_c1.begin(), --ft_c1.end())) << std::endl;
+		std::cout << "return std = " << &(*std_c1.erase(std_c1.begin(), --std_c1.end())) << std::endl;
 
-		testList(ftl1, stdl1, NOPRINT);
-		ftl1.erase(ftl1.begin(), ftl1.end());
-		stdl1.erase(stdl1.begin(), stdl1.end());
-		testList(ftl1, stdl1, NOPRINT);
+		testList(ft_c1, std_c1, NOPRINT);
+		ft_c1.erase(ft_c1.begin(), ft_c1.end());
+		std_c1.erase(std_c1.begin(), std_c1.end());
+		testList(ft_c1, std_c1, NOPRINT);
 	}
 	return (0);
 }

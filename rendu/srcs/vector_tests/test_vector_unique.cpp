@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:51:08 by bvalette          #+#    #+#             */
-/*   Updated: 2021/02/17 10:43:06 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/02/19 14:22:40 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@ int
 test_vector_unique( void )	{
 	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with doubles ~~~~~~~~~~~" << RESET_COLOR << std::endl;
 	{
-		ft::list<double>	ftl0;
-		std::list<double>	stdl0;
+		ft::list<double>	ft_c0;
+		std::list<double>	std_c0;
 		size_t				testSize = 500000;
 
 		std::cout << SUBTITLE << "[ pushback " << testSize << " random float values in list (same value for ft and std list, 0 <= val < 5) ]" << RESET_COLOR << std::endl;
-		srand(reinterpret_cast<long unsigned int>(&stdl0));
+		srand(reinterpret_cast<long unsigned int>(&std_c0));
 
 		int		divider;
 		float	val;
@@ -30,26 +30,26 @@ test_vector_unique( void )	{
 				divider = rand() % 5;
 				val = static_cast<float>(rand() % 15) / ( (divider == 0) ? i + 1 : divider );
 			}
-			ftl0.push_back(val);
-			stdl0.push_back(val);
+			ft_c0.push_back(val);
+			std_c0.push_back(val);
 		}
-		testList(ftl0, stdl0, NOPRINT);
+		testList(ft_c0, std_c0, NOPRINT);
 
 		std::cout << SUBTITLE << "[ unique (1) no arg ]" << RESET_COLOR << std::endl;
-		testList(ftl0, stdl0, NOPRINT);
-		stdl0.unique();
-		ftl0.unique();
-		testList(ftl0, stdl0, NOPRINT);
+		testList(ft_c0, std_c0, NOPRINT);
+		std_c0.unique();
+		ft_c0.unique();
+		testList(ft_c0, std_c0, NOPRINT);
 
 		std::cout << SUBTITLE << "[ unique (2) with binary predicate as boolean function (same_integral_part) ]" << RESET_COLOR << std::endl;
-		stdl0.unique(same_integral_part);
-		ftl0.unique(same_integral_part);
-		testList(ftl0, stdl0, NOPRINT);
+		std_c0.unique(same_integral_part);
+		ft_c0.unique(same_integral_part);
+		testList(ft_c0, std_c0, NOPRINT);
 
 		std::cout << SUBTITLE << "[ unique (2) with binary predicate as a structure (is_near()) ]" << RESET_COLOR << std::endl;
-		stdl0.unique(is_near());
-		ftl0.unique(is_near());
-		testList(ftl0, stdl0, NOPRINT);
+		std_c0.unique(is_near());
+		ft_c0.unique(is_near());
+		testList(ft_c0, std_c0, NOPRINT);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:50:31 by bvalette          #+#    #+#             */
-/*   Updated: 2021/02/19 18:47:35 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/02/20 12:17:25 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,6 @@ test_vector_instantiation( void )	{
 	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " ~~~~~~~~~~~" << RESET_COLOR << std::endl;
 	std::cout << TITLE << "~~~~ To see constructor calls, compile with " << RESET_COLOR << "-> make debug_mode=1 re f "<< std::endl;
 	{
-
-		{
-			std::vector<int>	c1(10, 42);
-			ft::vector<int>		c0(10, 42);
-			putVector(c1);
-			putVector(c0);
-			c1.resize(c1.capacity() + 5);
-			c0.resize(c0.capacity() + 5);
-			putVector(c1);
-			putVector(c0);
-		}
-		return (0);
-
 		std::cout << SUBTITLE << "[ DEFAULT CONSTRUCTOR ]" << RESET_COLOR << std::endl;
 		{
 			ft::vector<std::string>	ft_c0;
@@ -64,7 +51,7 @@ test_vector_instantiation( void )	{
 			std::vector<exampleClass>	std_c0(5);
 			testVector(ft_c0, std_c0, NOPRINT);
 		}
-		std::cout << SUBTITLE << "[ RANGE CONSTRUCTOR test: list0 with fill and list1 with range ctor from list0 iterators ]" << RESET_COLOR << std::endl;
+		std::cout << SUBTITLE << "[ RANGE CONSTRUCTOR test: vector0 with fill and vector1 with range ctor from vector0 iterators ]" << RESET_COLOR << std::endl;
 		{
 			ft::vector<int>		ft_c0(5, 123);
 			std::vector<int>	std_c0(5, 123);
@@ -75,7 +62,7 @@ test_vector_instantiation( void )	{
 			testVector(ft_c1, std_c1, NOPRINT);
 
 		}
-		std::cout << SUBTITLE << "[ COPY CONSTRUCTOR from list with 5 elements]" << RESET_COLOR << std::endl;
+		std::cout << SUBTITLE << "[ COPY CONSTRUCTOR from vector with 5 elements]" << RESET_COLOR << std::endl;
 		{
 			ft::vector<int>			ft_c0(5, 123);
 			std::vector<int>		std_c0(5, 123);
@@ -89,7 +76,7 @@ test_vector_instantiation( void )	{
 			testBool(&(*ft_c0.begin()) != &(*ft_c1.begin()), __LINE__);
 			testBool(&(*std_c0.begin()) != &(*std_c1.begin()), __LINE__);
 		}
-		std::cout << SUBTITLE << "[ COPY CONSTRUCTOR from list with no elements]" << RESET_COLOR << std::endl;
+		std::cout << SUBTITLE << "[ COPY CONSTRUCTOR from vector with no elements]" << RESET_COLOR << std::endl;
 		{
 			ft::vector<int>		ft_c0;
 			std::vector<int>	std_c0;

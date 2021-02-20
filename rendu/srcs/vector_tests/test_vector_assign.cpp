@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:48:00 by bvalette          #+#    #+#             */
-/*   Updated: 2021/02/19 15:36:14 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/02/20 12:08:11 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ int
 test_vector_assign( void )	{
 	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with ints ~~~~~~~~~~~" << RESET_COLOR << std::endl;
 	{
-		std::cout << SUBTITLE << "[ Instanciate list of 3 elements value -1 ]" << RESET_COLOR << std::endl;
-		ft::list<int>	ft_c0(3, -1);
-		std::list<int>	std_c0(3, -1);
+		std::cout << SUBTITLE << "[ Instanciate vector of 3 elements value -1 ]" << RESET_COLOR << std::endl;
+		ft::vector<int>	ft_c0(3, -1);
+		std::vector<int>	std_c0(3, -1);
 		testVector(ft_c0, std_c0, NOPRINT);
 		std::cout << SUBTITLE << "[ assign 5 with value 42 ]" << RESET_COLOR << std::endl;
 		ft_c0.assign(5, 42);
@@ -32,9 +32,9 @@ test_vector_assign( void )	{
 		ft_c0.assign(1, 100);
 		std_c0.assign(1, 100);
 		testVector(ft_c0, std_c0, NOPRINT);
-		std::cout << SUBTITLE << "[ assign with Iterators from list containing 3 times value -1 ]" << RESET_COLOR << std::endl;
-		ft::list<int>	ft_c1(3, -1);
-		std::list<int>	std_c1(3, -1);
+		std::cout << SUBTITLE << "[ assign with Iterators from vector containing 3 times value -1 ]" << RESET_COLOR << std::endl;
+		ft::vector<int>	ft_c1(3, -1);
+		std::vector<int>	std_c1(3, -1);
 		ft_c1.push_front(42);
 		std_c1.push_front(42);
 		ft_c1.push_back(99);

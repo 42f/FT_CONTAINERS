@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:02:19 by bvalette          #+#    #+#             */
-/*   Updated: 2021/02/17 10:41:01 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/02/20 09:12:57 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,10 @@ test_list_resize( void )	{
 		std::cout << SUBTITLE << "[ Instanciate list of 3 elements with no value ]" << RESET_COLOR << std::endl;
 		ft::list<int>	ftl0(3);
 		std::list<int>	stdl0(3);
+		testList(ftl0, stdl0, NOPRINT);
+		std::cout << SUBTITLE << "[ resize to same size with no value ]" << RESET_COLOR << std::endl;
+		ftl0.resize(3);
+		stdl0.resize(3);
 		testList(ftl0, stdl0, NOPRINT);
 		std::cout << SUBTITLE << "[ resize to 5 with no value ]" << RESET_COLOR << std::endl;
 		ftl0.resize(5);

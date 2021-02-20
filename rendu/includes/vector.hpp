@@ -56,13 +56,13 @@ namespace ft	{
 
 			vectorBase( size_t n ) : head(NULL), tail(NULL), tailStorage(NULL), alloc(allocator_type()) {
 
-				createStorage(n + (n>>1));
+				initStorage(n + (n>>1));
 				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> fill " << __func__ << std::endl;
 			}
 
 			vectorBase( size_t n, allocator_type const & userAlloc ) : head(NULL), tail(NULL), tailStorage(NULL), alloc(userAlloc) {
 
-				createStorage(n + (n>>1));
+				initStorage(n + (n>>1));
 				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> fill with alloc " << __func__ << std::endl;
 			}
 
@@ -87,7 +87,7 @@ namespace ft	{
 
 		protected:
 			void
-			createStorage( size_t n )	{
+			initStorage( size_t n )	{
 				if (n > 0)	{
 					this->head = this->alloc.allocate(n);
 					this->tail = this->head;
@@ -622,7 +622,7 @@ namespace ft	{
 					std::cout << "dispatch --> __true_type " << __func__ << std::endl;
 					std::cout << "CONSTRUCTOR --> fill " << __func__ << std::endl;
 				}
-				this->createStorage(n);
+				this->initStorage(n);
 				initFillVector(n, val);
 			}
 
@@ -637,7 +637,7 @@ namespace ft	{
 				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> range : " << __func__ << std::endl;
 
 				size_t	n = std::distance(first, last);
-				this->createStorage(n * 2);
+				this->initStorage(n * 2);
 				fillVector(first, last);
 			}
 
@@ -666,12 +666,11 @@ namespace ft	{
 			void
 			fillVector(iterator first, iterator last)	{
 
-				while (first != last)	{
+				for (;first != last; first++)	{
 					this->alloc.construct(this->tail, *first);
 					this->tail++;
 					if (this->tail == this->tailStorage)
 						std::cout << "RESIZE HERE" << std::endl;
-					first++;
 				}
 			}
 
@@ -697,67 +696,103 @@ namespace ft	{
 
 
 			/**
-			 * @brief Resize storage part only
+			 * @brief Reserve
+			*/
+			void
+			reserve (size_type n) {
+
+				if (n > this->capacity())	{
+					pointer		oldHead = this->head;
+					size_type	oldSize = this->size();
+					size_type	oldCapacity = this->capacity();
+
+					reallocateBigger(n);
+
+					destroyObjects(oldHead, oldSize);
+					this->alloc.deallocate(oldHead, oldCapacity);
+				}
+			}
+
+			void
+			reallocateBigger(size_type n)	{
+
+				if (n > this->capacity())	{
+
+					iterator	oldHeadIt = begin();
+					iterator	oldTailIt = end();
+
+					this->initStorage(n);
+					std::copy(oldHeadIt, oldTailIt, this->head);
+					this->tail += oldTailIt - oldHeadIt;
+				}
+			}
+
+			/**
+			 * @brief Resize vector to new size n, reallocate if n > capacity
 			*/
 			void
 			resize (size_type n, value_type val = value_type()) {
 
-				if (n > this->capacity())	{
-					iterator	oldHeadIt = begin();
-					iterator	oldTailIt = end();
-					pointer		oldHead = this->head;
-					pointer		oldTail = this->tail;
-					size_type	oldCapacity = this->capacity();
+				if (n > this->size())
+					resizeGrow(n, val);
+				else if (n < this->size())
+					resizeShrink(n);
+			}
 
-					this->createStorage(n + (oldCapacity>>1));
-					fillVector(oldHeadIt, oldTailIt);
-					this->tail += n - oldCapacity;
-					for (size_t i = oldCapacity; i < n; i++)	{
-						this->alloc.construct(this->tail, val);
-					}
-					for (size_t i = 0; oldHead + i != oldTail; i++)	{
-						this->alloc.destroy(oldHead + i);
-					}
+			void
+			resizeShrink (size_type n) {
+
+				size_type	newSize = size() - n;
+				this->tail -= newSize;
+				destroyObjects(this->tail, newSize);
+			}
+
+			void
+			resizeGrow (size_type n, value_type val) {
+
+				size_type	oldCapacity = this->capacity();
+				size_type	oldSize = this->size();
+				size_type	addedSize = n - oldSize;
+
+				if (n > this->capacity())	{
+
+					pointer		oldHead = this->head;
+
+					reallocateBigger(n + (oldCapacity>>1));
+					constructObjects(this->tail, addedSize, val);
+					this->tail += addedSize;
+
+					destroyObjects(oldHead, oldSize);
 					this->alloc.deallocate(oldHead, oldCapacity);
 				}
 				else if (n > this->size())	{
-					this->tail += n;
-				}
-				else	{
-					this->tail -= n;
-					for (;n > 0; --n)	{
-						this->alloc.destroy(this->tail + n);
-					}
+					constructObjects(this->tail, addedSize, val);
+					this->tail += addedSize;
 				}
 			}
+
+			void
+			constructObjects(pointer p, size_t n, value_type val = value_type())	{
+				for (size_t i = 0; i < n; i++)	{
+					this->alloc.construct(p + i, val);
+				}
+			}
+
+			void
+			destroyObjects(pointer p, size_t n)	{
+				for (size_t i = 0; i < n; i++)	{
+					this->alloc.destroy(p + i);
+				}
+			}
+
 
 			void
 			clearObject( void )	{
 
 				if (DEBUG_MODE >= 3) std::cout << __func__ << std::endl;
-				// clear();
-				for (size_t n = 0; this->head + n != this->tail; n++)
-					this->alloc.destroy(this->head + n);
+				destroyObjects(this->head, this->size());
 			}
 
-		// 	node*
-		// 	getNode(value_type const & val)	{
-
-		// 		node * newNode = NULL;
-		// 		try	{
-		// 			newNode = _alloc.allocate(1);
-		// 			_alloc.construct(newNode, val);
-		// 			newNode->next = newNode;
-		// 			newNode->prev = newNode;
-		// 		}
-		// 		catch(const std::exception& e) {
-		// 			clearObject();
-		// 			throw std::exception();
-		// 		}
-		// 		if (DEBUG_MODE >= 2)
-		// 			std::cout << "Create " << val << " @ " << newNode << std::endl;
-		// 		return newNode;
-		// 	}
 		}; // ----------------- Class Vector
 
 /*

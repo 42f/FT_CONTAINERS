@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:50:19 by bvalette          #+#    #+#             */
-/*   Updated: 2021/02/19 15:36:14 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/02/20 08:31:45 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ int
 test_vector_insert_erase( void )	{
 	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with std::string ~~~~~~~~~~~" << RESET_COLOR << std::endl;
 	{
-		ft::list<std::string>	ft_c0;
-		std::list<std::string>	std_c0;
+		ft::vector<std::string>	ft_c0;
+		std::vector<std::string>	std_c0;
 
 		std::string	val("helloworld");
 
@@ -32,8 +32,8 @@ test_vector_insert_erase( void )	{
 
 		testVector(ft_c0, std_c0, NOPRINT);
 
-		ft::list<std::string>	ft_c1;
-		std::list<std::string>	std_c1;
+		ft::vector<std::string>	ft_c1;
+		std::vector<std::string>	std_c1;
 
 		std::cout << SUBTITLE << "[ Insert with insert(iterator, iterator, iterator) ]" << RESET_COLOR << std::endl;
 		ft_c1.insert(ft_c1.begin(), ft_c0.begin(), ft_c0.end());

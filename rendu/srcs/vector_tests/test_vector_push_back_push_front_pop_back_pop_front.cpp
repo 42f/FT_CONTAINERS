@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:52:18 by bvalette          #+#    #+#             */
-/*   Updated: 2021/02/19 15:36:14 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/02/20 08:31:45 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ test_vector_push_back_push_front_pop_back_pop_front( void )	{
 
 	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with std::string ~~~~~~~~~~~" << RESET_COLOR << std::endl;
 	{
-		ft::list<std::string>	ft_c0;
-		std::list<std::string>	std_c0;
+		ft::vector<std::string>	ft_c0;
+		std::vector<std::string>	std_c0;
 
 		std::cout << SUBTITLE << "[ Insert with insert(iterator, size_t, value_type) ]" << RESET_COLOR << std::endl;
 		ft_c0.push_front("the Begining...");

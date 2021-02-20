@@ -80,15 +80,15 @@ bool print, std::string message = "" )	{
 
 	if (print == true)
 	{
-		putVector<T>(std_vct);
 		putVector<T>(ft_vct);
+		putVector<T>(std_vct);
 	}
 
 	if(ft_vct.size() != std_vct.size())	{
 		if (print == false && success == true)
 		{
-			putVector<T>(std_vct);
 			putVector<T>(ft_vct);
+			putVector<T>(std_vct);
 		}
 		std::cout << TITLE <<"size: ft (" << ft_vct.size() << ") std (" << std_vct.size() << ") Diff ! " << RESET_COLOR << std::endl;
 		std::cout << ERROR_TITLE << "ERROR !" << RESET_COLOR << std::endl;

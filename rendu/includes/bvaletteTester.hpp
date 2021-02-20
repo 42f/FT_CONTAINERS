@@ -27,6 +27,9 @@ class exampleClass : public std::string	{
 		exampleClass( void ) : a("HelloWorld") {
 			if (DEBUG_MODE >=3) std::cout << "Ctor exampleClass.." << std::endl;
 		};
+		~exampleClass( void ) {
+			if (DEBUG_MODE >=3) std::cout << "Dtor exampleClass.." << std::endl;
+		};
 
 		exampleClass & operator=( exampleClass const & rhs )	{
 			if (DEBUG_MODE >=3) std::cout << "Equal operator =" << std::endl;

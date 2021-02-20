@@ -77,15 +77,15 @@ bool print, std::string message = "" )	{
 
 	if (print == true)
 	{
-		putList<T>(std_lst);
 		putList<T>(ft_lst);
+		putList<T>(std_lst);
 	}
 
 	if(ft_lst.size() != std_lst.size())	{
 		if (print == false && success == true)
 		{
-			putList<T>(std_lst);
 			putList<T>(ft_lst);
+			putList<T>(std_lst);
 		}
 		std::cout << TITLE <<"size: ft (" << ft_lst.size() << ") std (" << std_lst.size() << ") Diff ! " << RESET_COLOR << std::endl;
 		std::cout << ERROR_TITLE << "ERROR !" << RESET_COLOR << std::endl;

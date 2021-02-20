@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:51:08 by bvalette          #+#    #+#             */
-/*   Updated: 2021/02/19 15:36:14 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/02/20 12:08:11 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@ int
 test_vector_unique( void )	{
 	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with doubles ~~~~~~~~~~~" << RESET_COLOR << std::endl;
 	{
-		ft::list<double>	ft_c0;
-		std::list<double>	std_c0;
+		ft::vector<double>	ft_c0;
+		std::vector<double>	std_c0;
 		size_t				testSize = 500000;
 
-		std::cout << SUBTITLE << "[ pushback " << testSize << " random float values in list (same value for ft and std list, 0 <= val < 5) ]" << RESET_COLOR << std::endl;
+		std::cout << SUBTITLE << "[ pushback " << testSize << " random float values in vector (same value for ft and std vector, 0 <= val < 5) ]" << RESET_COLOR << std::endl;
 		srand(reinterpret_cast<long unsigned int>(&std_c0));
 
 		int		divider;

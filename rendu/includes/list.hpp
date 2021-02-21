@@ -323,8 +323,10 @@ namespace ft	{
 			iterator			end( void ) const 		{ return (_tail); }
 			reverse_iterator	rbegin( void ) const	{ return reverse_iterator(end()); }
 			reverse_iterator	rend( void ) const 		{ return reverse_iterator(begin()); }
-			reference			front( void ) const		{ return (_head->data); }
-			reference			back( void ) const 		{ return (_tail->prev->data); }
+			reference			front( void ) 			{ return (_head->data); }
+			reference			back( void ) 	 		{ return (_tail->prev->data); }
+			const_reference		front( void ) const		{ return (_head->data); }
+			const_reference		back( void ) const 		{ return (_tail->prev->data); }
 
 			list&
 			operator= (const list& x)	{

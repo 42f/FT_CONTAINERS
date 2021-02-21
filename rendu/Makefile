@@ -124,10 +124,10 @@ SRCS += ./main_utils.cpp
 SRCS += ./main_tester_vector.cpp
 
 SRCS += ./test_vector_instantiation.cpp
-# SRCS += ./test_vector_push_back_push_front_pop_back_pop_front.cpp
+SRCS += ./test_vector_push_back_pop_back.cpp
 # SRCS += ./test_vector_clear.cpp
 SRCS += ./test_vector_capacities.cpp
-# SRCS += ./test_vector_insert_erase.cpp
+SRCS += ./test_vector_insert_erase.cpp
 # SRCS += ./test_vector_operatorEqual.cpp
 SRCS += ./test_vector_resize.cpp
 # SRCS += ./test_vector_assign.cpp

@@ -86,8 +86,10 @@ namespace ft	{
 
 
 		protected:
+
 			void
 			initStorage( size_t n )	{
+
 				if (n > 0)	{
 					this->head = this->alloc.allocate(n);
 					this->tail = this->head;
@@ -151,37 +153,37 @@ namespace ft	{
 			distance	operator- ( iterator rhs ) { return this->_ptr - rhs._ptr; }
 
 
-	// 		iterator	operator- ( distance n ) {
+			iterator	operator- ( distance n ) {
 
-	// 			iterator tmpIt = *this;
+				iterator tmpIt = *this;
 
-	// 			while ( n > 0 )	{
-	// 				tmpIt--;
-	// 				n--;
-	// 			}
-	// 			return tmpIt;
-	// 		}
+				while ( n > 0 )	{
+					tmpIt--;
+					n--;
+				}
+				return tmpIt;
+			}
 
-	// 		iterator	operator+ ( distance n ) {
+			iterator	operator+ ( distance n ) {
 
-	// 			iterator tmpIt = *this;
+				iterator tmpIt = *this;
 
-	// 			while ( n > 0 )	{
-	// 				tmpIt++;
-	// 				n--;
-	// 			}
-	// 			return tmpIt;
-	// 		}
+				while ( n > 0 )	{
+					tmpIt++;
+					n--;
+				}
+				return tmpIt;
+			}
 
-	// 		void	operator-= ( distance n ) {
+			void	operator-= ( distance n ) {
 
-	// 			*this = *this - n;
-	// 		}
+				*this = *this - n;
+			}
 
-	// 		void	operator+= ( distance n ) {
+			void	operator+= ( distance n ) {
 
-	// 			*this = *this + n;
-	// 		}
+				*this = *this + n;
+			}
 
 			bool 		operator==(const iterator& rhs) const { return _ptr==rhs._ptr; }
 			bool 		operator!=(const iterator& rhs) const { return _ptr!=rhs._ptr; }
@@ -298,44 +300,80 @@ namespace ft	{
 
 		// 	void
 		// 	pop_back( void )						{ erase(--end()); }
-		// 	void
-		// 	push_back (value_type const & val)		{ insert(end(), val); }
-		// 	void
-		// 	pop_front( void )						{ erase(begin()); }
-		// 	void
-		// 	push_front (value_type const & val)		{ insert(begin(), val); }
+			void
+			push_back (value_type const & val)		{ insert(end(), val); }
 
 			// void
 			// clear( void )	{ erase(begin(), end()); }
 
 
-		// 	/**
-		// 	 * @brief insert single element
-		// 	*/
-		// 	iterator insert(iterator position, const value_type& val)	{
+			/**
+			 * @brief insert single element
+			*/
+			iterator insert(iterator position, const value_type& val)	{
 
-		// 		node *	newNode = getNode(val);
-		// 		if (_size < max_size())	{
-		// 			if (_head == _tail || position == begin())
-		// 				_head = newNode;
-		// 			newNode->hook(position._ptr);
-		// 			incSize();
-		// 		}
-		// 		return newNode;
-		// 	}
+				difference_type indexPos = position - begin();
 
-		// 	/**
-		// 	 * @brief insert n elements of val
-		// 	*/
-		// 	void insert (iterator position, size_type n, const value_type& val)	{
+				if (capacity() == 0)	{
+					this->initStorage(1);
+					position = begin();
+				}
+				if (size() == capacity())	{
+					reserve(capacity() + (capacity()>>1));
+				}
 
-		// 		if (n + _size <= max_size())
-		// 		{
-		// 			for(; n > 0; --n)	{
-		// 				insert(position, val);
-		// 			}
-		// 		}
-		// 	}
+				if (begin() + indexPos != end())	{
+					if (size() > 1)	{
+						memMoveToRight(begin() + indexPos, end(), 1);
+					}
+					this->tail++;
+					destroyObjects(this->head + indexPos, 1);
+					constructObjects(this->head + indexPos, 1, val);
+				}
+				else {
+					constructObjects(this->tail, 1, val);
+					this->tail++;
+				}
+				return begin() + indexPos; 		// to change
+			}
+
+			/**
+			 * @brief Move [first, last] range by n memory blocks to theLeft
+			*/
+			void
+			memMoveToLeft(iterator first, iterator last, size_t n)	{			// to be tested
+				while (first != last)	{
+					constructObjects(first._ptr - n, 1, *first);
+					destroyObjects(first._ptr, 1);
+					first++;
+				}
+			}
+
+
+			/**
+			 * @brief Move [first, last] range by n memory blocks to the right
+			*/
+			void
+			memMoveToRight(iterator first, iterator last, size_t n)	{
+				while (last != first)	{
+					last--;
+					constructObjects(last._ptr + n, 1, *last);
+					destroyObjects(last._ptr, 1);
+				}
+			}
+
+			/**
+			 * @brief insert n elements of val
+			*/
+			void insert (iterator position, size_type n, const value_type& val)	{
+
+				if (n + _size <= max_size())
+				{
+					for(; n > 0; --n)	{
+						insert(position, val);
+					}
+				}
+			}
 
 		// 	/**
 		// 	 * @brief insert range of elements
@@ -682,8 +720,8 @@ namespace ft	{
 			initFillVector(size_type n, value_type const & val)	{
 
 				this->tail = this->head + n;
-				for (; n > 0; --n){
-					this->alloc.construct(this->tail - n, val);
+				for (size_t i = 0; i < n; i++){
+					this->alloc.construct(this->head + i, val);
 				}
 				if (DEBUG_MODE >= 3)	{
 					std::cout << __func__ << std::endl;
@@ -722,7 +760,7 @@ namespace ft	{
 					iterator	oldTailIt = end();
 
 					this->initStorage(n);
-					std::copy(oldHeadIt, oldTailIt, this->head);
+					constructObjects(this->head, oldHeadIt, oldTailIt);
 					this->tail += oldTailIt - oldHeadIt;
 				}
 			}
@@ -779,12 +817,18 @@ namespace ft	{
 			}
 
 			void
+			constructObjects(pointer p, iterator first, iterator last)	{
+				for (size_t i = 0; first != last; i++, first++)	{
+					this->alloc.construct(p + i, *first);
+				}
+			}
+
+			void
 			destroyObjects(pointer p, size_t n)	{
 				for (size_t i = 0; i < n; i++)	{
 					this->alloc.destroy(p + i);
 				}
 			}
-
 
 			void
 			clearObject( void )	{

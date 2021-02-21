@@ -142,9 +142,9 @@ bool print, std::string message = "" )	{
 	}
 
 	if (print == true && success == true)
-		std::cout << TESTOK_TITLE << "[ TEST PASSED: no diff ] vector sizes: ft(" << ft_vct.size() <<") std(" << std_vct.size() << ")" << RESET_COLOR << "\t  \342\234\205" << std::endl;
+		std::cout << TESTOK_TITLE << "[ TEST PASSED: no diff ] vector size: ft(" << ft_vct.size() << ") std(" << std_vct.size() << ") / capacity: ft(" << ft_vct.capacity() << ") std(" << std_vct.capacity() << ")" << RESET_COLOR << "\t  \342\234\205" << std::endl;
 	else if (success == true)
-		std::cout << "[ TEST PASSED: no diff ] vector sizes: ft(" << ft_vct.size() <<") std(" << std_vct.size() << ") \t \342\234\205" << std::endl;
+		std::cout << "[ TEST PASSED: no diff ] vector size: ft(" << ft_vct.size() << ") std(" << std_vct.size() << ") / capacity: ft(" << ft_vct.capacity() << ") std(" << std_vct.capacity() << ") \t \342\234\205" << std::endl;
 	else
 		std::cout << ERROR_TITLE << "TEST FAILED !" << RESET_COLOR << std::endl;
 }

@@ -6,21 +6,36 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:51:42 by bvalette          #+#    #+#             */
-/*   Updated: 2021/02/20 12:31:14 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/02/22 11:43:46 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bvaletteTester_vector.hpp"
 
-void
-testReserve(size_t testReserve, ft::vector<int> & ft_c0, std::vector<int> & std_c0)	 {
-		std::cout << SUBTITLE << "[ reserve("<< testReserve << ") ]" << RESET_COLOR << std::endl;
+#define NOVALUE -1
 
-		ft_c0.reserve(testReserve);
-		std_c0.reserve(testReserve);
+void
+testReserve(size_t testSize, ft::vector<int> & ft_c0, std::vector<int> & std_c0)	 {
+		std::cout << SUBTITLE << "[ reserve("<< testSize << ") ]" << RESET_COLOR << std::endl;
+
+		ft_c0.reserve(testSize);
+		std_c0.reserve(testSize);
 		testVector(ft_c0, std_c0, NOPRINT);
 		std::cout << "New Capacities after reserve: ft(" << ft_c0.capacity() << ") ; std(" << std_c0.capacity() << ")" << std::endl;
-		testBool(ft_c0.capacity() >= testReserve && std_c0.capacity() >= testReserve, __LINE__);
+		testBool(ft_c0.capacity() >= testSize && std_c0.capacity() >= testSize, __LINE__);
+}
+
+void
+testResize(ft::vector<int> & ft_c0, std::vector<int> & std_c0, size_t testSize, int value = NOVALUE)	 {
+
+		if (value == NOVALUE)
+			std::cout << SUBTITLE << "[ resize to " << testSize << " with no value ]" << RESET_COLOR << std::endl;
+		else
+			std::cout << SUBTITLE << "[ resize to " << testSize << " with value " << value << " ]" << RESET_COLOR << std::endl;
+
+		ft_c0.resize(testSize, value);
+		std_c0.resize(testSize, value);
+		testVector(ft_c0, std_c0, NOPRINT);
 }
 
 int
@@ -32,41 +47,28 @@ test_vector_resize( void )	{
 		ft::vector<int>	ft_c0(3);
 		std::vector<int>	std_c0(3);
 		testVector(ft_c0, std_c0, NOPRINT);
-		std::cout << SUBTITLE << "[ resize to same size with no value ]" << RESET_COLOR << std::endl;
-		ft_c0.resize(3);
-		std_c0.resize(3);
-		testVector(ft_c0, std_c0, NOPRINT);
-		std::cout << SUBTITLE << "[ resize to 5 with no value ]" << RESET_COLOR << std::endl;
-		ft_c0.resize(5);
-		std_c0.resize(5);
-		testVector(ft_c0, std_c0, NOPRINT);
-		std::cout << SUBTITLE << "[ resize to 7 with value 42 ]" << RESET_COLOR << std::endl;
-		ft_c0.resize(7, 42);
-		std_c0.resize(7, 42);
-		testVector(ft_c0, std_c0, NOPRINT);
-		// std::cout << SUBTITLE << "[ push back 999 and push front 111 ]" << RESET_COLOR << std::endl;
-		// ft_c0.push_back(999);
-		// std_c0.push_back(999);
-		// ft_c0.push_front(111);
-		// std_c0.push_front(111);
-		// testVector(ft_c0, std_c0, NOPRINT);
-		std::cout << SUBTITLE << "[ resize to 3 with value 42 ]" << RESET_COLOR << std::endl;
-		ft_c0.resize(3, 42);
-		std_c0.resize(3, 42);
-		testVector(ft_c0, std_c0, NOPRINT);
-		std::cout << SUBTITLE << "[ resize to 4 with value 42 ]" << RESET_COLOR << std::endl;
-		ft_c0.resize(4, 42);
-		std_c0.resize(4, 42);
-		testVector(ft_c0, std_c0, NOPRINT);
-		std::cout << SUBTITLE << "[ resize to 4 with value 99 ]" << RESET_COLOR << std::endl;
-		ft_c0.resize(4, 99);
-		std_c0.resize(4, 99);
-		testVector(ft_c0, std_c0, NOPRINT);
-		std::cout << SUBTITLE << "[ resize to 0 with no value ]" << RESET_COLOR << std::endl;
-		ft_c0.resize(0);
-		std_c0.resize(0);
 
-		size_t testResize = std_c0.max_size() + 1;
+		testResize(ft_c0, std_c0, 3);
+		testResize(ft_c0, std_c0, 5);
+		testResize(ft_c0, std_c0, 7);
+		std::cout << SUBTITLE << "[ push back 999 ]" << RESET_COLOR << std::endl;
+		ft_c0.push_back(999);
+		std_c0.push_back(999);
+		testVector(ft_c0, std_c0, NOPRINT);
+
+		testResize(ft_c0, std_c0, 3);
+		testResize(ft_c0, std_c0, 3);
+		testResize(ft_c0, std_c0, 3, 21);
+		testResize(ft_c0, std_c0, 5, 42);
+		testResize(ft_c0, std_c0, 7, 42);
+		testResize(ft_c0, std_c0, 4, 99);
+		testResize(ft_c0, std_c0, 4, 42);
+		testResize(ft_c0, std_c0, 4);
+		testResize(ft_c0, std_c0, 1000000);
+		testResize(ft_c0, std_c0, ft_c0.capacity() + 1);
+		testResize(ft_c0, std_c0, 0);
+
+		size_t testResize = std_c0.max_size();
 		std::cout << SUBTITLE << "[ resize("<< testResize << ") Max size, will throw exception ]" << RESET_COLOR << std::endl;
 		try {
 			try { std_c0.resize(testResize); } catch ( std::exception & e) {};
@@ -74,8 +76,16 @@ test_vector_resize( void )	{
 			testBool( 1 == 2, __LINE__);
 		}
 		catch (  std::bad_alloc & e )	{
-			std::cout << "Exception thrown by ft::vector, as it should." << std::endl;
+			std::cout << "Exception thrown: std::bad_alloc, as it should." << std::endl;
 			testBool( 1 == 1, __LINE__);
+		}
+		catch (  std::exception & e )	{
+			std::cout << "Exception thrown: std::exception, should be bad_alloc but it's ok..." << std::endl;
+			testBool( 1 == 1, __LINE__);
+		}
+		catch (  std::length_error & e )	{
+			std::cout << "Exception thrown: std::length_error, Wrong !" << std::endl;
+			testBool( 1 == 2, __LINE__);
 		}
 	}
 	{
@@ -96,10 +106,19 @@ test_vector_resize( void )	{
 		try {
 			try { std_c0.reserve(sizeReserve); } catch ( std::exception & e) {};
 			ft_c0.reserve(sizeReserve);
+			std::cout << "No Exception was thrown ! It should have !" << std::endl;
 			testBool( 1 == 2, __LINE__);
 		}
+		catch (  std::length_error & e )	{
+			std::cout << "Exception thrown: std::length_error, as it should." << std::endl;
+			testBool( 1 == 1, __LINE__);
+		}
 		catch (  std::bad_alloc & e )	{
-			std::cout << "Exception thrown by ft::vector, as it should." << std::endl;
+			std::cout << "Exception thrown: std::bad_alloc, should be length_error but it's ok..." << std::endl;
+			testBool( 1 == 1, __LINE__);
+		}
+		catch (  std::exception & e )	{
+			std::cout << "Exception thrown: std::exception, should be length_error but it's ok..." << std::endl;
 			testBool( 1 == 1, __LINE__);
 		}
 		testVector(ft_c0, std_c0, NOPRINT);

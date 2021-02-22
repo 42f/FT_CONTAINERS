@@ -157,7 +157,7 @@ bool print, std::string message = "" )	{
 int	main_tester_vector( void );
 
 int	test_vector_instantiation( void );
-int	test_vector_push_back_push_front_pop_back_pop_front( void );
+int	test_vector_push_back_pop_back( void );
 int	test_vector_clear( void );
 int	test_vector_capacities( void );
 int	test_vector_insert_erase( void );

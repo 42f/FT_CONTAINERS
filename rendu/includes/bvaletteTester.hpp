@@ -69,7 +69,7 @@ public:
 // 	return o;
 // }
 
-bool	testBool(bool b, int const lineNo = -1 );
+bool	testBool(bool b, int const lineNo = -1, int const loopIter = -1 );
 
 bool 	more_than_100 (const int& value);
 bool 	more_than_10 (const int& value);

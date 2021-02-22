@@ -8,6 +8,7 @@
 # include <iterator>
 # include <limits>
 # include <algorithm>
+# include <stdexcept>
 
 #ifndef DEBUG_MODE
 # define DEBUG_MODE 0
@@ -212,8 +213,8 @@ namespace ft	{
 			typedef vectorBase<T, T_alloc>					vectorBase;
 			typedef vectorIterator<T>						iterator;
 			typedef std::reverse_iterator<iterator> 		reverse_iterator;
-			// typedef const_iterator<T>						const_iterator;
-			// typedef std::const_reverse_iterator<iterator>	const_reverse_iterator;
+			typedef const vectorIterator<T>					const_iterator;
+			typedef const reverse_iterator					const_reverse_iterator;
 			typedef T										value_type;
 			typedef size_t									size_type;
 			typedef std::ptrdiff_t							difference_type;
@@ -270,18 +271,24 @@ namespace ft	{
 
 			~vector( void )	{
 
-				clearObject();
+				if (size() > 0)
+					clearObject();
 				if (DEBUG_MODE >= 1)
 					std::cout << "DESTRUCTOR --> " << __func__ << std::endl;
 			}
 
 			size_type			max_size( void ) const	{ return this->alloc.max_size();  }
-			bool				empty( void ) const		{ return (this->head == this->tail); }
+			bool				empty( void ) const		{ return (size() == 0); }
 			size_type			size( void ) const 		{ return (this->tail - this->head); }
-			iterator			begin( void ) const		{ return (this->head); }
-			iterator			end( void ) const 		{ return (this->tail); }
-			reverse_iterator	rbegin( void ) const	{ return reverse_iterator(end()); }
-			reverse_iterator	rend( void ) const 		{ return reverse_iterator(begin()); }
+			iterator			begin( void ) 			{ return (this->head); }
+			iterator			end( void ) 	 		{ return (this->tail); }
+			const_iterator		begin( void ) const		{ return (this->head); }
+			const_iterator		end( void ) const 		{ return (this->tail); }
+			reverse_iterator	rbegin( void ) 			{ return reverse_iterator(end()); }
+			reverse_iterator	rend( void ) 	 		{ return reverse_iterator(begin()); }
+			// const_reverse_iterator	rbegin( void ) const	{ return reverse_iterator(end()); }
+			// const_reverse_iterator	rend( void ) const 		{ return reverse_iterator(begin()); }
+
 			reference			front( void ) 			{ return (*this->head); }
 			reference			back( void ) 	 		{ return (*this->tail); }
 			const_reference		front( void ) const		{ return (*this->head); }
@@ -298,13 +305,12 @@ namespace ft	{
 			// 	return *this;
 			// }
 
-		// 	void
-		// 	pop_back( void )						{ erase(--end()); }
 			void
-			push_back (value_type const & val)		{ insert(end(), val); }
-
-			// void
-			// clear( void )	{ erase(begin(), end()); }
+			pop_back( void )					{ if (size() > 0) erase(--end()); }
+			void
+			push_back (value_type const & val)	{ insert(end(), val); }
+			void
+			clear( void )						{ erase(begin(), end()); }
 
 
 			/**
@@ -313,27 +319,7 @@ namespace ft	{
 			iterator insert(iterator position, const value_type& val)	{
 
 				difference_type indexPos = position - begin();
-
-				if (capacity() == 0)	{
-					this->initStorage(1);
-					position = begin();
-				}
-				if (size() == capacity())	{
-					reserve(capacity() + (capacity()>>1));
-				}
-
-				if (begin() + indexPos != end())	{
-					if (size() > 1)	{
-						memMoveToRight(begin() + indexPos, end(), 1);
-					}
-					this->tail++;
-					destroyObjects(this->head + indexPos, 1);
-					constructObjects(this->head + indexPos, 1, val);
-				}
-				else {
-					constructObjects(this->tail, 1, val);
-					this->tail++;
-				}
+				insert(position, 1, val);
 				return begin() + indexPos; 		// to change
 			}
 
@@ -341,7 +327,7 @@ namespace ft	{
 			 * @brief Move [first, last] range by n memory blocks to theLeft
 			*/
 			void
-			memMoveToLeft(iterator first, iterator last, size_t n)	{			// to be tested
+			memMoveLeft(iterator first, iterator last, size_t n)	{			// to be tested
 				while (first != last)	{
 					constructObjects(first._ptr - n, 1, *first);
 					destroyObjects(first._ptr, 1);
@@ -354,7 +340,7 @@ namespace ft	{
 			 * @brief Move [first, last] range by n memory blocks to the right
 			*/
 			void
-			memMoveToRight(iterator first, iterator last, size_t n)	{
+			memMoveRight(iterator first, iterator last, size_t n)	{
 				while (last != first)	{
 					last--;
 					constructObjects(last._ptr + n, 1, *last);
@@ -367,78 +353,81 @@ namespace ft	{
 			*/
 			void insert (iterator position, size_type n, const value_type& val)	{
 
-				if (n + _size <= max_size())
-				{
-					for(; n > 0; --n)	{
-						insert(position, val);
+				if (capacity() == 0)	{
+					this->initStorage(1);
+					position = begin();
+				}
+
+				difference_type indexPos = position - begin();
+				if (size() + n >= capacity())	{
+					doReserve(capacity() + n + (capacity()>>1));
+				}
+
+				if (begin() + indexPos != end())	{
+					if (size() > 1)	{
+						memMoveRight(begin() + indexPos, end(), n);
 					}
+					destroyObjects(this->head + indexPos, size() - indexPos);
+					this->tail += n;
+					constructObjects(this->head + indexPos, n, val);
+				}
+				else {
+					constructObjects(this->tail, n, val);
+					this->tail += n;
 				}
 			}
 
-		// 	/**
-		// 	 * @brief insert range of elements
-		// 	 * check here if arguments of type InputIterator are integer
-		// 	 * or iterators and dispatch to the right overload.
-		// 	 * Cf. /usr/include/c++/7/bits/cpp_type_traits.h line 136
-		// 	 * for implementation. Basicly __is_integer is a template function
-		// 	 * which, by default containts __false_type as __type, unless
-		// 	 * it is one of the integer types so it contains __true_type
-		// 	 * Here we create integet wich will be of type __true_type
-		// 	 * or __false_type, and by calling inster_dispatch with it, the right
-		// 	 * overload is called.
-		// 	 * insert_dispatch taking __true_type will execute code for
-		// 	*/
-		// 	template <class InputIterator>
-		// 	void
-		// 	insert (iterator position, InputIterator first,
-		// 	InputIterator last)	{
+			/**
+			 * @brief insert range of elements
+			 * check here if arguments of type InputIterator are integer
+			 * or iterators and dispatch to the right overload.
+			 * Cf. /usr/include/c++/7/bits/cpp_type_traits.h line 136
+			 * for implementation. Basicly __is_integer is a template function
+			 * which, by default containts __false_type as __type, unless
+			 * it is one of the integer types so it contains __true_type
+			 * Here we create integer wich will be of type __true_type
+			 * or __false_type, and by calling insert_dispatch with it, the right
+			 * overload is called.
+			*/
+			template <class InputIterator>
+			void
+			insert (iterator position, InputIterator first,
+			InputIterator last)	{
 
-		// 		typename std::__is_integer<InputIterator>::__type	integer;
-		// 		insert_dispatch(position, first, last, integer);
-		// 	}
+				typename std::__is_integer<InputIterator>::__type	integer;
+				insert_dispatch(position, first, last, integer);
+			}
 
-		// 	iterator
-		// 	erase (iterator position)	{
+			iterator
+			erase (iterator position)	{
 
-		// 		node * cursor = position._ptr;
-		// 		node * returnCursor = cursor->next;
-		// 		if (_size > 0)	{
-		// 			if (cursor == _head)
-		// 				_head = _head->next;
-		// 			cursor->unhook();
-		// 			_alloc.destroy(cursor);
-		// 			_alloc.deallocate(cursor, 1);
-		// 			decSize();
-		// 		}
-		// 		return returnCursor;
-		// 	}
+				destroyObjects(position._ptr, 1);
+				memMoveLeft(position + 1, end(), 1);
+				this->tail -= 1;
+				return position;
+			}
 
-		// 	iterator
-		// 	erase (iterator first, iterator last)	{
+			iterator
+			erase (iterator first, iterator last)	{
 
-		// 		iterator tmpCursor = first;
-		// 		while (first != last)
-		// 		{
-		// 			tmpCursor = first;
-		// 			first++;
-		// 			erase(tmpCursor);
-		// 		}
-		// 		return last;
-		// 	}
+				size_type			offset = first - begin();
+				difference_type		len = last - first;
+				destroyObjects(first._ptr, len);
+				memMoveLeft(last, end(), len);
+				this->tail -= len;
+				return begin() + offset;
+			}
 
+			void
+			resize (size_type n, value_type val = value_type())	{
 
-		// 	void
-		// 	resize (size_type n, value_type val = value_type())	{
-
-		// 		if (n < _size)	{
-		// 			typename ft::vector<T>::iterator it = begin();
-		// 			for(size_type i = 0; i < n; i++)
-		// 				it++;
-		// 			erase(it, end());
-		// 		}
-		// 		else if (n > _size)
-		// 			insert(end(), n - _size, val);
-		// 	}
+				if (n < size())	{
+					erase(end() - (size() - n), end());
+				}
+				else if (n > size())	{
+					insert(end(), n - size(), val);
+				}
+			}
 
 		// 	void
 		// 	swap (vector& src)	{
@@ -680,22 +669,43 @@ namespace ft	{
 			}
 
 
-		// 	template<typename integer>
-		// 	void
-		// 	insert_dispatch(iterator position, integer n, integer val,
-		// 	std::__true_type)	{
-		// 		insert(position, static_cast<size_type>(n),
-		// 			static_cast<value_type>(val));
-		// 	}
+			template<typename integer>
+			void
+			insert_dispatch(iterator position, integer n, integer val,
+			std::__true_type)	{
+				insert(position, static_cast<size_type>(n),
+					static_cast<value_type>(val));
+			}
 
-		// 	template<typename InputIterator>
-		// 	void
-		// 	insert_dispatch(iterator position, InputIterator first,
-		// 	InputIterator last, std::__false_type)	{
-		// 		for (; first != last; ++first)	{
-		// 			insert(position, *first);
-		// 		}
-		// 	}
+			template<typename InputIterator>
+			void
+			insert_dispatch(iterator position, InputIterator first,
+			InputIterator last, std::__false_type)	{
+
+				if (capacity() == 0)	{
+					this->initStorage(1);
+					position = begin();
+				}
+
+				difference_type indexPos = position - begin();
+				size_type		n = last - first;
+				if (size() + n >= capacity())	{
+					doReserve(capacity() + n + (capacity()>>1));
+				}
+
+				if (begin() + indexPos != end())	{
+					if (size() > 1)	{
+						memMoveRight(begin() + indexPos, end(), n);
+					}
+					destroyObjects(this->head + indexPos, size() - indexPos);
+					this->tail += n;
+					constructObjects(this->head + indexPos, first, last);
+				}
+				else {
+					constructObjects(this->head + indexPos, first, last);
+					this->tail += n;
+				}
+			}
 
 			/**
 			 * @brief Construct objects at alocated memory, to be used by
@@ -708,7 +718,7 @@ namespace ft	{
 					this->alloc.construct(this->tail, *first);
 					this->tail++;
 					if (this->tail == this->tailStorage)
-						std::cout << "RESIZE HERE" << std::endl;
+						std::cout << "RESIZE HERE" << std::endl;			// not fixed yet
 				}
 			}
 
@@ -723,21 +733,29 @@ namespace ft	{
 				for (size_t i = 0; i < n; i++){
 					this->alloc.construct(this->head + i, val);
 				}
-				if (DEBUG_MODE >= 3)	{
-					std::cout << __func__ << std::endl;
-					for (T* cursor = this->head; cursor != this->tail; ++cursor)
-						std::cout << "val = " << *cursor << " @ " << cursor << std::endl;
-					for (T* cursor = this->tail; cursor != this->tailStorage; ++cursor)
-						std::cout << "after tail: val = " << cursor << std::endl;
-				}
 			}
 
 
 			/**
-			 * @brief Reserve
+			 * @brief Reserve: Requests that the vector capacity be at
+			 * least enough to contain n elements.
 			*/
 			void
 			reserve (size_type n) {
+
+				if (n > max_size())	{
+					throw std::length_error("ft::vector::reserve called with n > max_size");
+				}
+				else	{
+					doReserve(n);
+				}
+			}
+
+			/**
+			 * @brief doReserve: No throw version of Reserve.
+			*/
+			void
+			doReserve (size_type n) {
 
 				if (n > this->capacity())	{
 					pointer		oldHead = this->head;
@@ -765,49 +783,49 @@ namespace ft	{
 				}
 			}
 
-			/**
-			 * @brief Resize vector to new size n, reallocate if n > capacity
-			*/
-			void
-			resize (size_type n, value_type val = value_type()) {
+			// /**
+			//  * @brief Resize vector to new size n, reallocate if n > capacity
+			// */
+			// void
+			// resize (size_type n, value_type val = value_type()) {
 
-				if (n > this->size())
-					resizeGrow(n, val);
-				else if (n < this->size())
-					resizeShrink(n);
-			}
+			// 	if (n > this->size())
+			// 		resizeGrow(n, val);
+			// 	else if (n < this->size())
+			// 		resizeShrink(n);
+			// }
 
-			void
-			resizeShrink (size_type n) {
+			// void
+			// resizeShrink (size_type n) {
 
-				size_type	newSize = size() - n;
-				this->tail -= newSize;
-				destroyObjects(this->tail, newSize);
-			}
+			// 	size_type	newSize = size() - n;
+			// 	this->tail -= newSize;
+			// 	destroyObjects(this->tail, newSize);
+			// }
 
-			void
-			resizeGrow (size_type n, value_type val) {
+			// void
+			// resizeGrow (size_type n, value_type val) {
 
-				size_type	oldCapacity = this->capacity();
-				size_type	oldSize = this->size();
-				size_type	addedSize = n - oldSize;
+			// 	size_type	oldCapacity = this->capacity();
+			// 	size_type	oldSize = this->size();
+			// 	size_type	addedSize = n - oldSize;
 
-				if (n > this->capacity())	{
+			// 	if (n > this->capacity())	{
 
-					pointer		oldHead = this->head;
+			// 		pointer		oldHead = this->head;
 
-					reallocateBigger(n + (oldCapacity>>1));
-					constructObjects(this->tail, addedSize, val);
-					this->tail += addedSize;
+			// 		reallocateBigger(n + (oldCapacity>>1));
+			// 		constructObjects(this->tail, addedSize, val);
+			// 		this->tail += addedSize;
 
-					destroyObjects(oldHead, oldSize);
-					this->alloc.deallocate(oldHead, oldCapacity);
-				}
-				else if (n > this->size())	{
-					constructObjects(this->tail, addedSize, val);
-					this->tail += addedSize;
-				}
-			}
+			// 		destroyObjects(oldHead, oldSize);
+			// 		this->alloc.deallocate(oldHead, oldCapacity);
+			// 	}
+			// 	else if (n > this->size())	{
+			// 		constructObjects(this->tail, addedSize, val);
+			// 		this->tail += addedSize;
+			// 	}
+			// }
 
 			void
 			constructObjects(pointer p, size_t n, value_type val = value_type())	{
@@ -825,7 +843,9 @@ namespace ft	{
 
 			void
 			destroyObjects(pointer p, size_t n)	{
+				// std::cout << "CALL DEST - " << n << std::endl;
 				for (size_t i = 0; i < n; i++)	{
+					// std::cout << i << "  dest => " << &(p[i]) << std::endl;
 					this->alloc.destroy(p + i);
 				}
 			}

@@ -164,6 +164,7 @@ int	test_vector_insert_erase( void );
 int	test_vector_operatorEqual( void );
 int	test_vector_resize( void );
 int	test_vector_assign( void );
+int	test_vector_at_operatorBrackets( void );
 int	test_vector_member_swap( void );
 int	test_vector_nonmember_swap( void );
 int	test_vector_relational_operators( void );

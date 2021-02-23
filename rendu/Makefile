@@ -125,25 +125,26 @@ SRCS += ./main_tester_vector.cpp
 
 SRCS += ./test_vector_instantiation.cpp
 SRCS += ./test_vector_push_back_pop_back.cpp
-# SRCS += ./test_vector_clear.cpp
+SRCS += ./test_vector_clear.cpp
 SRCS += ./test_vector_capacities.cpp
 SRCS += ./test_vector_insert_erase.cpp
-# SRCS += ./test_vector_operatorEqual.cpp
+SRCS += ./test_vector_operatorEqual.cpp
 SRCS += ./test_vector_resize.cpp
-# SRCS += ./test_vector_assign.cpp
-# SRCS += ./test_vector_member_swap.cpp
-# SRCS += ./test_vector_nonmember_swap.cpp
-# SRCS += ./test_vector_relational_operators.cpp
+SRCS += ./test_vector_assign.cpp
+SRCS += ./test_vector_at_operatorBrackets.cpp
+SRCS += ./test_vector_member_swap.cpp
+SRCS += ./test_vector_nonmember_swap.cpp
+SRCS += ./test_vector_relational_operators.cpp
 # SRCS += ./test_vector_splice.cpp
 # SRCS += ./test_vector_remove_if.cpp
 # SRCS += ./test_vector_remove.cpp
 # SRCS += ./test_vector_unique.cpp
 # SRCS += ./test_vector_merge.cpp
 # SRCS += ./test_vector_sort.cpp
-# SRCS += ./test_vector_iterator.cpp
-# SRCS += ./test_vector_reverseIterator.cpp
 # SRCS += ./test_vector_reverse.cpp
-# SRCS += ./test_vector_element_access.cpp
+SRCS += ./test_vector_iterator.cpp
+SRCS += ./test_vector_reverseIterator.cpp
+SRCS += ./test_vector_element_access.cpp
 
 vpath %.cpp ./srcs
 vpath %.cpp ./srcs/list_tests

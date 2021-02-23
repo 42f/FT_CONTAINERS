@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:51:42 by bvalette          #+#    #+#             */
-/*   Updated: 2021/02/22 11:43:46 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/02/22 16:56:36 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,21 +71,23 @@ test_vector_resize( void )	{
 		size_t testResize = std_c0.max_size();
 		std::cout << SUBTITLE << "[ resize("<< testResize << ") Max size, will throw exception ]" << RESET_COLOR << std::endl;
 		try {
-			try { std_c0.resize(testResize); } catch ( std::exception & e) {};
+			try { std_c0.resize(testResize); }
+				catch ( std::exception & e) {}
+				catch ( std::bad_alloc & e) {}
 			ft_c0.resize(testResize);
-			testBool( 1 == 2, __LINE__);
+			testBool( false, __LINE__);
 		}
 		catch (  std::bad_alloc & e )	{
 			std::cout << "Exception thrown: std::bad_alloc, as it should." << std::endl;
-			testBool( 1 == 1, __LINE__);
+			testBool( true, __LINE__);
 		}
 		catch (  std::exception & e )	{
 			std::cout << "Exception thrown: std::exception, should be bad_alloc but it's ok..." << std::endl;
-			testBool( 1 == 1, __LINE__);
+			testBool( true, __LINE__);
 		}
 		catch (  std::length_error & e )	{
 			std::cout << "Exception thrown: std::length_error, Wrong !" << std::endl;
-			testBool( 1 == 2, __LINE__);
+			testBool( false, __LINE__);
 		}
 	}
 	{
@@ -107,19 +109,19 @@ test_vector_resize( void )	{
 			try { std_c0.reserve(sizeReserve); } catch ( std::exception & e) {};
 			ft_c0.reserve(sizeReserve);
 			std::cout << "No Exception was thrown ! It should have !" << std::endl;
-			testBool( 1 == 2, __LINE__);
+			testBool( false, __LINE__);
 		}
 		catch (  std::length_error & e )	{
 			std::cout << "Exception thrown: std::length_error, as it should." << std::endl;
-			testBool( 1 == 1, __LINE__);
+			testBool( true, __LINE__);
 		}
 		catch (  std::bad_alloc & e )	{
 			std::cout << "Exception thrown: std::bad_alloc, should be length_error but it's ok..." << std::endl;
-			testBool( 1 == 1, __LINE__);
+			testBool( true, __LINE__);
 		}
 		catch (  std::exception & e )	{
 			std::cout << "Exception thrown: std::exception, should be length_error but it's ok..." << std::endl;
-			testBool( 1 == 1, __LINE__);
+			testBool( true, __LINE__);
 		}
 		testVector(ft_c0, std_c0, NOPRINT);
 		std::cout << "New Capacities after reserve: ft(" << ft_c0.capacity() << ") ; std(" << std_c0.capacity() << ")" << std::endl;

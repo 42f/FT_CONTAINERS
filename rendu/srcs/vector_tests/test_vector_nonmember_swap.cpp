@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:52:27 by bvalette          #+#    #+#             */
-/*   Updated: 2021/02/20 12:08:29 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/02/22 16:01:29 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,16 @@ test_vector_nonmember_swap( void )	{
 		std::cout << SUBTITLE << "[ Instanciate vector1 of 3 elements value 42 + push front 0 + push back 99 ]" << RESET_COLOR << std::endl;
 		ft::vector<int>	ft_c1(3, 42);
 		std::vector<int>	std_c1(3, 42);
-		ft_c1.push_front(0);
-		std_c1.push_front(0);
+		ft_c1.insert(ft_c1.begin(), 0);
+		std_c1.insert(std_c1.begin(), 0);
 		ft_c1.push_back(99);
 		std_c1.push_back(99);
 		testVector(ft_c1, std_c1, NOPRINT);
 
 		ft::vector<int>::iterator		ft_it0 = ft_c0.begin();
 		ft::vector<int>::iterator		ft_it1 = ft_c1.begin();
-		std::vector<int>::iterator	std_it0 = std_c0.begin();
-		std::vector<int>::iterator	std_it1 = std_c1.begin();
+		std::vector<int>::iterator		std_it0 = std_c0.begin();
+		std::vector<int>::iterator		std_it1 = std_c1.begin();
 
 		std::cout << SUBTITLE << "[ swap 2 vectors ]" << RESET_COLOR << std::endl;
 		ft::swap(ft_c0, ft_c1);
@@ -78,8 +78,6 @@ test_vector_nonmember_swap( void )	{
 		std::swap(std_c0, std_c1);
 		testVector(ft_c0, std_c0, NOPRINT, "Test vector0");
 		testVector(ft_c1, std_c1, NOPRINT, "Test vector1");
-
-
 	}
 	return (0);
 }

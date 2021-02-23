@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:52:49 by bvalette          #+#    #+#             */
-/*   Updated: 2021/02/20 12:08:11 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/02/22 15:54:27 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ test_vector_member_swap( void )	{
 		std::cout << SUBTITLE << "[ Instanciate vector1 of 3 elements value 42 + push front 0 + push back 99 ]" << RESET_COLOR << std::endl;
 		ft::vector<int>	ft_c1(3, 42);
 		std::vector<int>	std_c1(3, 42);
-		ft_c1.push_front(0);
-		std_c1.push_front(0);
+		ft_c1.insert(ft_c1.begin(), 0);
+		std_c1.insert(std_c1.begin(), 0);
 		ft_c1.push_back(99);
 		std_c1.push_back(99);
 		testVector(ft_c1, std_c1, NOPRINT);

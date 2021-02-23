@@ -77,10 +77,13 @@ endif
 
 HEADER += ./list.hpp
 HEADER += ./vector.hpp
+HEADER += ./map.hpp
+
 HEADER += ./bvaletteTester.hpp
 HEADER += ./bvaletteTester_defines.hpp
 HEADER += ./bvaletteTester_list.hpp
 HEADER += ./bvaletteTester_vector.hpp
+HEADER += ./bvaletteTester_map.hpp
 
 ################################################################################
 #-------- MAIN #################################################################
@@ -121,20 +124,25 @@ SRCS += ./main_utils.cpp
 #-------- VECTOR ###############################################################
 ################################################################################
 
-SRCS += ./main_tester_vector.cpp
+# SRCS += ./main_tester_vector.cpp
 
-SRCS += ./test_vector_instantiation.cpp
-SRCS += ./test_vector_push_back_pop_back.cpp
-SRCS += ./test_vector_clear.cpp
-SRCS += ./test_vector_capacities.cpp
-SRCS += ./test_vector_insert_erase.cpp
-SRCS += ./test_vector_operatorEqual.cpp
-SRCS += ./test_vector_resize.cpp
-SRCS += ./test_vector_assign.cpp
-SRCS += ./test_vector_at_operatorBrackets.cpp
-SRCS += ./test_vector_member_swap.cpp
-SRCS += ./test_vector_nonmember_swap.cpp
-SRCS += ./test_vector_relational_operators.cpp
+# SRCS += ./test_vector_instantiation.cpp
+# SRCS += ./test_vector_push_back_pop_back.cpp
+# SRCS += ./test_vector_clear.cpp
+# SRCS += ./test_vector_capacities.cpp
+# SRCS += ./test_vector_insert_erase.cpp
+# SRCS += ./test_vector_operatorEqual.cpp
+# SRCS += ./test_vector_resize.cpp
+# SRCS += ./test_vector_assign.cpp
+# SRCS += ./test_vector_at_operatorBrackets.cpp
+# SRCS += ./test_vector_member_swap.cpp
+# SRCS += ./test_vector_nonmember_swap.cpp
+# SRCS += ./test_vector_relational_operators.cpp
+# SRCS += ./test_vector_iterator.cpp
+# SRCS += ./test_vector_reverseIterator.cpp
+# SRCS += ./test_vector_element_access.cpp
+
+# NOT USED FOR VECTOR #
 # SRCS += ./test_vector_splice.cpp
 # SRCS += ./test_vector_remove_if.cpp
 # SRCS += ./test_vector_remove.cpp
@@ -142,13 +150,42 @@ SRCS += ./test_vector_relational_operators.cpp
 # SRCS += ./test_vector_merge.cpp
 # SRCS += ./test_vector_sort.cpp
 # SRCS += ./test_vector_reverse.cpp
-SRCS += ./test_vector_iterator.cpp
-SRCS += ./test_vector_reverseIterator.cpp
-SRCS += ./test_vector_element_access.cpp
+
+################################################################################
+#-------- VECTOR ###############################################################
+################################################################################
+
+SRCS += ./main_tester_map.cpp
+
+SRCS += ./test_map_instantiation.cpp
+# SRCS += ./test_map_push_back_pop_back.cpp
+# SRCS += ./test_map_clear.cpp
+# SRCS += ./test_map_capacities.cpp
+# SRCS += ./test_map_insert_erase.cpp
+# SRCS += ./test_map_operatorEqual.cpp
+# SRCS += ./test_map_resize.cpp
+# SRCS += ./test_map_assign.cpp
+# SRCS += ./test_map_at_operatorBrackets.cpp
+# SRCS += ./test_map_member_swap.cpp
+# SRCS += ./test_map_nonmember_swap.cpp
+# SRCS += ./test_map_relational_operators.cpp
+# SRCS += ./test_map_iterator.cpp
+# SRCS += ./test_map_reverseIterator.cpp
+# SRCS += ./test_map_element_access.cpp
+
+
+# SRCS += ./test_map_splice.cpp
+# SRCS += ./test_map_remove_if.cpp
+# SRCS += ./test_map_remove.cpp
+# SRCS += ./test_map_unique.cpp
+# SRCS += ./test_map_merge.cpp
+# SRCS += ./test_map_sort.cpp
+# SRCS += ./test_map_reverse.cpp
 
 vpath %.cpp ./srcs
 vpath %.cpp ./srcs/list_tests
 vpath %.cpp ./srcs/vector_tests
+vpath %.cpp ./srcs/map_tests
 vpath %.hpp ./includes
 
 OBJS = $(patsubst %.cpp, $(OBJ_DIR)%.o, $(SRCS))

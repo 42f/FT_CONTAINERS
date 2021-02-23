@@ -71,7 +71,9 @@
 			"__functional_03": "cpp",
 			"memory_resource": "cpp",
 			"__memory": "cpp",
-			"__cxx_version": "cpp"
+			"__cxx_version": "cpp",
+			"__tree": "cpp",
+			"map": "cpp"
 		}
 	},
 	"launch": {

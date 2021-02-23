@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:23:24 by bvalette          #+#    #+#             */
-/*   Updated: 2021/02/19 09:21:51 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/02/23 10:15:59 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@
 int main ( void )	{
 
 	// main_tester_list();
-	main_tester_vector();
+	// main_tester_vector();
+	main_tester_map();
 
 	return (0);
 }

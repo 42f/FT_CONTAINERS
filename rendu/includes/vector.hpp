@@ -105,42 +105,37 @@ namespace ft	{
 			vectorIterator(T* src) :_ptr(src) {}
 			vectorIterator(const iterator& itSrc) : _ptr(itSrc._ptr) {}
 
-			iterator&	operator++( void ) {
+			iterator&
+			operator++( void ) {
 				_ptr++;
 				return *this;
 			}
 
-			iterator 	operator++( int ) {
+			iterator
+			operator++( int ) {
 				iterator tmp(*this);
 				operator++();
 				return tmp;
 			}
 
-			iterator&	operator--( void ) {
+			iterator&
+			operator--( void ) {
 				_ptr--;
 				return *this;
 			}
 
-			iterator 	operator--( int ) {
+			iterator
+			operator--( int ) {
 				iterator tmp(*this);
 				operator--();
 				return tmp;
 			}
 
-			distance	operator- ( iterator rhs ) { return this->_ptr - rhs._ptr; }
+			distance
+			operator- ( iterator rhs ) { return this->_ptr - rhs._ptr; }
 
-			iterator	operator- ( distance n ) {
-
-				iterator tmpIt = *this;
-
-				while ( n > 0 )	{
-					tmpIt--;
-					n--;
-				}
-				return tmpIt;
-			}
-
-			const_iterator	operator- ( distance n ) const {
+			iterator
+			operator- ( distance n ) {
 
 				iterator tmpIt = *this;
 
@@ -151,7 +146,20 @@ namespace ft	{
 				return tmpIt;
 			}
 
-			iterator	operator+ ( distance n ) {
+			const_iterator
+			operator- ( distance n ) const {
+
+				iterator tmpIt = *this;
+
+				while ( n > 0 )	{
+					tmpIt--;
+					n--;
+				}
+				return tmpIt;
+			}
+
+			iterator
+			operator+ ( distance n ) {
 
 				iterator tmpIt = *this;
 
@@ -162,7 +170,8 @@ namespace ft	{
 				return tmpIt;
 			}
 
-			const_iterator	operator+ ( distance n ) const {
+			const_iterator
+			operator+ ( distance n ) const {
 
 				iterator tmpIt = *this;
 
@@ -173,14 +182,30 @@ namespace ft	{
 				return tmpIt;
 			}
 
-			void			operator-= ( distance n )				{ *this = *this - n; }
-			void			operator+= ( distance n )				{ *this = *this + n; }
-			bool			operator==(const iterator& rhs) const	{ return _ptr==rhs._ptr; }
-			bool			operator!=(const iterator& rhs) const	{ return _ptr!=rhs._ptr; }
-			bool			operator<(const iterator& rhs) const	{ return _ptr< rhs._ptr; }
-			reference		operator*()								{ return *_ptr; }
-			const_reference	operator*()	const					{ return *_ptr; }
+			void
+			operator-= ( distance n )				{ *this = *this - n; }
 
+			void
+			operator+= ( distance n )				{ *this = *this + n; }
+
+			bool
+			operator==(const iterator& rhs) const	{ return _ptr==rhs._ptr; }
+
+			bool
+			operator!=(const iterator& rhs) const	{ return _ptr!=rhs._ptr; }
+
+			bool
+			operator<(const iterator& rhs) const	{ return _ptr< rhs._ptr; }
+
+			reference
+			operator*()								{ return *_ptr; }
+
+			const_reference
+			operator*()	const						{ return *_ptr; }
+
+			/**
+			 * @brief Pointer holding the address of the iterator element.
+			*/
 			pointer		_ptr;
 
 	}; //----------------- Class iterator
@@ -326,14 +351,6 @@ namespace ft	{
 			void
 			clear( void )			{ erase(begin(), end()); }
 
-			vector&
-			operator= (const vector& x)	{
-
-				if (*this != x)
-					assign(x.begin(), x.end());
-				return *this;
-			}
-
 			/**
 			 * @brief insert single element
 			*/
@@ -343,7 +360,6 @@ namespace ft	{
 				insert(position, 1, val);
 				return begin() + indexPos; 		// to change
 			}
-
 
 			/**
 			 * @brief insert n elements of val
@@ -372,17 +388,6 @@ namespace ft	{
 					constructObjects(this->tail, n, val);
 					this->tail += n;
 				}
-			}
-
-
-			reference
-			operator[] (size_type n)	{
-				return (*(this->head + n));
-			}
-
-			const_reference
-			operator[] (size_type n) const	{
-				return (*(this->head + n));
 			}
 
 
@@ -496,6 +501,24 @@ namespace ft	{
 				else	{
 					doReserve(n);
 				}
+			}
+
+			vector&
+			operator= (const vector& x)	{
+
+				if (*this != x)
+					assign(x.begin(), x.end());
+				return *this;
+			}
+
+			reference
+			operator[] (size_type n)	{
+				return (*(this->head + n));
+			}
+
+			const_reference
+			operator[] (size_type n) const	{
+				return (*(this->head + n));
 			}
 
 /******************************************************************************.

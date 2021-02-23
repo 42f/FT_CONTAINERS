@@ -25,6 +25,10 @@
 # define ERROR_SOURCE    "\n\033[5m\033[041m"
 #endif
 
+#ifndef BLINK
+# define BLINK    "\033[05m"
+#endif
+
 #ifndef SUBTITLE
 # define SUBTITLE    "\n\033[7m"
 #endif

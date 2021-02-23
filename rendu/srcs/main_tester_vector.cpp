@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:23:15 by bvalette          #+#    #+#             */
-/*   Updated: 2021/02/23 09:02:58 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/02/23 09:35:35 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,12 @@ main_tester_vector( void )	{
 	*/
 		if (DEBUG_MODE == 0)
 		{
-			std::cout << SUBTITLE << "ALL TESTS PASSED ~~~~~~> " << RESET_COLOR << "\t \xF0\x9F\x8E\x89 \xF0\x9F\x8E\x8A" << std::endl;
-			std::cout << "                         " << RESET_COLOR << "\t \xF0\x9F\x8E\x89 \xF0\x9F\x8E\x8A" << std::endl;
-			std::cout << "                         " << RESET_COLOR << "\t \xF0\x9F\x8E\x89 \xF0\x9F\x8E\x8A" << std::endl;
+			std::cout << SUBTITLE << "ALL TESTS PASSED ~~~~~~> " << RESET_COLOR;
+			std::cout << BLINK << "\t \xF0\x9F\x8E\x89 \xF0\x9F\x8E\x8A" << RESET_COLOR << std::endl;
+			usleep(10);
+			std::cout << BLINK << "                         " << "\t \xF0\x9F\x8E\x89 \xF0\x9F\x8E\x8A" << RESET_COLOR << std::endl;
+			usleep(10);
+			std::cout << BLINK << "                         " << "\t \xF0\x9F\x8E\x89 \xF0\x9F\x8E\x8A" << RESET_COLOR << std::endl;
 		}
 	}
 	catch ( failedTest & )	{

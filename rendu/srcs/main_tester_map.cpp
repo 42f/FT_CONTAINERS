@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:23:15 by bvalette          #+#    #+#             */
-/*   Updated: 2021/02/23 10:14:25 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/02/24 09:15:53 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,10 @@ main_tester_vector( void )	{
 
 	try {
 
+		test_map_instantiation();
+
 	/******* NOT TESTED ******
 
-		test_map_instantiation();
 
 		test_map_capacities();
 		test_map_resize();

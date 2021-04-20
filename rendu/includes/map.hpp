@@ -28,6 +28,14 @@ namespace ft	{
 		nodePair_type		nodePair;
 		base_pointer 		right;
 
+		base_pointer	getLodePair_type{ return this->left; };
+		base_pointer	getRight( void )	{ return this->right; };
+		base_pointer	getPair( void )	{ return this->nodePair; };
+
+		void			setLeft(base_pointer newNode)	{this->left = newNode; };
+		void			setRight(base_pointer newNode)	{this->right = newNode; };
+		void			setPair(nodePair_type newPair)	{this->pair = newPair; };
+
 		btreeNodeBase() : left(*this), nodePair(key_type(), value_type()), right(*this)	{};
 		btreeNodeBase(nodePair_type pairSrc) : left(*this), nodePair(pairSrc), right(*this)	{};
 		~btreeNodeBase() {};
@@ -42,8 +50,8 @@ namespace ft	{
 		public:
 
 			typedef	typename std::pair<TKey, TVal>							pair_type;
-			typedef	typename btreeNodeBas<TKey, TVal>						node_type;
-			typedef typename T_alloc::template rebind<btreeNodeBase<TKey, TVal>::other
+			typedef	typename ft::btreeNodeBase<TKey, TVal>					node_type;
+			typedef typename T_alloc::template rebind< btreeNodeBase<TKey, TVal> >::other
 			allocator_type;
 
 			typedef typename T_alloc::reference								reference;
@@ -54,17 +62,18 @@ namespace ft	{
 			btree( void ) : head(NULL), size(0), alloc(allocator_type()) {
 
 				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> default " << __func__ << std::endl;
-				initStorage();
 			}
 
-			btree( allocator_type const & userAlloc ) : head(NULL), size(0), alloc(userAlloc) {
+			explicit btree( allocator_type const & userAlloc ) : head(NULL), size(0), alloc(userAlloc) {
 
 				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> defaut with alloc " << __func__ << std::endl;
-				initStorage();
+				// initStorage();
 			}
 
+/*
 			btree( btree const & src ) : head(NULL), size(0), alloc(allocator_type()) {
 
+				(void)src;
 				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> copy " << __func__ << std::endl;
 			}
 
@@ -72,7 +81,7 @@ namespace ft	{
 
 				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> copy with alloc " << __func__ << std::endl;
 			}
-
+*/
 			~btree( void )	{
 
 				deleteStorage();
@@ -84,41 +93,63 @@ namespace ft	{
 			allocator_type	alloc;
 
 			void
-			insertNode( pair_type pairSrc, pointer position = head )	{
+			insertNode( pair_type pairSrc )	{
 
-				if (size == 0)	{
+				if (head == NULL)
+					initStorage(pairSrc);
+				else	{
+					pointer		insertPos = head;
+					while (compare(insertPos->getPair, pairSrc) >= 0)
+						insertPos = insertNode->getRight;
+
+				}
+			}
+/*
+			void
+			insertNode( pair_type pairSrc, pointer position = NULL )	{
+
+				if (size == 0 || position == NULL)	{
 					alloc.construct(head, pairSrc);
 				}
 				else if (Compare(position->nodePair.first, pairSrc.first) == true ) {
 
 					if (position->left != position)	{
-						insert(p, position->left)
+						insert(position, position->left);
 					}
 					else	{
 						position->left = alloc.allocate(1);
-						alloc.construct(position->left, pairSrc.first, pair.second);
+						alloc.construct(position->left, pairSrc.first, pairSrc.second);
 						incSize();
 					}
 				}
 				else if (Compare(position->nodePair.first, pairSrc.first) == false &&
-					nodePair.first != pairSrc.first)
+					nodePair.first != pairSrc.first);
 
 					if (position->right != position)	{
-						insert(p, position->right)
+						insert(position, position->right);
 					}
 					else	{
 						position->right = alloc.allocate(1);
-						alloc.construct(position->left, pairSrc.first, pair.second);
+						alloc.construct(position->left, pairSrc.first, pairSrc.second);
 						incSize();
 					}
 			}
-
+*/
 		protected:
 
 			void
-			initStorage( void )	{
+			initStorage( pair_type pairSrc )	{
 
+				if (DEBUG_MODE >= 2) std::cout << __func__ << std::endl;
 				this->head = this->alloc.allocate(1);
+				this->head->setPair(pairSrc);
+				if (DEBUG_MODE >= 2) std::cout << __func__ << " : size  " << size << std::endl;
+				if (DEBUG_MODE >= 2) std::cout << __func__ << " : node  " << &head << std::endl;
+				if (DEBUG_MODE >= 2) std::cout << __func__ << " : left  " << &head->left << std::endl;
+				if (DEBUG_MODE >= 2) std::cout << __func__ << " : right " << &head->right << std::endl;
+				if (DEBUG_MODE >= 2) std::cout << __func__ << " : key   " << head->nodePair.first << std::endl;
+				if (DEBUG_MODE >= 2) std::cout << __func__ << " : data  " << head->nodePair.second << std::endl;
+
 			}
 
 		private:
@@ -131,7 +162,7 @@ namespace ft	{
 
 			void
 			deleteStorage( void )	{
-				// this->alloc.deallocate(head, n);
+				this->alloc.deallocate(head, size);
 				if (DEBUG_MODE >= 2) std::cout << __func__ << std::endl;
 			}
 
@@ -262,22 +293,25 @@ namespace ft	{
 				class TVal,
 				class Compare = std::less<TKey>,
 				class T_alloc = std::allocator<btreeNodeBase<TKey, TVal> > >
-	class map {
+	class map : protected btree<TKey, TVal, Compare, T_alloc> {
 
 		private:
 			typedef btree<TKey, TVal, Compare, T_alloc>		btree;
 		public:
 			typedef TKey									key_type;
 			typedef TVal									value_type;
-   			typedef typename T_alloc::allocator_type		allocator_type;
+
+   			// typedef typename T_alloc::allocator_type		allocator_type;
+   			typedef typename btree::allocator_type		allocator_type;
+
 			typedef typename T_alloc::reference				reference;
 			typedef typename T_alloc::const_reference		const_reference;
 			typedef typename T_alloc::pointer				pointer;
 			typedef typename T_alloc::const_pointer			const_pointer;
-			typedef mapIterator<T>							iterator;
-			typedef const mapIterator<T>					const_iterator;
-			typedef std::reverse_iterator<iterator> 		reverse_iterator;
-			typedef const reverse_iterator					const_reverse_iterator;
+			// typedef mapIterator<T>							iterator;
+			// typedef const mapIterator<T>					const_iterator;
+			// typedef std::reverse_iterator<iterator> 		reverse_iterator;
+			// typedef const reverse_iterator					const_reverse_iterator;
 			typedef std::ptrdiff_t							difference_type;
 			typedef size_t									size_type;
 
@@ -292,50 +326,70 @@ namespace ft	{
 			/**
 			 * @brief Default Constructor
 			*/
-			explicit map( allocator_type const & userAlloc = allocator_type() ) : btree(userAlloc) {
+      		map() : btree() {
 
 				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> DEFAULT " << __func__ << std::endl;
+
+			  }
+			explicit map( const Compare& comp, allocator_type const & userAlloc = allocator_type() ) : btree(comp, userAlloc) {
+
+				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> DEFAULT explicite " << __func__ << std::endl;
 			}
 
-			/**
-			 * @brief fill Constructor, allocate at least n memory blocks and
-			 * construct n objects val.
-			*/
-			explicit map( size_type n, value_type const & val = value_type(),
-				allocator_type const & userAlloc = allocator_type() ) : btree(n, userAlloc)	{
 
-				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> fill " << __func__ << std::endl;
-				initFillmap(n, val);
-			}
+/*
 
-			/**
-			 * @brief Range Constructor
-			*/
-			template <class InputIterator>
-			map (InputIterator first, InputIterator last,
-				 allocator_type const & userAlloc = allocator_type() )
-				 : btree(userAlloc)	{
+Template< class InputIt >
+map( InputIt first, InputIt last,
+     const Compare& comp = Compare(),
+     const Allocator& alloc = Allocator() );
 
-				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> range pre dispatcher ! " << __func__ << std::endl;
+map( const map& other );
 
-				typename std::__is_integer<InputIterator>::__type	integer;
-				map_constructor_dispatch(first, last, userAlloc, integer);
-			}
+*/
 
-			/**
-			 * @brief Copy Constructor
-			*/
-			explicit map( map const & src ) : btree(src.size()) {
 
-				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> copy " << __func__ << std::endl;
 
-				fillmap(src.begin(), src.end());
-			}
+			// /**
+			//  * @brief fill Constructor, allocate at least n memory blocks and
+			//  * construct n objects val.
+			// */
+			// explicit map( size_type n, value_type const & val = value_type(),
+			// 	allocator_type const & userAlloc = allocator_type() ) : btree(n, userAlloc)	{
+
+			// 	if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> fill " << __func__ << std::endl;
+			// 	initFillmap(n, val);
+			// }
+
+			// /**
+			//  * @brief Range Constructor
+			// */
+			// template <class InputIterator>
+			// map (InputIterator first, InputIterator last,
+			// 	 allocator_type const & userAlloc = allocator_type() )
+			// 	 : btree(userAlloc)	{
+
+			// 	if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> range pre dispatcher ! " << __func__ << std::endl;
+
+			// 	typename std::__is_integer<InputIterator>::__type	integer;
+			// 	map_constructor_dispatch(first, last, userAlloc, integer);
+			// }
+
+			// /**
+			//  * @brief Copy Constructor
+			// */
+			// explicit map( map const & src ) : btree(src.size()) {
+
+			// 	if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> copy " << __func__ << std::endl;
+
+			// 	fillmap(src.begin(), src.end());
+			// }
+
 
 			~map( void )	{
 
-				if (size() > 0)
-					clearObject();
+				// if (size() > 0)
+				// 	clearObject();
 				if (DEBUG_MODE >= 1)
 					std::cout << "DESTRUCTOR --> " << __func__ << std::endl;
 			}

@@ -14,60 +14,100 @@
 # define DEBUG_MODE 0
 #endif
 
+
+/*############################################################################*/
+/*############################################################################*/
+/*###########################                             ####################*/
+/*###########################                             ####################*/
+/*###########################           btreeNodeBase     ####################*/
+/*###########################                             ####################*/
+/*###########################                             ####################*/
+/*############################################################################*/
+/*############################################################################*/
+
+
 namespace ft	{
 
-	template< typename TKey, typename TVal>
+	template< typename Key, typename T>
 	struct btreeNodeBase	{
 
-		typedef		TKey							key_type;
-		typedef		TVal							value_type;
-		typedef		btreeNodeBase *					base_pointer;
-		typedef		typename std::pair<TKey, TVal>	nodePair_type;
+		typedef		Key							key_type;
+		typedef		T							value_type;
+		typedef		btreeNodeBase *				base_pointer;
+		typedef		typename std::pair<Key, T>	nodePair_type;
 
+		base_pointer		parent;
 		base_pointer 		left;
 		nodePair_type		nodePair;
 		base_pointer 		right;
 
-		base_pointer	getLodePair_type{ return this->left; };
-		base_pointer	getRight( void )	{ return this->right; };
-		base_pointer	getPair( void )	{ return this->nodePair; };
+		base_pointer	getLeft( void ) const	{ return this->left; }
+		base_pointer	getRight( void ) const	{ return this->right; }
+		nodePair_type&	getPair( void ) 		{ return this->nodePair; }
 
-		void			setLeft(base_pointer newNode)	{this->left = newNode; };
-		void			setRight(base_pointer newNode)	{this->right = newNode; };
-		void			setPair(nodePair_type newPair)	{this->pair = newPair; };
+		void			setParent(base_pointer parent)	{this->parent = parent; }
+		void			setLeft(base_pointer newNode)	{this->left = newNode; }
+		void			setRight(base_pointer newNode)	{this->right = newNode; }
+		void			setPair(nodePair_type& newPair)	{this->pair = newPair; }
 
-		btreeNodeBase() : left(*this), nodePair(key_type(), value_type()), right(*this)	{};
-		btreeNodeBase(nodePair_type pairSrc) : left(*this), nodePair(pairSrc), right(*this)	{};
-		~btreeNodeBase() {};
+		btreeNodeBase() : left(NULL), nodePair(key_type(), value_type()), right(NULL)	{}
+		btreeNodeBase(nodePair_type pairSrc) : left(NULL), nodePair(pairSrc), right(NULL)	{
+
+			std::cout << __func__ << ": " << this << std::endl;
+			std::cout << __func__ << ": " << getRight() << std::endl;
+			std::cout << __func__ << ": " << getLeft() << std::endl;
+		}
+		~btreeNodeBase() {}
 	};		// btreeNode
 
-	template< 	class TKey,
-				class TVal,
-				class Compare,
-				class T_alloc>
-	class btree	{
+
+
+
+
+
+
+
+
+/*############################################################################*/
+/*############################################################################*/
+/*###########################                             ####################*/
+/*###########################                             ####################*/
+/*###########################           btree             ####################*/
+/*###########################                             ####################*/
+/*###########################                             ####################*/
+/*############################################################################*/
+/*############################################################################*/
+
+
+
+	template< 	class Key,
+				class T,
+				class T_alloc,
+				class Compare >
+	class btree {
 
 		public:
 
-			typedef	typename std::pair<TKey, TVal>							pair_type;
-			typedef	typename ft::btreeNodeBase<TKey, TVal>					node_type;
-			typedef typename T_alloc::template rebind< btreeNodeBase<TKey, TVal> >::other
+			typedef	typename std::pair<Key, T>							pair_type;
+			typedef	typename ft::btreeNodeBase<Key, T>					node_type;
+			typedef typename T_alloc::template rebind< btreeNodeBase<Key, T> >::other
 			allocator_type;
+
+			typedef Compare													key_compare;
 
 			typedef typename T_alloc::reference								reference;
 			typedef typename T_alloc::const_reference						const_reference;
 			typedef typename T_alloc::pointer								pointer;
 			typedef typename T_alloc::const_pointer							const_pointer;
 
-			btree( void ) : head(NULL), size(0), alloc(allocator_type()) {
+			// btree( void ) : head(NULL), size(0), alloc(allocator_type()), cmp(key_compare()) {
 
-				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> default " << __func__ << std::endl;
-			}
+			// 	if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> default " << __func__ << std::endl;
+			// }
 
-			explicit btree( allocator_type const & userAlloc ) : head(NULL), size(0), alloc(userAlloc) {
+			explicit btree( const Compare &comp, allocator_type const & userAlloc ) : head(NULL), size(0), alloc(userAlloc), cmp(comp) {
 
 				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> defaut with alloc " << __func__ << std::endl;
-				// initStorage();
 			}
 
 /*
@@ -88,69 +128,169 @@ namespace ft	{
 				if (DEBUG_MODE >= 2) std::cout << "DESTRUCTOR --> " << __func__ << std::endl;
 			}
 
-			pointer			head;
-			size_t			size;
-			allocator_type	alloc;
+			pointer					head;
+			size_t					size;
+			allocator_type 			alloc;
+			Compare	const			cmp;
+
+		public:      // TEST PURPOSE: remove !
+
+			bool
+			isLeaf(pointer node)	{
+				return (node->getLeft() == NULL && node->getRight() == NULL);
+			}
+
+			bool
+			isRightEligible(pair_type& existingPair, pair_type& newPair)	{
+				return (cmp(existingPair.first, newPair.first));
+			}
+
+			bool
+			isRightEligible(Key& existingKey, Key& newKey)	{
+				return (cmp(existingKey, newKey));
+			}
+
+			bool
+			isEqualKey(Key& existingKey, Key& newKey)	{
+				return (cmp(existingKey, newKey) == false
+				&& cmp(newKey, existingKey) == false);
+			}
+
+			pointer
+			locateKeyPosition( Key& target )	{
+
+				pointer	cursor = head;
+				while ( cursor != NULL && isEqualKey(cursor->getPair().first, target) == false )	{
+					if ( isRightEligible(cursor->getPair().first, target) == true)
+						cursor = cursor->getRight();
+					else
+						cursor = cursor->getLeft();
+				}
+				return (cursor);
+			}
+
+			pointer
+			makeNode(pair_type& newPair, pointer parent)	{
+
+				pointer newNode = alloc.allocate(1);
+				alloc.construct(newNode, newPair);
+				if (DEBUG_MODE >= 2) std::cout << __func__ << "PARENT : " << parent << std::endl;
+				newNode->setParent(parent);
+				return (newNode);
+			}
 
 			void
-			insertNode( pair_type pairSrc )	{
+			addNodeProcess( pointer parent, pointer* root, pair_type& srcPair )	{
 
-				if (head == NULL)
-					initStorage(pairSrc);
+				if (*root != NULL)	{
+					pointer tree = *root;
+					if (isRightEligible(tree->getPair(), srcPair) == true)	{
+						addNodeProcess(tree, &(tree->right), srcPair);
+					}
+					else	{
+						addNodeProcess(tree, &(tree->left), srcPair);
+					}
+				}
 				else	{
-					pointer		insertPos = head;
-					while (compare(insertPos->getPair, pairSrc) >= 0)
-						insertPos = insertNode->getRight;
-
+					*root = makeNode(srcPair, parent);
+					incSize();
 				}
 			}
-/*
-			void
-			insertNode( pair_type pairSrc, pointer position = NULL )	{
-
-				if (size == 0 || position == NULL)	{
-					alloc.construct(head, pairSrc);
-				}
-				else if (Compare(position->nodePair.first, pairSrc.first) == true ) {
-
-					if (position->left != position)	{
-						insert(position, position->left);
-					}
-					else	{
-						position->left = alloc.allocate(1);
-						alloc.construct(position->left, pairSrc.first, pairSrc.second);
-						incSize();
-					}
-				}
-				else if (Compare(position->nodePair.first, pairSrc.first) == false &&
-					nodePair.first != pairSrc.first);
-
-					if (position->right != position)	{
-						insert(position, position->right);
-					}
-					else	{
-						position->right = alloc.allocate(1);
-						alloc.construct(position->left, pairSrc.first, pairSrc.second);
-						incSize();
-					}
-			}
-*/
-		protected:
 
 			void
-			initStorage( pair_type pairSrc )	{
+			addNode( pair_type& srcPair )	{
+				addNodeProcess(NULL, &head, srcPair);
+			}
 
-				if (DEBUG_MODE >= 2) std::cout << __func__ << std::endl;
-				this->head = this->alloc.allocate(1);
-				this->head->setPair(pairSrc);
-				if (DEBUG_MODE >= 2) std::cout << __func__ << " : size  " << size << std::endl;
-				if (DEBUG_MODE >= 2) std::cout << __func__ << " : node  " << &head << std::endl;
-				if (DEBUG_MODE >= 2) std::cout << __func__ << " : left  " << &head->left << std::endl;
-				if (DEBUG_MODE >= 2) std::cout << __func__ << " : right " << &head->right << std::endl;
-				if (DEBUG_MODE >= 2) std::cout << __func__ << " : key   " << head->nodePair.first << std::endl;
-				if (DEBUG_MODE >= 2) std::cout << __func__ << " : data  " << head->nodePair.second << std::endl;
+
+		// protected:
+
+			static void
+			debugPrintNode( pointer node )	{
+
+				if (DEBUG_MODE >= 2 && node != NULL)	{
+					std::cout << std::endl;
+					std::cout << __func__ << std::endl;
+					std::cout << __func__ << ": node   " << node << std::endl;
+					std::cout << __func__ << ": parent " << node->parent << std::endl;
+					std::cout << __func__ << ": left   " << node->left << std::endl;
+					std::cout << __func__ << ": right  " << node->right << std::endl;
+					std::cout << __func__ << ": key    " << node->nodePair.first << std::endl;
+					std::cout << __func__ << ": data   " << node->nodePair.second << std::endl;
+					std::cout << std::endl;
+				}
+				else
+					std::cout << __func__ << "Called with null" << std::endl;
 
 			}
+
+			void
+			applyNodePrefix( pointer root, bool (*func)(pair_type&, pair_type& ))	{
+
+				if (func == NULL || root == NULL)
+					return ;
+				func(root);
+				applyNodePrefix(root->getLeft(), func);
+				applyNodePrefix(root->getRight(), func);
+			}
+
+			void
+			applyNodePrefix( pointer root, void (*func)(pointer))	{
+
+				if (func == NULL || root == NULL)
+					return ;
+				func(root);
+				applyNodePrefix(root->getLeft(), func);
+				applyNodePrefix(root->getRight(), func);
+			}
+
+			void
+			applyNodeSuffix( pointer root, void (*func)(pointer))	{
+
+				if (func == NULL || root == NULL)
+					return ;
+				applyNodeSuffix(root->getLeft(), func);
+				applyNodeSuffix(root->getRight(), func);
+				func(root);
+			}
+
+			void
+			applyNodeInfix( pointer root, void (*func)(pointer))	{
+
+				if (func == NULL || root == NULL)
+					return ;
+				applyNodeInfix(root->getLeft(), func);
+				func(root);
+				applyNodeInfix(root->getRight(), func);
+			}
+
+
+			void
+			debugPrintTree( void )	{
+
+				debugPrintTreeProcess(*head);
+			}
+
+			void
+			debugPrintTreeProcess( node_type& node )	{
+
+				std::cout << "***********************************" << std::endl;
+				std::cout << __func__ << "Printing tree of size  " << size << std::endl;
+				applyNodePrefix(&node, debugPrintNode);
+			}
+
+			// void
+			// initStorage( pair_type pairSrc )	{
+
+			// 	//use makeNode ?
+			// 	head = alloc.allocate(1);
+			// 	alloc.construct(head, pairSrc);
+			// 	incSize();
+			// 	if (DEBUG_MODE >= 2)	{
+			// 		std::cout << __func__ << std::endl;
+			// 		// debugPrintNode(head);
+			// 	}
+			// }
 
 		private:
 
@@ -161,19 +301,53 @@ namespace ft	{
 			decSize( void ) { size--; }
 
 			void
+			deallocateTreeNodes( pointer root )	{
+
+				if (root == NULL)
+					return ;
+				deallocateTreeNodes(root->getLeft());
+				deallocateTreeNodes(root->getRight());
+				this->alloc.deallocate(root, 1);
+			}
+
+			void
 			deleteStorage( void )	{
-				this->alloc.deallocate(head, size);
 				if (DEBUG_MODE >= 2) std::cout << __func__ << std::endl;
+				deallocateTreeNodes(head);
 			}
 
 		}; // ----------------- Classbtree
-/*
+
+
+
+
+
+
+
+
+
+
+
+
+/*############################################################################*/
+/*############################################################################*/
+/*###########################                             ####################*/
+/*###########################                             ####################*/
+/*###########################          iterator           ####################*/
+/*###########################                             ####################*/
+/*###########################                             ####################*/
+/*############################################################################*/
+/*############################################################################*/
+
+
+
+
 	template< typename T, class T_alloc = std::allocator<T> >
-	class mapIterator : public std::iterator< std::random_access_iterator_tag, T >
+	class mapIterator : public std::iterator< std::bidirectional_iterator_tag, T >
 	{
 		public:
-			typedef mapIterator<T, T_alloc>			iterator;
-			typedef const mapIterator<T, T_alloc> 	const_iterator;
+			typedef mapIterator<T, T_alloc>				iterator;
+			typedef const mapIterator<T, T_alloc>	 	const_iterator;
 			typedef ptrdiff_t							distance;
 			typedef typename T_alloc::reference			reference;
 			typedef typename T_alloc::const_reference	const_reference;
@@ -197,45 +371,45 @@ namespace ft	{
 				return tmp;
 			}
 
-			iterator&
-			operator--( void ) {
-				_ptr--;
-				return *this;
-			}
+			// iterator&
+			// operator--( void ) {
+			// 	_ptr--;
+			// 	return *this;
+			// }
 
-			iterator
-			operator--( int ) {
-				iterator tmp(*this);
-				operator--();
-				return tmp;
-			}
+			// iterator
+			// operator--( int ) {
+			// 	iterator tmp(*this);
+			// 	operator--();
+			// 	return tmp;
+			// }
 
-			distance
-			operator- ( iterator rhs ) { return this->_ptr - rhs._ptr; }
+			// distance
+			// operator- ( iterator rhs ) { return this->_ptr - rhs._ptr; }
 
-			iterator
-			operator- ( distance n ) {
+			// iterator
+			// operator- ( distance n ) {
 
-				iterator tmpIt = *this;
+			// 	iterator tmpIt = *this;
 
-				while ( n > 0 )	{
-					tmpIt--;
-					n--;
-				}
-				return tmpIt;
-			}
+			// 	while ( n > 0 )	{
+			// 		tmpIt--;
+			// 		n--;
+			// 	}
+			// 	return tmpIt;
+			// }
 
-			const_iterator
-			operator- ( distance n ) const {
+			// const_iterator
+			// operator- ( distance n ) const {
 
-				iterator tmpIt = *this;
+			// 	iterator tmpIt = *this;
 
-				while ( n > 0 )	{
-					tmpIt--;
-					n--;
-				}
-				return tmpIt;
-			}
+			// 	while ( n > 0 )	{
+			// 		tmpIt--;
+			// 		n--;
+			// 	}
+			// 	return tmpIt;
+			// }
 
 			iterator
 			operator+ ( distance n ) {
@@ -261,8 +435,8 @@ namespace ft	{
 				return tmpIt;
 			}
 
-			void
-			operator-= ( distance n )				{ *this = *this - n; }
+			// void
+			// operator-= ( distance n )				{ *this = *this - n; }
 
 			void
 			operator+= ( distance n )				{ *this = *this + n; }
@@ -281,26 +455,52 @@ namespace ft	{
 
 			const_reference
 			operator*()	const						{ return *_ptr; }
-*/
+
 			/**
 			 * @brief Pointer holding the address of the iterator element.
 			*/
-/*			pointer		_ptr;
+			pointer		_ptr;
 
 	}; //----------------- Class iterator
-*/
-	template< 	class TKey,
-				class TVal,
-				class Compare = std::less<TKey>,
-				class T_alloc = std::allocator<btreeNodeBase<TKey, TVal> > >
-	class map : protected btree<TKey, TVal, Compare, T_alloc> {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*############################################################################*/
+/*############################################################################*/
+/*###########################                             ####################*/
+/*###########################                             ####################*/
+/*###########################           MAP CLASS         ####################*/
+/*###########################                             ####################*/
+/*###########################                             ####################*/
+/*############################################################################*/
+/*############################################################################*/
+
+
+	template< 	class Key,
+				class T,
+				class Compare = std::less<Key>,
+				class T_alloc = std::allocator<btreeNodeBase<Key, T> > >
+	// class map : protected btree<Key, T, Compare, T_alloc> {
+	class map : public btree<Key, T, T_alloc, Compare> {
 
 		private:
-			typedef btree<TKey, TVal, Compare, T_alloc>		btree;
+			typedef btree<Key, T, T_alloc, Compare>		btree;
 		public:
-			typedef TKey									key_type;
-			typedef TVal									value_type;
-
+			typedef Key									key_type;
+			typedef T									value_type;
+			typedef	Compare								key_compare;
    			// typedef typename T_alloc::allocator_type		allocator_type;
    			typedef typename btree::allocator_type		allocator_type;
 
@@ -326,54 +526,31 @@ namespace ft	{
 			/**
 			 * @brief Default Constructor
 			*/
-      		map() : btree() {
+      		// explicit map() : btree() {
 
-				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> DEFAULT " << __func__ << std::endl;
+			// 	if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> DEFAULT " << __func__ << std::endl;
 
-			  }
-			explicit map( const Compare& comp, allocator_type const & userAlloc = allocator_type() ) : btree(comp, userAlloc) {
+			//   }
+			map( const Compare& comp = key_compare(), const allocator_type & userAlloc = allocator_type() ) : btree(comp, userAlloc) {
 
 				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> DEFAULT explicite " << __func__ << std::endl;
 			}
 
 
-/*
+			/**
+			 * @brief Range Constructor
+			*/
+			template <class InputIterator>
+			map (InputIterator first, InputIterator last,
+				const key_compare& comp = key_compare(),
+				const allocator_type& userAlloc = allocator_type() )
+				 : btree(comp, userAlloc)	{
 
-Template< class InputIt >
-map( InputIt first, InputIt last,
-     const Compare& comp = Compare(),
-     const Allocator& alloc = Allocator() );
+				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> range pre dispatcher ! " << __func__ << std::endl;
 
-map( const map& other );
-
-*/
-
-
-
-			// /**
-			//  * @brief fill Constructor, allocate at least n memory blocks and
-			//  * construct n objects val.
-			// */
-			// explicit map( size_type n, value_type const & val = value_type(),
-			// 	allocator_type const & userAlloc = allocator_type() ) : btree(n, userAlloc)	{
-
-			// 	if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> fill " << __func__ << std::endl;
-			// 	initFillmap(n, val);
-			// }
-
-			// /**
-			//  * @brief Range Constructor
-			// */
-			// template <class InputIterator>
-			// map (InputIterator first, InputIterator last,
-			// 	 allocator_type const & userAlloc = allocator_type() )
-			// 	 : btree(userAlloc)	{
-
-			// 	if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> range pre dispatcher ! " << __func__ << std::endl;
-
-			// 	typename std::__is_integer<InputIterator>::__type	integer;
-			// 	map_constructor_dispatch(first, last, userAlloc, integer);
-			// }
+				typename std::__is_integer<InputIterator>::__type	integer;
+				map_constructor_dispatch(first, last, userAlloc, integer);
+			}
 
 			// /**
 			//  * @brief Copy Constructor
@@ -617,15 +794,21 @@ map( const map& other );
 // 				return *this;
 // 			}
 
-// 			reference
-// 			operator[] (size_type n)	{
-// 				return (*(this->head + n));
-// 			}
+			T&
+			operator[]( const Key& key )	{
 
-// 			const_reference
-// 			operator[] (size_type n) const	{
-// 				return (*(this->head + n));
-// 			}
+				pointer	cursor = btree::locateKeyPosition(key);
+				if (cursor == NULL)
+					std::cout <<  "NOT FOUND" << std::endl;
+				else
+					std::cout << "FOUND: " << cursor->getPair().first << " - " << cursor->getPair().second << std::endl;
+				return (cursor->getPair().second);
+			}
+
+			// const_reference
+			// operator[] (size_type n) const	{
+			// 	return (*(this->head + n));
+			// }
 
 // /******************************************************************************.
 // .******************************************************************************.

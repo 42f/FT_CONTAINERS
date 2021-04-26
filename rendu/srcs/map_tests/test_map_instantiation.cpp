@@ -20,12 +20,36 @@ test_map_instantiation( void )	{
 
 		std::map<const int, float>	std_c0;
 		ft::map<const int, float>	ft_c0;
+(void)std_c0;
+(void)ft_c0;
+		std::pair<const int, float>	ft_p0( 3, 1 );
+		std::pair<const int, float>	ft_p1( 2, 2 );
+		std::pair<const int, float>	ft_p2( -1, 3 );
+		std::pair<const int, float>	ft_p3( 5, 4 );
+		std::pair<const int, float>	ft_p4( -3, 5 );
 
-		std_c0[1] = 21.12;
-		std_c0[2] = 28.12;
-
-		std::cout << std_c0[1] << std::endl;
-		std::cout << std_c0[2] << std::endl;
+		ft_c0.addNode(ft_p0);
+		ft_c0.addNode(ft_p1);
+		ft_c0.addNode(ft_p2);
+		ft_c0.addNode(ft_p3);
+		ft_c0.addNode(ft_p4);
+		ft_c0.debugPrintTree();
+		// std::cout << "test operator [3]" << ft_c0[3];
+		// ft_c0[3] = 99;
+		// std_c0[1];
+		// std::cout << "1 ? " << std_c0[1] << std::endl;
+		// std_c0[1] = 42;
+		// std::cout << "1 ? " << std_c0[1] << std::endl;
+		// std_c0[20] = 2;
+		// std_c0[18] = 99;
+		// std::map
+		// std::cout << "test operator [3]" << ft_c0[3];
+		// std::cout << "test operator [2]" << ft_c0[2];
+		// std::cout << "test operator [-1]" << ft_c0[-1];
+		// std::cout << "test operator [5]" << ft_c0[5];
+		// std::cout << "test operator [-3]" << ft_c0[-3];
+		// ft_c0.insertNode(ft_p0);
+		// ft_c0.insertNode(ft_p1);
 
 		/*
 	{

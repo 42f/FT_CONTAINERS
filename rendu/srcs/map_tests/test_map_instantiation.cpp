@@ -20,19 +20,40 @@ test_map_instantiation( void )	{
 
 		std::map<const int, float>	std_c0;
 		ft::map<const int, float>	ft_c0;
-(void)std_c0;
-(void)ft_c0;
-		std::pair<const int, float>	ft_p0( 3, 1 );
-		std::pair<const int, float>	ft_p1( 2, 2 );
-		std::pair<const int, float>	ft_p2( -1, 3 );
-		std::pair<const int, float>	ft_p3( 5, 4 );
-		std::pair<const int, float>	ft_p4( -3, 5 );
+
+		ft::pair<const int, float>	ft_p0( 3, 1 );
+		ft::pair<const int, float>	ft_p1( 2, 2 );
+		ft::pair<const int, float>	ft_p2( -1, 3 );
+		ft::pair<const int, float>	ft_p3( 5, 4 );
+		ft::pair<const int, float>	ft_p4( -3, 5 );
 
 		ft_c0.addNode(ft_p0);
 		ft_c0.addNode(ft_p1);
 		ft_c0.addNode(ft_p2);
 		ft_c0.addNode(ft_p3);
 		ft_c0.addNode(ft_p4);
+
+		std_c0[1] = 24;
+		std_c0[2] = 25;
+		std_c0[3] = 26;
+
+		// std::map<const int, float>::iterator	itb_std = std_c0.begin();
+		// std::map<const int, float>::iterator	ite_std = std_c0.end();
+
+		// std::cout << "STD begin: first  " << itb_std->first << std::endl;
+		// std::cout << "STD begin: second " << itb_std->second << std::endl;
+		// std::cout << "STD end  : first  " << ite_std->first << std::endl;
+		// std::cout << "STD end  : second " << ite_std->second << std::endl;
+
+		// ft::map<const int, float>::iterator	itb_ft = ft_c0.begin();
+		// std::cout << "FT begin: first  " << itb_ft->first << std::endl;
+		// std::cout << "FT begin: second " << itb_ft->second << std::endl;
+		// std::cout << "FT end  : first  " << ite_ft->first << std::endl;
+		// std::cout << "FT end  : second " << ite_ft->second << std::endl;
+
+
+		// std::cout << "FT:  first  " << it->first << std::endl;
+		// std::cout << "FT:  second " << it->second << std::endl;
 		ft_c0.debugPrintTree();
 		// std::cout << "test operator [3]" << ft_c0[3];
 		// ft_c0[3] = 99;
@@ -53,6 +74,14 @@ test_map_instantiation( void )	{
 
 		/*
 	{
+
+
+
+
+
+
+
+
 
 		std::cout << SUBTITLE << "[ DEFAULT CONSTRUCTOR ]" << RESET_COLOR << std::endl;
 		{

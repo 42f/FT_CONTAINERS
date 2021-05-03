@@ -73,7 +73,8 @@
 			"__memory": "cpp",
 			"__cxx_version": "cpp",
 			"__tree": "cpp",
-			"map": "cpp"
+			"map": "cpp",
+			"clocale": "cpp"
 		}
 	},
 	"launch": {

@@ -1,6 +1,9 @@
 #ifndef MAP_HPP
 # define MAP_HPP
 
+# include "map_pair.hpp"
+# include "map_iterator.hpp"
+
 # include <iostream>
 # include <memory>
 # include <cstddef>
@@ -15,55 +18,54 @@
 #endif
 
 
-/*############################################################################*/
-/*############################################################################*/
-/*###########################                             ####################*/
-/*###########################                             ####################*/
-/*###########################           btreeNodeBase     ####################*/
-/*###########################                             ####################*/
-/*###########################                             ####################*/
-/*############################################################################*/
-/*############################################################################*/
-
 
 namespace ft	{
 
+
+/*############################################################################*/
+/*############################################################################*/
+/*###########################                             ####################*/
+/*###########################                             ####################*/
+/*###########################           btreeNode         ####################*/
+/*###########################                             ####################*/
+/*###########################                             ####################*/
+/*############################################################################*/
+/*############################################################################*/
+
+
+
 	template< typename Key, typename T>
-	struct btreeNodeBase	{
+	struct btreeNode	{
 
 		typedef		Key							key_type;
 		typedef		T							value_type;
-		typedef		btreeNodeBase *				base_pointer;
-		typedef		typename std::pair<Key, T>	nodePair_type;
+		typedef		btreeNode *					base_pointer;
+		typedef		typename ft::pair<Key, T>	pair_type;
 
 		base_pointer		parent;
 		base_pointer 		left;
-		nodePair_type		nodePair;
+		pair_type			pair;
 		base_pointer 		right;
 
-		base_pointer	getLeft( void ) const	{ return this->left; }
-		base_pointer	getRight( void ) const	{ return this->right; }
-		nodePair_type&	getPair( void ) 		{ return this->nodePair; }
+		base_pointer		getParent( void ) const	{ return this->parent;	}
+		base_pointer		getLeft( void ) const	{ return this->left;	}
+		base_pointer		getRight( void ) const	{ return this->right;	}
+		pair_type&			getPair( void ) 		{ return this->pair;	}
 
 		void			setParent(base_pointer parent)	{this->parent = parent; }
-		void			setLeft(base_pointer newNode)	{this->left = newNode; }
+		void			setLeft(base_pointer newNode)	{this->left = newNode; 	}
 		void			setRight(base_pointer newNode)	{this->right = newNode; }
-		void			setPair(nodePair_type& newPair)	{this->pair = newPair; }
+		void			setPair(pair_type& newPair)		{this->pair = newPair; 	}
 
-		btreeNodeBase() : left(NULL), nodePair(key_type(), value_type()), right(NULL)	{}
-		btreeNodeBase(nodePair_type pairSrc) : left(NULL), nodePair(pairSrc), right(NULL)	{
+		btreeNode() : left(NULL), pair(key_type(), value_type()), right(NULL)	{}
+		btreeNode(pair_type pairSrc) : left(NULL), pair(pairSrc), right(NULL)	{
 
 			std::cout << __func__ << ": " << this << std::endl;
 			std::cout << __func__ << ": " << getRight() << std::endl;
 			std::cout << __func__ << ": " << getLeft() << std::endl;
 		}
-		~btreeNodeBase() {}
+		~btreeNode() {}
 	};		// btreeNode
-
-
-
-
-
 
 
 
@@ -88,17 +90,14 @@ namespace ft	{
 
 		public:
 
-			typedef	typename std::pair<Key, T>							pair_type;
-			typedef	typename ft::btreeNodeBase<Key, T>					node_type;
-			typedef typename T_alloc::template rebind< btreeNodeBase<Key, T> >::other
-			allocator_type;
-
-			typedef Compare													key_compare;
-
-			typedef typename T_alloc::reference								reference;
-			typedef typename T_alloc::const_reference						const_reference;
-			typedef typename T_alloc::pointer								pointer;
-			typedef typename T_alloc::const_pointer							const_pointer;
+			typedef	typename ft::pair<Key, T>							pair_type;
+			typedef	typename ft::btreeNode<Key, T>						node_type;
+			typedef typename T_alloc::template rebind< btreeNode<Key, T> >::other	allocator_type;
+			typedef Compare												key_compare;
+			typedef typename T_alloc::reference							reference;
+			typedef typename T_alloc::const_reference					const_reference;
+			typedef typename T_alloc::pointer							pointer;
+			typedef typename T_alloc::const_pointer						const_pointer;
 
 			// btree( void ) : head(NULL), size(0), alloc(allocator_type()), cmp(key_compare()) {
 
@@ -134,6 +133,22 @@ namespace ft	{
 			Compare	const			cmp;
 
 		public:      // TEST PURPOSE: remove !
+
+			pointer
+			getFarLeft( pointer cursor )	{
+
+				while (cursor != NULL && cursor->left != NULL)
+					cursor = cursor->left;
+				return (cursor);
+			}
+
+			pointer
+			getFarRight( pointer cursor )	{
+
+				while (cursor != NULL && cursor->right != NULL)
+					cursor = cursor->right;
+				return (cursor);
+			}
 
 			bool
 			isLeaf(pointer node)	{
@@ -205,6 +220,7 @@ namespace ft	{
 
 		// protected:
 
+
 			static void
 			debugPrintNode( pointer node )	{
 
@@ -215,8 +231,8 @@ namespace ft	{
 					std::cout << __func__ << ": parent " << node->parent << std::endl;
 					std::cout << __func__ << ": left   " << node->left << std::endl;
 					std::cout << __func__ << ": right  " << node->right << std::endl;
-					std::cout << __func__ << ": key    " << node->nodePair.first << std::endl;
-					std::cout << __func__ << ": data   " << node->nodePair.second << std::endl;
+					std::cout << __func__ << ": key    " << node->pair.first << std::endl;
+					std::cout << __func__ << ": data   " << node->pair.second << std::endl;
 					std::cout << std::endl;
 				}
 				else
@@ -329,151 +345,6 @@ namespace ft	{
 
 
 
-/*############################################################################*/
-/*############################################################################*/
-/*###########################                             ####################*/
-/*###########################                             ####################*/
-/*###########################          iterator           ####################*/
-/*###########################                             ####################*/
-/*###########################                             ####################*/
-/*############################################################################*/
-/*############################################################################*/
-
-
-
-
-	template< typename T, class T_alloc = std::allocator<T> >
-	class mapIterator : public std::iterator< std::bidirectional_iterator_tag, T >
-	{
-		public:
-			typedef mapIterator<T, T_alloc>				iterator;
-			typedef const mapIterator<T, T_alloc>	 	const_iterator;
-			typedef ptrdiff_t							distance;
-			typedef typename T_alloc::reference			reference;
-			typedef typename T_alloc::const_reference	const_reference;
-			typedef typename T_alloc::pointer			pointer;
-			typedef typename T_alloc::const_pointer		const_pointer;
-
-			mapIterator( void ) :_ptr(NULL) {}
-			mapIterator(T* src) :_ptr(src) {}
-			mapIterator(const iterator& itSrc) : _ptr(itSrc._ptr) {}
-
-			iterator&
-			operator++( void ) {
-				_ptr++;
-				return *this;
-			}
-
-			iterator
-			operator++( int ) {
-				iterator tmp(*this);
-				operator++();
-				return tmp;
-			}
-
-			// iterator&
-			// operator--( void ) {
-			// 	_ptr--;
-			// 	return *this;
-			// }
-
-			// iterator
-			// operator--( int ) {
-			// 	iterator tmp(*this);
-			// 	operator--();
-			// 	return tmp;
-			// }
-
-			// distance
-			// operator- ( iterator rhs ) { return this->_ptr - rhs._ptr; }
-
-			// iterator
-			// operator- ( distance n ) {
-
-			// 	iterator tmpIt = *this;
-
-			// 	while ( n > 0 )	{
-			// 		tmpIt--;
-			// 		n--;
-			// 	}
-			// 	return tmpIt;
-			// }
-
-			// const_iterator
-			// operator- ( distance n ) const {
-
-			// 	iterator tmpIt = *this;
-
-			// 	while ( n > 0 )	{
-			// 		tmpIt--;
-			// 		n--;
-			// 	}
-			// 	return tmpIt;
-			// }
-
-			iterator
-			operator+ ( distance n ) {
-
-				iterator tmpIt = *this;
-
-				while ( n > 0 )	{
-					tmpIt++;
-					n--;
-				}
-				return tmpIt;
-			}
-
-			const_iterator
-			operator+ ( distance n ) const {
-
-				iterator tmpIt = *this;
-
-				while ( n > 0 )	{
-					tmpIt++;
-					n--;
-				}
-				return tmpIt;
-			}
-
-			// void
-			// operator-= ( distance n )				{ *this = *this - n; }
-
-			void
-			operator+= ( distance n )				{ *this = *this + n; }
-
-			bool
-			operator==(const iterator& rhs) const	{ return _ptr==rhs._ptr; }
-
-			bool
-			operator!=(const iterator& rhs) const	{ return _ptr!=rhs._ptr; }
-
-			bool
-			operator<(const iterator& rhs) const	{ return _ptr< rhs._ptr; }
-
-			reference
-			operator*()								{ return *_ptr; }
-
-			const_reference
-			operator*()	const						{ return *_ptr; }
-
-			/**
-			 * @brief Pointer holding the address of the iterator element.
-			*/
-			pointer		_ptr;
-
-	}; //----------------- Class iterator
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -491,7 +362,7 @@ namespace ft	{
 	template< 	class Key,
 				class T,
 				class Compare = std::less<Key>,
-				class T_alloc = std::allocator<btreeNodeBase<Key, T> > >
+				class T_alloc = std::allocator<btreeNode<Key, T> > >
 	// class map : protected btree<Key, T, Compare, T_alloc> {
 	class map : public btree<Key, T, T_alloc, Compare> {
 
@@ -508,10 +379,10 @@ namespace ft	{
 			typedef typename T_alloc::const_reference		const_reference;
 			typedef typename T_alloc::pointer				pointer;
 			typedef typename T_alloc::const_pointer			const_pointer;
-			// typedef mapIterator<T>							iterator;
+			typedef mapIterator<ft::pair<Key, T> >			iterator;
 			// typedef const mapIterator<T>					const_iterator;
 			// typedef std::reverse_iterator<iterator> 		reverse_iterator;
-			// typedef const reverse_iterator					const_reverse_iterator;
+			// typedef const reverse_iterator				const_reverse_iterator;
 			typedef std::ptrdiff_t							difference_type;
 			typedef size_t									size_type;
 
@@ -586,14 +457,14 @@ namespace ft	{
 // 			size_type
 // 			size( void ) const 		{ return (this->tail - this->head); }
 
-// 			iterator
-// 			begin( void ) 			{ return (this->head); }
+			iterator
+			begin( void ) 			{ return (this->getFarLeft(this->head)); }
 
 // 			const_iterator
 // 			begin( void ) const		{ return (this->head); }
 
-// 			iterator
-// 			end( void ) 	 		{ return (this->tail); }
+			// iterator
+			// end( void ) 	 		{ return (this->getFarRight(this->head)); }
 
 // 			const_iterator
 // 			end( void ) const 		{ return (this->tail); }

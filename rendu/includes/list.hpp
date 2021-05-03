@@ -103,16 +103,15 @@ namespace ft	{
 						position->prev = cursor;
 					}
 
-				if (DEBUG_MODE >= 3)
-				{
-					std::cout << __func__ << " at position: " << position << std::endl;
-					std::cout << __func__ << " prev = " << prev << std::endl;
-					std::cout << __func__ << " next = " << next << std::endl;
-					putNodeInfos(*this);
+					if (DEBUG_MODE >= 3)
+					{
+						std::cout << __func__ << " at position: " << position << std::endl;
+						std::cout << __func__ << " prev = " << prev << std::endl;
+						std::cout << __func__ << " next = " << next << std::endl;
+						putNodeInfos(*this);
+					}
 				}
 			}
-
-		}
 
 			void
 			unhook( void )	{

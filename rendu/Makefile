@@ -4,7 +4,7 @@ GREEN = \033[32m
 YELLOW = \033[33m
 
 NAME := ft_container_list
-INCLUDES = ./includes
+INCLUDES += ./includes
 SRCS_DIR = ./srcs
 CC = clang++
 OBJ_DIR = ./objs_$(NAME)/
@@ -77,7 +77,10 @@ endif
 
 HEADER += ./list.hpp
 HEADER += ./vector.hpp
+
 HEADER += ./map.hpp
+HEADER += ./map_pair.hpp
+HEADER += ./map_iterator.hpp
 
 HEADER += ./bvaletteTester.hpp
 HEADER += ./bvaletteTester_defines.hpp
@@ -187,6 +190,7 @@ vpath %.cpp ./srcs/list_tests
 vpath %.cpp ./srcs/vector_tests
 vpath %.cpp ./srcs/map_tests
 vpath %.hpp ./includes
+vpath %.hpp ./includes/map
 
 OBJS = $(patsubst %.cpp, $(OBJ_DIR)%.o, $(SRCS))
 

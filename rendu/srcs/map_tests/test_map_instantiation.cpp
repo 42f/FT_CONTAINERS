@@ -21,21 +21,21 @@ test_map_instantiation( void )	{
 		std::map<const int, float>	std_c0;
 		ft::map<const int, float>	ft_c0;
 
-		ft::pair<const int, float>	ft_p0( 3, 1 );
-		ft::pair<const int, float>	ft_p1( 2, 2 );
-		ft::pair<const int, float>	ft_p2( -1, 3 );
-		ft::pair<const int, float>	ft_p3( 5, 4 );
-		ft::pair<const int, float>	ft_p4( -3, 5 );
+		// ft::pair<const int, float>	ft_p0( 3, 1 );
+		// ft::pair<const int, float>	ft_p1( 2, 2 );
+		// ft::pair<const int, float>	ft_p2( -1, 3 );
+		// ft::pair<const int, float>	ft_p3( 5, 4 );
+		// ft::pair<const int, float>	ft_p4( -3, 5 );
 
-		ft_c0.addNode(ft_p0);
-		ft_c0.addNode(ft_p1);
-		ft_c0.addNode(ft_p2);
-		ft_c0.addNode(ft_p3);
-		ft_c0.addNode(ft_p4);
+		// ft_c0.addNode(ft_p0);
+		// ft_c0.addNode(ft_p1);
+		// ft_c0.addNode(ft_p2);
+		// ft_c0.addNode(ft_p3);
+		// ft_c0.addNode(ft_p4);
 
-		std_c0[1] = 24;
-		std_c0[2] = 25;
-		std_c0[3] = 26;
+		// std_c0[1] = 24;
+		// std_c0[2] = 25;
+		// std_c0[3] = 26;
 
 		// std::map<const int, float>::iterator	itb_std = std_c0.begin();
 		// std::map<const int, float>::iterator	ite_std = std_c0.end();
@@ -54,7 +54,7 @@ test_map_instantiation( void )	{
 
 		// std::cout << "FT:  first  " << it->first << std::endl;
 		// std::cout << "FT:  second " << it->second << std::endl;
-		ft_c0.debugPrintTree();
+		// ft_c0.debugPrintTree();
 		// std::cout << "test operator [3]" << ft_c0[3];
 		// ft_c0[3] = 99;
 		// std_c0[1];

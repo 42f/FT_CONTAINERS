@@ -22,6 +22,9 @@
 namespace ft	{
 
 
+
+
+
 /*############################################################################*/
 /*############################################################################*/
 /*###########################                             ####################*/
@@ -38,7 +41,7 @@ namespace ft	{
 	struct btreeNode	{
 
 		typedef		Key							key_type;
-		typedef		T							value_type;
+		typedef		T							mapped_type;
 		typedef		btreeNode *					base_pointer;
 		typedef		typename ft::pair<Key, T>	pair_type;
 
@@ -57,7 +60,7 @@ namespace ft	{
 		void			setRight(base_pointer newNode)	{this->right = newNode; }
 		void			setPair(pair_type& newPair)		{this->pair = newPair; 	}
 
-		btreeNode() : left(NULL), pair(key_type(), value_type()), right(NULL)	{}
+		btreeNode() : left(NULL), pair(key_type(), mapped_type()), right(NULL)	{}
 		btreeNode(pair_type pairSrc) : left(NULL), pair(pairSrc), right(NULL)	{
 
 			std::cout << __func__ << ": " << this << std::endl;
@@ -84,7 +87,7 @@ namespace ft	{
 
 	template< 	class Key,
 				class T,
-				class T_alloc,
+				class Allocator,
 				class Compare >
 	class btree {
 
@@ -92,19 +95,19 @@ namespace ft	{
 
 			typedef	typename ft::pair<Key, T>							pair_type;
 			typedef	typename ft::btreeNode<Key, T>						node_type;
-			typedef typename T_alloc::template rebind< btreeNode<Key, T> >::other	allocator_type;
+			typedef typename Allocator::template rebind< btreeNode<Key, T> >::other	allocator_type;
 			typedef Compare												key_compare;
-			typedef typename T_alloc::reference							reference;
-			typedef typename T_alloc::const_reference					const_reference;
-			typedef typename T_alloc::pointer							pointer;
-			typedef typename T_alloc::const_pointer						const_pointer;
+			typedef typename Allocator::reference							reference;
+			typedef typename Allocator::const_reference					const_reference;
+			typedef typename Allocator::pointer							pointer;
+			typedef typename Allocator::const_pointer						const_pointer;
 
-			// btree( void ) : head(NULL), size(0), alloc(allocator_type()), cmp(key_compare()) {
+			// btree( void ) : head(NULL), size(0), alloc(allocator_type()), comp(key_compare()) {
 
 			// 	if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> default " << __func__ << std::endl;
 			// }
 
-			explicit btree( const Compare &comp, allocator_type const & userAlloc ) : head(NULL), size(0), alloc(userAlloc), cmp(comp) {
+			explicit btree( const Compare &comp, allocator_type const & userAlloc ) : head(NULL), size(0), alloc(userAlloc), comp(comp) {
 
 				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> defaut with alloc " << __func__ << std::endl;
 			}
@@ -130,7 +133,7 @@ namespace ft	{
 			pointer					head;
 			size_t					size;
 			allocator_type 			alloc;
-			Compare	const			cmp;
+			Compare	const			comp;
 
 		public:      // TEST PURPOSE: remove !
 
@@ -157,18 +160,18 @@ namespace ft	{
 
 			bool
 			isRightEligible(pair_type& existingPair, pair_type& newPair)	{
-				return (cmp(existingPair.first, newPair.first));
+				return (comp(existingPair.first, newPair.first));
 			}
 
 			bool
 			isRightEligible(Key& existingKey, Key& newKey)	{
-				return (cmp(existingKey, newKey));
+				return (comp(existingKey, newKey));
 			}
 
 			bool
 			isEqualKey(Key& existingKey, Key& newKey)	{
-				return (cmp(existingKey, newKey) == false
-				&& cmp(newKey, existingKey) == false);
+				return (comp(existingKey, newKey) == false
+				&& comp(newKey, existingKey) == false);
 			}
 
 			pointer
@@ -348,6 +351,7 @@ namespace ft	{
 
 
 
+
 /*############################################################################*/
 /*############################################################################*/
 /*###########################                             ####################*/
@@ -362,29 +366,63 @@ namespace ft	{
 	template< 	class Key,
 				class T,
 				class Compare = std::less<Key>,
-				class T_alloc = std::allocator<btreeNode<Key, T> > >
-	// class map : protected btree<Key, T, Compare, T_alloc> {
-	class map : public btree<Key, T, T_alloc, Compare> {
+				class Allocator = std::allocator< ft::pair<Key, T> > >
+	class map {
+
+/******************************************************************************.
+.******************************************************************************.
+.*********** MEMBER TYPES            ******************************************.
+.******************************************************************************.
+.******************************************************************************/
 
 		private:
-			typedef btree<Key, T, T_alloc, Compare>		btree;
-		public:
-			typedef Key									key_type;
-			typedef T									value_type;
-			typedef	Compare								key_compare;
-   			// typedef typename T_alloc::allocator_type		allocator_type;
-   			typedef typename btree::allocator_type		allocator_type;
+			typedef ft::btree<Key, T, Allocator, Compare>		btree;
+			typedef ft::btree<Key, T, Allocator, Compare>*		btree_pointer;
 
-			typedef typename T_alloc::reference				reference;
-			typedef typename T_alloc::const_reference		const_reference;
-			typedef typename T_alloc::pointer				pointer;
-			typedef typename T_alloc::const_pointer			const_pointer;
+
+		public:
+			typedef Key										key_type;
+			typedef T										mapped_type;
+			typedef ft::pair<const Key, T>					value_type;
+			typedef	Compare									key_compare;
+
+			typedef size_t									size_type;
+			typedef std::ptrdiff_t							difference_type;
+			typedef Allocator								allocator_type;
+			typedef typename Allocator::reference			reference;
+			typedef typename Allocator::const_reference		const_reference;
+			typedef typename Allocator::pointer				pointer;
+			typedef typename Allocator::const_pointer		const_pointer;
+
 			typedef mapIterator<ft::pair<Key, T> >			iterator;
 			// typedef const mapIterator<T>					const_iterator;
 			// typedef std::reverse_iterator<iterator> 		reverse_iterator;
 			// typedef const reverse_iterator				const_reverse_iterator;
-			typedef std::ptrdiff_t							difference_type;
-			typedef size_t									size_type;
+
+/******************************************************************************.
+.******************************************************************************.
+.*********** NESTED CLASSES          ******************************************.
+.******************************************************************************.
+.******************************************************************************/
+
+			class value_compare {
+
+				public:
+					typedef	bool		result_type;
+					typedef	value_type	first_argument_type;
+					typedef	value_type	second_argument_type;
+
+					bool
+					operator()( const value_type& lhs, const value_type& rhs ) const {
+						return (comp(lhs.first, rhs.first));
+					}
+
+				protected:
+					value_compare( Compare c ) : comp(c) {}
+
+					Compare				comp;
+			};
+
 
 /******************************************************************************.
 .******************************************************************************.
@@ -397,31 +435,27 @@ namespace ft	{
 			/**
 			 * @brief Default Constructor
 			*/
-      		// explicit map() : btree() {
+			explicit
+			map( const Compare& comp = key_compare(), const allocator_type & userAlloc = allocator_type() )	: alloc(userAlloc), comp(comp)	{
 
-			// 	if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> DEFAULT " << __func__ << std::endl;
-
-			//   }
-			map( const Compare& comp = key_compare(), const allocator_type & userAlloc = allocator_type() ) : btree(comp, userAlloc) {
-
-				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> DEFAULT explicite " << __func__ << std::endl;
+				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> DEFAULT explicit " << __func__ << std::endl;
 			}
 
 
 			/**
 			 * @brief Range Constructor
 			*/
-			template <class InputIterator>
-			map (InputIterator first, InputIterator last,
-				const key_compare& comp = key_compare(),
-				const allocator_type& userAlloc = allocator_type() )
-				 : btree(comp, userAlloc)	{
+			// template <class InputIterator>
+			// map (InputIterator first, InputIterator last,
+			// 	const key_compare& comp = key_compare(),
+			// 	const allocator_type& userAlloc = allocator_type() )
+			// 	 : btree(comp, userAlloc)	{
 
-				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> range pre dispatcher ! " << __func__ << std::endl;
+			// 	if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> range pre dispatcher ! " << __func__ << std::endl;
 
-				typename std::__is_integer<InputIterator>::__type	integer;
-				map_constructor_dispatch(first, last, userAlloc, integer);
-			}
+			// 	typename std::__is_integer<InputIterator>::__type	integer;
+			// 	map_constructor_dispatch(first, last, userAlloc, integer);
+			// }
 
 			// /**
 			//  * @brief Copy Constructor
@@ -438,9 +472,20 @@ namespace ft	{
 
 				// if (size() > 0)
 				// 	clearObject();
-				if (DEBUG_MODE >= 1)
-					std::cout << "DESTRUCTOR --> " << __func__ << std::endl;
+				if (DEBUG_MODE >= 1) std::cout << "DESTRUCTOR --> " << __func__ << std::endl;
 			}
+
+/******************************************************************************.
+.******************************************************************************.
+.*********** PRIVATE VARIABLES  ***********************************************.
+.******************************************************************************.
+.******************************************************************************/
+
+			private:
+				btree_pointer		head;
+				size_t				size;
+				allocator_type 		alloc;
+				Compare	const		comp;
 
 /******************************************************************************.
 .******************************************************************************.
@@ -457,8 +502,8 @@ namespace ft	{
 // 			size_type
 // 			size( void ) const 		{ return (this->tail - this->head); }
 
-			iterator
-			begin( void ) 			{ return (this->getFarLeft(this->head)); }
+			// iterator
+			// begin( void ) 			{ return (this->getFarLeft(this->head)); }
 
 // 			const_iterator
 // 			begin( void ) const		{ return (this->head); }
@@ -500,7 +545,7 @@ namespace ft	{
 // 			pop_back( void )		{ if (size() > 0) erase(--end()); }
 
 // 			void
-// 			push_back (value_type const & val)	{ insert(end(), val); }
+// 			push_back (mapped_type const & val)	{ insert(end(), val); }
 
 // 			void
 // 			clear( void )			{ erase(begin(), end()); }
@@ -508,7 +553,7 @@ namespace ft	{
 // 			/**
 // 			 * @brief insert single element
 // 			*/
-// 			iterator insert(iterator position, const value_type& val)	{
+// 			iterator insert(iterator position, const mapped_type& val)	{
 
 // 				difference_type indexPos = position - begin();
 // 				insert(position, 1, val);
@@ -518,7 +563,7 @@ namespace ft	{
 // 			/**
 // 			 * @brief insert n elements of val
 // 			*/
-// 			void insert (iterator position, size_type n, const value_type& val)	{
+// 			void insert (iterator position, size_type n, const mapped_type& val)	{
 
 // 				if (capacity() == 0)	{
 // 					this->initStorage(1);
@@ -599,7 +644,7 @@ namespace ft	{
 // 			}
 
 // 			void
-// 			resize (size_type n, value_type val = value_type())	{
+// 			resize (size_type n, mapped_type val = mapped_type())	{
 
 // 				if (n < size())	{
 // 					erase(end() - (size() - n), end());
@@ -636,7 +681,7 @@ namespace ft	{
 // 				assign_dispatch(first, last, integer);
 // 			}
 
-// 			void assign(size_type n, const value_type& val)	{
+// 			void assign(size_type n, const mapped_type& val)	{
 
 // 				clear();
 // 				insert(begin(), n, val);
@@ -665,16 +710,16 @@ namespace ft	{
 // 				return *this;
 // 			}
 
-			T&
-			operator[]( const Key& key )	{
+			// T&
+			// operator[]( const Key& key )	{
 
-				pointer	cursor = btree::locateKeyPosition(key);
-				if (cursor == NULL)
-					std::cout <<  "NOT FOUND" << std::endl;
-				else
-					std::cout << "FOUND: " << cursor->getPair().first << " - " << cursor->getPair().second << std::endl;
-				return (cursor->getPair().second);
-			}
+			// 	pointer	cursor = btree::locateKeyPosition(key);
+			// 	if (cursor == NULL)
+			// 		std::cout <<  "NOT FOUND" << std::endl;
+			// 	else
+			// 		std::cout << "FOUND: " << cursor->getPair().first << " - " << cursor->getPair().second << std::endl;
+			// 	return (cursor->getPair().second);
+			// }
 
 			// const_reference
 			// operator[] (size_type n) const	{
@@ -701,7 +746,7 @@ namespace ft	{
 // 			void
 // 			assign_dispatch (integer n, integer val, std::__true_type)	{
 
-// 				assign(static_cast<size_type>(n), static_cast<value_type>(val));
+// 				assign(static_cast<size_type>(n), static_cast<mapped_type>(val));
 // 			}
 
 
@@ -742,7 +787,7 @@ namespace ft	{
 // 			insert_dispatch(iterator position, integer n, integer val,
 // 			std::__true_type)	{
 // 				insert(position, static_cast<size_type>(n),
-// 					static_cast<value_type>(val));
+// 					static_cast<mapped_type>(val));
 // 			}
 
 // 			template<typename InputIterator>
@@ -795,7 +840,7 @@ namespace ft	{
 // 			 * constructors
 // 			*/
 // 			void
-// 			initFillmap(size_type n, value_type const & val)	{
+// 			initFillmap(size_type n, mapped_type const & val)	{
 
 // 				this->tail = this->head + n;
 // 				for (size_t i = 0; i < n; i++){
@@ -838,7 +883,7 @@ namespace ft	{
 // 			}
 
 // 			void
-// 			constructObjects(pointer p, size_t n, value_type val = value_type())	{
+// 			constructObjects(pointer p, size_t n, mapped_type val = mapped_type())	{
 // 				for (size_t i = 0; i < n; i++)	{
 // 					this->alloc.construct(p + i, val);
 // 				}
@@ -896,7 +941,17 @@ namespace ft	{
 // 					throw std::out_of_range("Out of map's range");
 // 				}
 // 			}
-		}; // ----------------- Class map
+
+
+
+		}; // -------------------------------------------------------- Class map
+
+
+
+
+
+
+
 
 		// template <class T, class Alloc >
 		// void
@@ -945,4 +1000,6 @@ namespace ft	{
 		// bool
 		// operator>= (const map<T,Alloc>& lhs, const map<T,Alloc>& rhs)	{ return(!(lhs < rhs)); };
 } // ----------------- ft namespace
+
+
 #endif /* *****BVALETTE****** MAP_HPP */

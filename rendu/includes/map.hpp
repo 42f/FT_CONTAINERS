@@ -103,7 +103,7 @@ namespace ft	{
 				map_node*		left;
 				map_node*		parent;
 				map_node*		right;
-				value_type		pair;
+				value_type*		pair;
 			};
 
 
@@ -125,10 +125,10 @@ namespace ft	{
 
 				_head = btree_create_node(42, 21);
 
-				_head->pair.second = 2;
-				// iterator	it(_head);
-				// if (DEBUG_MODE >= 2) std::cout << __func__ << "pair: " << it._ptr->pair->first << std::endl;
-				// if (DEBUG_MODE >= 2) std::cout << __func__ << "pair: " << it._ptr->pair->second << std::endl;
+				_head->pair->second = 2;
+				iterator	it(_head);
+				if (DEBUG_MODE >= 2) std::cout << __func__ << "pair: " << it._ptr->pair->first << std::endl;
+				if (DEBUG_MODE >= 2) std::cout << __func__ << "pair: " << it._ptr->pair->second << std::endl;
 
 
 				_allocPair.destroy(_head->pair);
@@ -440,7 +440,8 @@ namespace ft	{
 				map_node*	newNode = _allocNode.allocate(1);
 				_allocNode.construct(newNode, map_node());
 				newNode->pair = _allocPair.allocate(1);
-				_allocNode.construct(newNode.pair, value_type(k, val));
+				_allocPair.construct(newNode->pair, value_type(k, val));
+				return (newNode);
 			}
 
 
@@ -492,16 +493,28 @@ namespace ft	{
 				btree_apply_node_prefix(root->right, applyf);
 				applyf(root);
 			}
-			// void
-			// btree_insert_data(map_node **root,
-// 									void *item, int (*cmpf)(void *, void *))	{
 
-// }
-			// void
-			// *btree_search_item(map_node *root,
-// 								void *data_ref, int (*cmpf)(void *, void *))	{
+			void
+			btree_insert_data(map_node **root, value_type pairSrc)	{
 
-// }
+				map_node* tree = *root;
+
+				if (*root != NULL)	{
+					if (_comp(pairSrc.first, tree->pair.first) < 0)
+						btree_insert_data(&tree->left, pairSrc);
+					else
+						btree_insert_data(&tree->right, pairSrc);
+				}
+				else
+					*root = btree_create_node(pairSrc.first, pairSrc.second);
+			}
+
+			value_type*
+			btree_search_pair(map_node *root, value_type* targetPair)	{
+
+
+
+			}
 
 			// size_t
 			// tree_nodes_count(map_node *root)	{

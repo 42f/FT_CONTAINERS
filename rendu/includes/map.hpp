@@ -103,7 +103,7 @@ namespace ft	{
 				map_node*		left;
 				map_node*		parent;
 				map_node*		right;
-				value_type*		pair;
+				value_type*		item;
 			};
 
 
@@ -128,18 +128,30 @@ namespace ft	{
 
 				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> DEFAULT explicit " << __func__ << std::endl;
 
-				// btree_insert_data(&_head, value_type(42, 99));
-				// btree_insert_data(&_head, value_type(21, 99));
-				// btree_insert_data(&_head, value_type(22, 99));
-				// btree_insert_data(&_head, value_type(103, 99));
-				// btree_insert_data(&_head, value_type(43, 99));
+				btree_insert_data(NULL, &_head, value_type(23, 99));
+				btree_insert_data(NULL, &_head, value_type(103, 99));
+				btree_insert_data(NULL, &_head, value_type(42, 99));
+				btree_insert_data(NULL, &_head, value_type(43, 99));
+				btree_insert_data(NULL, &_head, value_type(22, 99));
+				btree_insert_data(NULL, &_head, value_type(21, 99));
 				debugPrintTree(_head);
-				// _allocPair.destroy(_head->pair);
-				// _allocPair.deallocate(_head->pair, 1);
 
-				// _allocNode.destroy(_head);
-				// _allocNode.deallocate(_head, 1);
+				iterator it = begin();
+				std::cout << "iterator deref -> " << it->first << std::endl;
 
+				it++;
+				std::cout << "iterator begin ++ deref -> " << it->first << std::endl;
+				it++;
+				std::cout << "iterator begin ++ deref -> " << it->first << std::endl;
+				it++;
+				std::cout << "iterator begin ++ deref -> " << it->first << std::endl;
+				it++;
+				std::cout << "iterator begin ++ deref -> " << it->first << std::endl;
+				it++;
+				std::cout << "iterator begin ++ deref -> " << it->first << std::endl;
+
+				iterator ite = end();
+				std::cout << "iterator deref -> " << ite->first << std::endl;
 			}
 
 
@@ -171,10 +183,10 @@ namespace ft	{
 
 			~map( void )	{
 
-				// if (_size() > 0)
-					clearObject();
-
 				if (DEBUG_MODE >= 1) std::cout << "DESTRUCTOR --> " << __func__ << std::endl;
+				// if (_size() > 0)
+				if (_size > 0)
+					clearObject();
 			}
 
 /******************************************************************************.
@@ -216,8 +228,8 @@ namespace ft	{
 						std::cout << __func__ << ": parent " << node->parent << std::endl;
 						std::cout << __func__ << ": left   " << node->left << std::endl;
 						std::cout << __func__ << ": right  " << node->right << std::endl;
-						std::cout << __func__ << ": key    " << node->pair->first << std::endl;
-						std::cout << __func__ << ": data   " << node->pair->second << std::endl;
+						std::cout << __func__ << ": key    " << node->item->first << std::endl;
+						std::cout << __func__ << ": data   " << node->item->second << std::endl;
 						std::cout << std::endl;
 					}
 					else
@@ -240,14 +252,14 @@ namespace ft	{
 // 			size_type
 // 			_size( void ) const 		{ return (this->tail - this->_head); }
 
-			// iterator
-			// begin( void ) 			{ return (this->getFarLeft(this->_head)); }
+			iterator
+			begin( void ) 			{ return (getFarLeft(_head)); }
 
 // 			const_iterator
 // 			begin( void ) const		{ return (this->_head); }
 
-			// iterator
-			// end( void ) 	 		{ return (this->getFarRight(this->_head)); }
+			iterator
+			end( void ) 	 		{ return (getFarRight(_head)); }
 
 // 			const_iterator
 // 			end( void ) const 		{ return (this->tail); }
@@ -473,30 +485,32 @@ namespace ft	{
  		private:
 
 			map_node*
-			btree_create_node(key_type k, mapped_type val)	{
+			btree_create_node(map_node* parent, key_type k, mapped_type val)	{
 
 				map_node*	newNode = _allocNode.allocate(1);
 				_allocNode.construct(newNode, map_node());
-				newNode->pair = _allocPair.allocate(1);
-				_allocPair.construct(newNode->pair, value_type(k, val));
+				newNode->item = _allocPair.allocate(1);
+				_allocPair.construct(newNode->item, value_type(k, val));
+				newNode->parent = parent;
 				return (newNode);
 			}
 
 			void
-			btree_insert_data(map_node **root, value_type pairSrc)	{
+			btree_insert_data(map_node* parent, map_node **root, value_type pairSrc)	{
 
 				map_node* tree = *root;
 
 				if (*root != NULL)	{
-					if (_comp(pairSrc.first, tree->pair->first) == true)
-						btree_insert_data(&tree->left, pairSrc);
-					else if (pairSrc.first != tree->pair->first)
-						btree_insert_data(&tree->right, pairSrc);
+					if (_comp(pairSrc.first, tree->item->first) == true)
+						btree_insert_data(tree, &tree->left, pairSrc);
+					else if (pairSrc.first != tree->item->first)
+						btree_insert_data(tree, &tree->right, pairSrc);
 					else
 						return;
 				}
 				else	{
-					*root = btree_create_node(pairSrc.first, pairSrc.second);
+					*root = btree_create_node(parent, pairSrc.first, pairSrc.second);
+					incSize();
 				}
 			}
 
@@ -505,7 +519,7 @@ namespace ft	{
 
 				if (root == NULL)
 					return;
-				applyf(root->pair);
+				applyf(root->item);
 				btree_apply_item_prefix(root->left, applyf);
 				btree_apply_item_prefix(root->right, applyf);
 			}
@@ -517,7 +531,7 @@ namespace ft	{
 				if (root == NULL)
 					return;
 				btree_apply_item_prefix(root->left, applyf);
-				applyf(root->pair);
+				applyf(root->item);
 				btree_apply_item_prefix(root->right, applyf);
 			}
 
@@ -528,7 +542,7 @@ namespace ft	{
 					return;
 				btree_apply_item_prefix(root->left, applyf);
 				btree_apply_item_prefix(root->right, applyf);
-				applyf(root->pair);
+				applyf(root->item);
 			}
 
 			void
@@ -568,8 +582,8 @@ namespace ft	{
 				value_type*		foundTarget = NULL;
 				if (root != NULL && targetPair != NULL)	{
 					foundTarget = btree_search_pair(root->left. targetPair);
-					if (_comp(root->pair.first, targetPair->first) == 0)
-						return (root->pair);
+					if (_comp(root->item.first, targetPair->first) == 0)
+						return (root->item);
 					foundTarget = btree_search_pair(root->left. targetPair);
 				}
 				return (foundTarget);
@@ -594,7 +608,45 @@ namespace ft	{
 // }
 
 
+			map_node*
+			getFarLeft( map_node* cursor )	{
 
+				while (cursor != NULL && cursor->left != NULL)
+					cursor = cursor->left;
+				return (cursor);
+			}
+
+			map_node*
+			getFarRight( map_node* cursor )	{
+
+				while (cursor != NULL && cursor->right != NULL)
+					cursor = cursor->right;
+				return (cursor);
+			}
+
+
+			// bool
+			// isRightEligible(pair_type& existingPair, pair_type& newPair)	{
+			// 	return (comp(existingPair.first, newPair.first));
+			// }
+
+			// bool
+			// isRightEligible(Key& existingKey, Key& newKey)	{
+			// 	return (comp(existingKey, newKey));
+			// }
+
+			// bool
+			// isEqualKey(Key& existingKey, Key& newKey)	{
+			// 	return (comp(existingKey, newKey) == false
+			// 	&& comp(newKey, existingKey) == false);
+			// }
+
+
+			size_t
+			incSize( void ) { return(++_size); }
+
+			size_t
+			decSize( void ) { return(--_size); }
 
 
 
@@ -775,22 +827,20 @@ namespace ft	{
 			clearObject( void )	{
 
 				if (DEBUG_MODE >= 3) std::cout << __func__ << std::endl;
-				btree_apply_node_suffix(_head, freeNode);
+				freeAllNodes(_head);
 			}
 
-// 'void (*)(ft::map<const int, float, std::less<const int>, std::allocator<ft::pair<const int, float> >
-//       >::map_node *)' with an rvalue of type
-// 'void (ft::map<const int, float, std::less<const int>, std::allocator<ft::pair<const int, float> > >::*)(ft::map<const int, float,
-//       std::less<const int>, std::allocator<ft::pair<const int, float> > >::map_node *)'
-
 			void
-			freeNode( map_node* node )	{
+			freeAllNodes( map_node* node )	{
 
-				(void)node;
-				// _allocPair.detroy(node->pair);
-				// _allocPair.deallocate(node->pair, 1);
-				// _allocNode.destroy(node);
-				// _allocNode.deallocate(node, 1);
+				if (node == NULL)
+					return;
+				freeAllNodes(node->left);
+				freeAllNodes(node->right);
+				_allocPair.destroy(node->item);
+				_allocPair.deallocate(node->item, 1);
+				_allocNode.destroy(node);
+				_allocNode.deallocate(node, 1);
 			}
 
 // 			/**

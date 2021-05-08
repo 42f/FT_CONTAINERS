@@ -18,8 +18,8 @@ test_map_instantiation( void )	{
 	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " ~~~~~~~~~~~" << RESET_COLOR << std::endl;
 	std::cout << TITLE << "~~~~ To see constructor calls, compile with " << RESET_COLOR << "-> make debug_mode=1 re f "<< std::endl;
 
-		std::map<const int, float>	std_c0;
-		ft::map<const int, float>	ft_c0;
+		std::map<int, float>	std_c0;
+		ft::map<int, float>	ft_c0;
 
 		// ft::pair<const int, float>	ft_p0( 3, 1 );
 		// ft::pair<const int, float>	ft_p1( 2, 2 );

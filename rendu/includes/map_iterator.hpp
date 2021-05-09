@@ -35,9 +35,9 @@ namespace ft	{
 
 			typedef ptrdiff_t								distance;
 
-			// mapIterator( void ) : _ptr(NULL) {
-			// 	if (DEBUG_MODE >= 1) std::cout << __func__ << " DFLT " << _ptr << std::endl;
-			// }
+			mapIterator( void ) : _ptr(NULL) {
+				if (DEBUG_MODE >= 1) std::cout << __func__ << " DFLT " << _ptr << std::endl;
+			}
 			mapIterator(map_node* src) : _ptr(src), _comp(Compare()) {
 				if (DEBUG_MODE >= 1) std::cout << __func__ << " COPY " << _ptr << std::endl;
 			}
@@ -54,10 +54,20 @@ namespace ft	{
 				_ptr = cursor;
 			}
 
+			void
+			getPreviousBranch( void )	{
+
+				Key				startKey = _ptr->item->first;
+				map_node_ptr	cursor = _ptr->parent;
+
+				while (cursor != NULL && _comp(startKey, cursor->item->first) == true)
+					cursor = cursor->parent;
+				_ptr = cursor;
+			}
+
 
 			iterator&
 			operator++( void ) {
-
 
 				if (isLeaf(_ptr) == true)	{
 					if (_ptr == _ptr->parent->left)
@@ -81,18 +91,30 @@ namespace ft	{
 				return tmp;
 			}
 
-			// iterator&
-			// operator--( void ) {
-			// 	_ptr--;
-			// 	return *this;
-			// }
+			iterator&
+			operator--( void ) {
 
-			// iterator
-			// operator--( int ) {
-			// 	iterator tmp(*this);
-			// 	operator--();
-			// 	return tmp;
-			// }
+				if (isLeaf(_ptr) == true)	{
+					if (_ptr == _ptr->parent->right)
+						_ptr = _ptr->parent;
+					else
+						getPreviousBranch();
+				}
+				else	{
+					if (_ptr->left != NULL)
+						_ptr = getFarRight(_ptr->left);
+					else
+						getPreviousBranch();
+				}
+				return *this;
+			}
+
+			iterator
+			operator--( int ) {
+				iterator tmp(*this);
+				operator--();
+				return tmp;
+			}
 
 			// distance
 			// operator- ( iterator rhs ) { return this->_ptr - rhs._ptr; }
@@ -163,11 +185,14 @@ namespace ft	{
 			pointer
 			operator->()				{ return (_ptr->item); }
 
+			const_pointer
+			operator->()	const		{ return (_ptr->item); }
+
 			reference
-			operator*()					{ return (_ptr->item); }
+			operator*()					{ return (*(_ptr->item)); }
 
 			const_reference
-			operator*()	const			{ return (_ptr->item); }
+			operator*()	const			{ return (*(_ptr->item)); }
 
 			bool
 			isLeaf(map_node_ptr node)	{

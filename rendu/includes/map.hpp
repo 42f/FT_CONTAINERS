@@ -65,7 +65,7 @@ namespace ft	{
 
 			// typedef mapIterator<ft::pair<const Key, T> >	iterator;
 			typedef mapIterator<Key, T, Compare, map_node>	iterator;
-			// typedef const mapIterator<T>					const_iterator;
+			typedef const mapIterator<Key, T, Compare, map_node>	const_iterator;
 			// typedef std::reverse_iterator<iterator> 		reverse_iterator;
 			// typedef const reverse_iterator				const_reverse_iterator;
 
@@ -129,18 +129,29 @@ namespace ft	{
 				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> DEFAULT explicit " << __func__ << std::endl;
 
 				btree_insert_data(NULL, &_head, value_type(23, 99));
-				btree_insert_data(NULL, &_head, value_type(103, 99));
 				btree_insert_data(NULL, &_head, value_type(42, 99));
 				btree_insert_data(NULL, &_head, value_type(43, 99));
 				btree_insert_data(NULL, &_head, value_type(22, 99));
 				btree_insert_data(NULL, &_head, value_type(21, 99));
+				btree_insert_data(NULL, &_head, value_type(103, 99));
 				debugPrintTree(_head);
 
 				iterator it = begin();
+				const iterator itb = it;
+
+				std::cout << "deref ft " << (*itb).first << std::endl;
+				if (!(itb != it))
+					std::cout << "it == itb" << std::endl;
+				if (itb == it)
+					std::cout << "it == itb" << std::endl;
 				std::cout << "iterator deref -> " << it->first << std::endl;
 
 				it++;
 				std::cout << "iterator begin ++ deref -> " << it->first << std::endl;
+				if (!(itb == it))
+					std::cout << "it != itb" << std::endl;
+				if (itb != it)
+					std::cout << "it != itb" << std::endl;
 				it++;
 				std::cout << "iterator begin ++ deref -> " << it->first << std::endl;
 				it++;
@@ -148,6 +159,17 @@ namespace ft	{
 				it++;
 				std::cout << "iterator begin ++ deref -> " << it->first << std::endl;
 				it++;
+				std::cout << "iterator begin ++ deref -> " << it->first << std::endl;
+
+				it--;
+				std::cout << "iterator begin ++ deref -> " << it->first << std::endl;
+				it--;
+				std::cout << "iterator begin ++ deref -> " << it->first << std::endl;
+				it--;
+				std::cout << "iterator begin ++ deref -> " << it->first << std::endl;
+				it--;
+				std::cout << "iterator begin ++ deref -> " << it->first << std::endl;
+				it--;
 				std::cout << "iterator begin ++ deref -> " << it->first << std::endl;
 
 				iterator ite = end();

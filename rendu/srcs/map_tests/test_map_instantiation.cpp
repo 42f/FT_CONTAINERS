@@ -30,8 +30,7 @@ test_map_instantiation( void )	{
 
 		// std::cout << "ret c: " << ret.first->first << std::endl;
 
-		ft::map<int, float>	ft_c0;
-		ft::map<int, float>	ft_c1;
+		ft::map<int, float>				ft_c0;
 
 		ft_c0.insert(ft::pair<int, float>(42, 11));
 		ft_c0.insert(ft::pair<int, float>(2, 11));
@@ -40,13 +39,13 @@ test_map_instantiation( void )	{
 		ft_c0.insert(ft::pair<int, float>(5, 11));
 		ft_c0.insert(ft::pair<int, float>(52, 11));
 
-		ft_c1.insert(ft_c0.begin(), ft_c0.end());
+		ft::map<int, float>::iterator	it = ft_c0.begin();
 
-std::cout << "C0---------" << std::endl;
 		ft_c0.debugPrintTree();
-std::cout << "C1---------" << std::endl;
-		ft_c1.debugPrintTree();
-
+		for (int i = 0; i < 7; i++)	{
+			std::cout << "it begin + " << i << " -> " << it._ptr << std::endl;
+			it++;
+		}
 		// ft::pair<const int, float>	ft_p0( 3, 1 );
 		// ft::pair<const int, float>	ft_p1( 2, 2 );
 		// ft::pair<const int, float>	ft_p2( -1, 3 );

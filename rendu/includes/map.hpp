@@ -45,10 +45,11 @@ namespace ft	{
 .******************************************************************************.
 .******************************************************************************/
 
-
 		private:
 			struct	map_node;
 		public:
+			// friend class mapIterator<Key, T, Compare, map_node>;
+
 			typedef Key										key_type;
 			typedef T										mapped_type;
 			typedef ft::pair<const Key, T>					value_type;
@@ -119,49 +120,52 @@ namespace ft	{
 			 * @brief Default Constructor
 			*/
 			explicit
-			map( const Compare& _comp = key_compare(),
+			map( const Compare& comp = key_compare(),
 			const allocator_type & userAlloc = allocator_type() )	: 	_head(NULL),
+																		_dumbNode(NULL),
 																		_size(0),
 																		_allocNode(userAlloc),
 																		_allocPair(userAlloc),
-																		_comp(_comp)				{
+																		_comp(comp)				{
 
 				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> DEFAULT explicit " << __func__ << std::endl;
-
-
-
-				// debugPrintTree(_head);
 			}
 
 
 			/**
 			 * @brief Range Constructor
 			*/
-			// template <class InputIterator>
-			// map (InputIterator first, InputIterator last,
-			// 	const key_compare& _comp = key_compare(),
-			// 	const allocator_type& userAlloc = allocator_type() )
-			// 	 : btree(_comp, userAlloc)	{
+			template <class InputIterator>
+			map (InputIterator first, InputIterator last,
+				const key_compare& comp = key_compare(),
+				const allocator_type& userAlloc = allocator_type() ) :	_head(NULL),
+																		_dumbNode(NULL),
+																		_size(0),
+																		_allocNode(userAlloc),
+																		_allocPair(userAlloc),
+																		_comp(comp)				{
 
-			// 	if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> range pre dispatcher ! " << __func__ << std::endl;
+				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> range pre dispatcher ! " << __func__ << std::endl;
 
-			// 	iterator cursor = first;
-			// 	while (cursor != last)	{
-			// 		cursor++;
-			// 	}
-			// 	// typename std::__is_integer<InputIterator>::__type	integer;
-			// 	// map_constructor_dispatch(first, last, userAlloc, integer);
-			// }
+				insert(first, last);
+				// typename std::__is_integer<InputIterator>::__type	integer;
+				// map_constructor_dispatch(first, last, userAlloc, integer);
+			}
 
-			// /**
-			//  * @brief Copy Constructor
-			// */
-			// explicit map( map const & src ) : btree(src._size()) {
+			/**
+			 * @brief Copy Constructor
+			*/
+			explicit map( map const & src ) :	_head(NULL),
+												_dumbNode(NULL),
+												_size(0),
+												_allocNode(src._allocNode),
+												_allocPair(src._allocPair),
+												_comp(src._comp)				{
 
-			// 	if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> copy " << __func__ << std::endl;
+				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> copy " << __func__ << std::endl;
 
-			// 	fillmap(src.begin(), src.end());
-			// }
+				insert(src.begin(), src.end());
+			}
 
 
 			~map( void )	{
@@ -180,6 +184,7 @@ namespace ft	{
 
 			private:
 				map_node*				_head;
+				map_node*				_dumbNode;
 				size_t					_size;
 				_node_allocator_type 	_allocNode;
 				allocator_type 			_allocPair;
@@ -209,9 +214,6 @@ namespace ft	{
 					for(it; it != ite; it++)
 						debugPrintNode(it._ptr);
 					debugPrintNode(it._ptr);
-					std::cout << "***********************************" << std::endl;
-					// (void)node;
-					btree_apply_node_infix(_head, debugPrintNode);
 					std::cout << "***********************************" << std::endl;
 				}
 
@@ -266,14 +268,14 @@ namespace ft	{
 			iterator
 			begin( void ) 			{ return (getFarLeft(_head)); }
 
-// 			const_iterator
-// 			begin( void ) const		{ return (this->_head); }
+			const_iterator
+			begin( void ) const		{ return (getFarLeft(_head)); }
 
 			iterator
 			end( void ) 	 		{ return (getFarRight(_head)); }
 
-// 			const_iterator
-// 			end( void ) const 		{ return (this->tail); }
+			const_iterator
+			end( void ) const 		{ return (getFarRight(_head)); }
 
 // 			reverse_iterator
 // 			rbegin( void ) 			{ return reverse_iterator(end()); }
@@ -287,17 +289,17 @@ namespace ft	{
 // 			const_reverse_iterator
 // 			rend( void ) const 		{ return reverse_iterator(begin()); }
 
-// 			reference
-// 			front( void ) 			{ return (*(this->_head)); }
+			reference
+			front( void ) 			{ return (*(begin())); }
 
-// 			const_reference
-// 			front( void ) const		{ return (*(this->_head)); }
+			const_reference
+			front( void ) const		{ return (*(begin())); }
 
-// 			reference
-// 			back( void ) 	 		{ return (*(this->tail - 1)); }
+			reference
+			back( void ) 	 		{ return (*(--end())); }
 
-// 			const_reference
-// 			back( void ) const 		{ return (*(this->tail - 1)); }
+			const_reference
+			back( void ) const 		{ return (*(--end())); }
 
 // 			size_type
 // 			capacity( void ) const	{ return (this->tailStorage - this->_head); }
@@ -349,6 +351,23 @@ namespace ft	{
  			void
 			insert (InputIterator first, InputIterator last)	{
 
+				InputIterator	cursor = first;
+				size_t			size = 0;
+
+				for (cursor; cursor != last; cursor++)				// draft improvement to balance tree
+					size++;
+				if (size > 3)	{
+					cursor = first;
+					for (size_t i = 0; i < size / 2; i++)
+						cursor++;
+					insert(*cursor);
+					for (size_t i = 0; i < size / 4; i++)
+						cursor++;
+					insert(*cursor);
+					for (size_t i = 0; i < size / 2; i--)
+						cursor--;
+					insert(*cursor);
+				}
 				iterator	lastInsert = insert(*first).first;
 				first++;
 				for (first; first != last; first++)
@@ -499,6 +518,28 @@ namespace ft	{
 
  		private:
 
+			void
+			btree_update_dumbNode( map_node* node )	{
+				if (_dumbNode == NULL)
+					btree_init_dumbNode();
+				if (node == getFarLeft(_head))
+					_dumbNode->left = node;
+				if (node == getFarRight(_head))
+					_dumbNode->right = node;
+				if (DEBUG_MODE >= 2) std::cout << __func__ << "_DUMBNODE HERE:" << std::endl;
+				std::cout << "_dumbNode, left: " << _dumbNode->left << std::endl;
+				std::cout << "_dumbNode, right: " << _dumbNode->right << std::endl;
+			}
+
+			void
+			btree_init_dumbNode( void )	{
+
+				if (_dumbNode == NULL)	{
+					_dumbNode = _allocNode.allocate(1);
+					_allocNode.construct(_dumbNode, map_node());
+				}
+			}
+
 			map_node*
 			btree_create_node(map_node* parent, key_type k, mapped_type val)	{
 
@@ -532,6 +573,7 @@ namespace ft	{
 				else	{
 					*root = btree_create_node(parent, pairSrc.first, pairSrc.second);
 					incSize();
+					btree_update_dumbNode(*root);
 					return (ft::pair<iterator, bool>(iterator(*root), true));
 				}
 			}
@@ -629,9 +671,8 @@ namespace ft	{
 
 // }
 
-
 			map_node*
-			getFarLeft( map_node* cursor )	{
+			getFarLeft( map_node* cursor ) const	{
 
 				while (cursor != NULL && cursor->left != NULL)
 					cursor = cursor->left;
@@ -639,7 +680,7 @@ namespace ft	{
 			}
 
 			map_node*
-			getFarRight( map_node* cursor )	{
+			getFarRight( map_node* cursor ) const	{
 
 				while (cursor != NULL && cursor->right != NULL)
 					cursor = cursor->right;

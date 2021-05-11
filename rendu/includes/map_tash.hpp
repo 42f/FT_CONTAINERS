@@ -113,7 +113,7 @@
 
 		public:      // TEST PURPOSE: remove !
 
-			pointer
+				pointer
 			getFarLeft( pointer cursor )	{
 
 				while (cursor != NULL && cursor->left != NULL)

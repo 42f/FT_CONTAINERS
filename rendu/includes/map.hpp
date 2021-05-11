@@ -126,54 +126,22 @@ namespace ft	{
 																		_allocPair(userAlloc),
 																		_comp(_comp)				{
 
-				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> DEFAULT explicit " << __func__ << std::endl;
+				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> DEFAULT explicit " << __func__ << std::endl;
 
-				btree_insert_data(NULL, &_head, value_type(23, 99));
-				btree_insert_data(NULL, &_head, value_type(42, 99));
-				btree_insert_data(NULL, &_head, value_type(43, 99));
-				btree_insert_data(NULL, &_head, value_type(22, 99));
-				btree_insert_data(NULL, &_head, value_type(21, 99));
-				btree_insert_data(NULL, &_head, value_type(103, 99));
+				insert(value_type(42, 99));
+				insert(value_type(21, 99));
+
+				ft::pair<iterator, bool> ret_0;
+				ret_0.first = insert(end(), value_type(20, 99));
+				std::cout << "ret_0: " << ret_0.first._ptr << " : " << ret_0.first->first << ", " << ret_0.first->second << " -- " << std::boolalpha<< ret_0.second << std::endl;
+
+				ft::pair<iterator, bool> ret_1;
+				ret_1.first = insert(end(), value_type(20, 11199));
+				std::cout << "ret_1: " << ret_1.first._ptr << " : " << ret_1.first->first << ", " << ret_1.first->second << " -- " << std::boolalpha<< ret_1.second << std::endl;
+
+				insert(value_type(45, 99));
+				// insert(end(), value_type(50, 99));
 				debugPrintTree(_head);
-
-				iterator it = begin();
-				const iterator itb = it;
-
-				std::cout << "deref ft " << (*itb).first << std::endl;
-				if (!(itb != it))
-					std::cout << "it == itb" << std::endl;
-				if (itb == it)
-					std::cout << "it == itb" << std::endl;
-				std::cout << "iterator deref -> " << it->first << std::endl;
-
-				it++;
-				std::cout << "iterator begin ++ deref -> " << it->first << std::endl;
-				if (!(itb == it))
-					std::cout << "it != itb" << std::endl;
-				if (itb != it)
-					std::cout << "it != itb" << std::endl;
-				it++;
-				std::cout << "iterator begin ++ deref -> " << it->first << std::endl;
-				it++;
-				std::cout << "iterator begin ++ deref -> " << it->first << std::endl;
-				it++;
-				std::cout << "iterator begin ++ deref -> " << it->first << std::endl;
-				it++;
-				std::cout << "iterator begin ++ deref -> " << it->first << std::endl;
-
-				it--;
-				std::cout << "iterator begin ++ deref -> " << it->first << std::endl;
-				it--;
-				std::cout << "iterator begin ++ deref -> " << it->first << std::endl;
-				it--;
-				std::cout << "iterator begin ++ deref -> " << it->first << std::endl;
-				it--;
-				std::cout << "iterator begin ++ deref -> " << it->first << std::endl;
-				it--;
-				std::cout << "iterator begin ++ deref -> " << it->first << std::endl;
-
-				iterator ite = end();
-				std::cout << "iterator deref -> " << ite->first << std::endl;
 			}
 
 
@@ -188,8 +156,12 @@ namespace ft	{
 
 			// 	if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> range pre dispatcher ! " << __func__ << std::endl;
 
-			// 	typename std::__is_integer<InputIterator>::__type	integer;
-			// 	map_constructor_dispatch(first, last, userAlloc, integer);
+			// 	iterator cursor = first;
+			// 	while (cursor != last)	{
+			// 		cursor++;
+			// 	}
+			// 	// typename std::__is_integer<InputIterator>::__type	integer;
+			// 	// map_constructor_dispatch(first, last, userAlloc, integer);
 			// }
 
 			// /**
@@ -237,6 +209,10 @@ namespace ft	{
 					std::cout << "***********************************" << std::endl;
 					std::cout << __func__ << "_head is pointing to:  " << _head << std::endl;
 					std::cout << __func__ << "Printing tree of size  " << _size << std::endl;
+					// iterator it;
+					// for(it = begin(); it != end(); it++)
+					// 	debugPrintNode(it._ptr);
+					// debugPrintNode(it._ptr);
 					btree_apply_node_infix(node, debugPrintNode);
 				}
 
@@ -322,44 +298,25 @@ namespace ft	{
 // 			void
 // 			clear( void )			{ erase(begin(), end()); }
 
-// 			/**
-// 			 * @brief insert single element
-// 			*/
-// 			iterator insert(iterator position, const mapped_type& val)	{
+			/**
+			 * @brief insert single element
+			*/
+			ft::pair<iterator, bool>
+			insert(const value_type& val)	{
 
-// 				difference_type indexPos = position - begin();
-// 				insert(position, 1, val);
-// 				return begin() + indexPos; 		// to change
-// 			}
+				return(btree_insert_data(NULL, &_head, val));
+			}
 
-// 			/**
-// 			 * @brief insert n elements of val
-// 			*/
-// 			void insert (iterator position, size_type n, const mapped_type& val)	{
+			/**
+			 * @brief insert single element with hint to determine a closer
+			 * insertion point
+			*/
+			iterator
+			insert (iterator position, const value_type& val)	{
 
-// 				if (capacity() == 0)	{
-// 					this->initStorage(1);
-// 					position = begin();
-// 				}
-
-// 				difference_type indexPos = position - begin();
-// 				if (_size() + n >= capacity())	{
-// 					doReserve(capacity() + n + (capacity()>>1));
-// 				}
-
-// 				if (begin() + indexPos != end())	{
-// 					if (_size() > 1)	{
-// 						memMoveRight(begin() + indexPos, end(), n);
-// 					}
-// 					destroyObjects(this->_head + indexPos, _size() - indexPos);
-// 					this->tail += n;
-// 					constructObjects(this->_head + indexPos, n, val);
-// 				}
-// 				else {
-// 					constructObjects(this->tail, n, val);
-// 					this->tail += n;
-// 				}
-// 			}
+				ft::pair<iterator, bool> ret = btree_insert_data(position._ptr, &position._ptr, val);
+				return (ret.first);
+			}
 
 
 // 			reference
@@ -517,26 +474,26 @@ namespace ft	{
 				return (newNode);
 			}
 
-			void
+			ft::pair<iterator, bool>
 			btree_insert_data(map_node* parent, map_node **root, value_type pairSrc)	{
 
-				map_node* tree = *root;
-
 				if (*root != NULL)	{
+					map_node* tree = *root;
 					if (_comp(pairSrc.first, tree->item->first) == true)
-						btree_insert_data(tree, &tree->left, pairSrc);
+						return (btree_insert_data(tree, &tree->left, pairSrc));
 					else if (pairSrc.first != tree->item->first)
-						btree_insert_data(tree, &tree->right, pairSrc);
+						return (btree_insert_data(tree, &tree->right, pairSrc));
 					else
-						return;
+						return (ft::pair<iterator, bool>(iterator(*root), false));
 				}
 				else	{
 					*root = btree_create_node(parent, pairSrc.first, pairSrc.second);
 					incSize();
+					return (ft::pair<iterator, bool>(iterator(*root), true));
 				}
 			}
 
-			void
+		void
 			btree_apply_item_prefix(map_node *root, void (*applyf)(value_type*))	{
 
 				if (root == NULL)
@@ -665,10 +622,10 @@ namespace ft	{
 
 
 			size_t
-			incSize( void ) { return(++_size); }
+			incSize( size_t inc = 1 ) { return(_size + inc); }
 
 			size_t
-			decSize( void ) { return(--_size); }
+			decSize( size_t inc = 1 ) { return(_size - inc); }
 
 
 

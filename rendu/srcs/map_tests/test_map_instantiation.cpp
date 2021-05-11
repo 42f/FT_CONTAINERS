@@ -19,11 +19,9 @@ test_map_instantiation( void )	{
 	std::cout << TITLE << "~~~~ To see constructor calls, compile with " << RESET_COLOR << "-> make debug_mode=1 re f "<< std::endl;
 
 		std::map<int, float>	std_c0;
-		std_c0[42] = 21;
-		const std::map<int, float>::iterator	it_std_c0 = std_c0.begin();
+		// std::pair<std::map<int, float>::iterator, bool> ret = std_c0.insert(std::pair<int, float>(42, 101));
 
-
-		std::cout << "std deref " << (*it_std_c0).first << std::endl;
+		// std::cout << "ret c: " << ret.first->first << std::endl;
 
 		ft::map<int, float>	ft_c0;
 

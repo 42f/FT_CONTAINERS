@@ -36,10 +36,10 @@ namespace ft	{
 			typedef ptrdiff_t								distance;
 
 			mapIterator( void ) : _ptr(NULL) {
-				if (DEBUG_MODE >= 2) std::cout << __func__ << " DFLT " << _ptr << std::endl;
+				// if (DEBUG_MODE >= 2) std::cout << __func__ << " DFLT " << _ptr << std::endl;
 			}
 			mapIterator(map_node* src) : _ptr(src), _comp(Compare()) {
-				if (DEBUG_MODE >= 2) std::cout << __func__ << " COPY " << _ptr << std::endl;
+				// if (DEBUG_MODE >= 2) std::cout << __func__ << " COPY " << _ptr << std::endl;
 			}
 			mapIterator(const iterator& itSrc) : _ptr(itSrc._ptr) {}
 

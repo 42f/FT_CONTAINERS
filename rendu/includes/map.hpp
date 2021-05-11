@@ -128,20 +128,9 @@ namespace ft	{
 
 				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> DEFAULT explicit " << __func__ << std::endl;
 
-				insert(value_type(42, 99));
-				insert(value_type(21, 99));
 
-				ft::pair<iterator, bool> ret_0;
-				ret_0.first = insert(end(), value_type(20, 99));
-				std::cout << "ret_0: " << ret_0.first._ptr << " : " << ret_0.first->first << ", " << ret_0.first->second << " -- " << std::boolalpha<< ret_0.second << std::endl;
 
-				ft::pair<iterator, bool> ret_1;
-				ret_1.first = insert(end(), value_type(20, 11199));
-				std::cout << "ret_1: " << ret_1.first._ptr << " : " << ret_1.first->first << ", " << ret_1.first->second << " -- " << std::boolalpha<< ret_1.second << std::endl;
-
-				insert(value_type(45, 99));
-				// insert(end(), value_type(50, 99));
-				debugPrintTree(_head);
+				// debugPrintTree(_head);
 			}
 
 
@@ -202,32 +191,55 @@ namespace ft	{
 .******************************************************************************.
 .******************************************************************************/
 
-			private:
+			// private:
+			public:
 				void
-				debugPrintTree( map_node* node )	{
+				debugPrintTree()	{
 
+					if (DEBUG_MODE < 2)
+						return ;
 					std::cout << "***********************************" << std::endl;
+
 					std::cout << __func__ << "_head is pointing to:  " << _head << std::endl;
 					std::cout << __func__ << "Printing tree of size  " << _size << std::endl;
-					// iterator it;
-					// for(it = begin(); it != end(); it++)
-					// 	debugPrintNode(it._ptr);
-					// debugPrintNode(it._ptr);
-					btree_apply_node_infix(node, debugPrintNode);
+
+					iterator it = begin();
+					iterator ite = end();
+
+					for(it; it != ite; it++)
+						debugPrintNode(it._ptr);
+					debugPrintNode(it._ptr);
+					std::cout << "***********************************" << std::endl;
+					// (void)node;
+					btree_apply_node_infix(_head, debugPrintNode);
+					std::cout << "***********************************" << std::endl;
 				}
 
 				static void
 				debugPrintNode( map_node* node )	{
 
-					if (DEBUG_MODE >= 2 && node != NULL)	{
+					if (DEBUG_MODE < 2)
+						return ;
+					if (node != NULL)	{
 						std::cout << std::endl;
 						std::cout << __func__ << std::endl;
 						std::cout << __func__ << ": node   " << node << std::endl;
-						std::cout << __func__ << ": parent " << node->parent << std::endl;
-						std::cout << __func__ << ": left   " << node->left << std::endl;
-						std::cout << __func__ << ": right  " << node->right << std::endl;
-						std::cout << __func__ << ": key    " << node->item->first << std::endl;
-						std::cout << __func__ << ": data   " << node->item->second << std::endl;
+						std::cout << __func__ << ":---- KEY    " << node->item->first << std::endl;
+						std::cout << __func__ << ":---- ITEM   " << node->item->second << std::endl;
+						std::cout << __func__ << ": parent " << node->parent;
+						if (node->parent != NULL)
+							std::cout << "(" << node->parent->item->first << ";" << node->parent->item->second << ")" << std::endl;
+						else
+							std::cout << "--> THIS NODE IS _HEAD" << std::endl;
+
+						std::cout << __func__ << ": left   " << node->left;
+						if (node->left != NULL)
+							std::cout << "(" << node->left->item->first << ";" << node->left->item->second << ")";
+						std::cout << std::endl;
+						std::cout << __func__ << ": right  " << node->right;
+						if (node->right != NULL)
+							std::cout << "(" << node->right->item->first << ";" << node->right->item->second << ")";
+						std::cout << std::endl;
 						std::cout << std::endl;
 					}
 					else
@@ -241,6 +253,7 @@ namespace ft	{
 .******************************************************************************.
 .******************************************************************************/
 
+		public:
 // 			size_type
 // 			max_size( void ) const	{ return this->_alloc.max_size();  }
 
@@ -314,10 +327,33 @@ namespace ft	{
 			iterator
 			insert (iterator position, const value_type& val)	{
 
-				ft::pair<iterator, bool> ret = btree_insert_data(position._ptr, &position._ptr, val);
+				if(position == NULL)
+					return (NULL);		// what to return ?
+
+				ft::pair<iterator, bool> ret;
+				if (position._ptr->parent != NULL
+					&& (_comp(position._ptr->parent->item->first, val.first) == true
+					|| _comp(val.first, position._ptr->parent->item->first) == true))
+						ret = btree_insert_data(NULL, &_head, val);
+				else
+					ret = btree_insert_data(position._ptr, &position._ptr, val);
 				return (ret.first);
 			}
 
+				/**
+				 * @brief Range insert from first to last element
+				*/
+
+				// to be improved with rebalanced nodes
+			template <class InputIterator>
+ 			void
+			insert (InputIterator first, InputIterator last)	{
+
+				iterator	lastInsert = insert(*first).first;
+				first++;
+				for (first; first != last; first++)
+					lastInsert = insert(lastInsert, *first);
+			}
 
 // 			reference
 // 			at (size_type n)	{
@@ -474,6 +510,13 @@ namespace ft	{
 				return (newNode);
 			}
 
+				/**
+				 * @brief Actual function inserting new data in the tree.
+				 * @param parent shall be NULL to insert anywhere from the head.
+				 * @param root starting point in the tree to look for a suitable potision.
+				 * @param pairSrc pair to be inserted.
+				*/
+
 			ft::pair<iterator, bool>
 			btree_insert_data(map_node* parent, map_node **root, value_type pairSrc)	{
 
@@ -622,10 +665,10 @@ namespace ft	{
 
 
 			size_t
-			incSize( size_t inc = 1 ) { return(_size + inc); }
+			incSize( size_t inc = 1 ) { _size += inc; return(_size + inc); }
 
 			size_t
-			decSize( size_t inc = 1 ) { return(_size - inc); }
+			decSize( size_t inc = 1 ) { _size += inc; return(_size - inc); }
 
 
 

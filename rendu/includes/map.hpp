@@ -47,8 +47,10 @@ namespace ft	{
 
 		private:
 			struct	map_node;
+			class	map_iterator;
+
 		public:
-			// friend class mapIterator<Key, T, Compare, map_node>;
+			// friend class map_iterator<Key, T, Compare, map_node>;
 
 			typedef Key										key_type;
 			typedef T										mapped_type;
@@ -64,9 +66,8 @@ namespace ft	{
 			typedef typename Allocator::pointer				pointer;
 			typedef typename Allocator::const_pointer		const_pointer;
 
-			// typedef mapIterator<ft::pair<const Key, T> >	iterator;
-			typedef mapIterator<Key, T, Compare, map_node>	iterator;
-			typedef const mapIterator<Key, T, Compare, map_node>	const_iterator;
+			typedef map_iterator	iterator;
+			typedef const map_iterator	const_iterator;
 			// typedef std::reverse_iterator<iterator> 		reverse_iterator;
 			// typedef const reverse_iterator				const_reverse_iterator;
 
@@ -80,6 +81,180 @@ namespace ft	{
 .******************************************************************************.
 .******************************************************************************/
 
+		private:
+
+		class map_iterator	{
+
+				typedef	ft::pair<const Key, T>*					pointer;
+				typedef	ft::pair<const Key, T>&					reference;
+				typedef	const ft::pair<const Key, T>*			const_pointer;
+				typedef	const ft::pair<const Key, T>&			const_reference;
+
+				typedef map_node*								map_node_ptr;
+
+			public:
+
+				map_iterator( map_node* ptr = NULL, map_node* dumbNode = NULL,
+					const key_compare& comp = key_compare() ) :	_ptr(ptr),
+																_btreeDumdNode(dumbNode),
+																_comp(comp)		{}
+				map_iterator(const iterator& itSrc) :	_ptr(itSrc._ptr),
+														_btreeDumdNode(itSrc._btreeDumdNode),
+														_comp(itSrc._comp)		{}
+
+				iterator&
+				operator++( void ) {
+
+					if (_ptr == _btreeDumdNode)
+						_ptr = _btreeDumdNode->left;
+					else if (isLastNode(_ptr) == true)
+						_ptr = _btreeDumdNode;
+					else if (isLeaf(_ptr) == true)	{
+						if (_ptr == _ptr->parent->left)
+							_ptr = _ptr->parent;
+						else
+							getNextBranch();
+					}
+					else	{
+						if (_ptr->right != NULL)
+							_ptr = getFarLeft(_ptr->right);
+						else
+							getNextBranch();
+					}
+					return *this;
+				}
+
+				iterator
+				operator++( int ) {
+					iterator tmp(*this);
+					operator++();
+					return tmp;
+				}
+
+
+				iterator&
+				operator--( void ) {
+
+
+					if (_ptr == _btreeDumdNode)
+						_ptr = _btreeDumdNode->right;
+					else if (isFirstNode(_ptr) == true)
+						_ptr = _btreeDumdNode;
+					else if (isLeaf(_ptr) == true)	{
+						if (_ptr == _ptr->parent->right)
+							_ptr = _ptr->parent;
+						else
+							getPreviousBranch();
+					}
+					else	{
+						if (_ptr->left != NULL)
+							_ptr = getFarRight(_ptr->left);
+						else
+							getPreviousBranch();
+					}
+					return *this;
+				}
+
+				iterator
+				operator--( int ) {
+					iterator tmp(*this);
+					operator--();
+					return tmp;
+				}
+
+				bool
+				operator==(const iterator& rhs) const	{ return _ptr==rhs._ptr; }
+
+				bool
+				operator!=(const iterator& rhs) const	{ return _ptr!=rhs._ptr; }
+
+				bool
+				operator<(const iterator& rhs) const	{ return _ptr< rhs._ptr; }
+
+				pointer
+				operator->()				{ return (_ptr->item); }
+
+				const_pointer
+				operator->()	const		{ return (_ptr->item); }
+
+				reference
+				operator*()					{ return (*(_ptr->item)); }
+
+				const_reference
+				operator*()	const			{ return (*(_ptr->item)); }
+
+
+				/**
+				 * @brief Pointer holding the address of the iterator element.
+				*/
+				map_node_ptr		_ptr;
+				map_node_ptr		_btreeDumdNode;
+				Compare				_comp;
+
+			private:
+
+				map_node*
+				getFarLeft( map_node* cursor )	{
+
+					while (cursor != NULL && cursor->left != NULL)
+						cursor = cursor->left;
+					return (cursor);
+				}
+
+				map_node*
+				getFarRight( map_node* cursor )	{
+
+					while (cursor != NULL && cursor->right != NULL)
+						cursor = cursor->right;
+					return (cursor);
+				}
+
+				void
+				getNextBranch( void )	{
+
+					Key				startKey = _ptr->item->first;
+					map_node_ptr	cursor = _ptr->parent;
+
+					while (cursor != NULL && _comp(cursor->item->first, startKey) == true)
+						cursor = cursor->parent;
+					_ptr = cursor;
+				}
+
+				void
+				getPreviousBranch( void )	{
+
+					Key				startKey = _ptr->item->first;
+					map_node_ptr	cursor = _ptr->parent;
+
+					while (cursor != NULL && _comp(startKey, cursor->item->first) == true)
+						cursor = cursor->parent;
+					_ptr = cursor;
+				}
+
+				bool
+				isLeaf(map_node_ptr node)	{
+					return (node->left == NULL && node->right == NULL);
+				}
+
+				bool
+				isFirstNode( map_node* p )	{
+					return (p == _btreeDumdNode->left);
+				}
+
+				bool
+				isLastNode( map_node* p )	{
+					return (p == _btreeDumdNode->right);
+				}
+
+
+			}; //----------------- Class iterator
+
+			struct map_node	{
+				map_node*		left;
+				map_node*		parent;
+				map_node*		right;
+				value_type*		item;
+			};
 
 			class value_compare {
 
@@ -98,15 +273,6 @@ namespace ft	{
 
 					Compare				_comp;
 			};
-
-		private:
-			struct map_node	{
-				map_node*		left;
-				map_node*		parent;
-				map_node*		right;
-				value_type*		item;
-			};
-
 
 /******************************************************************************.
 .******************************************************************************.
@@ -128,7 +294,7 @@ namespace ft	{
 																		_allocPair(userAlloc),
 																		_comp(comp)				{
 
-				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> DEFAULT explicit " << __func__ << std::endl;
+				if (DEBUG_MODE >= 4) std::cout << "CONSTRUCTOR --> DEFAULT explicit " << __func__ << std::endl;
 			}
 
 
@@ -145,7 +311,7 @@ namespace ft	{
 																		_allocPair(userAlloc),
 																		_comp(comp)				{
 
-				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> range pre dispatcher ! " << __func__ << std::endl;
+				if (DEBUG_MODE >= 4) std::cout << "CONSTRUCTOR --> range pre dispatcher ! " << __func__ << std::endl;
 
 				insert(first, last);
 				// typename std::__is_integer<InputIterator>::__type	integer;
@@ -162,7 +328,7 @@ namespace ft	{
 												_allocPair(src._allocPair),
 												_comp(src._comp)				{
 
-				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> copy " << __func__ << std::endl;
+				if (DEBUG_MODE >= 4) std::cout << "CONSTRUCTOR --> copy " << __func__ << std::endl;
 
 				insert(src.begin(), src.end());
 			}
@@ -170,7 +336,7 @@ namespace ft	{
 
 			~map( void )	{
 
-				if (DEBUG_MODE >= 1) std::cout << "DESTRUCTOR --> " << __func__ << std::endl;
+				if (DEBUG_MODE >= 4) std::cout << "DESTRUCTOR --> " << __func__ << std::endl;
 				// if (_size() > 0)
 				if (_size > 0)
 					clearObject();
@@ -182,7 +348,7 @@ namespace ft	{
 .******************************************************************************.
 .******************************************************************************/
 
-			private:
+			protected:
 				map_node*				_head;
 				map_node*				_dumbNode;
 				size_t					_size;
@@ -208,12 +374,16 @@ namespace ft	{
 					std::cout << __func__ << "_head is pointing to:  " << _head << std::endl;
 					std::cout << __func__ << "Printing tree of size  " << _size << std::endl;
 
+					std::cout << "****************ITERATORES*******************" << std::endl;
 					iterator it = begin();
-					iterator ite = end();
+					iterator ite = --end();
 
 					for(it; it != ite; it++)
 						debugPrintNode(it._ptr);
 					debugPrintNode(it._ptr);
+
+					std::cout << "*****************PREFIX******************" << std::endl;
+					btree_apply_node_prefix(_head, debugPrintNode);
 					std::cout << "***********************************" << std::endl;
 				}
 
@@ -226,8 +396,12 @@ namespace ft	{
 						std::cout << std::endl;
 						std::cout << __func__ << std::endl;
 						std::cout << __func__ << ": node   " << node << std::endl;
-						std::cout << __func__ << ":---- KEY    " << node->item->first << std::endl;
-						std::cout << __func__ << ":---- ITEM   " << node->item->second << std::endl;
+						if (node->item != NULL)	{
+							std::cout << __func__ << ":---- KEY    " << node->item->first << std::endl;
+							std::cout << __func__ << ":---- ITEM   " << node->item->second << std::endl;
+						}
+						else
+							std::cout << "NO ITEM" << std::endl;
 						std::cout << __func__ << ": parent " << node->parent;
 						if (node->parent != NULL)
 							std::cout << "(" << node->parent->item->first << ";" << node->parent->item->second << ")" << std::endl;
@@ -266,16 +440,20 @@ namespace ft	{
 // 			_size( void ) const 		{ return (this->tail - this->_head); }
 
 			iterator
-			begin( void ) 			{ return (getFarLeft(_head)); }
+			begin( void ) 			{ return (iterator(_dumbNode->left, _dumbNode, _comp)); }
+			// begin( void ) 			{ return (getFarLeft(_head)); }
 
 			const_iterator
-			begin( void ) const		{ return (getFarLeft(_head)); }
+			begin( void ) const		{ return (iterator(_dumbNode->left, _dumbNode, _comp)); }
+			// begin( void ) const		{ return (getFarLeft(_head)); }
 
 			iterator
-			end( void ) 	 		{ return (getFarRight(_head)); }
+			end( void ) 	 		{ return (iterator(_dumbNode->right, _dumbNode, _comp)); }
+			// end( void ) 	 		{ return (getFarRight(_head)); }
 
 			const_iterator
-			end( void ) const 		{ return (getFarRight(_head)); }
+			end( void ) const 		{ return (iterator(_dumbNode->right, _dumbNode, _comp)); }
+			// end( void ) const 		{ return (getFarRight(_head)); }
 
 // 			reverse_iterator
 // 			rbegin( void ) 			{ return reverse_iterator(end()); }
@@ -520,15 +698,18 @@ namespace ft	{
 
 			void
 			btree_update_dumbNode( map_node* node )	{
+				if (DEBUG_MODE >= 1) std::cout << __func__ << ":	 updating dumdNode" << std::endl;
+				std::cout << "BEFORE: " << std::endl;
+				debugPrintNode(_dumbNode);
 				if (_dumbNode == NULL)
 					btree_init_dumbNode();
 				if (node == getFarLeft(_head))
 					_dumbNode->left = node;
 				if (node == getFarRight(_head))
 					_dumbNode->right = node;
-				if (DEBUG_MODE >= 2) std::cout << __func__ << "_DUMBNODE HERE:" << std::endl;
-				std::cout << "_dumbNode, left: " << _dumbNode->left << std::endl;
-				std::cout << "_dumbNode, right: " << _dumbNode->right << std::endl;
+				std::cout << "AFTER: " << std::endl;
+				debugPrintNode(_dumbNode);
+				std::cout << "==================================== " << std::endl;
 			}
 
 			void
@@ -568,13 +749,13 @@ namespace ft	{
 					else if (pairSrc.first != tree->item->first)
 						return (btree_insert_data(tree, &tree->right, pairSrc));
 					else
-						return (ft::pair<iterator, bool>(iterator(*root), false));
+						return (ft::pair<iterator, bool>(iterator(*root, _dumbNode, _comp), false));
 				}
 				else	{
 					*root = btree_create_node(parent, pairSrc.first, pairSrc.second);
-					incSize();
 					btree_update_dumbNode(*root);
-					return (ft::pair<iterator, bool>(iterator(*root), true));
+					incSize();
+					return (ft::pair<iterator, bool>(iterator(*root, _dumbNode, _comp), true));
 				}
 			}
 

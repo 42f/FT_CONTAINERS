@@ -19,6 +19,25 @@ test_map_instantiation( void )	{
 	std::cout << TITLE << "~~~~ To see constructor calls, compile with " << RESET_COLOR << "-> make debug_mode=1 re f "<< std::endl;
 
 		std::map<int, float>	std_c0;
+		std::map<int, float>	std_c1;
+
+		// std_c0[1] = 42;
+		// std_c0[2] = 42;
+		// std_c0[4] = 42;
+		// std_c0[-1] = 42;
+		// std_c1[1] = 99;
+		// std_c1[2] = 99;
+		// std_c1[6] = 99;
+		// std_c1[-1] = 99;
+		// std::map<int, float>::iterator	it_std = std_c0.end();
+		// it_std--;
+		// std::cout << "it -> " << it_std->second << std::endl;
+		// it_std = std_c1.end();
+		// it_std--;
+		// std::cout << "it -> " << it_std->second << std::endl;
+
+
+
 		// std_c0.insert(std::pair<int, float>(1, 101));
 		// std_c0.insert(std::pair<int, float>(50, 101));
 		// std::pair<std::map<int, float>::iterator, bool> ret = std_c0.insert(std::pair<int, float>(42, 101));
@@ -33,19 +52,15 @@ test_map_instantiation( void )	{
 		ft::map<int, float>				ft_c0;
 
 		ft_c0.insert(ft::pair<int, float>(42, 11));
-		ft_c0.insert(ft::pair<int, float>(2, 11));
-		ft_c0.insert(ft::pair<int, float>(3, 11));
-		ft_c0.insert(ft::pair<int, float>(4, 11));
-		ft_c0.insert(ft::pair<int, float>(5, 11));
+		ft_c0.insert(ft::pair<int, float>(12, 11));
+		ft_c0.insert(ft::pair<int, float>(13, 11));
+		ft_c0.insert(ft::pair<int, float>(14, 11));
+		ft_c0.insert(ft::pair<int, float>(15, 11));
 		ft_c0.insert(ft::pair<int, float>(52, 11));
 
 		ft::map<int, float>::iterator	it = ft_c0.begin();
 
-		ft_c0.debugPrintTree();
-		for (int i = 0; i < 7; i++)	{
-			std::cout << "it begin + " << i << " -> " << it._ptr << std::endl;
-			it++;
-		}
+		// ft_c0.debugPrintTree();
 		// ft::pair<const int, float>	ft_p0( 3, 1 );
 		// ft::pair<const int, float>	ft_p1( 2, 2 );
 		// ft::pair<const int, float>	ft_p2( -1, 3 );

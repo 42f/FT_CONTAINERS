@@ -376,7 +376,7 @@ namespace ft	{
 
 					std::cout << "****************ITERATORES*******************" << std::endl;
 					iterator it = begin();
-					iterator ite = --end();
+					iterator ite = end();
 
 					for(it; it != ite; it++)
 						debugPrintNode(it._ptr);
@@ -398,7 +398,7 @@ namespace ft	{
 						std::cout << __func__ << ": node   " << node << std::endl;
 						if (node->item != NULL)	{
 							std::cout << __func__ << ":---- KEY    " << node->item->first << std::endl;
-							std::cout << __func__ << ":---- ITEM   " << node->item->second << std::endl;
+							std::cout << __func__ << ":---- VAL    " << node->item->second << std::endl;
 						}
 						else
 							std::cout << "NO ITEM" << std::endl;
@@ -698,18 +698,12 @@ namespace ft	{
 
 			void
 			btree_update_dumbNode( map_node* node )	{
-				if (DEBUG_MODE >= 1) std::cout << __func__ << ":	 updating dumdNode" << std::endl;
-				std::cout << "BEFORE: " << std::endl;
-				debugPrintNode(_dumbNode);
 				if (_dumbNode == NULL)
 					btree_init_dumbNode();
 				if (node == getFarLeft(_head))
 					_dumbNode->left = node;
 				if (node == getFarRight(_head))
 					_dumbNode->right = node;
-				std::cout << "AFTER: " << std::endl;
-				debugPrintNode(_dumbNode);
-				std::cout << "==================================== " << std::endl;
 			}
 
 			void
@@ -1072,6 +1066,13 @@ namespace ft	{
 
 				if (DEBUG_MODE >= 3) std::cout << __func__ << std::endl;
 				freeAllNodes(_head);
+				freeSingleNode(_dumbNode);
+			}
+
+			void
+			freeSingleNode( map_node* node)	{
+				_allocNode.destroy(node);
+				_allocNode.deallocate(node, 1);
 			}
 
 			void
@@ -1081,10 +1082,11 @@ namespace ft	{
 					return;
 				freeAllNodes(node->left);
 				freeAllNodes(node->right);
-				_allocPair.destroy(node->item);
-				_allocPair.deallocate(node->item, 1);
-				_allocNode.destroy(node);
-				_allocNode.deallocate(node, 1);
+				if (node->item != NULL)	{
+					_allocPair.destroy(node->item);
+					_allocPair.deallocate(node->item, 1);
+				}
+				freeSingleNode(node);
 			}
 
 // 			/**

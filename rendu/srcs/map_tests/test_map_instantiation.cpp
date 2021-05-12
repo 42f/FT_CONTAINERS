@@ -53,14 +53,16 @@ test_map_instantiation( void )	{
 
 		ft_c0.insert(ft::pair<int, float>(42, 11));
 		ft_c0.insert(ft::pair<int, float>(12, 11));
+		ft_c0.insert(ft::pair<int, float>(12, 22));
 		ft_c0.insert(ft::pair<int, float>(13, 11));
 		ft_c0.insert(ft::pair<int, float>(14, 11));
 		ft_c0.insert(ft::pair<int, float>(15, 11));
 		ft_c0.insert(ft::pair<int, float>(52, 11));
+		ft_c0.insert(ft::pair<int, float>(-52, 11));
 
 		ft::map<int, float>::iterator	it = ft_c0.begin();
 
-		// ft_c0.debugPrintTree();
+		ft_c0.debugPrintTree();
 		// ft::pair<const int, float>	ft_p0( 3, 1 );
 		// ft::pair<const int, float>	ft_p1( 2, 2 );
 		// ft::pair<const int, float>	ft_p2( -1, 3 );

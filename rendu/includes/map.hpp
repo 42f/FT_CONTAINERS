@@ -109,7 +109,7 @@ namespace ft	{
 						_ptr = _btreeDumdNode->left;
 					else if (isLastNode(_ptr) == true)
 						_ptr = _btreeDumdNode;
-					else if (isLeaf(_ptr) == true)	{
+					else if (map::isLeaf(_ptr) == true)	{
 						if (_ptr == _ptr->parent->left)
 							_ptr = _ptr->parent;
 						else
@@ -117,7 +117,7 @@ namespace ft	{
 					}
 					else	{
 						if (_ptr->right != NULL)
-							_ptr = getFarLeft(_ptr->right);
+							_ptr = map::getFarLeft(_ptr->right);
 						else
 							getNextBranch();
 					}
@@ -140,7 +140,7 @@ namespace ft	{
 						_ptr = _btreeDumdNode->right;
 					else if (isFirstNode(_ptr) == true)
 						_ptr = _btreeDumdNode;
-					else if (isLeaf(_ptr) == true)	{
+					else if (map::isLeaf(_ptr) == true)	{
 						if (_ptr == _ptr->parent->right)
 							_ptr = _ptr->parent;
 						else
@@ -148,7 +148,7 @@ namespace ft	{
 					}
 					else	{
 						if (_ptr->left != NULL)
-							_ptr = getFarRight(_ptr->left);
+							_ptr = map::getFarRight(_ptr->left);
 						else
 							getPreviousBranch();
 					}
@@ -193,22 +193,6 @@ namespace ft	{
 
 			private:
 
-				map_node*
-				getFarLeft( map_node* cursor )	{
-
-					while (cursor != NULL && cursor->left != NULL)
-						cursor = cursor->left;
-					return (cursor);
-				}
-
-				map_node*
-				getFarRight( map_node* cursor )	{
-
-					while (cursor != NULL && cursor->right != NULL)
-						cursor = cursor->right;
-					return (cursor);
-				}
-
 				void
 				getNextBranch( void )	{
 
@@ -229,11 +213,6 @@ namespace ft	{
 					while (cursor != NULL && _comp(startKey, cursor->item->first) == true)
 						cursor = cursor->parent;
 					_ptr = cursor;
-				}
-
-				bool
-				isLeaf(map_node_ptr node)	{
-					return (node->left == NULL && node->right == NULL);
 				}
 
 				bool
@@ -370,9 +349,13 @@ namespace ft	{
 					if (DEBUG_MODE < 2)
 						return ;
 					std::cout << "***********************************" << std::endl;
-
 					std::cout << __func__ << "_head is pointing to:  " << _head << std::endl;
-					std::cout << __func__ << "Printing tree of size  " << _size << std::endl;
+					std::cout << "_dumbNode is... : " << std::endl;
+					debugPrintNode(_dumbNode);
+					std::cout << "Printing tree of size  " << _size << std::endl;
+					std::cout << "*****************PREFIX******************" << std::endl;
+					btree_apply_node_prefix(_head, debugPrintNode);
+
 
 					std::cout << "****************ITERATORES*******************" << std::endl;
 					iterator it = begin();
@@ -382,8 +365,6 @@ namespace ft	{
 						debugPrintNode(it._ptr);
 					debugPrintNode(it._ptr);
 
-					std::cout << "*****************PREFIX******************" << std::endl;
-					btree_apply_node_prefix(_head, debugPrintNode);
 					std::cout << "***********************************" << std::endl;
 				}
 
@@ -395,24 +376,24 @@ namespace ft	{
 					if (node != NULL)	{
 						std::cout << std::endl;
 						std::cout << __func__ << std::endl;
-						std::cout << __func__ << ": node   " << node << std::endl;
+						std::cout << "NODE   " << node << std::endl;
 						if (node->item != NULL)	{
-							std::cout << __func__ << ":---- KEY    " << node->item->first << std::endl;
-							std::cout << __func__ << ":---- VAL    " << node->item->second << std::endl;
+							std::cout << "--- KEY    " << node->item->first << std::endl;
+							std::cout << "--  VAL    " << node->item->second << std::endl;
 						}
 						else
 							std::cout << "NO ITEM" << std::endl;
-						std::cout << __func__ << ": parent " << node->parent;
+						std::cout << "parent " << node->parent;
 						if (node->parent != NULL)
 							std::cout << "(" << node->parent->item->first << ";" << node->parent->item->second << ")" << std::endl;
 						else
 							std::cout << "--> THIS NODE IS _HEAD" << std::endl;
 
-						std::cout << __func__ << ": left   " << node->left;
+						std::cout << " left   " << node->left;
 						if (node->left != NULL)
 							std::cout << "(" << node->left->item->first << ";" << node->left->item->second << ")";
 						std::cout << std::endl;
-						std::cout << __func__ << ": right  " << node->right;
+						std::cout << " right  " << node->right;
 						if (node->right != NULL)
 							std::cout << "(" << node->right->item->first << ";" << node->right->item->second << ")";
 						std::cout << std::endl;
@@ -585,36 +566,68 @@ namespace ft	{
 // 				insert_dispatch(position, first, last, integer);
 // 			}
 
-// 			iterator
-// 			erase (iterator position)	{
+			void
+			erase (iterator position)	{
 
-// 				destroyObjects(position._ptr, 1);
-// 				memMoveLeft(position + 1, end(), 1);
-// 				this->tail -= 1;
-// 				return position;
-// 			}
+				map_node*	deadNode = position._ptr;
+				map_node*	deadNodeLeft = deadNode->left;
+				map_node*	deadNodeRight = deadNode->right;
+				map_node*	singleChild = getSingleChild(deadNode);
 
-// 			iterator
-// 			erase (iterator first, iterator last)	{
+				if (isLeaf(deadNode) == true)
+					detachFromParent(deadNode);
+				else if (singleChild != NULL)
+					detachFromParent(deadNode, singleChild);
+				else	{
+					detachFromParent(deadNode, deadNodeLeft);
+					map_node*	farRight = getFarRight(deadNodeLeft);
+					deadNodeRight->parent = farRight;
+					farRight->right = deadNodeRight;
+				}
+				decSize();
+				btree_update_dumbNode();
+				freeItem(deadNode->item);
+				freeNode(deadNode);
+			}
 
-// 				size_type			offset = first - begin();
-// 				difference_type		len = last - first;
-// 				destroyObjects(first._ptr, len);
-// 				memMoveLeft(last, end(), len);
-// 				this->tail -= len;
-// 				return begin() + offset;
-// 			}
+			void
+			detachFromParent( map_node* node, map_node* newChild = NULL )	{
+				map_node* parent = node->parent;
+				if (parent != NULL)	{
+					if (parent->left == node)
+						parent->left = newChild;
+					else if (parent->right == node)
+						parent->right = newChild;
+				}
+				else if (node == _head)
+					_head = newChild;
+				if (newChild != NULL)
+					newChild->parent = parent;
+				node->parent = NULL;
+			}
 
-// 			void
-// 			resize (size_type n, mapped_type val = mapped_type())	{
+			static map_node*
+			getSingleChild( map_node* node )	{
 
-// 				if (n < _size())	{
-// 					erase(end() - (_size() - n), end());
-// 				}
-// 				else if (n > _size())	{
-// 					insert(end(), n - _size(), val);
-// 				}
-// 			}
+				if (node->right != NULL && node->left == NULL)
+					return (node->right);
+				else if (node->right == NULL && node->left != NULL)
+					return (node->left);
+				else
+					return (NULL);
+			}
+
+
+			// size_type
+			// erase (const key_type& k)	{
+
+			// }
+
+			// void
+			// erase (iterator first, iterator last);	{
+
+			// }
+
 
 // 			void
 // 			swap (map& src)	{
@@ -704,6 +717,14 @@ namespace ft	{
 					_dumbNode->left = node;
 				if (node == getFarRight(_head))
 					_dumbNode->right = node;
+			}
+
+			void
+			btree_update_dumbNode( void )	{
+				if (_dumbNode == NULL)
+					btree_init_dumbNode();
+				_dumbNode->left = getFarLeft(_head);
+				_dumbNode->right = getFarRight(_head);
 			}
 
 			void
@@ -846,22 +867,26 @@ namespace ft	{
 
 // }
 
-			map_node*
-			getFarLeft( map_node* cursor ) const	{
+			static map_node*
+			getFarLeft( map_node* cursor ) {
 
 				while (cursor != NULL && cursor->left != NULL)
 					cursor = cursor->left;
 				return (cursor);
 			}
 
-			map_node*
-			getFarRight( map_node* cursor ) const	{
+			static map_node*
+			getFarRight( map_node* cursor ) {
 
 				while (cursor != NULL && cursor->right != NULL)
 					cursor = cursor->right;
 				return (cursor);
 			}
 
+			static bool
+			isLeaf(map_node* node) {
+				return (node->left == NULL && node->right == NULL);
+			}
 
 			// bool
 			// isRightEligible(pair_type& existingPair, pair_type& newPair)	{
@@ -881,10 +906,10 @@ namespace ft	{
 
 
 			size_t
-			incSize( size_t inc = 1 ) { _size += inc; return(_size + inc); }
+			incSize( size_t inc = 1 ) { _size += inc; return(_size); }
 
 			size_t
-			decSize( size_t inc = 1 ) { _size += inc; return(_size - inc); }
+			decSize( size_t inc = 1 ) { _size -= inc; return(_size); }
 
 
 
@@ -1066,27 +1091,34 @@ namespace ft	{
 
 				if (DEBUG_MODE >= 3) std::cout << __func__ << std::endl;
 				freeAllNodes(_head);
-				freeSingleNode(_dumbNode);
+				freeNode(_dumbNode);
 			}
 
 			void
-			freeSingleNode( map_node* node)	{
-				_allocNode.destroy(node);
-				_allocNode.deallocate(node, 1);
-			}
-
-			void
-			freeAllNodes( map_node* node )	{
-
-				if (node == NULL)
-					return;
-				freeAllNodes(node->left);
-				freeAllNodes(node->right);
-				if (node->item != NULL)	{
-					_allocPair.destroy(node->item);
-					_allocPair.deallocate(node->item, 1);
+			freeNode( map_node* node)	{
+				if (node != NULL)	{
+					_allocNode.destroy(node);
+					_allocNode.deallocate(node, 1);
 				}
-				freeSingleNode(node);
+			}
+
+			void
+			freeItem( value_type* item )	{
+				if (item != NULL)	{
+					_allocPair.destroy(item);
+					_allocPair.deallocate(item, 1);
+				}
+			}
+
+			void
+			freeAllNodes( map_node* root )	{
+
+				if (root == NULL)
+					return;
+				freeAllNodes(root->left);
+				freeAllNodes(root->right);
+				freeItem(root->item);
+				freeNode(root);
 			}
 
 // 			/**

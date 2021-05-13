@@ -52,15 +52,24 @@ test_map_instantiation( void )	{
 		ft::map<int, float>				ft_c0;
 
 		ft_c0.insert(ft::pair<int, float>(42, 11));
-		ft_c0.insert(ft::pair<int, float>(12, 11));
-		ft_c0.insert(ft::pair<int, float>(12, 22));
-		ft_c0.insert(ft::pair<int, float>(13, 11));
-		ft_c0.insert(ft::pair<int, float>(14, 11));
-		ft_c0.insert(ft::pair<int, float>(15, 11));
-		ft_c0.insert(ft::pair<int, float>(52, 11));
-		ft_c0.insert(ft::pair<int, float>(-52, 11));
-
+		ft_c0.insert(ft::pair<int, float>(10, 11));
+		ft_c0.insert(ft::pair<int, float>(100, 11));
+		ft_c0.insert(ft::pair<int, float>(50, 11));
+		ft_c0.insert(ft::pair<int, float>(43, 11));
+		ft_c0.insert(ft::pair<int, float>(55, 11));
+		ft_c0.insert(ft::pair<int, float>(110, 11));
+		ft_c0.insert(ft::pair<int, float>(105, 11));
+		ft_c0.insert(ft::pair<int, float>(120, 11));
+		ft_c0.debugPrintTree();
 		ft::map<int, float>::iterator	it = ft_c0.begin();
+		it++;
+		it++;
+		it++;
+		it++;
+		it++;
+		std::cout << "REMOVE: " << it->first << std::endl;
+		ft_c0.erase(it);
+
 
 		ft_c0.debugPrintTree();
 		// ft::pair<const int, float>	ft_p0( 3, 1 );

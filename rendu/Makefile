@@ -86,7 +86,7 @@ HEADER += ./bvaletteTester.hpp
 HEADER += ./bvaletteTester_defines.hpp
 HEADER += ./bvaletteTester_list.hpp
 HEADER += ./bvaletteTester_vector.hpp
-# HEADER += ./bvaletteTester_map.hpp
+HEADER += ./bvaletteTester_map.hpp
 
 ################################################################################
 #-------- MAIN #################################################################

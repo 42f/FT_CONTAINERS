@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "bvaletteTester_map.hpp"
+#include <functional>   // std::greater
 
 int
 test_map_instantiation( void )	{
@@ -18,192 +19,73 @@ test_map_instantiation( void )	{
 	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " ~~~~~~~~~~~" << RESET_COLOR << std::endl;
 	std::cout << TITLE << "~~~~ To see constructor calls, compile with " << RESET_COLOR << "-> make debug_mode=1 re f "<< std::endl;
 
-		std::map<int, float>	std_c0;
-		std::map<int, float>	std_c1;
-
-		// std_c0[1] = 42;
-		// std_c0[2] = 42;
-		// std_c0[4] = 42;
-		// std_c0[-1] = 42;
-		// std_c1[1] = 99;
-		// std_c1[2] = 99;
-		// std_c1[6] = 99;
-		// std_c1[-1] = 99;
-		// std::map<int, float>::iterator	it_std = std_c0.end();
-		// it_std--;
-		// std::cout << "it -> " << it_std->second << std::endl;
-		// it_std = std_c1.end();
-		// it_std--;
-		// std::cout << "it -> " << it_std->second << std::endl;
-
-
-
-		// std_c0.insert(std::pair<int, float>(1, 101));
-		// std_c0.insert(std::pair<int, float>(50, 101));
-		// std::pair<std::map<int, float>::iterator, bool> ret = std_c0.insert(std::pair<int, float>(42, 101));
-
-		// std_c0.insert(ret.first, std::pair<int, float>(-10, 42));
-
-		// for (std::map<int, float>::iterator it = std_c0.begin(); it != std_c0.end(); it++)
-		// 	std::cout << "std: " << it->first << " " << it->second << std::endl;
-
-		// std::cout << "ret c: " << ret.first->first << std::endl;
-
-		ft::map<int, float>				ft_c0;
-
-		ft_c0.insert(ft::pair<int, float>(42, 11));
-		ft_c0.insert(ft::pair<int, float>(10, 11));
-		ft_c0.insert(ft::pair<int, float>(100, 11));
-		ft_c0.insert(ft::pair<int, float>(50, 11));
-		ft_c0.insert(ft::pair<int, float>(43, 11));
-		ft_c0.insert(ft::pair<int, float>(55, 11));
-		ft_c0.insert(ft::pair<int, float>(110, 11));
-		ft_c0.insert(ft::pair<int, float>(105, 11));
-		ft_c0.insert(ft::pair<int, float>(120, 11));
-		ft_c0.debugPrintTree();
-
-		ft::map<int, float>::iterator		it = ft_c0.begin();
-		ft::map<int, float>::iterator		ite = ft_c0.end();
-
-		ite--;
-		ite--;
-
-		ft_c0.erase(it, ite);
-		// std::cout << "REMOVE: " << it->first << std::endl;
-
-
-		ft_c0.debugPrintTree();
-		// ft::pair<const int, float>	ft_p0( 3, 1 );
-		// ft::pair<const int, float>	ft_p1( 2, 2 );
-		// ft::pair<const int, float>	ft_p2( -1, 3 );
-		// ft::pair<const int, float>	ft_p3( 5, 4 );
-		// ft::pair<const int, float>	ft_p4( -3, 5 );
-
-		// ft_c0.addNode(ft_p0);
-		// ft_c0.addNode(ft_p1);
-		// ft_c0.addNode(ft_p2);
-		// ft_c0.addNode(ft_p3);
-		// ft_c0.addNode(ft_p4);
-
-		// std_c0[1] = 24;
-		// std_c0[2] = 25;
-		// std_c0[3] = 26;
-
-		// std::map<const int, float>::iterator	itb_std = std_c0.begin();
-		// std::map<const int, float>::iterator	ite_std = std_c0.end();
-
-		// std::cout << "STD begin: first  " << itb_std->first << std::endl;
-		// std::cout << "STD begin: second " << itb_std->second << std::endl;
-		// std::cout << "STD end  : first  " << ite_std->first << std::endl;
-		// std::cout << "STD end  : second " << ite_std->second << std::endl;
-
-		// ft::map<const int, float>::iterator	itb_ft = ft_c0.begin();
-		// std::cout << "FT begin: first  " << itb_ft->first << std::endl;
-		// std::cout << "FT begin: second " << itb_ft->second << std::endl;
-		// std::cout << "FT end  : first  " << ite_ft->first << std::endl;
-		// std::cout << "FT end  : second " << ite_ft->second << std::endl;
-
-
-		// std::cout << "FT:  first  " << it->first << std::endl;
-		// std::cout << "FT:  second " << it->second << std::endl;
-		// ft_c0.debugPrintTree();
-		// std::cout << "test operator [3]" << ft_c0[3];
-		// ft_c0[3] = 99;
-		// std_c0[1];
-		// std::cout << "1 ? " << std_c0[1] << std::endl;
-		// std_c0[1] = 42;
-		// std::cout << "1 ? " << std_c0[1] << std::endl;
-		// std_c0[20] = 2;
-		// std_c0[18] = 99;
-		// std::map
-		// std::cout << "test operator [3]" << ft_c0[3];
-		// std::cout << "test operator [2]" << ft_c0[2];
-		// std::cout << "test operator [-1]" << ft_c0[-1];
-		// std::cout << "test operator [5]" << ft_c0[5];
-		// std::cout << "test operator [-3]" << ft_c0[-3];
-		// ft_c0.insertNode(ft_p0);
-		// ft_c0.insertNode(ft_p1);
-
-		/*
 	{
-
-
-
-
-
-
-
-
-
 		std::cout << SUBTITLE << "[ DEFAULT CONSTRUCTOR ]" << RESET_COLOR << std::endl;
 		{
-			ft::map<std::string>	ft_c0;
-			std::map<std::string>	std_c0;
-			testMap(ft_c0, std_c0, NOPRINT);
-			ft::map<float>		ft_c1;
-			std::map<float>	std_c1;
-			testMap(ft_c1, std_c1, NOPRINT);
-		}
-		std::cout << SUBTITLE << "[ FILL CONSTRUCTOR with value ]" << RESET_COLOR << std::endl;
-		{
-			ft::map<int>	ft_c0(5, 123);
-			std::map<int>	std_c0(5, 123);
-			testMap(ft_c0, std_c0, NOPRINT);
-		}
-		std::cout << SUBTITLE << "[ FILL CONSTRUCTOR with value explicitly casted ]" << RESET_COLOR << std::endl;
-		{
-			ft::map<int>	ft_c0(static_cast<size_t>(5),123);
-			std::map<int>	std_c0(static_cast<size_t>(5),123);
-			testMap(ft_c0, std_c0, NOPRINT);
-		}
-		std::cout << SUBTITLE << "[ FILL CONSTRUCTOR without value ]" << RESET_COLOR << std::endl;
-		{
-			ft::map<int>	ft_c0(5);
-			std::map<int>	std_c0(5);
-			testMap(ft_c0, std_c0, NOPRINT);
-		}
-		std::cout << SUBTITLE << "[ FILL CONSTRUCTOR without value and with classExample which has a default value ]" << RESET_COLOR << std::endl;
-		{
-			ft::map<exampleClass>	ft_c0(5);
-			std::map<exampleClass>	std_c0(5);
-			testMap(ft_c0, std_c0, NOPRINT);
-		}
-		std::cout << SUBTITLE << "[ RANGE CONSTRUCTOR test: map0 with fill and map1 with range ctor from map0 iterators ]" << RESET_COLOR << std::endl;
-		{
-			ft::map<int>		ft_c0(5, 123);
-			std::map<int>	std_c0(5, 123);
-			testMap(ft_c0, std_c0, NOPRINT);
-			std::cout << SUBTITLE << "->>\t\t[ RANGE CONSTRUCTOR with begin and ++begin as argument ]" << RESET_COLOR << std::endl;
-			ft::map<int>		ft_c1(ft_c0.begin(), ++ft_c0.begin());
-			std::map<int>	std_c1(std_c0.begin(), ++std_c0.begin());
-			testMap(ft_c1, std_c1, NOPRINT);
+			ft::map<std::string, float>		ft_c0;
+			std::map<std::string, float>	std_c0;
 
+			testMap<std::string, float>(ft_c0, std_c0, PRINT);
+
+			ft::map<float, int>		ft_c1;
+			std::map<float, int>	std_c1;
+
+			testMap<float, int>(ft_c1, std_c1, PRINT);
 		}
-		std::cout << SUBTITLE << "[ COPY CONSTRUCTOR from map with 5 elements]" << RESET_COLOR << std::endl;
+
+		std::map<char, int>	std_first;
+		std_first.insert(std::pair<char, int>('a',10));
+		std_first.insert(std::pair<char, int>('b',30));
+		std_first.insert(std::pair<char, int>('c',50));
+		std_first.insert(std::pair<char, int>('d',70));
+
+		ft::map<char, int>	ft_first;
+		ft_first.insert(ft::pair<char, int>('a',10));
+		ft_first.insert(ft::pair<char, int>('b',30));
+		ft_first.insert(ft::pair<char, int>('c',50));
+		ft_first.insert(ft::pair<char, int>('d',70));
+
+
+		std::cout << SUBTITLE << "[ RANGE CONSTRUCTOR ]" << RESET_COLOR << std::endl;
 		{
-			ft::map<int>			ft_c0(5, 123);
-			std::map<int>		std_c0(5, 123);
-			testMap(ft_c0, std_c0, NOPRINT);
-
-			ft::map<int>			ft_c1(ft_c0);
-			std::map<int>		std_c1(std_c0);
-			testMap(ft_c1, std_c1, NOPRINT);
-
-			std::cout << SUBTITLE << "[ check if begin points to a new elements ]" << RESET_COLOR << std::endl;
-			testBool(&(*ft_c0.begin()) != &(*ft_c1.begin()), __LINE__);
-			testBool(&(*std_c0.begin()) != &(*std_c1.begin()), __LINE__);
+			ft::map<char, int>		ft_c0(ft_first.begin(), ft_first.end());
+			std::map<char, int>		std_c0(std_first.begin(), std_first.end());
+			testMap<char, int>(ft_c0, std_c0, NOPRINT);
 		}
-		std::cout << SUBTITLE << "[ COPY CONSTRUCTOR from map with no elements]" << RESET_COLOR << std::endl;
+		std::cout << SUBTITLE << "[ COPY CONSTRUCTOR ]" << RESET_COLOR << std::endl;
 		{
-			ft::map<int>		ft_c0;
-			std::map<int>	std_c0;
-
-			ft::map<int>		ft_c1(ft_c0);
-			std::map<int>	std_c1(std_c0);
-			testMap(ft_c0, std_c0, NOPRINT);
-			testMap(ft_c1, std_c1, NOPRINT);
+			ft::map<char, int>		ft_c0(ft_first);
+			std::map<char, int>		std_c0(std_first);
+			testMap<char, int>(ft_c0, std_c0, NOPRINT);
 		}
+		std::cout << SUBTITLE << "[ COPY CONSTRUCTOR with specific Compare function]" << RESET_COLOR << std::endl;
+		{
+			std::map<char, int, std::greater<char> >	std_first_greater;
+			std_first.insert(std::pair<char, int>('a',10));
+			std_first.insert(std::pair<char, int>('b',30));
+			std_first.insert(std::pair<char, int>('c',50));
+			std_first.insert(std::pair<char, int>('d',70));
+
+			ft::map<char, int, std::greater<char> >	ft_first_greater;
+			ft_first.insert(ft::pair<char, int>('a',10));
+			ft_first.insert(ft::pair<char, int>('b',30));
+			ft_first.insert(ft::pair<char, int>('c',50));
+			ft_first.insert(ft::pair<char, int>('d',70));
+
+			std::map<char, int, std::greater<char> >	std_c0(std_first_greater);
+			ft::map<char, int, std::greater<char> >		ft_c0(ft_first_greater);
+			ft::map<char, int, std::greater<char> >::iterator	it = ft_first_greater.begin();
+			ft::map<char, int, std::greater<char> >::iterator	ite = ft_first_greater.end();
+
+			std::cout << "IT  : " << it._ptr << std::endl;
+			std::cout << "ITe : " << ite._ptr << std::endl;
+			while (it != ite)	{
+				std::cout << it->first << "; " << it->second << std::endl;
+				it++;
+			}
+			// testMap<char, int, std::greater<char> >(ft_c0, std_c0, NOPRINT);
+		}
+
 	}
-	*/
 	return (0);
 }

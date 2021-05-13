@@ -9,15 +9,13 @@
  **	===========================================================================+
 */
 
-template< typename K, typename T>
+template< typename K, typename T, typename Compare, typename Alloc>
 void
-putMap( ft::map<K, T> const & container, int errorPos = -1 )	{
+putMap( ft::map<K, T, Compare, Alloc> const & container, int errorPos = -1 )	{
 
 	std::cout << PRINT_TITLE << "[ FT::map ]" << RESET_COLOR << std::endl;
 	std::cout << PRINT_TITLE << "[ size of map ]" << RESET_COLOR << " -> ";
 	std::cout << container.size() << std::endl;
-	std::cout << PRINT_TITLE << "[ size capacity map ]" << RESET_COLOR << " -> ";
-	std::cout << container.capacity() << std::endl;
 	typename ft::map<K, T>::iterator it = container.begin();
 	typename ft::map<K, T>::iterator ite = container.end();
 
@@ -30,23 +28,21 @@ putMap( ft::map<K, T> const & container, int errorPos = -1 )	{
 	for (int i = 0; container.size() > 0 && i <= printMax && it != ite; it++, i++)
 	{
 		if (i == errorPos || i > static_cast<int>(container.size()))
-			std::cout << ERROR_SOURCE << "ft: [" << i << "] " << RESET_COLOR << *it << " -> " << &(*it) << std::endl;
+			std::cout << ERROR_SOURCE << "ft: [" << i << "] " << RESET_COLOR << it->first << "; " << it->second << " -> " << &(*it) << std::endl;
 		else
-			std::cout << "ft: [" << i << "] " <<*it << " -> " << &(*it) << std::endl;
+			std::cout << "ft: [" << i << "] " << it->first << "; " << it->second << " -> " << &(*it) << std::endl;
 	}
 	if (printMax != static_cast<int>(container.size()))
 		std::cout << " !!\t map size is too large to print... stoping here." << std::endl;
 }
 
-template< typename K, typename T>
+template< typename K, typename T, typename Compare, typename Alloc>
 void
-putMap( std::map<K, T> const & container, int errorPos = -1 )	{
+putMap( std::map<K, T, Compare, Alloc> const & container, int errorPos = -1 )	{
 
 	std::cout << PRINT_STD_TITLE << "[ STD::map ]" << RESET_COLOR << std::endl;
 	std::cout << PRINT_STD_TITLE << "[ size of map ]" << RESET_COLOR << " -> ";
 	std::cout << container.size() << std::endl;
-	std::cout << PRINT_STD_TITLE << "[ capacity of map ]" << RESET_COLOR << " -> ";
-	std::cout << container.capacity() << std::endl;
 	typename std::map<K, T>::const_iterator it = container.begin();
 	typename std::map<K, T>::const_iterator ite = container.end();
 
@@ -59,18 +55,22 @@ putMap( std::map<K, T> const & container, int errorPos = -1 )	{
 	for (int i = 0; container.size() > 0 && i <= printMax && it != ite; it++, i++)
 	{
 		if (i == errorPos || i > static_cast<int>(container.size()))
-			std::cout << ERROR_SOURCE << "std: [" << i << "] " << RESET_COLOR << *it << " -> " << &(*it) << std::endl;
+			std::cout << ERROR_SOURCE << "std: [" << i << "] " << RESET_COLOR << it->first << "; " << it->second << " -> " << &(*it) << std::endl;
 		else
-			std::cout << "std: [" << i << "] " <<*it << " -> " << &(*it) << std::endl;
+			std::cout << "std: [" << i << "] " << it->first << "; " << it->second << " -> " << &(*it) << std::endl;
 	}
 	if (printMax != static_cast<int>(container.size()))
 		std::cout << " !!\t map size is too large to print... stoping here." << std::endl;
 }
 
 
-template< typename K, typename T>
+template<	class K,
+			class T>
+			// class Compare,
+			// class ftAlloc = std::allocator<ft::pair<const K, T> >,
+			// class stdAlloc = std::allocator<std::pair<const K, T> > >
 void
-testMap( ft::map<K, T> const & ft_vct, std::map<K, T> const &std_vct,
+testMap( ft::map<K, T> const & ft_c, std::map<K, T> const &std_c,
 bool print, std::string message = "" )	{
 
 	bool	success = true;
@@ -80,17 +80,17 @@ bool print, std::string message = "" )	{
 
 	if (print == true)
 	{
-		putMap<T>(ft_vct);
-		putMap<T>(std_vct);
+		putMap<K, T>(ft_c);
+		putMap<K, T>(std_c);
 	}
 
-	if(ft_vct.size() != std_vct.size())	{
+	if(ft_c.size() != std_c.size())	{
 		if (print == false && success == true)
 		{
-			putMap<T>(ft_vct);
-			putMap<T>(std_vct);
+			putMap<K, T>(ft_c);
+			putMap<K, T>(std_c);
 		}
-		std::cout << TITLE <<"size: ft (" << ft_vct.size() << ") std (" << std_vct.size() << ") Diff ! " << RESET_COLOR << std::endl;
+		std::cout << TITLE <<"size: ft (" << ft_c.size() << ") std (" << std_c.size() << ") Diff ! " << RESET_COLOR << std::endl;
 		std::cout << ERROR_TITLE << "ERROR !" << RESET_COLOR << std::endl;
 		if (DEBUG_MODE < 1)
 			throw failedTest();
@@ -98,25 +98,22 @@ bool print, std::string message = "" )	{
 			success = false;
 	}
 
-	if (ft_vct.size() > 0)
+	if (ft_c.size() > 0)
 	{
 		int i = 0;
-		typename ft::map<K, T>::iterator	ft_it = ft_vct.begin();
-		typename ft::map<K, T>::iterator	ft_ite = ft_vct.end();
+		typename ft::map<K, T>::iterator	ft_it = ft_c.begin();
+		typename ft::map<K, T>::iterator	ft_ite = ft_c.end();
 
-		typename std::map<K, T>::const_iterator	std_it = std_vct.begin();
-		typename std::map<K, T>::const_iterator	std_ite = std_vct.end();
+		typename std::map<K, T>::const_iterator	std_it = std_c.begin();
+		typename std::map<K, T>::const_iterator	std_ite = std_c.end();
 		while (ft_it != ft_ite && std_it != std_ite)	{
 
-			if(*ft_it != *std_it)	{
-				if (print == false && success == true)
-				{
-					putMap<T>(ft_vct, i);
-					putMap<T>(std_vct, i);
-				}
-				std::cout << TITLE <<"iterator at pos " << i << ": ft (" << *ft_it << ") " << RESET_COLOR;
+			if(ft_it->first != std_it->first || ft_it->second != std_it->second)	{
+				putMap<K, T>(ft_c, i);
+				putMap<K, T>(std_c, i);
+				std::cout << TITLE <<"iterator at pos " << i << ": ft (" << ft_it->first << "; " << ft_it->second << ") " << RESET_COLOR;
 				std::cout << ERROR_TITLE << "ERROR !" << RESET_COLOR << std::endl;
-				std::cout << "std (" << *std_it << ") Diff ! " << RESET_COLOR << std::endl;
+				std::cout << "std (" << std_it->first << "; " << std_it->second << ") Diff ! " << RESET_COLOR << std::endl;
 				if (DEBUG_MODE < 1)
 					throw failedTest();
 				else
@@ -129,8 +126,8 @@ bool print, std::string message = "" )	{
 		if (ft_it != ft_ite || std_it != std_ite)	{
 			if (print == false && success == true)
 			{
-				putMap<T>(ft_vct);
-				putMap<T>(std_vct);
+				putMap<K, T>(ft_c);
+				putMap<K, T>(std_c);
 			}
 			std::cout << TITLE <<"Diff in map after iterating thought it." << RESET_COLOR << std::endl;
 			std::cout << ERROR_TITLE << "ERROR !" << RESET_COLOR << std::endl;
@@ -142,9 +139,9 @@ bool print, std::string message = "" )	{
 	}
 
 	if (print == true && success == true)
-		std::cout << TESTOK_TITLE << "[ TEST PASSED: no diff ] map size: ft(" << ft_vct.size() << ") std(" << std_vct.size() << ") / capacity: ft(" << ft_vct.capacity() << ") std(" << std_vct.capacity() << ")" << RESET_COLOR << "\t  \342\234\205" << std::endl;
+		std::cout << TESTOK_TITLE << "[ TEST PASSED: no diff ] map size: ft(" << ft_c.size() << ") std(" << std_c.size() << ")" << RESET_COLOR << "\t  \342\234\205" << std::endl;
 	else if (success == true)
-		std::cout << "[ TEST PASSED: no diff ] map size: ft(" << ft_vct.size() << ") std(" << std_vct.size() << ") / capacity: ft(" << ft_vct.capacity() << ") std(" << std_vct.capacity() << ") \t \342\234\205" << std::endl;
+		std::cout << "[ TEST PASSED: no diff ] map size: ft(" << ft_c.size() << ") std(" << std_c.size() << ") \t \342\234\205" << std::endl;
 	else
 		std::cout << ERROR_TITLE << "TEST FAILED !" << RESET_COLOR << std::endl;
 }

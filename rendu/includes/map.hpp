@@ -50,7 +50,6 @@ namespace ft	{
 			class	map_iterator;
 
 		public:
-			// friend class map_iterator<Key, T, Compare, map_node>;
 
 			typedef Key										key_type;
 			typedef T										mapped_type;
@@ -66,10 +65,10 @@ namespace ft	{
 			typedef typename Allocator::pointer				pointer;
 			typedef typename Allocator::const_pointer		const_pointer;
 
-			typedef map_iterator	iterator;
-			typedef const map_iterator	const_iterator;
-			// typedef std::reverse_iterator<iterator> 		reverse_iterator;
-			// typedef const reverse_iterator				const_reverse_iterator;
+			typedef map_iterator							iterator;
+			typedef const map_iterator						const_iterator;
+			typedef std::reverse_iterator<iterator> 		reverse_iterator;
+			typedef const reverse_iterator					const_reverse_iterator;
 
 		private:
 			typedef typename Allocator::template rebind<map_node>::other	_node_allocator_type;
@@ -358,9 +357,8 @@ namespace ft	{
 					iterator it = begin();
 					iterator ite = end();
 
-					for(it; it != ite; it++)
+					for(it; it != ite; ++it)
 						debugPrintNode(it._ptr);
-					debugPrintNode(it._ptr);
 
 					std::cout << "***********************************" << std::endl;
 				}
@@ -414,36 +412,64 @@ namespace ft	{
 // 			bool
 // 			empty( void ) const		{ return (_size() == 0); }
 
-// 			size_type
-// 			_size( void ) const 		{ return (this->tail - this->_head); }
+			size_type
+			size( void ) const 		{ return (_size); }
 
 			iterator
-			begin( void ) 			{ return (iterator(_dumbNode->left, _dumbNode, _comp)); }
-			// begin( void ) 			{ return (getFarLeft(_head)); }
+			begin( void ) 			{
+				if (_dumbNode != NULL)
+					return (iterator(_dumbNode->left, _dumbNode, _comp));
+				return (NULL);
+			}
 
 			const_iterator
-			begin( void ) const		{ return (iterator(_dumbNode->left, _dumbNode, _comp)); }
-			// begin( void ) const		{ return (getFarLeft(_head)); }
+			begin( void ) const		{
+				if (_dumbNode != NULL)
+					return (iterator(_dumbNode->left, _dumbNode, _comp));
+				return (NULL);
+			}
 
 			iterator
-			end( void ) 	 		{ return (iterator(_dumbNode->right, _dumbNode, _comp)); }
-			// end( void ) 	 		{ return (getFarRight(_head)); }
+			end( void ) 	 		{
+				if (_dumbNode != NULL)
+					return (iterator(_dumbNode, _dumbNode, _comp));
+				return (NULL);
+			}
 
 			const_iterator
-			end( void ) const 		{ return (iterator(_dumbNode->right, _dumbNode, _comp)); }
-			// end( void ) const 		{ return (getFarRight(_head)); }
+			end( void ) const 		{
+				if (_dumbNode != NULL)
+					return (iterator(_dumbNode, _dumbNode, _comp));
+				return (NULL);
+			}
 
-// 			reverse_iterator
-// 			rbegin( void ) 			{ return reverse_iterator(end()); }
+			reverse_iterator
+			rbegin( void ) 			{
+				if (_dumbNode != NULL)
+					return reverse_iterator(end());
+				return (NULL);
+			}
 
-// 			const_reverse_iterator
-// 			rbegin( void ) const	{ return reverse_iterator(end()); }
+			const_reverse_iterator
+			rbegin( void ) const	{
+				if (_dumbNode != NULL)
+					return reverse_iterator(end());
+				return (NULL);
+			}
 
-// 			reverse_iterator
-// 			rend( void ) 	 		{ return reverse_iterator(begin()); }
+			reverse_iterator
+			rend( void ) 	 		{
+				if (_dumbNode != NULL)
+					return reverse_iterator(begin());
+				return (NULL);
+			}
 
-// 			const_reverse_iterator
-// 			rend( void ) const 		{ return reverse_iterator(begin()); }
+			const_reverse_iterator
+			rend( void ) const 		{
+				if (_dumbNode != NULL)
+					return reverse_iterator(begin());
+				return (NULL);
+			}
 
 			reference
 			front( void ) 			{ return (*(begin())); }
@@ -507,27 +533,32 @@ namespace ft	{
  			void
 			insert (InputIterator first, InputIterator last)	{
 
-				InputIterator	cursor = first;
-				size_t			size = 0;
+				// InputIterator	cursor = first;
+				// size_t			rangeSized = 0;
 
-				for (cursor; cursor != last; cursor++)				// draft improvement to balance tree
-					size++;
-				if (size > 3)	{
-					cursor = first;
-					for (size_t i = 0; i < size / 2; i++)
-						cursor++;
-					insert(*cursor);
-					for (size_t i = 0; i < size / 4; i++)
-						cursor++;
-					insert(*cursor);
-					for (size_t i = 0; i < size / 2; i--)
-						cursor--;
-					insert(*cursor);
+				// for (cursor; cursor != last; cursor++)				// draft improvement to balance tree
+				// 	rangeSized++;
+				// if (rangeSized > 3)	{
+				// 	cursor = first;
+				// 	for (size_t i = 0; i < rangeSized / 2; i++)
+				// 		cursor++;
+				// 	insert(*cursor);
+				// 	for (size_t i = 0; i < rangeSized / 4; i++)
+				// 		cursor++;
+				// 	insert(*cursor);
+				// 	for (size_t i = 0; i < rangeSized / 2; i--)
+				// 		cursor--;
+				// 	insert(*cursor);
+				// }
+				// ft::pair<iterator, bool>	tmp = insert(*first);
+				// iterator	lastInsert = tmp.first;
+				// first++;
+				// for (first; first != last; first++)
+				// 	lastInsert = insert(lastInsert, *first);
+				while (first != last){
+					insert(*first);
+					first++;
 				}
-				iterator	lastInsert = insert(*first).first;
-				first++;
-				for (first; first != last; first++)
-					lastInsert = insert(lastInsert, *first);
 			}
 
 // 			reference
@@ -606,7 +637,8 @@ namespace ft	{
 
 				iterator next;
 				while (first != last)	{
-					next = ++first;
+					next = first;
+					next++;
 					erase(first);
 					first = next;
 				}

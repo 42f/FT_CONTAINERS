@@ -316,9 +316,7 @@ namespace ft	{
 			~map( void )	{
 
 				if (DEBUG_MODE >= 4) std::cout << "DESTRUCTOR --> " << __func__ << std::endl;
-				// if (_size() > 0)
-				if (_size > 0)
-					clearObject();
+				clearTree();
 			}
 
 /******************************************************************************.
@@ -567,13 +565,15 @@ namespace ft	{
 // 			}
 
 			void
-			erase (iterator position)	{
+			erase( iterator position )	{
 
 				map_node*	deadNode = position._ptr;
 				map_node*	deadNodeLeft = deadNode->left;
 				map_node*	deadNodeRight = deadNode->right;
 				map_node*	singleChild = getSingleChild(deadNode);
 
+				if (deadNode == NULL)
+					return;
 				if (isLeaf(deadNode) == true)
 					detachFromParent(deadNode);
 				else if (singleChild != NULL)
@@ -589,6 +589,23 @@ namespace ft	{
 				freeItem(deadNode->item);
 				freeNode(deadNode);
 			}
+
+			size_type
+			erase( const key_type& k )	{
+
+				map_node*	target = btree_search_key(_head, k);
+				if (target == NULL)
+					return 0;
+				else	{
+					erase(iterator(target, _dumbNode, _comp));
+					return (1);
+				}
+			}
+
+			// void
+			// erase (iterator first, iterator last)	{
+
+			// }
 
 			void
 			detachFromParent( map_node* node, map_node* newChild = NULL )	{
@@ -774,7 +791,7 @@ namespace ft	{
 				}
 			}
 
-		void
+			void
 			btree_apply_item_prefix(map_node *root, void (*applyf)(value_type*))	{
 
 				if (root == NULL)
@@ -836,17 +853,16 @@ namespace ft	{
 			}
 
 
-			value_type*
-			btree_search_pair(map_node *root, value_type* targetPair)	{
+			map_node*
+			btree_search_key(map_node* root, const key_type& targetKey)	{
 
-				value_type*		foundTarget = NULL;
-				if (root != NULL && targetPair != NULL)	{
-					foundTarget = btree_search_pair(root->left. targetPair);
-					if (_comp(root->item.first, targetPair->first) == 0)
-						return (root->item);
-					foundTarget = btree_search_pair(root->left. targetPair);
+				if (root != NULL)	{
+					if (_comp(targetKey, root->item->first) == true)
+						return (btree_search_key(root->left, targetKey));
+					else if (_comp(root->item->first, targetKey) == true)
+						return (btree_search_key(root->right, targetKey));
 				}
-				return (foundTarget);
+				return (root);
 			}
 
 			// size_t
@@ -898,11 +914,11 @@ namespace ft	{
 			// 	return (comp(existingKey, newKey));
 			// }
 
-			// bool
-			// isEqualKey(Key& existingKey, Key& newKey)	{
-			// 	return (comp(existingKey, newKey) == false
-			// 	&& comp(newKey, existingKey) == false);
-			// }
+			bool
+			isEqualKey(const Key& existingKey, const Key& newKey)	{
+				return (_comp(existingKey, newKey) == false
+				&& _comp(newKey, existingKey) == false);
+			}
 
 
 			size_t
@@ -1087,7 +1103,7 @@ namespace ft	{
 			// }
 
 			void
-			clearObject( void )	{
+			clearTree( void )	{
 
 				if (DEBUG_MODE >= 3) std::cout << __func__ << std::endl;
 				freeAllNodes(_head);

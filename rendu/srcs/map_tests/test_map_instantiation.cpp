@@ -61,14 +61,19 @@ test_map_instantiation( void )	{
 		ft_c0.insert(ft::pair<int, float>(105, 11));
 		ft_c0.insert(ft::pair<int, float>(120, 11));
 		ft_c0.debugPrintTree();
-		ft::map<int, float>::iterator	it = ft_c0.begin();
-		it++;
-		it++;
-		it++;
-		it++;
-		it++;
-		std::cout << "REMOVE: " << it->first << std::endl;
-		ft_c0.erase(it);
+		std::cout << "ERASE ALL" << std::endl;
+		ft_c0.erase(42);
+		ft_c0.erase(10);
+		ft_c0.erase(100);
+		ft_c0.erase(50);
+		ft_c0.erase(43);
+		ft_c0.erase(55);
+		ft_c0.erase(110);
+		ft_c0.erase(105);
+		ft_c0.erase(120);
+		// ft::map<int, float>::iterator	it = ft_c0.begin();
+		// it++;
+		// std::cout << "REMOVE: " << it->first << std::endl;
 
 
 		ft_c0.debugPrintTree();

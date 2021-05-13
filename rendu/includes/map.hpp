@@ -183,7 +183,6 @@ namespace ft	{
 				const_reference
 				operator*()	const			{ return (*(_ptr->item)); }
 
-
 				/**
 				 * @brief Pointer holding the address of the iterator element.
 				*/
@@ -351,9 +350,9 @@ namespace ft	{
 					std::cout << "_dumbNode is... : " << std::endl;
 					debugPrintNode(_dumbNode);
 					std::cout << "Printing tree of size  " << _size << std::endl;
-					std::cout << "*****************PREFIX******************" << std::endl;
-					btree_apply_node_prefix(_head, debugPrintNode);
 
+					// std::cout << "*****************PREFIX******************" << std::endl;
+					// btree_apply_node_prefix(_head, debugPrintNode);
 
 					std::cout << "****************ITERATORES*******************" << std::endl;
 					iterator it = begin();
@@ -602,10 +601,16 @@ namespace ft	{
 				}
 			}
 
-			// void
-			// erase (iterator first, iterator last)	{
+			void
+			erase (iterator first, iterator last)	{
 
-			// }
+				iterator next;
+				while (first != last)	{
+					next = ++first;
+					erase(first);
+					first = next;
+				}
+			}
 
 			void
 			detachFromParent( map_node* node, map_node* newChild = NULL )	{

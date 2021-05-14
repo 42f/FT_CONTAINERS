@@ -83,8 +83,11 @@ test_map_instantiation( void )	{
 			std::map<exampleClass, int>	std_c0;
 			ft::map<exampleClass, int>	ft_c0;
 
-			std_c0.insert(std::pair<exampleClass, int>(exampleClass(), 42));
-			ft_c0.insert(ft::pair<exampleClass, int>(exampleClass(), 42));
+			for (size_t i = 0; i < 10; i++)	{
+				int ran = rand() % 10000;
+				std_c0.insert(std::pair<exampleClass, int>(exampleClass(i + ran), 42));
+				ft_c0.insert(ft::pair<exampleClass, int>(exampleClass(i + ran), 42));
+			}
 
 			testMap<exampleClass, int>(ft_c0, std_c0, PRINT);
 		}

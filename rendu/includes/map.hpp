@@ -815,7 +815,7 @@ namespace ft	{
 					map_node* tree = *root;
 					if (_comp(pairSrc.first, tree->item->first) == true)
 						return (btree_insert_data(tree, &tree->left, pairSrc));
-					else if (pairSrc.first != tree->item->first)
+					else if (isEqualKey(pairSrc.first, tree->item->first) == false)
 						return (btree_insert_data(tree, &tree->right, pairSrc));
 					else
 						return (ft::pair<iterator, bool>(iterator(*root, _dumbNode, _comp), false));

@@ -5,14 +5,18 @@
 #include <string>
 #include "bvaletteTester_defines.hpp"
 
-class exampleClass : public std::string	{
+class exampleClass	{
 
 	public:
 
 		std::string a;
 		int			b;
-		exampleClass( void ) : a("HelloWorld"), b(rand()) {
-			std::cout << "CONSTRUCTION OF EX, " << b << std::endl;
+		exampleClass( void ) : a("HelloWorld"), b(rand())	{
+
+			if (DEBUG_MODE >=3) std::cout << "Ctor exampleClass.." << std::endl;
+		};
+		exampleClass( int i ) : a("HelloWorld"), b(i)	{
+
 			if (DEBUG_MODE >=3) std::cout << "Ctor exampleClass.." << std::endl;
 		};
 		~exampleClass( void ) {
@@ -27,16 +31,26 @@ class exampleClass : public std::string	{
 			}
 			return *this;
 		}
-
-		bool
-		operator<( exampleClass& rhs )	{
-			return (b < rhs.b);
-		}
 };
+
+bool
+operator<( const exampleClass& lhs, const exampleClass& rhs ) {
+	return (lhs.b < rhs.b);
+}
+
+bool
+operator==( const exampleClass& lhs, const exampleClass& rhs ) {
+	return (lhs.b == rhs.b && lhs.a == rhs.a);
+}
+
+bool
+operator!=( const exampleClass& lhs, const exampleClass& rhs ) {
+	return (!(lhs==rhs));
+}
 
 std::ostream&
 operator<<( std::ostream & o, exampleClass const & i )	{
-	o << i.b;
+	o << i.b << " - " << i.a;
 	return o;
 };
 

@@ -500,9 +500,9 @@ namespace ft	{
 			*/
 			ft::pair<iterator, bool>
 			insert(const value_type& val)	{
-
 				return(btree_insert_data(NULL, &_head, val));
 			}
+
 
 			/**
 			 * @brief insert single element with hint to determine a closer

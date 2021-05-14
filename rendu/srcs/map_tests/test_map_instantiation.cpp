@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "bvaletteTester_map.hpp"
-#include <functional>   // std::greater
+// #include <functional>   // std::greater
 
 int
 test_map_instantiation( void )	{

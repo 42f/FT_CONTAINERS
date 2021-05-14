@@ -65,10 +65,10 @@ putMap( std::map<K, T, Compare, Alloc> const & container, int errorPos = -1 )	{
 
 
 template<	class K,
-			class T>
-			// class Compare,
-			// class ftAlloc = std::allocator<ft::pair<const K, T> >,
-			// class stdAlloc = std::allocator<std::pair<const K, T> > >
+			class T,
+			class Compare = std::less<K>,
+			class ftAlloc = std::allocator<ft::pair<const K, T> >,
+			class stdAlloc = std::allocator<std::pair<const K, T> > >
 void
 testMap( ft::map<K, T> const & ft_c, std::map<K, T> const &std_c,
 bool print, std::string message = "" )	{

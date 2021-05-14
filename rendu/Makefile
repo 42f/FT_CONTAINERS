@@ -3,26 +3,26 @@ BOLD = \033[1m
 GREEN = \033[32m
 YELLOW = \033[33m
 
-NAME := ft_container_list
+NAME := ft_container
 INCLUDES += ./includes
 SRCS_DIR = ./srcs
 CC = clang++
 OBJ_DIR = ./objs_$(NAME)/
+PCH_DIR = ./pchs_$(NAME)/
 
-CFLAGS += -std=c++98
-CFLAGS += -g3
+# CFLAGS += -std=c++98
 CFLAGS += -Wall
 CFLAGS += -Wextra
-# CFLAGS += -fPIC
+CFLAGS += -fPIC
 
 ifeq ($(noassert), 1)
 	CFLAGS += -DNDEBUG=1
 endif
 
 ifeq ($(print_all), 1)
-	CFLAGS += -D NOPRINT=1
+	OTHER_FLAGS += -D NOPRINT=1
 else
-	CFLAGS += -D NOPRINT=0
+	OTHER_FLAGS += -D NOPRINT=0
 endif
 
 ifeq ($(unused), 1)
@@ -75,12 +75,11 @@ else ifeq ($(debug_mode), 4)
 	CFLAGS += -D DEBUG_MODE=4
 endif
 
-HEADER += ./list.hpp
-HEADER += ./vector.hpp
-
-HEADER += ./map.hpp
-HEADER += ./map_pair.hpp
-HEADER += ./map_iterator.hpp
+PROJECT_HEADER += ./list.hpp
+PROJECT_HEADER += ./vector.hpp
+PROJECT_HEADER += ./map.hpp
+PROJECT_HEADER += ./map_pair.hpp
+PROJECT_HEADER += ./map_iterator.hpp
 
 HEADER += ./bvaletteTester.hpp
 HEADER += ./bvaletteTester_defines.hpp
@@ -193,26 +192,36 @@ vpath %.hpp ./includes
 vpath %.hpp ./includes/map
 
 OBJS = $(patsubst %.cpp, $(OBJ_DIR)%.o, $(SRCS))
+PCHS = $(patsubst %.hpp, $(PCH_DIR)%.pch, $(PROJECT_HEADER))
 
 all :
 	$(MAKE) $(NAME)
 	@echo
 	@echo
 
-$(OBJS): $(OBJ_DIR)%.o: %.cpp $(HEADER)
-	$(CC) $(CFLAGS) -c $<  -I $(INCLUDES) -o $@
+$(OBJS): $(OBJ_DIR)%.o: %.cpp $(HEADER) $(PROJECT_HEADER)
+	$(CC) -g3 $(OTHER_FLAGS) -c $<  -I $(INCLUDES) -o $@
 
-$(NAME): $(OBJ_DIR) $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -I$(INCLUDES) -o $@
+$(NAME): $(PCH_DIR) $(PCHS) $(OBJ_DIR) $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -include-pch $(PCH_DIR) -o $@
 	@echo "🎉 \033[32m$@ is ready !\033[0m ✅"
+
+$(PCHS): $(PCH_DIR)%.pch: %.hpp $(PROJECT_HEADER)
+	$(CC) -std=c++98 $(CFLAGS) $< -o $@
 
 $(OBJ_DIR):
 	@mkdir -p $@
 
+$(PCH_DIR):
+	@mkdir -p $@
+
+pch:
+	$(MAKE) $(PCHS)
+
 FORCE :
 
 clean :
-	$(RM) -R $(OBJ_DIR)
+	$(RM) -R $(OBJ_DIR) $(PCH_DIR)
 
 fclean : clean
 	$(RM) $(NAME) output.log

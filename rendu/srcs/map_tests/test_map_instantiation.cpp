@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "bvaletteTester_map.hpp"
+#include "exampleClass.hpp"
 // #include <functional>   // std::greater
 
 int
@@ -61,31 +62,32 @@ test_map_instantiation( void )	{
 		std::cout << SUBTITLE << "[ COPY CONSTRUCTOR with specific Compare function]" << RESET_COLOR << std::endl;
 		{
 			std::map<char, int, std::greater<char> >	std_first_greater;
-			std_first.insert(std::pair<char, int>('a',10));
-			std_first.insert(std::pair<char, int>('b',30));
-			std_first.insert(std::pair<char, int>('c',50));
-			std_first.insert(std::pair<char, int>('d',70));
+			std_first_greater.insert(std::pair<char, int>('a',10));
+			std_first_greater.insert(std::pair<char, int>('b',30));
+			std_first_greater.insert(std::pair<char, int>('c',50));
+			std_first_greater.insert(std::pair<char, int>('d',70));
 
 			ft::map<char, int, std::greater<char> >	ft_first_greater;
-			ft_first.insert(ft::pair<char, int>('a',10));
-			ft_first.insert(ft::pair<char, int>('b',30));
-			ft_first.insert(ft::pair<char, int>('c',50));
-			ft_first.insert(ft::pair<char, int>('d',70));
+			ft_first_greater.insert(ft::pair<char, int>('a',10));
+			ft_first_greater.insert(ft::pair<char, int>('b',30));
+			ft_first_greater.insert(ft::pair<char, int>('c',50));
+			ft_first_greater.insert(ft::pair<char, int>('d',70));
 
 			std::map<char, int, std::greater<char> >	std_c0(std_first_greater);
-			ft::map<char, int, std::greater<char> >		ft_c0(ft_first_greater);
-			ft::map<char, int, std::greater<char> >::iterator	it = ft_first_greater.begin();
-			ft::map<char, int, std::greater<char> >::iterator	ite = ft_first_greater.end();
+			ft::map<char, int,  std::greater<char> >	ft_c0(ft_first_greater);
 
-			std::cout << "IT  : " << it._ptr << std::endl;
-			std::cout << "ITe : " << ite._ptr << std::endl;
-			while (it != ite)	{
-				std::cout << it->first << "; " << it->second << std::endl;
-				it++;
-			}
-			// testMap<char, int, std::greater<char> >(ft_c0, std_c0, NOPRINT);
+			testMap<char, int, std::greater<char> >(ft_c0, std_c0, NOPRINT);
 		}
+		std::cout << SUBTITLE << "[ CONSTRUCTOR WITH CUSTOM CLASS ]" << RESET_COLOR << std::endl;
+		{
+			std::map<exampleClass, int>	std_c0;
+			ft::map<exampleClass, int>	ft_c0;
 
+			std_c0.insert(std::pair<exampleClass, int>(exampleClass(), 42));
+			ft_c0.insert(ft::pair<exampleClass, int>(exampleClass(), 42));
+
+			testMap<exampleClass, int>(ft_c0, std_c0, PRINT);
+		}
 	}
 	return (0);
 }

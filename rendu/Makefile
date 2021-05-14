@@ -81,6 +81,7 @@ PROJECT_HEADER += ./map.hpp
 PROJECT_HEADER += ./map_pair.hpp
 PROJECT_HEADER += ./map_iterator.hpp
 
+HEADER += ./exampleClass.hpp
 HEADER += ./bvaletteTester.hpp
 HEADER += ./bvaletteTester_defines.hpp
 HEADER += ./bvaletteTester_list.hpp

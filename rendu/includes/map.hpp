@@ -446,28 +446,28 @@ namespace ft	{
 			reverse_iterator
 			rbegin( void ) 			{
 				if (_dumbNode != NULL)
-					return reverse_iterator(end());
+					return reverse_iterator(--end());
 				return (NULL);
 			}
 
 			const_reverse_iterator
 			rbegin( void ) const	{
 				if (_dumbNode != NULL)
-					return reverse_iterator(end());
+					return reverse_iterator(--end());
 				return (NULL);
 			}
 
 			reverse_iterator
 			rend( void ) 	 		{
 				if (_dumbNode != NULL)
-					return reverse_iterator(begin());
+					return reverse_iterator(--begin());
 				return (NULL);
 			}
 
 			const_reverse_iterator
 			rend( void ) const 		{
 				if (_dumbNode != NULL)
-					return reverse_iterator(begin());
+					return reverse_iterator(--begin());
 				return (NULL);
 			}
 

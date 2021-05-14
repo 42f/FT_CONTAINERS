@@ -14,6 +14,32 @@
 
 void
 testInsert ( void )	{
+		std::cout << SUBTITLE << "[ Insert with two different Compare functions]" << RESET_COLOR << std::endl;
+		{
+			std::map<char, int, std::greater<char> >	std_first_greater;
+			std_first_greater.insert(std::pair<char, int>('a',10));
+			std_first_greater.insert(std::pair<char, int>('b',30));
+			std_first_greater.insert(std::pair<char, int>('c',50));
+			std_first_greater.insert(std::pair<char, int>('d',70));
+			ft::map<char, int, std::greater<char> >	ft_first_greater;
+			ft_first_greater.insert(ft::pair<char, int>('a',10));
+			ft_first_greater.insert(ft::pair<char, int>('b',30));
+			ft_first_greater.insert(ft::pair<char, int>('c',50));
+			ft_first_greater.insert(ft::pair<char, int>('d',70));
+
+			std::map<char, int, std::greater<char> >::iterator	std_it = std_first_greater.begin();
+			std::map<char, int, std::greater<char> >::iterator	std_ite = std_first_greater.end();
+			ft::map<char, int, std::greater<char> >::iterator	ft_it = ft_first_greater.begin();
+			ft::map<char, int, std::greater<char> >::iterator	ft_ite = ft_first_greater.end();
+
+			std::map<char, int>	std_c0;
+			ft::map<char, int>	ft_c0;
+			std_c0.insert(std_it, std_ite);
+			ft_c0.insert(ft_it, ft_ite);
+
+			testMap<char, int, std::greater<char> >(ft_first_greater, std_first_greater, PRINT);
+			testMap<char, int>(ft_c0, std_c0, PRINT);
+		}
 	{
 		std::cout << HEADER_TITLE << "[ Instanciate map of 4 strings ]" << RESET_COLOR << std::endl;
 		ft::map<std::string>		ft_c0(4, "___");

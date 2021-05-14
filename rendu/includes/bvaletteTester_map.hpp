@@ -16,8 +16,8 @@ putMap( ft::map<K, T, Compare, Alloc> const & container, int errorPos = -1 )	{
 	std::cout << PRINT_TITLE << "[ FT::map ]" << RESET_COLOR << std::endl;
 	std::cout << PRINT_TITLE << "[ size of map ]" << RESET_COLOR << " -> ";
 	std::cout << container.size() << std::endl;
-	typename ft::map<K, T>::iterator it = container.begin();
-	typename ft::map<K, T>::iterator ite = container.end();
+	typename ft::map<K, T, Compare, Alloc>::iterator it = container.begin();
+	typename ft::map<K, T, Compare, Alloc>::iterator ite = container.end();
 
 	int	printMax;
 
@@ -43,8 +43,8 @@ putMap( std::map<K, T, Compare, Alloc> const & container, int errorPos = -1 )	{
 	std::cout << PRINT_STD_TITLE << "[ STD::map ]" << RESET_COLOR << std::endl;
 	std::cout << PRINT_STD_TITLE << "[ size of map ]" << RESET_COLOR << " -> ";
 	std::cout << container.size() << std::endl;
-	typename std::map<K, T>::const_iterator it = container.begin();
-	typename std::map<K, T>::const_iterator ite = container.end();
+	typename std::map<K, T, Compare, Alloc>::const_iterator it = container.begin();
+	typename std::map<K, T, Compare, Alloc>::const_iterator ite = container.end();
 
 	int	printMax;
 
@@ -70,7 +70,7 @@ template<	class K,
 			class ftAlloc = std::allocator<ft::pair<const K, T> >,
 			class stdAlloc = std::allocator<std::pair<const K, T> > >
 void
-testMap( ft::map<K, T> const & ft_c, std::map<K, T> const &std_c,
+testMap( ft::map<K, T, Compare, ftAlloc> const & ft_c, std::map<K, T, Compare, stdAlloc> const &std_c,
 bool print, std::string message = "" )	{
 
 	bool	success = true;
@@ -101,11 +101,11 @@ bool print, std::string message = "" )	{
 	if (ft_c.size() > 0)
 	{
 		int i = 0;
-		typename ft::map<K, T>::iterator	ft_it = ft_c.begin();
-		typename ft::map<K, T>::iterator	ft_ite = ft_c.end();
+		typename ft::map<K, T, Compare, ftAlloc>::iterator	ft_it = ft_c.begin();
+		typename ft::map<K, T, Compare, ftAlloc>::iterator	ft_ite = ft_c.end();
 
-		typename std::map<K, T>::const_iterator	std_it = std_c.begin();
-		typename std::map<K, T>::const_iterator	std_ite = std_c.end();
+		typename std::map<K, T, Compare, stdAlloc>::const_iterator	std_it = std_c.begin();
+		typename std::map<K, T, Compare, stdAlloc>::const_iterator	std_ite = std_c.end();
 		while (ft_it != ft_ite && std_it != std_ite)	{
 
 			if(ft_it->first != std_it->first || ft_it->second != std_it->second)	{

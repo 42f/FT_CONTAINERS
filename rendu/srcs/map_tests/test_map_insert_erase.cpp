@@ -176,6 +176,7 @@ testBasicErase( void )	{
 		testBool( (--std_ite)->first == (--ft_ite)->first , __LINE__);
 		std_ite++;
 		ft_ite++;
+
 		std::cout << HEADER_TITLE << "[ Erase with key argument ]" << RESET_COLOR << std::endl;
 		std_c0.erase('c');
 		ft_c0.erase('c');
@@ -183,7 +184,7 @@ testBasicErase( void )	{
 		ft_c0.erase('g');
 		testMap<char, exampleClass>(ft_c0, std_c0, NOPRINT);
 
-		std::cout << HEADER_TITLE << "[ Erase with range argument ]" << RESET_COLOR << std::endl;
+		std::cout << HEADER_TITLE << "[ Erase with range argument + iterator validity ]" << RESET_COLOR << std::endl;
 		std_it = std_c0.begin();
 		ft_it = ft_c0.begin();
 		std_c0.erase(std_it,std_ite);

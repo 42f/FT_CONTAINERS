@@ -66,7 +66,7 @@ namespace ft	{
 			typedef typename Allocator::const_pointer		const_pointer;
 
 			typedef map_iterator							iterator;
-			typedef const map_iterator						const_iterator;
+			typedef const iterator							const_iterator;
 			typedef std::reverse_iterator<iterator> 		reverse_iterator;
 			typedef const reverse_iterator					const_reverse_iterator;
 
@@ -133,7 +133,6 @@ namespace ft	{
 
 				iterator&
 				operator--( void ) {
-
 
 					if (_ptr == _btreeDumdNode)
 						_ptr = _btreeDumdNode->right;
@@ -231,6 +230,7 @@ namespace ft	{
 				map_node*		parent;
 				map_node*		right;
 				value_type*		item;
+				bool			color;
 			};
 
 			class value_compare {
@@ -406,11 +406,11 @@ namespace ft	{
 .******************************************************************************/
 
 		public:
-// 			size_type
-// 			max_size( void ) const	{ return this->_alloc.max_size();  }
+			size_type
+			max_size( void ) const	{ return this->_allocNode.max_size();  }
 
-// 			bool
-// 			empty( void ) const		{ return (_size() == 0); }
+			bool
+			empty( void ) const		{ return (_size == 0); }
 
 			size_type
 			size( void ) const 		{ return (_size); }
@@ -422,7 +422,7 @@ namespace ft	{
 				return (NULL);
 			}
 
-			const_iterator
+			iterator
 			begin( void ) const		{
 				if (_dumbNode != NULL)
 					return (iterator(_dumbNode->left, _dumbNode, _comp));
@@ -436,7 +436,7 @@ namespace ft	{
 				return (NULL);
 			}
 
-			const_iterator
+			iterator
 			end( void ) const 		{
 				if (_dumbNode != NULL)
 					return (iterator(_dumbNode, _dumbNode, _comp));
@@ -450,10 +450,10 @@ namespace ft	{
 				return (NULL);
 			}
 
-			const_reverse_iterator
+			reverse_iterator
 			rbegin( void ) const	{
 				if (_dumbNode != NULL)
-					return reverse_iterator(--end());
+					return const_reverse_iterator(--end());
 				return (NULL);
 			}
 
@@ -464,10 +464,10 @@ namespace ft	{
 				return (NULL);
 			}
 
-			const_reverse_iterator
+			reverse_iterator
 			rend( void ) const 		{
 				if (_dumbNode != NULL)
-					return reverse_iterator(--begin());
+					return const_reverse_iterator(--begin());
 				return (NULL);
 			}
 

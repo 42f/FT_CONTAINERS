@@ -11,7 +11,7 @@ class exampleClass	{
 
 		std::string a;
 		int			b;
-		exampleClass( void ) : a("HelloWorld"), b(rand())	{
+		exampleClass( void ) : a("HelloWorld"), b(42)	{
 
 			if (DEBUG_MODE >=3) std::cout << "Ctor exampleClass.." << std::endl;
 		};
@@ -28,27 +28,28 @@ class exampleClass	{
 			if ( this != &rhs )
 			{
 				this->a = rhs.a;
+				this->b = rhs.b;
 			}
 			return *this;
 		}
 };
 
-bool
+inline bool
 operator<( const exampleClass& lhs, const exampleClass& rhs ) {
 	return (lhs.b < rhs.b);
 }
 
-bool
+inline bool
 operator==( const exampleClass& lhs, const exampleClass& rhs ) {
 	return (lhs.b == rhs.b && lhs.a == rhs.a);
 }
 
-bool
+inline bool
 operator!=( const exampleClass& lhs, const exampleClass& rhs ) {
 	return (!(lhs==rhs));
 }
 
-std::ostream&
+inline std::ostream&
 operator<<( std::ostream & o, exampleClass const & i )	{
 	o << i.b << " - " << i.a;
 	return o;

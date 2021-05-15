@@ -12,7 +12,13 @@
 
 #include "bvaletteTester_map.hpp"
 #include "exampleClass.hpp"
-// #include <functional>   // std::greater
+
+bool fncomp (char lhs, char rhs) {return lhs<rhs;}
+
+struct classcomp {
+bool operator() (const char& lhs, const char& rhs) const
+	{return lhs<rhs;}
+};
 
 int
 test_map_instantiation( void )	{
@@ -26,12 +32,12 @@ test_map_instantiation( void )	{
 			ft::map<std::string, float>		ft_c0;
 			std::map<std::string, float>	std_c0;
 
-			testMap<std::string, float>(ft_c0, std_c0, PRINT);
+			testMap<std::string, float>(ft_c0, std_c0, NOPRINT);
 
 			ft::map<float, int>		ft_c1;
 			std::map<float, int>	std_c1;
 
-			testMap<float, int>(ft_c1, std_c1, PRINT);
+			testMap<float, int>(ft_c1, std_c1, NOPRINT);
 		}
 
 		std::map<char, int>	std_first;
@@ -78,6 +84,26 @@ test_map_instantiation( void )	{
 
 			testMap<char, int, std::greater<char> >(ft_c0, std_c0, NOPRINT);
 		}
+		std::cout << SUBTITLE << "[ COPY CONSTRUCTOR with Custom compare class]" << RESET_COLOR << std::endl;
+		{
+
+			std::map<char, int, classcomp>	std_first_greater;
+			std_first_greater.insert(std::pair<char, int>('a',10));
+			std_first_greater.insert(std::pair<char, int>('b',30));
+			std_first_greater.insert(std::pair<char, int>('c',50));
+			std_first_greater.insert(std::pair<char, int>('d',70));
+
+			ft::map<char, int, classcomp>	ft_first_greater;
+			ft_first_greater.insert(ft::pair<char, int>('a',10));
+			ft_first_greater.insert(ft::pair<char, int>('b',30));
+			ft_first_greater.insert(ft::pair<char, int>('c',50));
+			ft_first_greater.insert(ft::pair<char, int>('d',70));
+
+			std::map<char, int, classcomp >	std_c0(std_first_greater);
+			ft::map<char, int,  classcomp >	ft_c0(ft_first_greater);
+
+			testMap<char, int, classcomp >(ft_c0, std_c0, NOPRINT);
+		}
 		std::cout << SUBTITLE << "[ CONSTRUCTOR WITH CUSTOM CLASS ]" << RESET_COLOR << std::endl;
 		{
 			std::map<exampleClass, int>	std_c0;
@@ -88,8 +114,7 @@ test_map_instantiation( void )	{
 				std_c0.insert(std::pair<exampleClass, int>(exampleClass(i + ran), 42));
 				ft_c0.insert(ft::pair<exampleClass, int>(exampleClass(i + ran), 42));
 			}
-
-			testMap<exampleClass, int>(ft_c0, std_c0, PRINT);
+			testMap<exampleClass, int>(ft_c0, std_c0, NOPRINT);
 		}
 	}
 	return (0);

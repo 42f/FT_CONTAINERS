@@ -81,12 +81,12 @@ PROJECT_HEADER += ./map.hpp
 PROJECT_HEADER += ./map_pair.hpp
 PROJECT_HEADER += ./map_iterator.hpp
 
-HEADER += ./exampleClass.hpp
 HEADER += ./bvaletteTester.hpp
 HEADER += ./bvaletteTester_defines.hpp
 HEADER += ./bvaletteTester_list.hpp
 HEADER += ./bvaletteTester_vector.hpp
 HEADER += ./bvaletteTester_map.hpp
+HEADER += ./exampleClass.hpp
 
 ################################################################################
 #-------- MAIN #################################################################
@@ -161,10 +161,10 @@ SRCS += ./main_utils.cpp
 SRCS += ./main_tester_map.cpp
 
 SRCS += ./test_map_instantiation.cpp
+SRCS += ./test_map_insert_erase.cpp
 # SRCS += ./test_map_push_back_pop_back.cpp
 # SRCS += ./test_map_clear.cpp
 # SRCS += ./test_map_capacities.cpp
-# SRCS += ./test_map_insert_erase.cpp
 # SRCS += ./test_map_operatorEqual.cpp
 # SRCS += ./test_map_resize.cpp
 # SRCS += ./test_map_assign.cpp
@@ -190,7 +190,6 @@ vpath %.cpp ./srcs/list_tests
 vpath %.cpp ./srcs/vector_tests
 vpath %.cpp ./srcs/map_tests
 vpath %.hpp ./includes
-vpath %.hpp ./includes/map
 
 OBJS = $(patsubst %.cpp, $(OBJ_DIR)%.o, $(SRCS))
 PCHS = $(patsubst %.hpp, $(PCH_DIR)%.pch, $(PROJECT_HEADER))
@@ -201,10 +200,10 @@ all :
 	@echo
 
 $(OBJS): $(OBJ_DIR)%.o: %.cpp $(HEADER) $(PROJECT_HEADER)
-	$(CC) -g3 $(OTHER_FLAGS) -c $<  -I $(INCLUDES) -o $@
+	$(CC) $(CFLAGS) -g3 $(OTHER_FLAGS) -c $<  -I $(INCLUDES) -o $@
 
 $(NAME): $(PCH_DIR) $(PCHS) $(OBJ_DIR) $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -include-pch $(PCH_DIR) -o $@
+	$(CC) $(CFLAGS) $(OBJS) -I $(INCLUDES) -o $@
 	@echo "🎉 \033[32m$@ is ready !\033[0m ✅"
 
 $(PCHS): $(PCH_DIR)%.pch: %.hpp $(PROJECT_HEADER)

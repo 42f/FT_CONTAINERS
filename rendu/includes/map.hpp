@@ -739,21 +739,13 @@ namespace ft	{
 // 				return *this;
 // 			}
 
-			// T&
-			// operator[]( const Key& key )	{
+			mapped_type&
+			operator[]( const Key& key )	{
 
-			// 	pointer	cursor = btree::locateKeyPosition(key);
-			// 	if (cursor == NULL)
-			// 		std::cout <<  "NOT FOUND" << std::endl;
-			// 	else
-			// 		std::cout << "FOUND: " << cursor->getPair().first << " - " << cursor->getPair().second << std::endl;
-			// 	return (cursor->getPair().second);
-			// }
-
-			// const_reference
-			// operator[] (size_type n) const	{
-			// 	return (*(this->_head + n));
-			// }
+				value_type					insertValue(key, mapped_type());
+				ft::pair<iterator, bool>	ret = insert(insertValue);
+				return (ret.first->second);
+			}
 
 // /******************************************************************************.
 // .******************************************************************************.

@@ -152,12 +152,12 @@ bool print, std::string message = "" )	{
 */
 
 int	main_tester_map( void );
-
 int	test_map_instantiation( void );
+int	test_map_insert_erase( void );
+
 int	test_map_push_back_pop_back( void );
 int	test_map_clear( void );
 int	test_map_capacities( void );
-int	test_map_insert_erase( void );
 int	test_map_operatorEqual( void );
 int	test_map_resize( void );
 int	test_map_assign( void );

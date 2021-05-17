@@ -13,24 +13,24 @@
 #include "bvaletteTester_map.hpp"
 
 void
-test_constIterator( ft::map<char, std::string> const & ft_c0, std::map<char, std::string> const & std_c0 )	{
+test_constIterator( ft::map<int, int>  & ft_c0, std::map<int, int> & std_c0 )	{
 
 	std::cout << HEADER_TITLE << "Test const version of reverse iterator" << RESET_COLOR << std::endl;
 	std::cout << SUBTITLE << "If compile fails, const version of function are missing" << RESET_COLOR << std::endl;
 
-	std::map<char, std::string>::const_iterator	std_it = std_c0.begin();
-	std::map<char, std::string>::const_iterator	std_itend = --std_c0.end();
+	std::map<int, int>::const_iterator	std_it = std_c0.begin();
+	std::map<int, int>::const_iterator	std_itend = --std_c0.end();
 
-	ft::map<char, std::string>::const_iterator		ft_it = ft_c0.begin(); //  !!!! ---> HINT:  IN CASE OF COMPILER ISSUE: const version is MISSING !
-	ft::map<char, std::string>::const_iterator		ft_itend = --ft_c0.end(); //  !!!! ---> HINT:  IN CASE OF COMPILER ISSUE: const version is MISSING !
+	ft::map<int, int>::const_iterator		ft_it = ft_c0.begin(); //  !!!! ---> HINT:  IN CASE OF COMPILER ISSUE: const version is MISSING !
+	ft::map<int, int>::const_iterator		ft_itend = --ft_c0.end(); //  !!!! ---> HINT:  IN CASE OF COMPILER ISSUE: const version is MISSING !
 
 	std::cout << "Test ft : operator-> on const iterator: " << ft_it->first << std::endl;//  !!!! ---> HINT:  IN CASE OF COMPILER ISSUE: const version is MISSING !
 	std::cout << "Test std: operator-> on const iterator: " << std_it->first << std::endl;
 	std::cout << "Test ft : operator-> on const iterator: " << ft_itend->first << std::endl;//  !!!! ---> HINT:  IN CASE OF COMPILER ISSUE: const version is MISSING !
 	std::cout << "Test std: operator-> on const iterator: " << std_itend->first << std::endl;
-	++std_it;
-	std::cout << "it ++ -> " << std_it->first << std::endl;
-	// ++ft_it;
+	// ++std_it;
+	// std::cout <<  << std::endl;std::cout << "it ++ -> " << std_it->first << std::endl;
+	// ft_it++;
 	testBool(true);
 }
 
@@ -41,24 +41,30 @@ test_map_iterator( void )	{
 	{
 		std::cout << SUBTITLE << "[ Default Ctor, copy ctor, copy assignable ]" << RESET_COLOR << std::endl;
 
-		std::map<char,std::string> 				std_c0;
-		ft::map<char,std::string> 				ft_c0;
+		std::map<int,int> 				std_c0;
+		ft::map<int,int> 				ft_c0;
 
 		// insert some values:
-		std_c0['c']="c 10";
-		std_c0['a'];
-		std_c0['b'];
+		std_c0[1]= 42 ;
+		std_c0[0] = 0;
+		std_c0[-4] = 21;
 
-		ft_c0['c']="c 10";
-		ft_c0['a'];
-		ft_c0['b'];
+		ft_c0[1]= 42 ;
+		ft_c0[0] = 0;
+		ft_c0[-4] = 21;
 
-		std::map<char,std::string>::iterator		std_it_1 = std_c0.begin();
-		ft::map<char,std::string>::iterator			ft_it_1 = ft_c0.begin();
-		std::map<char,std::string>::iterator		std_it_2(std_it_1);
-		ft::map<char,std::string>::iterator			ft_it_2(ft_it_1);
-		std::map<char,std::string>::iterator		std_it_3;
-		ft::map<char,std::string>::iterator			ft_it_3;
+		std::map<int, int>::iterator		std_it_1 = std_c0.begin();
+		ft::map<int, int>::iterator			ft_it_1 = ft_c0.begin();
+
+
+		std::cout << SUBTITLE << "[ Change some mapped values through iterator ]" << RESET_COLOR << std::endl;
+		std_it_1->second = 21;
+		ft_it_1->second = 21;
+
+		std::map<int, int>::iterator		std_it_2(std_it_1);
+		ft::map<int, int>::iterator			ft_it_2(ft_it_1);
+		std::map<int, int>::iterator		std_it_3;
+		ft::map<int, int>::iterator			ft_it_3;
 		std_it_3 = std_it_1;
 		ft_it_3 = ft_it_1;
 		testBool(std_it_1->first == ft_it_1->first && std_it_1->second == ft_it_1->second, __LINE__);

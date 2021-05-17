@@ -17,8 +17,6 @@
 # define DEBUG_MODE 0
 #endif
 
-
-
 namespace ft	{
 
 /*############################################################################*/
@@ -44,11 +42,8 @@ namespace ft	{
 .*********** MEMBER TYPES            ******************************************.
 .******************************************************************************.
 .******************************************************************************/
-
 		private:
 			struct	map_node;
-			class	map_iterator;
-
 		public:
 
 			typedef Key										key_type;
@@ -65,10 +60,16 @@ namespace ft	{
 			typedef typename Allocator::pointer				pointer;
 			typedef typename Allocator::const_pointer		const_pointer;
 
-			typedef map_iterator							iterator;
-			typedef const iterator							const_iterator;
-			typedef std::reverse_iterator<iterator> 		reverse_iterator;
-			typedef const reverse_iterator					const_reverse_iterator;
+
+			typedef typename ft::map_iterator<Key, T, Compare, map_node, false>	iterator;
+			typedef typename ft::map_iterator<Key, T, Compare, map_node, true>	const_iterator;
+
+            typedef typename std::reverse_iterator<iterator<Key, T, Compare, Node, false> > reverse_iterator;
+            typedef typename std::reverse_iterator<iterator<Key, T, Compare, Node, true> >  const_reverse_iterator;
+
+			// typedef const iterator											const_iterator;
+			// typedef std::reverse_iterator<iterator> 						reverse_iterator;
+			// typedef const reverse_iterator									const_reverse_iterator;
 
 		private:
 			typedef typename Allocator::template rebind<map_node>::other	_node_allocator_type;
@@ -82,148 +83,6 @@ namespace ft	{
 
 		private:
 
-		class map_iterator	{
-
-				typedef	ft::pair<const Key, T>*					pointer;
-				typedef	ft::pair<const Key, T>&					reference;
-				typedef	const ft::pair<const Key, T>*			const_pointer;
-				typedef	const ft::pair<const Key, T>&			const_reference;
-
-				typedef map_node*								map_node_ptr;
-
-			public:
-
-				map_iterator( map_node* ptr = NULL, map_node* dumbNode = NULL,
-					const key_compare& comp = key_compare() ) :	_ptr(ptr),
-																_btreeDumdNode(dumbNode),
-																_comp(comp)		{}
-				map_iterator(const iterator& itSrc) :	_ptr(itSrc._ptr),
-														_btreeDumdNode(itSrc._btreeDumdNode),
-														_comp(itSrc._comp)		{}
-
-				iterator&
-				operator++( void ) {
-
-					if (_ptr == _btreeDumdNode)
-						_ptr = _btreeDumdNode->left;
-					else if (isLastNode(_ptr) == true)
-						_ptr = _btreeDumdNode;
-					else if (map::isLeaf(_ptr) == true)	{
-						if (_ptr == _ptr->parent->left)
-							_ptr = _ptr->parent;
-						else
-							getNextBranch();
-					}
-					else	{
-						if (_ptr->right != NULL)
-							_ptr = map::getFarLeft(_ptr->right);
-						else
-							getNextBranch();
-					}
-					return *this;
-				}
-
-				iterator
-				operator++( int ) {
-					iterator tmp(*this);
-					operator++();
-					return tmp;
-				}
-
-
-				iterator&
-				operator--( void ) {
-
-					if (_ptr == _btreeDumdNode)
-						_ptr = _btreeDumdNode->right;
-					else if (isFirstNode(_ptr) == true)
-						_ptr = _btreeDumdNode;
-					else if (map::isLeaf(_ptr) == true)	{
-						if (_ptr == _ptr->parent->right)
-							_ptr = _ptr->parent;
-						else
-							getPreviousBranch();
-					}
-					else	{
-						if (_ptr->left != NULL)
-							_ptr = map::getFarRight(_ptr->left);
-						else
-							getPreviousBranch();
-					}
-					return *this;
-				}
-
-				iterator
-				operator--( int ) {
-					iterator tmp(*this);
-					operator--();
-					return tmp;
-				}
-
-				bool
-				operator==(const iterator& rhs) const	{ return _ptr==rhs._ptr; }
-
-				bool
-				operator!=(const iterator& rhs) const	{ return _ptr!=rhs._ptr; }
-
-				bool
-				operator<(const iterator& rhs) const	{ return _ptr< rhs._ptr; }
-
-				pointer
-				operator->()				{ return (&(_ptr->item)); }
-
-				const_pointer
-				operator->()	const		{ return (&(_ptr->item)); }
-
-				reference
-				operator*()					{ return (_ptr->item); }
-
-				const_reference
-				operator*()	const			{ return (_ptr->item); }
-
-				/**
-				 * @brief Pointer holding the address of the iterator element.
-				*/
-				map_node_ptr		_ptr;
-				map_node_ptr		_btreeDumdNode;
-				Compare				_comp;
-
-			private:
-
-				void
-				getNextBranch( void )	{
-
-					Key				startKey = _ptr->item.first;
-					map_node_ptr	cursor = _ptr->parent;
-
-					while (cursor != NULL && _comp(cursor->item.first, startKey) == true)
-						cursor = cursor->parent;
-					_ptr = cursor;
-				}
-
-				void
-				getPreviousBranch( void )	{
-
-					Key				startKey = _ptr->item.first;
-					map_node_ptr	cursor = _ptr->parent;
-
-					while (cursor != NULL && _comp(startKey, cursor->item.first) == true)
-						cursor = cursor->parent;
-					_ptr = cursor;
-				}
-
-				bool
-				isFirstNode( map_node* p )	{
-					return (p == _btreeDumdNode->left);
-				}
-
-				bool
-				isLastNode( map_node* p )	{
-					return (p == _btreeDumdNode->right);
-				}
-
-
-			}; //----------------- Class iterator
 
 			struct map_node	{
 
@@ -236,9 +95,8 @@ namespace ft	{
 				map_node*		left;
 				map_node*		parent;
 				map_node*		right;
-				// value_type*		item;
-				bool			color;
 				value_type		item;
+				bool			color;
 			};
 
 			class value_compare {
@@ -411,7 +269,7 @@ namespace ft	{
 
 		public:
 			size_type
-			max_size( void ) const	{ return this->_allocNode.max_size();  }
+			max_size( void ) const	{ return this->_allocNode.max_size(); }
 
 			bool
 			empty( void ) const		{ return (_size == 0); }

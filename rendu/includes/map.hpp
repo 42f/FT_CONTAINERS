@@ -230,6 +230,7 @@ namespace ft	{
 				map_node*		parent;
 				map_node*		right;
 				value_type*		item;
+				// value_type		item;
 				bool			color;
 			};
 
@@ -470,27 +471,6 @@ namespace ft	{
 					return const_reverse_iterator(--begin());
 				return (NULL);
 			}
-
-			reference
-			front( void ) 			{ return (*(begin())); }
-
-			const_reference
-			front( void ) const		{ return (*(begin())); }
-
-			reference
-			back( void ) 	 		{ return (*(--end())); }
-
-			const_reference
-			back( void ) const 		{ return (*(--end())); }
-
-// 			size_type
-// 			capacity( void ) const	{ return (this->tailStorage - this->_head); }
-
-// 			void
-// 			pop_back( void )		{ if (_size() > 0) erase(--end()); }
-
-// 			void
-// 			push_back (mapped_type const & val)	{ insert(end(), val); }
 
 // 			void
 // 			clear( void )			{ erase(begin(), end()); }

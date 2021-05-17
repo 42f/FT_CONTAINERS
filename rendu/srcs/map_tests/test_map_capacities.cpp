@@ -35,42 +35,42 @@ test_map_capacities( void )	{
 		}
 
 		std::cout << HEADER_TITLE << "[ max_size, only test if present, values might differ ]" << RESET_COLOR << std::endl;
-		testBool(std_c0.max_size() > 1 && ft_c0.max_size() > 1, __LINE__);
+		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
 		std::cout << "MAX SIZE = std. " << std_c0.max_size() << std::endl;
 		std::cout << "MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
 	}
 	{
 		std::map<char, std::string>		std_c0;
 		ft::map<char, std::string>		ft_c0;
-		testBool(std_c0.max_size() > 1 && ft_c0.max_size() > 1, __LINE__);
+		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
 		std::cout << "MAX SIZE = std. " << std_c0.max_size() << std::endl;
 		std::cout << "MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
 	}
 	{
 		std::map<std::string, u_int64_t>		std_c0;
 		ft::map<std::string, u_int64_t>		ft_c0;
-		testBool(std_c0.max_size() > 1 && ft_c0.max_size() > 1, __LINE__);
+		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
 		std::cout << "MAX SIZE = std. " << std_c0.max_size() << std::endl;
 		std::cout << "MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
 	}
 	{
 		std::map<float, double>		std_c0;
 		ft::map<float, double>		ft_c0;
-		testBool(std_c0.max_size() > 1 && ft_c0.max_size() > 1, __LINE__);
+		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
 		std::cout << "MAX SIZE = std. " << std_c0.max_size() << std::endl;
 		std::cout << "MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
 	}
 	{
 		std::map<std::vector<float>, char*>		std_c0;
 		ft::map<std::vector<float>, char*>		ft_c0;
-		testBool(std_c0.max_size() > 1 && ft_c0.max_size() > 1, __LINE__);
+		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
 		std::cout << "MAX SIZE = std. " << std_c0.max_size() << std::endl;
 		std::cout << "MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
 	}
 	{
 		std::map<short, int>		std_c0;
-		ft::map<short, int>		ft_c0;
-		testBool(std_c0.max_size() > 1 && ft_c0.max_size() > 1, __LINE__);
+		ft::map<short, int>			ft_c0;
+		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
 		std::cout << "MAX SIZE = std. " << std_c0.max_size() << std::endl;
 		std::cout << "MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
 	}

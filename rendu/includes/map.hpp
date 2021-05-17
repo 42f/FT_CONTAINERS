@@ -170,16 +170,16 @@ namespace ft	{
 				operator<(const iterator& rhs) const	{ return _ptr< rhs._ptr; }
 
 				pointer
-				operator->()				{ return (_ptr->item); }
+				operator->()				{ return (&(_ptr->item)); }
 
 				const_pointer
-				operator->()	const		{ return (_ptr->item); }
+				operator->()	const		{ return (&(_ptr->item)); }
 
 				reference
-				operator*()					{ return (*(_ptr->item)); }
+				operator*()					{ return (_ptr->item); }
 
 				const_reference
-				operator*()	const			{ return (*(_ptr->item)); }
+				operator*()	const			{ return (_ptr->item); }
 
 				/**
 				 * @brief Pointer holding the address of the iterator element.
@@ -193,10 +193,10 @@ namespace ft	{
 				void
 				getNextBranch( void )	{
 
-					Key				startKey = _ptr->item->first;
+					Key				startKey = _ptr->item.first;
 					map_node_ptr	cursor = _ptr->parent;
 
-					while (cursor != NULL && _comp(cursor->item->first, startKey) == true)
+					while (cursor != NULL && _comp(cursor->item.first, startKey) == true)
 						cursor = cursor->parent;
 					_ptr = cursor;
 				}
@@ -204,10 +204,10 @@ namespace ft	{
 				void
 				getPreviousBranch( void )	{
 
-					Key				startKey = _ptr->item->first;
+					Key				startKey = _ptr->item.first;
 					map_node_ptr	cursor = _ptr->parent;
 
-					while (cursor != NULL && _comp(startKey, cursor->item->first) == true)
+					while (cursor != NULL && _comp(startKey, cursor->item.first) == true)
 						cursor = cursor->parent;
 					_ptr = cursor;
 				}
@@ -226,12 +226,19 @@ namespace ft	{
 			}; //----------------- Class iterator
 
 			struct map_node	{
+
+				map_node( value_type itemSrc ) :	left(NULL),
+													parent(NULL),
+													right(NULL),
+													item(itemSrc) {}
+				~map_node( void ) {}
+
 				map_node*		left;
 				map_node*		parent;
 				map_node*		right;
-				value_type*		item;
-				// value_type		item;
+				// value_type*		item;
 				bool			color;
+				value_type		item;
 			};
 
 			class value_compare {
@@ -269,7 +276,6 @@ namespace ft	{
 																		_dumbNode(NULL),
 																		_size(0),
 																		_allocNode(userAlloc),
-																		_allocPair(userAlloc),
 																		_comp(comp)				{
 
 				if (DEBUG_MODE >= 4) std::cout << "CONSTRUCTOR --> DEFAULT explicit " << __func__ << std::endl;
@@ -286,7 +292,6 @@ namespace ft	{
 																		_dumbNode(NULL),
 																		_size(0),
 																		_allocNode(userAlloc),
-																		_allocPair(userAlloc),
 																		_comp(comp)				{
 
 				if (DEBUG_MODE >= 4) std::cout << "CONSTRUCTOR --> range pre dispatcher ! " << __func__ << std::endl;
@@ -303,7 +308,6 @@ namespace ft	{
 												_dumbNode(NULL),
 												_size(0),
 												_allocNode(src._allocNode),
-												_allocPair(src._allocPair),
 												_comp(src._comp)				{
 
 				if (DEBUG_MODE >= 4) std::cout << "CONSTRUCTOR --> copy " << __func__ << std::endl;
@@ -329,7 +333,6 @@ namespace ft	{
 				map_node*				_dumbNode;
 				size_t					_size;
 				_node_allocator_type 	_allocNode;
-				allocator_type 			_allocPair;
 				Compare	const			_comp;
 
 /******************************************************************************.
@@ -374,24 +377,24 @@ namespace ft	{
 						std::cout << __func__ << std::endl;
 						std::cout << "NODE   " << node << std::endl;
 						if (node->item != NULL)	{
-							std::cout << "--- KEY    " << node->item->first << std::endl;
-							std::cout << "--  VAL    " << node->item->second << std::endl;
+							std::cout << "--- KEY    " << node->item.first << std::endl;
+							std::cout << "--  VAL    " << node->item.second << std::endl;
 						}
 						else
 							std::cout << "NO ITEM" << std::endl;
 						std::cout << "parent " << node->parent;
 						if (node->parent != NULL)
-							std::cout << "(" << node->parent->item->first << ";" << node->parent->item->second << ")" << std::endl;
+							std::cout << "(" << node->parent->item.first << ";" << node->parent->item.second << ")" << std::endl;
 						else
 							std::cout << "--> THIS NODE IS _HEAD" << std::endl;
 
 						std::cout << " left   " << node->left;
 						if (node->left != NULL)
-							std::cout << "(" << node->left->item->first << ";" << node->left->item->second << ")";
+							std::cout << "(" << node->left->item.first << ";" << node->left->item.second << ")";
 						std::cout << std::endl;
 						std::cout << " right  " << node->right;
 						if (node->right != NULL)
-							std::cout << "(" << node->right->item->first << ";" << node->right->item->second << ")";
+							std::cout << "(" << node->right->item.first << ";" << node->right->item.second << ")";
 						std::cout << std::endl;
 						std::cout << std::endl;
 					}
@@ -496,8 +499,8 @@ namespace ft	{
 
 				ft::pair<iterator, bool> ret;
 				if (position._ptr->parent != NULL
-					&& (_comp(position._ptr->parent->item->first, val.first) == true
-					|| _comp(val.first, position._ptr->parent->item->first) == true))
+					&& (_comp(position._ptr->parent->item.first, val.first) == true
+					|| _comp(val.first, position._ptr->parent->item.first) == true))
 						ret = btree_insert_data(NULL, &_head, val);
 				else
 					ret = btree_insert_data(position._ptr, &position._ptr, val);
@@ -596,7 +599,7 @@ namespace ft	{
 				}
 				decSize();
 				btree_update_dumbNode();
-				freeItem(deadNode->item);
+				// freeItem(deadNode->item);
 				freeNode(deadNode);
 			}
 
@@ -758,7 +761,7 @@ namespace ft	{
 
 				if (_dumbNode == NULL)	{
 					_dumbNode = _allocNode.allocate(1);
-					_allocNode.construct(_dumbNode, map_node());
+					_allocNode.construct(_dumbNode, map_node(value_type()));
 				}
 			}
 
@@ -766,9 +769,7 @@ namespace ft	{
 			btree_create_node(map_node* parent, key_type k, mapped_type val)	{
 
 				map_node*	newNode = _allocNode.allocate(1);
-				_allocNode.construct(newNode, map_node());
-				newNode->item = _allocPair.allocate(1);
-				_allocPair.construct(newNode->item, value_type(k, val));
+				_allocNode.construct(newNode, map_node(value_type(k ,val)));
 				newNode->parent = parent;
 				return (newNode);
 			}
@@ -785,9 +786,9 @@ namespace ft	{
 
 				if (*root != NULL)	{
 					map_node* tree = *root;
-					if (_comp(pairSrc.first, tree->item->first) == true)
+					if (_comp(pairSrc.first, tree->item.first) == true)
 						return (btree_insert_data(tree, &tree->left, pairSrc));
-					else if (isEqualKey(pairSrc.first, tree->item->first) == false)
+					else if (isEqualKey(pairSrc.first, tree->item.first) == false)
 						return (btree_insert_data(tree, &tree->right, pairSrc));
 					else
 						return (ft::pair<iterator, bool>(iterator(*root, _dumbNode, _comp), false));
@@ -866,9 +867,9 @@ namespace ft	{
 			btree_search_key(map_node* root, const key_type& targetKey)	{
 
 				if (root != NULL)	{
-					if (_comp(targetKey, root->item->first) == true)
+					if (_comp(targetKey, root->item.first) == true)
 						return (btree_search_key(root->left, targetKey));
-					else if (_comp(root->item->first, targetKey) == true)
+					else if (_comp(root->item.first, targetKey) == true)
 						return (btree_search_key(root->right, targetKey));
 				}
 				return (root);
@@ -1128,21 +1129,13 @@ namespace ft	{
 			}
 
 			void
-			freeItem( value_type* item )	{
-				if (item != NULL)	{
-					_allocPair.destroy(item);
-					_allocPair.deallocate(item, 1);
-				}
-			}
-
-			void
 			freeAllNodes( map_node* root )	{
 
 				if (root == NULL)
 					return;
 				freeAllNodes(root->left);
 				freeAllNodes(root->right);
-				freeItem(root->item);
+				// freeItem(root->item);
 				freeNode(root);
 			}
 

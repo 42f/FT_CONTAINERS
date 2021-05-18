@@ -64,8 +64,8 @@ namespace ft	{
 			typedef typename ft::map_iterator<Key, T, Compare, map_node, false>	iterator;
 			typedef typename ft::map_iterator<Key, T, Compare, map_node, true>	const_iterator;
 
-            typedef typename std::reverse_iterator<iterator<Key, T, Compare, Node, false> > reverse_iterator;
-            typedef typename std::reverse_iterator<iterator<Key, T, Compare, Node, true> >  const_reverse_iterator;
+            typedef typename std::reverse_iterator<map_iterator<Key, T, Compare, map_node, false> > reverse_iterator;
+            typedef typename std::reverse_iterator<map_iterator<Key, T, Compare, map_node, true> >  const_reverse_iterator;
 
 			// typedef const iterator											const_iterator;
 			// typedef std::reverse_iterator<iterator> 						reverse_iterator;

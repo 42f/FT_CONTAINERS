@@ -16,13 +16,13 @@ namespace ft	{
     *   Use a boolean to typedef either type 1 or type 2.
     */
     template <bool isConst, typename isFalse, typename isTrue>
-    struct chooseConst {};
+    struct ft_enable_if {};
 
     /**
     *   Typedef: pointer, ref...
     */
     template <typename isFalse, typename isTrue>
-    struct chooseConst<false, isFalse, isTrue>
+    struct ft_enable_if<false, isFalse, isTrue>
     {
         typedef isFalse type;
     };
@@ -31,7 +31,7 @@ namespace ft	{
     *   Typedef: const pointer, const ref...
     */
     template <typename isFalse, typename isTrue>
-    struct chooseConst<true, isFalse, isTrue>
+    struct ft_enable_if<true, isFalse, isTrue>
     {
         typedef isTrue type;
     };
@@ -45,16 +45,13 @@ namespace ft	{
 
             typedef std::bidirectional_iterator_tag			iterator_category;
 
-			typedef map_iterator<Key, T, Compare, map_node, false>	iterator;
-			typedef map_iterator<Key, T, Compare, map_node, true>	const_iterator;
 			typedef std::reverse_iterator< map_iterator<Key, T, Compare, map_node, false> >	reverse_iterator;
 			typedef std::reverse_iterator< map_iterator<Key, T, Compare, map_node, true> >	const_reverse_iterator;
-			// typedef std::reverse_iterator<iterator> 		reverse_iterator;
-			// typedef const reverse_iterator					const_reverse_iterator;
-			typedef	Compare									key_compare;
 
-			typedef typename chooseConst<B, value_type&, const value_type&>::type       reference;
-            typedef typename chooseConst<B, value_type*, const value_type*>::type       pointer;
+			typedef	Compare									key_compare;
+			typedef typename ft::pair<const Key, T>			value_type;
+			typedef typename ft_enable_if<B, value_type&, const value_type&>::type       reference;
+            typedef typename ft_enable_if<B, value_type*, const value_type*>::type       pointer;
 
 			// typedef	ft::pair<const Key, T>*					pointer;
 			// typedef	ft::pair<const Key, T>&					reference;
@@ -66,11 +63,15 @@ namespace ft	{
 				const key_compare& comp = key_compare() ) :	_ptr(ptr),
 															_btreeDumdNode(dumbNode),
 															_comp(comp)		{}
-			map_iterator(const iterator& itSrc) :	_ptr(itSrc._ptr),
-													_btreeDumdNode(itSrc._btreeDumdNode),
-													_comp(itSrc._comp)		{}
 
-			iterator&
+
+			map_iterator(const map_iterator<Key, T, Compare, map_node, false>& itSrc) :	_ptr(itSrc._ptr),
+																							_btreeDumdNode(itSrc._btreeDumdNode),
+																							_comp(itSrc._comp)		{}
+
+			~map_iterator( void )	{}
+
+			map_iterator&
 			operator++( void ) {
 
 				if (_ptr == _btreeDumdNode)
@@ -92,14 +93,14 @@ namespace ft	{
 				return *this;
 			}
 
-			iterator
+			map_iterator
 			operator++( int ) {
-				iterator tmp(*this);
+				map_iterator tmp(*this);
 				operator++();
 				return tmp;
 			}
 
-			iterator&
+			map_iterator&
 			operator--( void ) {
 
 				if (_ptr == _btreeDumdNode)
@@ -121,35 +122,30 @@ namespace ft	{
 				return *this;
 			}
 
-			iterator
+			map_iterator
 			operator--( int ) {
-				iterator tmp(*this);
+				map_iterator tmp(*this);
 				operator--();
 				return tmp;
 			}
 
-			operator==(const iterator& rhs) const	{ return _ptr==rhs._ptr; }
+			bool
+			operator==(const map_iterator& rhs) const	{ return _ptr==rhs._ptr; }
 
 			bool
-			operator!=(const iterator& rhs) const	{ return _ptr!=rhs._ptr; }
+			operator!=(const map_iterator& rhs) const	{ return _ptr!=rhs._ptr; }
 
 			bool
-			operator<(const iterator& rhs) const	{ return _ptr< rhs._ptr; }
+			operator<(const map_iterator& rhs) const	{ return _ptr< rhs._ptr; }
 
 			pointer
-			operator->()				{ return (&(_ptr->item)); }
-
-			const_pointer
-			operator->()	const		{ return (&(_ptr->item)); }
+			operator->()	const		{ return (&_ptr->item); }
 
 			reference
-			operator*()					{ return (_ptr->item); }
-
-			const_reference
-			operator*()	const			{ return (_ptr->item); }
+			operator*()	const		{ return (_ptr->item); }
 
 			/**
-			 * @brief Pointer holding the address of the iterator element.
+			 * @brief Pointer holding the address of the map_iterator element.
 			*/
 			map_node*			_ptr;
 			map_node*			_btreeDumdNode;
@@ -211,7 +207,7 @@ namespace ft	{
 			}
 
 
-		}; //----------------- Class iterator
+		}; //----------------- Class map_iterator
 
 
 } // ----------------- ft namespace

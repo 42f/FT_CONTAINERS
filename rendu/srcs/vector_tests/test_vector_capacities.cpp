@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:48:58 by bvalette          #+#    #+#             */
-/*   Updated: 2021/02/20 12:08:11 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/17 11:43:51 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,58 @@ test_vector_capacities( void )	{
 		testBool(std.max_size() == ft.max_size(), __LINE__);
 
 	}
+		{
+		size_t		testSize = 0;
+		std::cout << SUBTITLE << "[ max_size for a vector of " << testSize << " elements ]" << RESET_COLOR << std::endl;
+		std::vector<bool>	std(testSize);
+		ft::vector<bool>		ft(testSize);
+		testBool(std.max_size() == ft.max_size(), __LINE__);
+		std::cout << "bool : max_size for std : " << std.max_size() << std::endl;
+		std::cout << "bool : max_size for ft  : " << ft.max_size() << std::endl;
+
+	}
+	{
+		std::vector<char>		std_c0;
+		ft::vector<char>		ft_c0;
+		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
+		std::cout << "char : MAX SIZE = std. " << std_c0.max_size() << std::endl;
+		std::cout << "char : MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
+	}
+	{
+		std::vector<std::string>		std_c0;
+		ft::vector<std::string>		ft_c0;
+		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
+		std::cout << "std::string : MAX SIZE = std. " << std_c0.max_size() << std::endl;
+		std::cout << "std::string : MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
+	}
+	{
+		std::vector<float>		std_c0;
+		ft::vector<float>		ft_c0;
+		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
+		std::cout << "float : MAX SIZE = std. " << std_c0.max_size() << std::endl;
+		std::cout << "float : MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
+	}
+	{
+		std::vector<int>		std_c0;
+		ft::vector<int>			ft_c0;
+		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
+		std::cout << "int : MAX SIZE = std. " << std_c0.max_size() << std::endl;
+		std::cout << "int : MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
+	}
+	{
+		std::vector<short>		std_c0;
+		ft::vector<short>			ft_c0;
+		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
+		std::cout << "short : MAX SIZE = std. " << std_c0.max_size() << std::endl;
+		std::cout << "short : MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
+	}
+	{
+		std::vector<double>		std_c0;
+		ft::vector<double>			ft_c0;
+		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
+		std::cout << "double : MAX SIZE = std. " << std_c0.max_size() << std::endl;
+		std::cout << "double : MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
+	}
+
 	return (0);
 }

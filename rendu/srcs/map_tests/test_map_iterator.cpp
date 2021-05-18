@@ -13,7 +13,7 @@
 #include "bvaletteTester_map.hpp"
 
 void
-test_constIterator( ft::map<int, int>  & ft_c0, std::map<int, int> & std_c0 )	{
+test_constIterator( ft::map<int, int>  const & ft_c0, std::map<int, int> const & std_c0 )	{
 
 	std::cout << HEADER_TITLE << "Test const version of reverse iterator" << RESET_COLOR << std::endl;
 	std::cout << SUBTITLE << "If compile fails, const version of function are missing" << RESET_COLOR << std::endl;
@@ -28,9 +28,9 @@ test_constIterator( ft::map<int, int>  & ft_c0, std::map<int, int> & std_c0 )	{
 	std::cout << "Test std: operator-> on const iterator: " << std_it->first << std::endl;
 	std::cout << "Test ft : operator-> on const iterator: " << ft_itend->first << std::endl;//  !!!! ---> HINT:  IN CASE OF COMPILER ISSUE: const version is MISSING !
 	std::cout << "Test std: operator-> on const iterator: " << std_itend->first << std::endl;
-	// ++std_it;
+	++std_it;
 	// std::cout <<  << std::endl;std::cout << "it ++ -> " << std_it->first << std::endl;
-	// ft_it++;
+	++ft_it;
 	testBool(true);
 }
 

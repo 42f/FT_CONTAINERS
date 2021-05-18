@@ -1,8 +1,8 @@
 #ifndef BVALETTETESTER_VECTOR_HPP
 # define BVALETTETESTER_VECTOR_HPP
 
-#include "vector.hpp"
-#include "bvaletteTester.hpp"
+# include "../vector/vector.hpp"
+# include "./tester/bvaletteTester.hpp"
 
 /**	===========================================================================+
  *  ----------- TESTER FOR VECTOR ---------------------------------------------|

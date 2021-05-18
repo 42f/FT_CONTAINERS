@@ -10,32 +10,30 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bvaletteTester_map.hpp"
+# include "./tester/bvaletteTester_map.hpp"
 
 int
 test_map_member_swap( void )	{
 	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with ints ~~~~~~~~~~~" << RESET_COLOR << std::endl;
 	{
 		std::cout << SUBTITLE << "[ Instanciate map0 of 3 elements value -1 ]" << RESET_COLOR << std::endl;
-		ft::map<int>	ft_c0(3, -1);
-		std::map<int>	std_c0(3, -1);
+		ft::map<int, int>	ft_c0(3, -1);
+		std::map<int, int>	std_c0(3, -1);
 		testMap(ft_c0, std_c0, NOPRINT);
 
 		std::cout << SUBTITLE << "[ Instanciate map1 of 3 elements value 42 + push front 0 + push back 99 ]" << RESET_COLOR << std::endl;
-		ft::map<int>	ft_c1(3, 42);
-		std::map<int>	std_c1(3, 42);
+		ft::map<int, int>	ft_c1(3, 42);
+		std::map<int, int>	std_c1(3, 42);
 		ft_c1.insert(ft_c1.begin(), 0);
 		std_c1.insert(std_c1.begin(), 0);
-		ft_c1.push_back(99);
-		std_c1.push_back(99);
 		testMap(ft_c1, std_c1, NOPRINT);
 
 		std::cout << SUBTITLE << "[ instanciate iterator to begin of map 0 and map 1 ]" << RESET_COLOR << std::endl;
 
-		ft::map<int>::iterator		ft_it0 = ft_c0.begin();
-		ft::map<int>::iterator		ft_it1 = ft_c1.begin();
-		std::map<int>::iterator	std_it0 = std_c0.begin();
-		std::map<int>::iterator	std_it1 = std_c1.begin();
+		ft::map<int, int>::iterator		ft_it0 = ft_c0.begin();
+		ft::map<int, int>::iterator		ft_it1 = ft_c1.begin();
+		std::map<int, int>::iterator	std_it0 = std_c0.begin();
+		std::map<int, int>::iterator	std_it1 = std_c1.begin();
 
 		std::cout << SUBTITLE << "[ swap 2 maps ]" << RESET_COLOR << std::endl;
 		ft_c0.swap(ft_c1);

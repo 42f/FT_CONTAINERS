@@ -1,7 +1,7 @@
 #ifndef MAP_HPP
 # define MAP_HPP
 
-# include "map_pair.hpp"
+# include "../utils/ft_pair.hpp"
 # include "map_iterator.hpp"
 
 # include <iostream>
@@ -212,15 +212,12 @@ namespace ft	{
 					debugPrintNode(_dumbNode);
 					std::cout << "Printing tree of size  " << _size << std::endl;
 
-					// std::cout << "*****************PREFIX******************" << std::endl;
-					// btree_apply_node_prefix(_head, debugPrintNode);
-
 					std::cout << "****************ITERATORES*******************" << std::endl;
 					iterator it = begin();
 					iterator ite = end();
 
 					for(it; it != ite; ++it)
-						debugPrintNode(it._ptr);
+						debugPrintNode(it.getPtr());
 
 					std::cout << "***********************************" << std::endl;
 				}
@@ -356,12 +353,14 @@ namespace ft	{
 					return (NULL);		// what to return ?
 
 				ft::pair<iterator, bool> ret;
-				if (position._ptr->parent != NULL
-					&& (_comp(position._ptr->parent->item.first, val.first) == true
-					|| _comp(val.first, position._ptr->parent->item.first) == true))
+				map_node*	posParent = position.getPosParent();
+				map_node*	posNode = position.getPtr();
+				if (posParent != NULL
+					&& (_comp(posParent->item.first, val.first) == true
+					|| _comp(val.first, posParent->item.first) == true))
 						ret = btree_insert_data(NULL, &_head, val);
 				else
-					ret = btree_insert_data(position._ptr, &position._ptr, val);
+					ret = btree_insert_data(posNode, &posNode, val);
 				return (ret.first);
 			}
 
@@ -438,7 +437,7 @@ namespace ft	{
 			void
 			erase( iterator position )	{
 
-				map_node*	deadNode = position._ptr;
+				map_node*	deadNode = position.getPtr();
 				map_node*	deadNodeLeft = deadNode->left;
 				map_node*	deadNodeRight = deadNode->right;
 				map_node*	singleChild = getSingleChild(deadNode);
@@ -524,21 +523,27 @@ namespace ft	{
 			// }
 
 
-// 			void
-// 			swap (map& src)	{
+			void
+			swap (map& src)	{
 
-// 				pointer 	headTmp = src._head;
-// 				pointer 	tailTmp = src.tail;
-// 				pointer		tailStorageTmp = src.tailStorage;
+				map_node*				tmp_head = src._head;
+				map_node*				tmp_dumbNode = src._dumbNode;
+				size_t					tmp_size = src._size;
+				_node_allocator_type 	tmp_allocNode = src._allocNode;
+				// Compare	const			tmp_comp = src._comp;
 
-// 				src._head = this->_head;
-// 				src.tail = this->tail;
-// 				src.tailStorage = this->tailStorage;
+				src._head = this->_head;
+				src._dumbNode = this->_dumbNode;
+				src._size = this->_size;
+				src._allocNode = this->_allocNode;
+				// src._comp = this->_comp;
 
-// 				this->_head = headTmp;
-// 				this->tail = tailTmp;
-// 				this->tailStorage = tailStorageTmp;
-// 			}
+				this->_head = tmp_head;
+				this->_dumbNode = tmp_dumbNode;
+				this->_size = tmp_size;
+				this->_allocNode = tmp_allocNode;
+				// this->_comp = tmp_comp;
+			}
 
 // 			/**
 // 			 * @brief Here we use the same technic as for insert : the type
@@ -582,6 +587,8 @@ namespace ft	{
 
 			mapped_type&
 			operator[]( const Key& key )	{
+
+				// return (*((this->insert(make_pair(key,mapped_type()))).first).second);
 
 				value_type					insertValue(key, mapped_type());
 				ft::pair<iterator, bool>	ret = insert(insertValue);
@@ -1045,13 +1052,12 @@ namespace ft	{
 
 
 
+		template <class Key, class T, class Compare, class Alloc>
+		void
+		swap (map<Key,T,Compare,Alloc>& x, map<Key,T,Compare,Alloc>& y)	{
 
-		// template <class T, class Alloc >
-		// void
-		// swap (map<T,Alloc>& x, map<T,Alloc>& y)	{
-
-		// 	x.swap(y);
-		// };
+			x.swap(y);
+		};
 
 		// template <class T, class Alloc>
 		// bool

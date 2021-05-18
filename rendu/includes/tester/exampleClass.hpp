@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <string>
-#include "bvaletteTester_defines.hpp"
+# include "./bvaletteTester_defines.hpp"
 
 class exampleClass	{
 

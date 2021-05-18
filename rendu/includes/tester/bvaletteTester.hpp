@@ -9,7 +9,7 @@
 #include <unistd.h>
 #include <iostream>
 
-#include "bvaletteTester_defines.hpp"
+# include "./bvaletteTester_defines.hpp"
 
 class failedTest :  public std::exception {};
 

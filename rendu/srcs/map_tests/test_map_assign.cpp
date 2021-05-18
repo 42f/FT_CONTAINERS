@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bvaletteTester_map.hpp"
+# include "./tester/bvaletteTester_map.hpp"
 
 void
 testAssign(ft::map<int> & ft_c0, std::map<int> & std_c0, size_t n, int val)	{

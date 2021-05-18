@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "exampleClass.hpp"
-#include "bvaletteTester_map.hpp"
+# include "./tester/exampleClass.hpp"
+# include "./tester/bvaletteTester_map.hpp"
 
 void
 testBasicInsertMemberFunction ( void )	{

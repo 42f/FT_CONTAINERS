@@ -1,7 +1,8 @@
 #ifndef MAP_ITERATOR_HPP
 # define MAP_ITERATOR_HPP
 
-# include "map_pair.hpp"
+# include "../utils/ft_pair.hpp"
+# include "../utils/ft_enable_if.hpp"
 # include <iostream>
 # include <cstddef>
 
@@ -11,31 +12,6 @@
 
 
 namespace ft	{
-
-	/**
-    *   Use a boolean to typedef either type 1 or type 2.
-    */
-    template <bool isConst, typename isFalse, typename isTrue>
-    struct ft_enable_if {};
-
-    /**
-    *   Typedef: pointer, ref...
-    */
-    template <typename isFalse, typename isTrue>
-    struct ft_enable_if<false, isFalse, isTrue>
-    {
-        typedef isFalse type;
-    };
-
-    /**
-    *   Typedef: const pointer, const ref...
-    */
-    template <typename isFalse, typename isTrue>
-    struct ft_enable_if<true, isFalse, isTrue>
-    {
-        typedef isTrue type;
-    };
-
 
 	template< 	class Key,
 				class T,
@@ -53,10 +29,6 @@ namespace ft	{
 			typedef typename ft_enable_if<B, value_type&, const value_type&>::type       reference;
             typedef typename ft_enable_if<B, value_type*, const value_type*>::type       pointer;
 
-			// typedef	ft::pair<const Key, T>*					pointer;
-			// typedef	ft::pair<const Key, T>&					reference;
-			// typedef	const ft::pair<const Key, T>*			const_pointer;
-			// typedef	const ft::pair<const Key, T>&			const_reference;
 		public:
 
 			map_iterator( map_node* ptr = NULL, map_node* dumbNode = NULL,
@@ -65,9 +37,9 @@ namespace ft	{
 															_comp(comp)		{}
 
 
-			map_iterator(const map_iterator<Key, T, Compare, map_node, false>& itSrc) :	_ptr(itSrc._ptr),
-																							_btreeDumdNode(itSrc._btreeDumdNode),
-																							_comp(itSrc._comp)		{}
+			map_iterator(const map_iterator<Key, T, Compare, map_node, false>& itSrc) :	_ptr(itSrc.getPtr()),
+																						_btreeDumdNode(itSrc.getDumbNode()),
+																						_comp(itSrc.getComp())		{}
 
 			~map_iterator( void )	{}
 
@@ -144,30 +116,27 @@ namespace ft	{
 			reference
 			operator*()	const		{ return (_ptr->item); }
 
+
+			map_node*			getPtr(void) const { return (_ptr);	}
+
+			map_node*			getPosParent(void) const {
+
+				if (_ptr != NULL)
+					return (_ptr->parent);
+				return (NULL);
+			}
+
+			map_node*			getDumbNode(void) const { return (_btreeDumdNode);	}
+			Compare				getComp(void) const { return (_comp);	}
+
+
+		private:
 			/**
 			 * @brief Pointer holding the address of the map_iterator element.
 			*/
 			map_node*			_ptr;
 			map_node*			_btreeDumdNode;
 			Compare				_comp;
-
-		private:
-
-			map_node*
-			getFarLeft( map_node* cursor )	{
-
-				while (cursor != NULL && cursor->left != NULL)
-					cursor = cursor->left;
-				return (cursor);
-			}
-
-			map_node*
-			getFarRight( map_node* cursor )	{
-
-				while (cursor != NULL && cursor->right != NULL)
-					cursor = cursor->right;
-				return (cursor);
-			}
 
 			void
 			getNextBranch( void )	{
@@ -191,6 +160,22 @@ namespace ft	{
 				_ptr = cursor;
 			}
 
+			static	map_node*
+			getFarLeft( map_node* cursor )	{
+
+				while (cursor != NULL && cursor->left != NULL)
+					cursor = cursor->left;
+				return (cursor);
+			}
+
+			static	map_node*
+			getFarRight( map_node* cursor )	{
+
+				while (cursor != NULL && cursor->right != NULL)
+					cursor = cursor->right;
+				return (cursor);
+			}
+
 			bool
 			isFirstNode( map_node* p )	{
 				return (p == _btreeDumdNode->left);
@@ -201,7 +186,7 @@ namespace ft	{
 				return (p == _btreeDumdNode->right);
 			}
 
-			bool
+			static	bool
 			isLeaf(map_node* node)	{
 				return (node->left == NULL && node->right == NULL);
 			}

@@ -1,5 +1,5 @@
-#include "list.hpp"
-#include "bvaletteTester.hpp"
+# include "../list/list.hpp"
+# include "./tester/bvaletteTester.hpp"
 
 #ifndef BVALETTETESTER_LIST_HPP
 # define BVALETTETESTER_LIST_HPP

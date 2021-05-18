@@ -1,8 +1,8 @@
 #ifndef BVALETTETESTER_MAP_HPP
 # define BVALETTETESTER_MAP_HPP
 
-#include "map.hpp"
-#include "bvaletteTester.hpp"
+# include "../map/map.hpp"
+# include "./tester/bvaletteTester.hpp"
 
 /**	===========================================================================+
  *  ----------- TESTER FOR MAP ------------------------------------------------|

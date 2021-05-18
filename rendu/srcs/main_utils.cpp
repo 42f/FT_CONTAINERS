@@ -6,11 +6,11 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:23:24 by bvalette          #+#    #+#             */
-/*   Updated: 2021/02/22 09:37:44 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/18 09:50:28 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bvaletteTester.hpp"
+# include "./tester/bvaletteTester.hpp"
 
 bool more_than_100 (const int& value) { return (value>100); }
 bool more_than_10 (const int& value) { return (value>10); }

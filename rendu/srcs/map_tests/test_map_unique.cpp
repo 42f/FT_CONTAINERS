@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bvaletteTester_map.hpp"
+# include "./tester/bvaletteTester_map.hpp"
 
 int
 test_map_unique( void )	{

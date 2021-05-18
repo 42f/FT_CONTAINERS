@@ -6,12 +6,12 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:50:31 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/14 15:34:59 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/18 09:50:57 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bvaletteTester_vector.hpp"
-#include "exampleClass.hpp"
+# include "./tester/bvaletteTester_vector.hpp"
+# include "./tester/exampleClass.hpp"
 
 int
 test_vector_instantiation( void )	{

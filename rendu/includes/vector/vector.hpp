@@ -296,8 +296,6 @@ namespace ft	{
 
 			size_type
 			max_size( void ) const	{ return this->alloc.max_size();  }
-//return std::numeric_limits<difference_type>::max() / (sizeof(T) / 2 < 1 ? 1 : sizeof(T) / 2);
-// from discord ?
 
 			bool
 			empty( void ) const		{ return (size() == 0); }

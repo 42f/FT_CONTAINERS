@@ -10,71 +10,78 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bvaletteTester_map.hpp"
+# include "./tester/bvaletteTester_map.hpp"
+# include "./tester/exampleClass.hpp"
+
 
 void
-test_constAt(ft::map<int> const & ft_c0, std::map<int> const & std_c0) {
+test_basic_brackets()	{
 
-		std::cout << SUBTITLE << " Calling const version of functions at and operator[] " << RESET_COLOR << std::endl;
-		const int & constVal_std = std_c0.at(1);
-		const int & constVal_ft = ft_c0.at(1); 				//  !!!! ---> HINT:  IN CASE OF COMPILER ISSUE: const version is MISSING !
-		testBool(constVal_std == constVal_ft, __LINE__);
-		testBool( ft_c0[1] ==  std_c0[1], __LINE__);	//  !!!! ---> HINT:  IN CASE OF COMPILER ISSUE: const version is MISSING !
+		std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " ~~~~~~~~~~~" << RESET_COLOR << std::endl;
+		std::map<int, exampleClass>		std_c0;
+		ft::map<int, exampleClass>		ft_c0;
+
+		testBool(ft_c0[42] == std_c0[42], __LINE__);
+		ft_c0[42] = 21;
+		std_c0[42] = 21;
+		testBool(ft_c0[42] == std_c0[42], __LINE__);
+		ft_c0[42] = 1;
+		std_c0[42] = 1;
+		testBool(ft_c0[42] == std_c0[42], __LINE__);
+		ft_c0[42];
+		std_c0[42];
+		testBool(ft_c0[42] == std_c0[42], __LINE__);
 }
 
-int
-test_map_at_operatorBrackets( void )	{
-	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with ints ~~~~~~~~~~~" << RESET_COLOR << std::endl;
+template<typename T_FT, typename T_STD>
+void
+test_brackets(void)	{
 	{
-		ft::map<int>			ft_c0;
-		std::map<int>		std_c0;
+		std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " ~~~~~~~~~~~" << RESET_COLOR << std::endl;
+		T_FT		ft_c0;
+		T_STD		std_c0;
 
 
 		srand(reinterpret_cast<long unsigned int>(&std_c0));
 		size_t	testSize = 20 + rand() % 10000;
-		std::cout << HEADER_TITLE << "Instanciate map with "<< testSize << " values, a random number of random valueS " << RESET_COLOR << std::endl;
+		std::cout << HEADER_TITLE << " Insert "<< testSize;
+		std::cout << " random key values in a map with eighter incremental mapped value or no value set, the same key value will be tested more than one time " << RESET_COLOR << std::endl;
 
 		int		val;
-
-		ft_c0.reserve(testSize + 1);
-		std_c0.reserve(testSize + 1);
+		std::vector<int>	testValues;
+		testValues.reserve(testSize);
 		for (size_t i = 1; i < testSize; i++)	{
-			val = rand();
-			ft_c0.push_back(val);
-			std_c0.push_back(val);
+			val = rand()%4200;
+			testValues.push_back(val);
+			if (i % 2 == 0)	{
+				ft_c0[val];
+				std_c0[val];
+			}
+			else	{
+				ft_c0[val] = i;
+				std_c0[val] = i;
+			}
 		}
 		testMap(ft_c0, std_c0, NOPRINT);
 
 		bool	success = true;
-		std::cout << SUBTITLE << " Going though the whole map, one at function call at the time " << RESET_COLOR << std::endl;
-		for (size_t i = 0; i < testSize - 1 ; i++)	{
-			if (ft_c0.at(i) != std_c0.at(i))
-			 	success = testBool(false, __LINE__, i);
+		std::cout << SUBTITLE << " Going though the whole map, one operator[] call at the time " << RESET_COLOR << std::endl;
+		std::vector<int>::iterator it = testValues.begin();
+		std::vector<int>::iterator ite = testValues.end();
+		for (int i = 0; it != ite && success == true; i++, it++)	{
+			success = (ft_c0[*it] == std_c0[*it]);
 		}
 		testBool(success, __LINE__);
-		try {
-			try { std_c0.at(testSize); } catch (std::out_of_range & e) {};
-			ft_c0.at(testSize);
-			std::cout << "No exception thrown ! Bad !! " << std::endl;
-			testBool(false, __LINE__);
-		}
-		catch ( std::out_of_range & e)	{
-			std::cout << "Catched exception, as  it should, Out of Range : " << e.what() << std::endl;
-			testBool(true, __LINE__);
-		}
-
-
-		success = true;
-		std::cout << SUBTITLE << " Going though the whole map, with operator[]" << RESET_COLOR << std::endl;
-		for (size_t i = 0; i < testSize - 1 ; i++)	{
-			if (ft_c0[i] != std_c0[i])
-			 	success = testBool(false, __LINE__, i);
-		}
-		testBool(success, __LINE__);
-
-		test_constAt(ft_c0, std_c0);
-
 	}
+}
+
+
+int
+test_map_at_operatorBrackets( void )	{
+
+	test_basic_brackets();
+	test_brackets<ft::map<int, int>, std::map<int, int> >();
+	test_brackets<ft::map<int, exampleClass>, std::map<int, exampleClass> >();
 	return (0);
 }
 

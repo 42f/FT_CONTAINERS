@@ -4,7 +4,8 @@ GREEN = \033[32m
 YELLOW = \033[33m
 
 NAME := ft_container
-INCLUDES += ./includes
+
+INCLUDES += ./includes/
 SRCS_DIR = ./srcs
 CC = clang++
 OBJ_DIR = ./objs_$(NAME)/
@@ -78,8 +79,10 @@ endif
 PROJECT_HEADER += ./list.hpp
 PROJECT_HEADER += ./vector.hpp
 PROJECT_HEADER += ./map.hpp
-PROJECT_HEADER += ./map_pair.hpp
 PROJECT_HEADER += ./map_iterator.hpp
+
+PROJECT_HEADER += ./ft_pair.hpp
+PROJECT_HEADER += ./ft_enable_if.hpp
 
 HEADER += ./bvaletteTester.hpp
 HEADER += ./bvaletteTester_defines.hpp
@@ -164,15 +167,15 @@ SRCS += ./test_map_instantiation.cpp
 SRCS += ./test_map_insert_erase.cpp
 SRCS += ./test_map_capacities.cpp
 SRCS += ./test_map_iterator.cpp
+SRCS += ./test_map_at_operatorBrackets.cpp
+SRCS += ./test_map_nonmember_swap.cpp
 
 # SRCS += ./test_map_push_back_pop_back.cpp
 # SRCS += ./test_map_clear.cpp
 # SRCS += ./test_map_operatorEqual.cpp
 # SRCS += ./test_map_resize.cpp
 # SRCS += ./test_map_assign.cpp
-# SRCS += ./test_map_at_operatorBrackets.cpp
 # SRCS += ./test_map_member_swap.cpp
-# SRCS += ./test_map_nonmember_swap.cpp
 # SRCS += ./test_map_relational_operators.cpp
 # SRCS += ./test_map_reverseIterator.cpp
 # SRCS += ./test_map_element_access.cpp
@@ -190,7 +193,14 @@ vpath %.cpp ./srcs
 vpath %.cpp ./srcs/list_tests
 vpath %.cpp ./srcs/vector_tests
 vpath %.cpp ./srcs/map_tests
+
 vpath %.hpp ./includes
+vpath %.hpp ./includes/tester
+
+vpath %.hpp ./includes/map
+vpath %.hpp ./includes/list
+vpath %.hpp ./includes/vector
+vpath %.hpp ./includes/utils
 
 OBJS = $(patsubst %.cpp, $(OBJ_DIR)%.o, $(SRCS))
 PCHS = $(patsubst %.hpp, $(PCH_DIR)%.pch, $(PROJECT_HEADER))

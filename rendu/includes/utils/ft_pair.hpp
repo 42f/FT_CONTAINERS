@@ -1,5 +1,5 @@
-#ifndef MAP_PAIR_HPP
-# define MAP_PAIR_HPP
+#ifndef FT_PAIR_HPP
+# define FT_PAIR_HPP
 
 # include <iostream>
 

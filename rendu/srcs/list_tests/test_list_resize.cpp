@@ -6,11 +6,11 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:02:19 by bvalette          #+#    #+#             */
-/*   Updated: 2021/02/20 09:12:57 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/18 09:50:28 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bvaletteTester_list.hpp"
+# include "./tester/bvaletteTester_list.hpp"
 
 int
 test_list_resize( void )	{

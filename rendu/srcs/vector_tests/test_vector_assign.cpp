@@ -6,11 +6,11 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:48:00 by bvalette          #+#    #+#             */
-/*   Updated: 2021/02/22 14:24:18 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/18 09:50:28 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bvaletteTester_vector.hpp"
+# include "./tester/bvaletteTester_vector.hpp"
 
 void
 testAssign(ft::vector<int> & ft_c0, std::vector<int> & std_c0, size_t n, int val)	{

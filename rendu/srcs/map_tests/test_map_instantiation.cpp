@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bvaletteTester_map.hpp"
-#include "exampleClass.hpp"
+# include "./tester/bvaletteTester_map.hpp"
+# include "./tester/exampleClass.hpp"
 
 bool fncomp (char lhs, char rhs) {return lhs<rhs;}
 

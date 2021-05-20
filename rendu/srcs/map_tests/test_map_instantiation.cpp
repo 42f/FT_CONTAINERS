@@ -12,13 +12,7 @@
 
 # include "./tester/bvaletteTester_map.hpp"
 # include "./tester/exampleClass.hpp"
-
-bool fncomp (char lhs, char rhs) {return lhs<rhs;}
-
-struct classcomp {
-bool operator() (const char& lhs, const char& rhs) const
-	{return lhs<rhs;}
-};
+# include "./tester/compClass.hpp"
 
 int
 test_map_instantiation( void )	{
@@ -87,22 +81,22 @@ test_map_instantiation( void )	{
 		std::cout << SUBTITLE << "[ COPY CONSTRUCTOR with Custom compare class]" << RESET_COLOR << std::endl;
 		{
 
-			std::map<char, int, classcomp>	std_first_greater;
+			std::map<char, int, compClass>	std_first_greater;
 			std_first_greater.insert(std::pair<char, int>('a',10));
 			std_first_greater.insert(std::pair<char, int>('b',30));
 			std_first_greater.insert(std::pair<char, int>('c',50));
 			std_first_greater.insert(std::pair<char, int>('d',70));
 
-			ft::map<char, int, classcomp>	ft_first_greater;
+			ft::map<char, int, compClass>	ft_first_greater;
 			ft_first_greater.insert(ft::pair<char, int>('a',10));
 			ft_first_greater.insert(ft::pair<char, int>('b',30));
 			ft_first_greater.insert(ft::pair<char, int>('c',50));
 			ft_first_greater.insert(ft::pair<char, int>('d',70));
 
-			std::map<char, int, classcomp >	std_c0(std_first_greater);
-			ft::map<char, int,  classcomp >	ft_c0(ft_first_greater);
+			std::map<char, int, compClass >	std_c0(std_first_greater);
+			ft::map<char, int,  compClass >	ft_c0(ft_first_greater);
 
-			testMap<char, int, classcomp >(ft_c0, std_c0, NOPRINT);
+			testMap<char, int, compClass >(ft_c0, std_c0, NOPRINT);
 		}
 		std::cout << SUBTITLE << "[ CONSTRUCTOR WITH CUSTOM CLASS ]" << RESET_COLOR << std::endl;
 		{

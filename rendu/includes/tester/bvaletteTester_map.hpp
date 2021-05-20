@@ -163,7 +163,7 @@ int	test_map_resize( void );
 int	test_map_assign( void );
 int	test_map_at_operatorBrackets( void );
 int	test_map_member_swap( void );
-int	test_map_nonmember_swap( void );
+int	test_map_swap( void );
 int	test_map_relational_operators( void );
 int	test_map_splice( void );
 int	test_map_remove_if( void );

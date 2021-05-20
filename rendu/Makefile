@@ -90,6 +90,7 @@ HEADER += ./bvaletteTester_list.hpp
 HEADER += ./bvaletteTester_vector.hpp
 HEADER += ./bvaletteTester_map.hpp
 HEADER += ./exampleClass.hpp
+HEADER += ./compClass.hpp
 
 ################################################################################
 #-------- MAIN #################################################################
@@ -168,14 +169,13 @@ SRCS += ./test_map_insert_erase.cpp
 SRCS += ./test_map_capacities.cpp
 SRCS += ./test_map_iterator.cpp
 SRCS += ./test_map_at_operatorBrackets.cpp
-SRCS += ./test_map_nonmember_swap.cpp
+SRCS += ./test_map_swap.cpp
+SRCS += ./test_map_clear.cpp
 
 # SRCS += ./test_map_push_back_pop_back.cpp
-# SRCS += ./test_map_clear.cpp
 # SRCS += ./test_map_operatorEqual.cpp
 # SRCS += ./test_map_resize.cpp
 # SRCS += ./test_map_assign.cpp
-# SRCS += ./test_map_member_swap.cpp
 # SRCS += ./test_map_relational_operators.cpp
 # SRCS += ./test_map_reverseIterator.cpp
 # SRCS += ./test_map_element_access.cpp

@@ -177,7 +177,7 @@ namespace ft	{
 			~map( void )	{
 
 				if (DEBUG_MODE >= 4) std::cout << "DESTRUCTOR --> " << __func__ << std::endl;
-				clearTree();
+				clear();
 			}
 
 /******************************************************************************.
@@ -330,8 +330,16 @@ namespace ft	{
 				return (NULL);
 			}
 
-// 			void
-// 			clear( void )			{ erase(begin(), end()); }
+			void
+			clear( void )			{
+
+				if (DEBUG_MODE >= 3) std::cout << __func__ << std::endl;
+				freeAllNodes(_head);
+				freeNode(_dumbNode);
+				_size = 0;
+				_head = NULL;
+				_dumbNode = NULL;
+			}
 
 			/**
 			 * @brief insert single element
@@ -401,39 +409,6 @@ namespace ft	{
 				}
 			}
 
-// 			reference
-// 			at (size_type n)	{
-// 				checkRange(n);
-// 				return ((*this)[n]);
-// 			}
-
-// 			const_reference
-// 			at (size_type n) const	{
-// 				checkRange(n);
-// 				return ((*this)[n]);
-// 			}
-
-// 			/**
-// 			 * @brief insert range of elements
-// 			 * check here if arguments of type InputIterator are integer
-// 			 * or iterators and dispatch to the right overload.
-// 			 * Cf. /usr/include/c++/7/bits/cpp_type_traits.h line 136
-// 			 * for implementation. Basicly __is_integer is a template function
-// 			 * which, by default containts __false_type as __type, unless
-// 			 * it is one of the integer types so it contains __true_type
-// 			 * Here we create integer wich will be of type __true_type
-// 			 * or __false_type, and by calling insert_dispatch with it, the right
-// 			 * overload is called.
-// 			*/
-// 			template <class InputIterator>
-// 			void
-// 			insert (iterator position, InputIterator first,
-// 			InputIterator last)	{
-
-// 				typename std::__is_integer<InputIterator>::__type	integer;
-// 				insert_dispatch(position, first, last, integer);
-// 			}
-
 			void
 			erase( iterator position )	{
 
@@ -456,7 +431,6 @@ namespace ft	{
 				}
 				decSize();
 				btree_update_dumbNode();
-				// freeItem(deadNode->item);
 				freeNode(deadNode);
 			}
 
@@ -526,23 +500,22 @@ namespace ft	{
 			void
 			swap (map& src)	{
 
-				map_node*				tmp_head = src._head;
-				map_node*				tmp_dumbNode = src._dumbNode;
-				size_t					tmp_size = src._size;
-				_node_allocator_type 	tmp_allocNode = src._allocNode;
-				// Compare	const			tmp_comp = src._comp;
+				if (this->_head != src._head)	{
+					map_node*				tmp_head = src._head;
+					map_node*				tmp_dumbNode = src._dumbNode;
+					size_t					tmp_size = src._size;
+					_node_allocator_type 	tmp_allocNode = src._allocNode;
 
-				src._head = this->_head;
-				src._dumbNode = this->_dumbNode;
-				src._size = this->_size;
-				src._allocNode = this->_allocNode;
-				// src._comp = this->_comp;
+					src._head = this->_head;
+					src._dumbNode = this->_dumbNode;
+					src._size = this->_size;
+					src._allocNode = this->_allocNode;
 
-				this->_head = tmp_head;
-				this->_dumbNode = tmp_dumbNode;
-				this->_size = tmp_size;
-				this->_allocNode = tmp_allocNode;
-				// this->_comp = tmp_comp;
+					this->_head = tmp_head;
+					this->_dumbNode = tmp_dumbNode;
+					this->_size = tmp_size;
+					this->_allocNode = tmp_allocNode;
+				}
 			}
 
 // 			/**
@@ -976,14 +949,6 @@ namespace ft	{
 					// this->_alloc.destroy(p + i);
 				// }
 			// }
-
-			void
-			clearTree( void )	{
-
-				if (DEBUG_MODE >= 3) std::cout << __func__ << std::endl;
-				freeAllNodes(_head);
-				freeNode(_dumbNode);
-			}
 
 			void
 			freeNode( map_node* node)	{

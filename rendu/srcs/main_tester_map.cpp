@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:23:15 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/18 12:19:57 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/20 14:30:30 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,18 @@ main_tester_map( void )	{
 
 	try {
 
-		test_map_instantiation();
-		test_map_insert_erase();
-		test_map_capacities();
-		test_map_iterator();
-		test_map_at_operatorBrackets();
-		// test_map_member_swap();
-		test_map_nonmember_swap();
+		// test_map_instantiation();
+		// test_map_insert_erase();
+		// test_map_capacities();
+		// test_map_iterator();
+		// test_map_at_operatorBrackets();
+		// test_map_swap();
+		test_map_clear();
 
 	/******* NOT TESTED ******
+
+
 		test_map_reverseIterator();
-
-
-		test_map_clear();
 
 		test_map_element_access();
 		test_map_relational_operators();

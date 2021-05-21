@@ -210,9 +210,9 @@ namespace ft	{
 					iterator it = begin();
 					iterator ite = end();
 
-					for(it; it != ite; ++it)
+					for(; it != ite; ++it)	{
 						debugPrintNode(it.getPtr());
-
+					}
 					std::cout << "***********************************" << std::endl;
 				}
 
@@ -225,12 +225,8 @@ namespace ft	{
 						std::cout << std::endl;
 						std::cout << __func__ << std::endl;
 						std::cout << "NODE   " << node << std::endl;
-						if (node->item != NULL)	{
-							std::cout << "--- KEY    " << node->item.first << std::endl;
-							std::cout << "--  VAL    " << node->item.second << std::endl;
-						}
-						else
-							std::cout << "NO ITEM" << std::endl;
+						std::cout << "--- KEY    " << node->item.first << std::endl;
+						std::cout << "--  VAL    " << node->item.second << std::endl;
 						std::cout << "parent " << node->parent;
 						if (node->parent != NULL)
 							std::cout << "(" << node->parent->item.first << ";" << node->parent->item.second << ")" << std::endl;
@@ -260,21 +256,6 @@ namespace ft	{
 
 		public:
 
-			map_node*
-			locateNode( map_node* root, const key_type& key ) const	{
-
-				if (root != NULL)	{
-					if (_comp(key, root->item.first) == true)
-						return (locateNode(root->left, key));
-					else if (isEqualKey(key, root->item.first) == false)
-						return (locateNode(root->right, key));
-					else
-						return (root);
-				}
-				else
-					return (NULL);
-			}
-
 			iterator
 			find (const key_type& k)	{
 
@@ -289,6 +270,8 @@ namespace ft	{
 			const_iterator
 			find (const key_type& k) const	{
 
+				if (empty() == true)
+					return (NULL);
 				map_node* const	nodeFound = locateNode(_head, k);
 				if (nodeFound == NULL)
 					return (end());
@@ -299,6 +282,64 @@ namespace ft	{
 			count (const key_type& k) const	{
 				return (find(k) != end() ? 1 : 0);
 			}
+
+			iterator
+			lower_bound (const key_type& k) {
+
+				if (empty() == true)
+					return (NULL);
+
+				map_node* const	nodeFound = locateBound(_head, k, isLowerBoundNode);
+
+				if (nodeFound == NULL)
+					return (end());
+				else
+					return (iterator(nodeFound, _dumbNode, _comp));
+			}
+
+			const_iterator
+			lower_bound (const key_type& k) const	{
+
+				if (empty() == true)
+					return (NULL);
+
+				map_node* const	nodeFound = locateBound(_head, k, isLowerBoundNode);
+
+				if (nodeFound == NULL)
+					return (end());
+				else
+					return (const_iterator(nodeFound, _dumbNode, _comp));
+			}
+
+
+			iterator
+			upper_bound (const key_type& k) {
+
+				if (empty() == true)
+					return (NULL);
+
+				map_node* const	nodeFound = locateBound(_head, k, isUpperBoundNode);
+
+				if (nodeFound == NULL)
+					return (end());
+				else
+					return (iterator(nodeFound, _dumbNode, _comp));
+			}
+
+			const_iterator
+			upper_bound (const key_type& k) const	{
+
+				if (empty() == true)
+					return (NULL);
+
+				map_node* const	nodeFound = locateBound(_head, k, isUpperBoundNode);
+
+				if (nodeFound == NULL)
+					return (end());
+				else
+					return (const_iterator(nodeFound, _dumbNode, _comp));
+			}
+
 
 			size_type
 			max_size( void ) const	{ return this->_allocNode.max_size(); }
@@ -625,6 +666,60 @@ namespace ft	{
 
  		private:
 
+			map_node*
+			locateBound( map_node* root, const key_type& key, bool (*predicate)(map_node*, const key_type&) ) const	{
+
+				if (predicate(_dumbNode->left, key) == true)
+					return (_dumbNode->left);
+				else if (predicate(_dumbNode->right, key) == false)
+					return (NULL);
+
+				map_node* candidate = root;
+				map_node* bestCandidate = NULL;
+				while (candidate != NULL)	{
+					if (predicate(candidate, key) == true)	{
+						bestCandidate = candidate;
+						candidate = candidate->left;
+					}
+					else
+						candidate = candidate->right;
+				}
+				return (bestCandidate);
+			}
+
+			map_node*
+			locateNode( map_node* root, const key_type& key ) const	{
+
+				if (root != NULL)	{
+					if (_comp(key, root->item.first) == true)
+						return (locateNode(root->left, key));
+					else if (isEqualKey(key, root->item.first) == false)
+						return (locateNode(root->right, key));
+					else
+						return (root);
+				}
+				else
+					return (NULL);
+			}
+
+			static bool
+			isLowerBoundNode( map_node* node, const key_type& key ) {
+
+			typename ft::map<Key, T, Compare> tmpObj;
+			typename ft::map<Key, T, Compare>::key_compare cmpFunc = tmpObj.key_comp();
+
+				return (node != NULL
+					&& (cmpFunc(node->item.first, key) == false
+						|| isEqualKey(node->item.first, key) == true));
+			}
+
+			static bool
+			isUpperBoundNode( map_node* node, const key_type& key ) {
+				typename ft::map<Key, T, Compare> tmpObj;
+				typename ft::map<Key, T, Compare>::key_compare cmpFunc = tmpObj.key_comp();
+				return (node != NULL && cmpFunc(key, node->item.first) == true);
+			}
+
 			void
 			btree_update_dumbNode( map_node* node )	{
 				if (_dumbNode == NULL)
@@ -811,10 +906,12 @@ namespace ft	{
 			// 	return (comp(existingKey, newKey));
 			// }
 
-			bool
-			isEqualKey(const Key& existingKey, const Key& newKey) const	{
-				return (_comp(existingKey, newKey) == false
-				&& _comp(newKey, existingKey) == false);
+			static bool
+			isEqualKey(const Key& existingKey, const Key& newKey) {
+				typename ft::map<Key, T, Compare> tmpObj;
+				typename ft::map<Key, T, Compare>::key_compare cmpFunc = tmpObj.key_comp();
+				return (cmpFunc(existingKey, newKey) == false
+				&& cmpFunc(newKey, existingKey) == false);
 			}
 
 

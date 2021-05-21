@@ -14,7 +14,7 @@ PCH_DIR = ./pchs_$(NAME)/
 # CFLAGS += -std=c++98
 CFLAGS += -Wall
 CFLAGS += -Wextra
-CFLAGS += -fPIC
+# CFLAGS += -fPIC
 
 ifeq ($(noassert), 1)
 	CFLAGS += -DNDEBUG=1
@@ -175,6 +175,8 @@ SRCS += ./test_key_compare_value_compare.cpp
 SRCS += ./test_map_operatorEqual.cpp
 SRCS += ./test_map_find.cpp
 SRCS += ./test_map_count.cpp
+SRCS += ./test_map_lower_bound.cpp
+SRCS += ./test_map_upper_bound.cpp
 
 # SRCS += ./test_map_relational_operators.cpp
 # SRCS += ./test_map_reverseIterator.cpp
@@ -208,7 +210,7 @@ all :
 	@echo
 
 $(OBJS): $(OBJ_DIR)%.o: %.cpp $(HEADER) $(PROJECT_HEADER)
-	$(CC) $(CFLAGS) -g3 $(OTHER_FLAGS) -c $<  -I $(INCLUDES) -o $@
+	$(CC) $(CFLAGS) $(OTHER_FLAGS) -c $<  -I $(INCLUDES) -o $@
 
 $(NAME): $(PCH_DIR) $(PCHS) $(OBJ_DIR) $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -I $(INCLUDES) -o $@

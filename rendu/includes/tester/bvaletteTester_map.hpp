@@ -160,6 +160,8 @@ int	test_map_push_back_pop_back( void );
 int	test_map_clear( void );
 int	test_map_find( void );
 int	test_map_count( void );
+int	test_map_lower_bound( void );
+int	test_map_upper_bound( void );
 
 int	test_map_capacities( void );
 int	test_map_operatorEqual( void );

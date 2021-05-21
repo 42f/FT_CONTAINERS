@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:23:15 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/21 16:47:30 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/21 17:52:32 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ main_tester_map( void )	{
 		// test_map_count();
 		// test_map_lower_bound();
 		// test_map_upper_bound();
+		test_map_equal_range();
 	/******* NOT TESTED ******
 
 

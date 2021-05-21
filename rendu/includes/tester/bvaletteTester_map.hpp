@@ -162,6 +162,7 @@ int	test_map_find( void );
 int	test_map_count( void );
 int	test_map_lower_bound( void );
 int	test_map_upper_bound( void );
+int	test_map_equal_range( void );
 
 int	test_map_capacities( void );
 int	test_map_operatorEqual( void );

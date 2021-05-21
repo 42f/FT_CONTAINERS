@@ -341,6 +341,18 @@ namespace ft	{
 			}
 
 
+			pair<iterator,iterator>
+			equal_range (const key_type& k)	{
+
+				return (ft::make_pair(lower_bound(k), upper_bound(k)));
+			}
+
+			pair<const_iterator, const_iterator>
+			equal_range (const key_type& k) const	{
+
+				return (ft::make_pair(lower_bound(k), upper_bound(k)));
+			}
+
 			size_type
 			max_size( void ) const	{ return this->_allocNode.max_size(); }
 

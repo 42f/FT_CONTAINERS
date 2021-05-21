@@ -177,6 +177,7 @@ SRCS += ./test_map_find.cpp
 SRCS += ./test_map_count.cpp
 SRCS += ./test_map_lower_bound.cpp
 SRCS += ./test_map_upper_bound.cpp
+SRCS += ./test_map_equal_range.cpp
 
 # SRCS += ./test_map_relational_operators.cpp
 # SRCS += ./test_map_reverseIterator.cpp

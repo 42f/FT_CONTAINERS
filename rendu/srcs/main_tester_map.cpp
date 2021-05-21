@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:23:15 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/20 14:30:30 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/21 11:24:17 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,11 @@ main_tester_map( void )	{
 		// test_map_iterator();
 		// test_map_at_operatorBrackets();
 		// test_map_swap();
-		test_map_clear();
-
+		// test_map_clear();
+		// test_key_compare_value_compare();
+		// test_map_operatorEqual();
+		test_map_find();
+		test_map_count();
 	/******* NOT TESTED ******
 
 
@@ -35,7 +38,6 @@ main_tester_map( void )	{
 
 		test_map_element_access();
 		test_map_relational_operators();
-		test_map_operatorEqual();
 	*/
 	/******* NOT USED ******
 

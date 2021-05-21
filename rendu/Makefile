@@ -171,18 +171,15 @@ SRCS += ./test_map_iterator.cpp
 SRCS += ./test_map_at_operatorBrackets.cpp
 SRCS += ./test_map_swap.cpp
 SRCS += ./test_map_clear.cpp
+SRCS += ./test_key_compare_value_compare.cpp
+SRCS += ./test_map_operatorEqual.cpp
+SRCS += ./test_map_find.cpp
+SRCS += ./test_map_count.cpp
 
-# SRCS += ./test_map_push_back_pop_back.cpp
-# SRCS += ./test_map_operatorEqual.cpp
-# SRCS += ./test_map_resize.cpp
-# SRCS += ./test_map_assign.cpp
 # SRCS += ./test_map_relational_operators.cpp
 # SRCS += ./test_map_reverseIterator.cpp
-# SRCS += ./test_map_element_access.cpp
 
 
-# SRCS += ./test_map_splice.cpp
-# SRCS += ./test_map_remove_if.cpp
 # SRCS += ./test_map_remove.cpp
 # SRCS += ./test_map_unique.cpp
 # SRCS += ./test_map_merge.cpp

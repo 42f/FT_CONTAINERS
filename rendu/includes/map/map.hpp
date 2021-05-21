@@ -67,10 +67,6 @@ namespace ft	{
             typedef typename std::reverse_iterator<map_iterator<Key, T, Compare, map_node, false> > reverse_iterator;
             typedef typename std::reverse_iterator<map_iterator<Key, T, Compare, map_node, true> >  const_reverse_iterator;
 
-			// typedef const iterator											const_iterator;
-			// typedef std::reverse_iterator<iterator> 						reverse_iterator;
-			// typedef const reverse_iterator									const_reverse_iterator;
-
 		private:
 			typedef typename Allocator::template rebind<map_node>::other	_node_allocator_type;
 
@@ -82,7 +78,6 @@ namespace ft	{
 .******************************************************************************/
 
 		private:
-
 
 			struct map_node	{
 
@@ -99,8 +94,11 @@ namespace ft	{
 				bool			color;
 			};
 
-			class value_compare {
+		public:
 
+			class value_compare	{
+
+				friend class map<Key, T, Compare, Allocator>;
 				public:
 					typedef	bool		result_type;
 					typedef	value_type	first_argument_type;
@@ -135,7 +133,6 @@ namespace ft	{
 																		_size(0),
 																		_allocNode(userAlloc),
 																		_comp(comp)				{
-
 				if (DEBUG_MODE >= 4) std::cout << "CONSTRUCTOR --> DEFAULT explicit " << __func__ << std::endl;
 			}
 
@@ -153,16 +150,13 @@ namespace ft	{
 																		_comp(comp)				{
 
 				if (DEBUG_MODE >= 4) std::cout << "CONSTRUCTOR --> range pre dispatcher ! " << __func__ << std::endl;
-
 				insert(first, last);
-				// typename std::__is_integer<InputIterator>::__type	integer;
-				// map_constructor_dispatch(first, last, userAlloc, integer);
 			}
 
 			/**
 			 * @brief Copy Constructor
 			*/
-			explicit map( map const & src ) :	_head(NULL),
+			map( map const & src ) :	_head(NULL),
 												_dumbNode(NULL),
 												_size(0),
 												_allocNode(src._allocNode),
@@ -265,6 +259,47 @@ namespace ft	{
 .******************************************************************************/
 
 		public:
+
+			map_node*
+			locateNode( map_node* root, const key_type& key ) const	{
+
+				if (root != NULL)	{
+					if (_comp(key, root->item.first) == true)
+						return (locateNode(root->left, key));
+					else if (isEqualKey(key, root->item.first) == false)
+						return (locateNode(root->right, key));
+					else
+						return (root);
+				}
+				else
+					return (NULL);
+			}
+
+			iterator
+			find (const key_type& k)	{
+
+				if (empty() == true)
+					return (NULL);
+				map_node*	nodeFound = locateNode(_head, k);
+				if (nodeFound == NULL)
+					return (end());
+				return (iterator(nodeFound, _dumbNode, _comp));
+			}
+
+			const_iterator
+			find (const key_type& k) const	{
+
+				map_node* const	nodeFound = locateNode(_head, k);
+				if (nodeFound == NULL)
+					return (end());
+				return (const_iterator(nodeFound, _dumbNode, _comp));
+			}
+
+			size_type
+			count (const key_type& k) const	{
+				return (find(k) != end() ? 1 : 0);
+			}
+
 			size_type
 			max_size( void ) const	{ return this->_allocNode.max_size(); }
 
@@ -550,13 +585,24 @@ namespace ft	{
 // 				}
 // 			}
 
-// 			map&
-// 			operator= (const map& x)	{
+			map&
+			operator= (const map& src)	{
 
-// 				if (*this != x)
-// 					assign(x.begin(), x.end());
-// 				return *this;
-// 			}
+				if (this->_head != src._head)	{
+					clear();
+
+					if (src.empty() == false)	{
+						if (src.size() > 2)	{
+							iterator	half = src.begin();
+							for (size_t i = 0; i < src.size() / 2; i++)
+								half++;
+							insert(*half);
+						}
+						insert(src.begin(), src.end());
+					}
+				}
+				return *this;
+			}
 
 			mapped_type&
 			operator[]( const Key& key )	{
@@ -567,6 +613,9 @@ namespace ft	{
 				ft::pair<iterator, bool>	ret = insert(insertValue);
 				return (ret.first->second);
 			}
+
+            value_compare	value_comp() const	{ return value_compare(_comp); }
+            key_compare		key_comp() const	{ return key_compare(_comp); }
 
 // /******************************************************************************.
 // .******************************************************************************.
@@ -732,7 +781,7 @@ namespace ft	{
 // }
 
 			static map_node*
-			getFarLeft( map_node* cursor ) {
+			getFarLeft( map_node* cursor )  {
 
 				while (cursor != NULL && cursor->left != NULL)
 					cursor = cursor->left;
@@ -740,7 +789,7 @@ namespace ft	{
 			}
 
 			static map_node*
-			getFarRight( map_node* cursor ) {
+			getFarRight( map_node* cursor )  {
 
 				while (cursor != NULL && cursor->right != NULL)
 					cursor = cursor->right;
@@ -748,7 +797,7 @@ namespace ft	{
 			}
 
 			static bool
-			isLeaf(map_node* node) {
+			isLeaf(map_node* node)  {
 				return (node->left == NULL && node->right == NULL);
 			}
 
@@ -763,7 +812,7 @@ namespace ft	{
 			// }
 
 			bool
-			isEqualKey(const Key& existingKey, const Key& newKey)	{
+			isEqualKey(const Key& existingKey, const Key& newKey) const	{
 				return (_comp(existingKey, newKey) == false
 				&& _comp(newKey, existingKey) == false);
 			}
@@ -1000,8 +1049,6 @@ namespace ft	{
 // 					throw std::out_of_range("Out of map's range");
 // 				}
 // 			}
-
-            value_compare value_comp() const    { return value_compare(_comp); }
 
 		}; // -------------------------------------------------------- Class map
 

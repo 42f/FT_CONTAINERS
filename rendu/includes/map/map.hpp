@@ -431,56 +431,49 @@ namespace ft	{
 			iterator
 			insert (iterator position, const value_type& val)	{
 
-				if(position == NULL)
-					return (iterator());		// what to return ?
+				map_node* posPtr = position.getPtr();
 
-				ft::pair<iterator, bool> ret;
-				map_node*	posParent = position.getPosParent();
-				map_node*	posNode = position.getPtr();
-				if (posParent != NULL
-					&& (_comp(posParent->item.first, val.first) == true
-					|| _comp(val.first, posParent->item.first) == true))
-						ret = btree_insert_data(NULL, &_head, val);
+				if (position == NULL)
+					return (iterator());
+
+				std::cout << "VALUE IS ----------------------- " << val.first << std::endl;
+				if (locateBound(position.getPtr(), val.first, isLowerBoundNode) != NULL)
+					std::cout << "lower bound NOT NUL -----------------------" << std::endl;
 				else
-					ret = btree_insert_data(posNode, &posNode, val);
-				return (ret.first);
+					std::cout << "lower bound is NUL -----------------------" << std::endl;
+				if (locateBound(position.getPtr(), val.first, isUpperBoundNode) != NULL)
+					std::cout << "upper bound NOT NUL -----------------------" << std::endl;
+				else
+					std::cout << "upper bound is NUL -----------------------" << std::endl;
+				if (locateBound(position.getPtr(), val.first, isLowerBoundNode) != NULL)
+					return (btree_insert_data(position.getPtr(), &(position.getPtr()->right), val).first);
+				else
+					return (btree_insert_data(NULL, &_head, val).first);
 			}
+			// 	if(position == NULL)
+			// 		return (iterator());
+
+			// 	ft::pair<iterator, bool> ret;
+			// 	map_node*	posParent = position.getPosParent();
+			// 	map_node*	posNode = position.getPtr();
+			// 	if (posParent != NULL
+			// 		&& (_comp(posParent->item.first, val.first) == true
+			// 		|| _comp(val.first, posParent->item.first) == true))
+			// 			ret = btree_insert_data(NULL, &_head, val);
+			// 	else
+			// 		ret = btree_insert_data(posNode, &posNode, val);
+			// 	return (ret.first);
+			// }
 
 				/**
 				 * @brief Range insert from first to last element
 				*/
-
-				// to be improved with rebalanced nodes
 			template <class InputIterator>
  			void
 			insert (InputIterator first, InputIterator last)	{
 
-				// InputIterator	cursor = first;
-				// size_t			rangeSized = 0;
-
-				// for (cursor; cursor != last; cursor++)				// draft improvement to balance tree
-				// 	rangeSized++;
-				// if (rangeSized > 3)	{
-				// 	cursor = first;
-				// 	for (size_t i = 0; i < rangeSized / 2; i++)
-				// 		cursor++;
-				// 	insert(*cursor);
-				// 	for (size_t i = 0; i < rangeSized / 4; i++)
-				// 		cursor++;
-				// 	insert(*cursor);
-				// 	for (size_t i = 0; i < rangeSized / 2; i--)
-				// 		cursor--;
-				// 	insert(*cursor);
-				// }
-				// ft::pair<iterator, bool>	tmp = insert(*first);
-				// iterator	lastInsert = tmp.first;
-				// first++;
-				// for (first; first != last; first++)
-				// 	lastInsert = insert(lastInsert, *first);
-				while (first != last){
+				for (; first != last; first++)
 					insert(*first);
-					first++;
-				}
 			}
 
 			void

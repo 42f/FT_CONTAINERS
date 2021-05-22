@@ -26,8 +26,6 @@ namespace ft	{
 
 			typedef ft::reverse_iterator< map_iterator<Key, T, Compare, map_node, false> >	reverse_iterator;
 			typedef ft::reverse_iterator< map_iterator<Key, T, Compare, map_node, true> >	const_reverse_iterator;
-			// typedef std::reverse_iterator< map_iterator<Key, T, Compare, map_node, false> >	reverse_iterator;
-			// typedef std::reverse_iterator< map_iterator<Key, T, Compare, map_node, true> >	const_reverse_iterator;
 
 			typedef	Compare									key_compare;
 			typedef typename ft::pair<const Key, T>			value_type;
@@ -122,12 +120,12 @@ namespace ft	{
 
 
 			map_node*			getPtr(void) const { return (_ptr);	}
-			// map_node*			getPosParent(void) const {
+			map_node*			getPosParent(void) const {
 
-			// 	if (_ptr != NULL)
-			// 		return (_ptr->parent);
-			// 	return (NULL);
-			// }
+				if (_ptr != NULL)
+					return (_ptr->parent);
+				return (NULL);
+			}
 
 			map_node*			getDumbNode(void) const { return (_btreeDumdNode);	}
 			Compare				getComp(void) const { return (_comp);	}

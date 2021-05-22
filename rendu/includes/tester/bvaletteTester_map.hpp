@@ -111,9 +111,9 @@ bool print, std::string message = "" )	{
 			if(ft_it->first != std_it->first || ft_it->second != std_it->second)	{
 				putMap<K, T>(ft_c, i);
 				putMap<K, T>(std_c, i);
-				std::cout << TITLE <<"iterator at pos " << i << ": ft (" << ft_it->first << "; " << ft_it->second << ") " << RESET_COLOR;
+				std::cout << TITLE <<"iterator at pos " << i << ": ft (" << ft_it->first << "; " << ft_it->second << ") ";
+				std::cout << " / std (" << std_it->first << "; " << std_it->second << ") Diff ! " << RESET_COLOR << std::endl;
 				std::cout << ERROR_TITLE << "ERROR !" << RESET_COLOR << std::endl;
-				std::cout << "std (" << std_it->first << "; " << std_it->second << ") Diff ! " << RESET_COLOR << std::endl;
 				if (DEBUG_MODE < 1)
 					throw failedTest();
 				else

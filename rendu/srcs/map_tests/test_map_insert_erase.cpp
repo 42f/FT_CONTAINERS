@@ -41,6 +41,46 @@ testBasicInsertMemberFunction ( void )	{
 			testMap<char, int, std::greater<char> >(ft_first_greater, std_first_greater, NOPRINT);
 			testMap<char, int>(ft_c0, std_c0, NOPRINT);
 		}
+		{
+			int testSize = 35000;
+			int findKey = 42;
+			std::cout << HEADER_TITLE << "[ Insert Range with " << testSize << " int key and int mapped value ]" << RESET_COLOR << std::endl;
+
+			std::vector<ft::pair<int, int> >	ft_val_0(testSize);
+			std::vector<std::pair<int, int> >	std_val_0(testSize);
+			srand(time(NULL));
+			for (int i = 0; i < testSize; i++)	{
+				int val = rand() % testSize;
+				if (i == testSize / 2)
+					findKey = val;
+				ft_val_0[i] = ft::make_pair(val, i);
+				std_val_0[i] = std::make_pair(val, i);
+			}
+
+			std::map<int, int>	std_c0;
+			ft::map<int, int>	ft_c0;
+
+			std_c0.insert(std_val_0.begin(), std_val_0.end());
+			ft_c0.insert(ft_val_0.begin(), ft_val_0.end());
+			testMap(ft_c0, std_c0, NOPRINT);
+
+			std::cout << HEADER_TITLE << "[ Insert with Hint ]" << RESET_COLOR << std::endl;
+
+			std::map<int, int>::iterator	std_it = std_c0.find(findKey);
+			ft::map<int, int>::iterator		ft_it = ft_c0.find(findKey);
+
+			std_c0.insert(std_it, std::make_pair(testSize * 2 , 1));
+			ft_c0.insert(ft_it, ft::make_pair(testSize * 2 , 1));
+			std::cout << "Size = " << std_c0.size() << std::endl;
+			std::cout << "Size = " << ft_c0.size() << std::endl;
+			testMap(ft_c0, std_c0, NOPRINT);
+			std_c0.insert(std_it, std::make_pair(-42, 1));
+			ft_c0.insert(ft_it, ft::make_pair(-42, 1));
+			testMap(ft_c0, std_c0, NOPRINT);
+			std::cout << "Size = " << std_c0.size() << std::endl;
+			std::cout << "Size = " << ft_c0.size() << std::endl;
+
+		}
 }
 
 void
@@ -198,10 +238,10 @@ test_map_insert_erase( void )	{
 	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with std::string ~~~~~~~~~~~" << RESET_COLOR << std::endl;
 
 		std::cout << TITLE << "[ INSERT ]" << RESET_COLOR << std::endl;
+
 		testBasicInsertMemberFunction();
 		testBracketsInsert();
 		testCppRefCode();
-
 		std::cout << TITLE << "[ ERASE ]" << RESET_COLOR << std::endl;
 		testBasicErase();
 

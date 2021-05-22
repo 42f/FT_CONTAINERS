@@ -166,7 +166,7 @@ SRCS += ./main_utils.cpp
 SRCS += ./main_tester_map.cpp
 
 # SRCS += ./test_map_instantiation.cpp
-# SRCS += ./test_map_insert_erase.cpp
+SRCS += ./test_map_insert_erase.cpp
 # SRCS += ./test_map_capacities.cpp
 # SRCS += ./test_map_iterator.cpp
 # SRCS += ./test_map_at_operatorBrackets.cpp

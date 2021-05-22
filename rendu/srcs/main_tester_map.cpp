@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:23:15 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/22 15:58:07 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/22 19:20:14 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ main_tester_map( void )	{
 	try {
 
 		// test_map_instantiation();
-		// test_map_insert_erase();
+		test_map_insert_erase();
 		// test_map_capacities();
 		// test_map_iterator();
 		// test_map_at_operatorBrackets();

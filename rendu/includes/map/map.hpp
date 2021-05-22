@@ -393,32 +393,16 @@ namespace ft	{
 			}
 
 			reverse_iterator
-			rbegin( void ) 			{
-				if (_dumbNode != NULL)
-					return reverse_iterator(--end());
-				return (reverse_iterator());
-			}
+			rbegin( void ) 			{	return reverse_iterator(--end());	}
+
+			const_reverse_iterator
+			rbegin( void ) 	const	{	return reverse_iterator(--end());	}
 
 			reverse_iterator
-			rbegin( void ) const	{
-				if (_dumbNode != NULL)
-					return const_reverse_iterator(--end());
-				return (reverse_iterator());
-			}
+			rend( void ) 			{	return reverse_iterator(end());	}
 
-			reverse_iterator
-			rend( void ) 	 		{
-				if (_dumbNode != NULL)
-					return reverse_iterator(--begin());
-				return (reverse_iterator());
-			}
-
-			reverse_iterator
-			rend( void ) const 		{
-				if (_dumbNode != NULL)
-					return const_reverse_iterator(--begin());
-				return (reverse_iterator());
-			}
+			const_reverse_iterator
+			rend( void ) 	const	{	return reverse_iterator(end());	}
 
 			void
 			clear( void )			{

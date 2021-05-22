@@ -12,110 +12,151 @@
 
 # include "./tester/bvaletteTester_map.hpp"
 
-// void
-// test_constReverseIterator( ft::map<int> const & ft_c0, std::map<int> const & std_c0 )	{
+void
+test_iterator_values_pointed(
+				ft::map<int, int>::reverse_iterator ft_it_test ,
+				ft::map<int, int>& ft_c0 ,
+				std::map<int, int>::reverse_iterator std_it_test ,
+				std::map<int, int>& std_c0 , int line)	{
 
-// 	std::cout << HEADER_TITLE << "Test const version of reverse iterator" << RESET_COLOR << std::endl;
-// 	std::cout << SUBTITLE << "If compile fails, const version of function are missing" << RESET_COLOR << std::endl;
-// 	ft::map<int>::const_reverse_iterator		ft_it = ft_c0.rbegin(); //  !!!! ---> HINT:  IN CASE OF COMPILER ISSUE: const version is MISSING !
-// 	ft::map<int>::const_reverse_iterator		ft_itend = ft_c0.rend() - 1; //  !!!! ---> HINT:  IN CASE OF COMPILER ISSUE: const version is MISSING !
+	if (std_it_test == std_c0.rend())
+		testBool(ft_it_test == ft_c0.rend(), line);
+	else
+		testBool(ft_it_test->first == std_it_test->first && ft_it_test->second == std_it_test->second, line);
+	if (std_it_test != std_c0.rbegin())
+		testBool(ft_it_test != ft_c0.rbegin(), line);
+}
 
-// 	std::map<int>::const_reverse_iterator	std_it = std_c0.rbegin();
-// 	std::map<int>::const_reverse_iterator	std_itend = std_c0.rend() - 1;
+void
+test_const_iterator_values_pointed(
+				ft::map<int, int>::const_reverse_iterator ft_it_test ,
+				const ft::map<int, int>& ft_c0 ,
+				std::map<int, int>::const_reverse_iterator std_it_test ,
+				const std::map<int, int>& std_c0 , int line)	{
 
-// 	std::cout << "Test ft : operaotr * on const -> " << *ft_it << std::endl;//  !!!! ---> HINT:  IN CASE OF COMPILER ISSUE: const version is MISSING !
-// 	std::cout << "Test std: operaotr * on const -> " << *std_it << std::endl;
-// 	std::cout << "Test ft : operaotr * on const -> " << *ft_itend << std::endl;//  !!!! ---> HINT:  IN CASE OF COMPILER ISSUE: const version is MISSING !
-// 	std::cout << "Test std: operaotr * on const -> " << *std_itend << std::endl;
-// 	testBool(true);
-// }
+	if (std_it_test == std_c0.rend())
+		testBool(ft_it_test == ft_c0.rend(), line);
+	else
+		testBool(ft_it_test->first == std_it_test->first && ft_it_test->second == std_it_test->second, line);
+	if (std_it_test != std_c0.rbegin())
+		testBool(ft_it_test != ft_c0.rbegin(), line);
+}
+
+void
+test_constReverseIterator( ft::map<int, int> const & ft_c0, std::map<int, int> const & std_c0 )	{
+
+	std::cout << HEADER_TITLE << "Test const version of reverse iterator" << RESET_COLOR << std::endl;
+	std::cout << SUBTITLE << "If compile fails, const version of function are missing" << RESET_COLOR << std::endl;
+	std::map<int, int>::const_reverse_iterator	std_it = std_c0.rbegin();
+	std::map<int, int>::const_reverse_iterator	std_itend = std_c0.rend()--;
+
+	ft::map<int, int>::const_reverse_iterator		ft_it = ft_c0.rbegin(); //  !!!! ---> HINT:  IN CASE OF COMPILER ISSUE: const version is MISSING !
+	ft::map<int, int>::const_reverse_iterator		ft_itend = ft_c0.rend()--; //  !!!! ---> HINT:  IN CASE OF COMPILER ISSUE: const version is MISSING !
+
+	test_const_iterator_values_pointed(ft_it, ft_c0, std_it, std_c0, __LINE__);
+	test_const_iterator_values_pointed(ft_itend, ft_c0, std_itend, std_c0, __LINE__);
+
+	ft_it++;
+	std_it++;
+	test_const_iterator_values_pointed(ft_it, ft_c0, std_it, std_c0, __LINE__);
+	++ft_it;
+	++std_it;
+	test_const_iterator_values_pointed(ft_it, ft_c0, std_it, std_c0, __LINE__);
+	ft_it--;
+	std_it--;
+	test_const_iterator_values_pointed(ft_it, ft_c0, std_it, std_c0, __LINE__);
+	--ft_it;
+	--std_it;
+	test_const_iterator_values_pointed(ft_it, ft_c0, std_it, std_c0, __LINE__);
+
+}
 
 int
 test_map_reverseIterator( void )	{
 	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with ints ~~~~~~~~~~~" << RESET_COLOR << std::endl;
 
-		std::map<int, int>		std_c0;
-		ft::map<int, int>		ft_c0;
+	{
+		int testSize = 5000;
+		int findKey = 42;
+		std::cout << HEADER_TITLE << "[ Create a map of " << testSize << " int key and int mapped value ]" << RESET_COLOR << std::endl;
 
-		std_c0[2] = 2;
-		std_c0[42] = 1;
-		std_c0[12] = 3;
-		ft_c0[2] = 2;
-		ft_c0[42] = 1;
-		ft_c0[12] = 3;
+		std::vector<ft::pair<int, int> >	ft_val_0(testSize);
+		std::vector<std::pair<int, int> >	std_val_0(testSize);
+		srand(time(NULL));
+		for (int i = 0; i < testSize; i++)	{
+			int val = rand() % testSize;
+			if (i == testSize / 2)
+				findKey = val;
+			ft_val_0[i] = ft::make_pair(val, i);
+			std_val_0[i] = std::make_pair(val, i);
+		}
 
-		std::map<int, int>::reverse_iterator		std_it	= std_c0.rbegin();
-		ft::map<int, int>::reverse_iterator			ft_it	= ft_c0.rbegin();
+		std::map<int, int>	std_c0(std_val_0.begin(), std_val_0.end());
+		ft::map<int, int>	ft_c0(ft_val_0.begin(), ft_val_0.end());
+		testMap(ft_c0, std_c0, NOPRINT);
 
-			std::cout << "std it = " << std_it->first << " ; " << std_it->second << std::endl;
-			// std::cout << "ft it  = " << ft_it->first << " ; " << ft_it->second << std::endl;
+		ft::map<int, int>::reverse_iterator			ft_it = ft_c0.rbegin();
+		ft::map<int, int>::reverse_iterator			ft_it2 = --ft_c0.rend();
+		ft::map<int, int>::reverse_iterator			ft_it3 = ++ft_c0.rbegin();
+		ft::map<int, int>::reverse_iterator			ft_itend = ft_c0.rend();
 
-		(void)std_it;
-		(void)ft_it;
+		std::map<int, int>::reverse_iterator		std_it = std_c0.rbegin();
+		std::map<int, int>::reverse_iterator		std_it2 = --std_c0.rend();
+		std::map<int, int>::reverse_iterator		std_it3 = ++std_c0.rbegin();
+		std::map<int, int>::reverse_iterator		std_itend = std_c0.rend();
 
+		test_iterator_values_pointed(ft_it, ft_c0, std_it, std_c0, __LINE__);
+		test_iterator_values_pointed(ft_itend, ft_c0, std_itend, std_c0, __LINE__);
+		test_iterator_values_pointed(ft_it2, ft_c0, std_it2, std_c0, __LINE__);
+		test_iterator_values_pointed(ft_it3, ft_c0, std_it3, std_c0, __LINE__);
 
+		std::cout << HEADER_TITLE << "[ TEST REVERSE ITERATOR ARITHMETIC ]" << RESET_COLOR << std::endl;
 
+		ft_it++;
+		std_it++;
+		test_iterator_values_pointed(ft_it, ft_c0, std_it, std_c0, __LINE__);
+		++ft_it;
+		++std_it;
+		test_iterator_values_pointed(ft_it, ft_c0, std_it, std_c0, __LINE__);
+		ft_it--;
+		std_it--;
+		test_iterator_values_pointed(ft_it, ft_c0, std_it, std_c0, __LINE__);
+		--ft_it;
+		--std_it;
+		test_iterator_values_pointed(ft_it, ft_c0, std_it, std_c0, __LINE__);
 
+		ft_itend--;
+		std_itend--;
+		test_iterator_values_pointed(ft_itend, ft_c0, std_itend, std_c0, __LINE__);
+		--ft_itend;
+		--std_itend;
+		test_iterator_values_pointed(ft_itend, ft_c0, std_itend, std_c0, __LINE__);
+		ft_itend++;
+		std_itend++;
+		test_iterator_values_pointed(ft_itend, ft_c0, std_itend, std_c0, __LINE__);
+		++ft_itend;
+		++std_itend;
+		test_iterator_values_pointed(ft_itend, ft_c0, std_itend, std_c0, __LINE__);
 
+		test_constReverseIterator(ft_c0, std_c0);
 
-
-
-
-
-	// {
-	// std::cout << HEADER_TITLE << "TEST REVERSE ITERATOR RELATIONAL OPERATORS" << RESET_COLOR << std::endl;
-	// 	ft::map<int>		ft_c0;
-	// 	std::map<int>	std_c0;
-	// 	size_t				testSize = 10;
-
-	// 	std::cout << SUBTITLE << "[ pushback " << testSize << " ASCENDING even values in map 0 ]" << RESET_COLOR << std::endl;
-
-	// 	for (size_t i = 1; i < testSize; i++)	{
-	// 		ft_c0.push_back(i);
-	// 		std_c0.push_back(i);
-	// 	}
-	// 	testMap(ft_c0, std_c0, NOPRINT);
-
-	// 	ft::map<int>::reverse_iterator		ft_it = ft_c0.rbegin();
-	// 	ft::map<int>::reverse_iterator		ft_it2 = ft_c0.rbegin();
-	// 	ft::map<int>::reverse_iterator		ft_itend = ft_c0.rend();
-
-	// 	std::map<int>::reverse_iterator		std_it = std_c0.rbegin();
-	// 	std::map<int>::reverse_iterator		std_it2 = std_c0.rbegin();
-	// 	std::map<int>::reverse_iterator		std_itend = std_c0.rend();
-
-	// 	std::cout << SUBTITLE << "[ test operator!= ]" << RESET_COLOR << std::endl;
-	// 	testBool(ft_it != ft_itend && std_it != std_itend, __LINE__);
-	// 	std::cout << SUBTITLE << "[ test operator== ]" << RESET_COLOR << std::endl;
-	// 	testBool(ft_it == ft_it2 && std_it == std_it2, __LINE__);
-	// 	test_constReverseIterator(ft_c0, std_c0);
-	// }
-	// std::cout << HEADER_TITLE << "TEST REVERSE ITERATOR ARITHMETIC" << RESET_COLOR << std::endl;
-	// {
-	// 	ft::map<int>			l;
-	// 	l.push_back(0);
-	// 	l.push_back(1);
-	// 	l.push_back(2);
-	// 	l.push_back(3);
-	// 	l.push_back(4);
-	// 	l.push_back(5);
-	// 	ft::map<int>::reverse_iterator it1 = l.rbegin();
-	// 	ft::map<int>::reverse_iterator it2 = l.rbegin();
-	// 	it1++;
-	// 	it1++;
-	// 	it2++;
-	// 	it2++;
-	// 	ft::map<int>::reverse_iterator ite1 = l.rend();
-	// 	ft::map<int>::reverse_iterator ite2 = l.rend();
-	// 	ite1--;
-	// 	ite1--;
-	// 	ite2--;
-	// 	ite2--;
-
-	// 	testBool(*it1 == 3, __LINE__);
-	// 	testBool(*ite1 == 1, __LINE__);
-	// 	testBool(*it1 == *it2, __LINE__);
-	// 	testBool(*ite1 == *ite2, __LINE__);
-	// }
+		std::cout << HEADER_TITLE << "[ TEST BASE MEMBER FUNCTION ]" << RESET_COLOR << std::endl;
+		{
+			std_it = ++std_c0.rbegin();
+			ft_it = ++ft_c0.rbegin();
+			std::map<int, int>::iterator		std_base = std_it.base();
+			ft::map<int, int>::iterator			ft_base = ft_it.base();
+			testBool( ft_base->first == std_base->first
+				&&	ft_base->second == std_base->second, __LINE__);
+		}
+		{
+			std_it = --std_c0.rend();
+			ft_it = --ft_c0.rend();
+			std::map<int, int>::iterator		std_base = std_it.base();
+			ft::map<int, int>::iterator			ft_base = ft_it.base();
+			testBool( ft_base->first == std_base->first
+				&&	ft_base->second == std_base->second, __LINE__);
+		}
+	}
 	return (0);
 }

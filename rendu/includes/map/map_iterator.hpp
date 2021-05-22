@@ -106,13 +106,13 @@ namespace ft	{
 			}
 
 			bool
-			operator==(const map_iterator& rhs) const	{ return _ptr==rhs._ptr; }
+			operator==(const map_iterator& rhs) const	{ return _ptr==rhs.getPtr(); }
 
 			bool
-			operator!=(const map_iterator& rhs) const	{ return _ptr!=rhs._ptr; }
+			operator!=(const map_iterator& rhs) const	{ return _ptr!=rhs.getPtr(); }
 
 			bool
-			operator<(const map_iterator& rhs) const	{ return _ptr< rhs._ptr; }
+			operator<(const map_iterator& rhs) const	{ return _ptr< rhs.getPtr(); }
 
 			pointer
 			operator->()	const		{ return (&_ptr->item); }
@@ -122,13 +122,12 @@ namespace ft	{
 
 
 			map_node*			getPtr(void) const { return (_ptr);	}
+			// map_node*			getPosParent(void) const {
 
-			map_node*			getPosParent(void) const {
-
-				if (_ptr != NULL)
-					return (_ptr->parent);
-				return (NULL);
-			}
+			// 	if (_ptr != NULL)
+			// 		return (_ptr->parent);
+			// 	return (NULL);
+			// }
 
 			map_node*			getDumbNode(void) const { return (_btreeDumdNode);	}
 			Compare				getComp(void) const { return (_comp);	}

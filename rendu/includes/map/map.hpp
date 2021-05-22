@@ -8,7 +8,7 @@
 # include <memory>
 # include <cstddef>
 # include <string>
-# include <iterator>
+// # include <iterator>
 # include <limits>
 # include <algorithm>
 # include <stdexcept>
@@ -64,8 +64,10 @@ namespace ft	{
 			typedef typename ft::map_iterator<Key, T, Compare, map_node, false>	iterator;
 			typedef typename ft::map_iterator<Key, T, Compare, map_node, true>	const_iterator;
 
-            typedef typename std::reverse_iterator<map_iterator<Key, T, Compare, map_node, false> > reverse_iterator;
-            typedef typename std::reverse_iterator<map_iterator<Key, T, Compare, map_node, true> >  const_reverse_iterator;
+            // typedef typename std::reverse_iterator<map_iterator<Key, T, Compare, map_node, false> > reverse_iterator;
+            // typedef typename std::reverse_iterator<map_iterator<Key, T, Compare, map_node, true> >  const_reverse_iterator;
+            typedef typename ft::reverse_iterator<map_iterator<Key, T, Compare, map_node, false> > reverse_iterator;
+            typedef typename ft::reverse_iterator<map_iterator<Key, T, Compare, map_node, true> >  const_reverse_iterator;
 
 		private:
 			typedef typename Allocator::template rebind<map_node>::other	_node_allocator_type;
@@ -260,7 +262,7 @@ namespace ft	{
 			find (const key_type& k)	{
 
 				if (empty() == true)
-					return (NULL);
+					return(iterator());
 				map_node*	nodeFound = locateNode(_head, k);
 				if (nodeFound == NULL)
 					return (end());
@@ -271,7 +273,7 @@ namespace ft	{
 			find (const key_type& k) const	{
 
 				if (empty() == true)
-					return (NULL);
+					return(iterator());
 				map_node* const	nodeFound = locateNode(_head, k);
 				if (nodeFound == NULL)
 					return (end());
@@ -287,7 +289,7 @@ namespace ft	{
 			lower_bound (const key_type& k) {
 
 				if (empty() == true)
-					return (NULL);
+					return(iterator());
 
 				map_node* const	nodeFound = locateBound(_head, k, isLowerBoundNode);
 
@@ -301,7 +303,7 @@ namespace ft	{
 			lower_bound (const key_type& k) const	{
 
 				if (empty() == true)
-					return (NULL);
+					return(const_iterator());
 
 				map_node* const	nodeFound = locateBound(_head, k, isLowerBoundNode);
 
@@ -316,7 +318,7 @@ namespace ft	{
 			upper_bound (const key_type& k) {
 
 				if (empty() == true)
-					return (NULL);
+					return(iterator());
 
 				map_node* const	nodeFound = locateBound(_head, k, isUpperBoundNode);
 
@@ -330,7 +332,7 @@ namespace ft	{
 			upper_bound (const key_type& k) const	{
 
 				if (empty() == true)
-					return (NULL);
+					return(const_iterator());
 
 				map_node* const	nodeFound = locateBound(_head, k, isUpperBoundNode);
 
@@ -366,56 +368,56 @@ namespace ft	{
 			begin( void ) 			{
 				if (_dumbNode != NULL)
 					return (iterator(_dumbNode->left, _dumbNode, _comp));
-				return (NULL);
+				return (iterator());
 			}
 
 			iterator
 			begin( void ) const		{
 				if (_dumbNode != NULL)
 					return (iterator(_dumbNode->left, _dumbNode, _comp));
-				return (NULL);
+				return (iterator());
 			}
 
 			iterator
 			end( void ) 	 		{
 				if (_dumbNode != NULL)
 					return (iterator(_dumbNode, _dumbNode, _comp));
-				return (NULL);
+				return (iterator());
 			}
 
 			iterator
 			end( void ) const 		{
 				if (_dumbNode != NULL)
 					return (iterator(_dumbNode, _dumbNode, _comp));
-				return (NULL);
+				return (iterator());
 			}
 
 			reverse_iterator
 			rbegin( void ) 			{
 				if (_dumbNode != NULL)
 					return reverse_iterator(--end());
-				return (NULL);
+				return (reverse_iterator());
 			}
 
 			reverse_iterator
 			rbegin( void ) const	{
 				if (_dumbNode != NULL)
 					return const_reverse_iterator(--end());
-				return (NULL);
+				return (reverse_iterator());
 			}
 
 			reverse_iterator
 			rend( void ) 	 		{
 				if (_dumbNode != NULL)
 					return reverse_iterator(--begin());
-				return (NULL);
+				return (reverse_iterator());
 			}
 
 			reverse_iterator
 			rend( void ) const 		{
 				if (_dumbNode != NULL)
 					return const_reverse_iterator(--begin());
-				return (NULL);
+				return (reverse_iterator());
 			}
 
 			void
@@ -446,7 +448,7 @@ namespace ft	{
 			insert (iterator position, const value_type& val)	{
 
 				if(position == NULL)
-					return (NULL);		// what to return ?
+					return (iterator());		// what to return ?
 
 				ft::pair<iterator, bool> ret;
 				map_node*	posParent = position.getPosParent();

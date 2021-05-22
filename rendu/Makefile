@@ -83,6 +83,7 @@ PROJECT_HEADER += ./map_iterator.hpp
 
 PROJECT_HEADER += ./ft_pair.hpp
 PROJECT_HEADER += ./ft_enable_if.hpp
+PROJECT_HEADER += ./ft_rev_iterator.hpp
 
 HEADER += ./bvaletteTester.hpp
 HEADER += ./bvaletteTester_defines.hpp
@@ -164,25 +165,25 @@ SRCS += ./main_utils.cpp
 
 SRCS += ./main_tester_map.cpp
 
-SRCS += ./test_map_instantiation.cpp
-SRCS += ./test_map_insert_erase.cpp
-SRCS += ./test_map_capacities.cpp
-SRCS += ./test_map_iterator.cpp
-SRCS += ./test_map_at_operatorBrackets.cpp
-SRCS += ./test_map_swap.cpp
-SRCS += ./test_map_clear.cpp
-SRCS += ./test_key_compare_value_compare.cpp
-SRCS += ./test_map_operatorEqual.cpp
-SRCS += ./test_map_find.cpp
-SRCS += ./test_map_count.cpp
-SRCS += ./test_map_lower_bound.cpp
-SRCS += ./test_map_upper_bound.cpp
-SRCS += ./test_map_equal_range.cpp
+# SRCS += ./test_map_instantiation.cpp
+# SRCS += ./test_map_insert_erase.cpp
+# SRCS += ./test_map_capacities.cpp
+# SRCS += ./test_map_iterator.cpp
+# SRCS += ./test_map_at_operatorBrackets.cpp
+# SRCS += ./test_map_swap.cpp
+# SRCS += ./test_map_clear.cpp
+# SRCS += ./test_key_compare_value_compare.cpp
+# SRCS += ./test_map_operatorEqual.cpp
+# SRCS += ./test_map_find.cpp
+# SRCS += ./test_map_count.cpp
+# SRCS += ./test_map_lower_bound.cpp
+# SRCS += ./test_map_upper_bound.cpp
+# SRCS += ./test_map_equal_range.cpp
+
+SRCS += ./test_map_reverseIterator.cpp
+
 
 # SRCS += ./test_map_relational_operators.cpp
-# SRCS += ./test_map_reverseIterator.cpp
-
-
 # SRCS += ./test_map_remove.cpp
 # SRCS += ./test_map_unique.cpp
 # SRCS += ./test_map_merge.cpp

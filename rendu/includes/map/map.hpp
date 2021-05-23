@@ -431,39 +431,16 @@ namespace ft	{
 			iterator
 			insert (iterator position, const value_type& val)	{
 
-				map_node* posPtr = position.getPtr();
-
-				if (position == NULL)
+				map_node*	posPtr = position.getPtr();
+				if (posPtr == NULL)
 					return (iterator());
-
-				std::cout << "VALUE IS ----------------------- " << val.first << std::endl;
-				if (locateBound(position.getPtr(), val.first, isLowerBoundNode) != NULL)
-					std::cout << "lower bound NOT NUL -----------------------" << std::endl;
-				else
-					std::cout << "lower bound is NUL -----------------------" << std::endl;
-				if (locateBound(position.getPtr(), val.first, isUpperBoundNode) != NULL)
-					std::cout << "upper bound NOT NUL -----------------------" << std::endl;
-				else
-					std::cout << "upper bound is NUL -----------------------" << std::endl;
-				if (locateBound(position.getPtr(), val.first, isLowerBoundNode) != NULL)
-					return (btree_insert_data(position.getPtr(), &(position.getPtr()->right), val).first);
+				if (position != end() && lower_bound(val.first) == position)	{
+					if (DEBUG_MODE >= 2) std::cout << __func__ << ":	 Insert with optimization." << std::endl;
+					return (btree_insert_data(posPtr->parent, &posPtr, val).first);
+				}
 				else
 					return (btree_insert_data(NULL, &_head, val).first);
 			}
-			// 	if(position == NULL)
-			// 		return (iterator());
-
-			// 	ft::pair<iterator, bool> ret;
-			// 	map_node*	posParent = position.getPosParent();
-			// 	map_node*	posNode = position.getPtr();
-			// 	if (posParent != NULL
-			// 		&& (_comp(posParent->item.first, val.first) == true
-			// 		|| _comp(val.first, posParent->item.first) == true))
-			// 			ret = btree_insert_data(NULL, &_head, val);
-			// 	else
-			// 		ret = btree_insert_data(posNode, &posNode, val);
-			// 	return (ret.first);
-			// }
 
 				/**
 				 * @brief Range insert from first to last element
@@ -658,17 +635,17 @@ namespace ft	{
  		private:
 
 			map_node*
-			locateBound( map_node* root, const key_type& key, bool (*predicate)(map_node*, const key_type&) ) const	{
+			locateBound( map_node* root, const key_type& key, bool (*isBound)(map_node*, const key_type&) ) const	{
 
-				if (predicate(_dumbNode->left, key) == true)
+				if (root == _head && isBound(_dumbNode->left, key) == true)
 					return (_dumbNode->left);
-				else if (predicate(_dumbNode->right, key) == false)
+				else if (root == _head && isBound(_dumbNode->right, key) == false)
 					return (NULL);
 
 				map_node* candidate = root;
 				map_node* bestCandidate = NULL;
 				while (candidate != NULL)	{
-					if (predicate(candidate, key) == true)	{
+					if (isBound(candidate, key) == true)	{
 						bestCandidate = candidate;
 						candidate = candidate->left;
 					}

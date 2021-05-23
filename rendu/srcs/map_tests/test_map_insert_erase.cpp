@@ -13,8 +13,10 @@
 # include "./tester/exampleClass.hpp"
 # include "./tester/bvaletteTester_map.hpp"
 
+
+
 void
-testBasicInsertMemberFunction ( void )	{
+testInserEraseAdvanced ( void )	{
 		std::cout << HEADER_TITLE << "[ Insert with two different Compare functions]" << RESET_COLOR << std::endl;
 		{
 			std::map<char, int, std::greater<char> >	std_first_greater;
@@ -71,15 +73,56 @@ testBasicInsertMemberFunction ( void )	{
 
 			std_c0.insert(std_it, std::make_pair(testSize * 2 , 1));
 			ft_c0.insert(ft_it, ft::make_pair(testSize * 2 , 1));
-			std::cout << "Size = " << std_c0.size() << std::endl;
-			std::cout << "Size = " << ft_c0.size() << std::endl;
 			testMap(ft_c0, std_c0, NOPRINT);
-			std_c0.insert(std_it, std::make_pair(-42, 1));
-			ft_c0.insert(ft_it, ft::make_pair(-42, 1));
-			testMap(ft_c0, std_c0, NOPRINT);
-			std::cout << "Size = " << std_c0.size() << std::endl;
-			std::cout << "Size = " << ft_c0.size() << std::endl;
 
+			std_c0.insert(std_c0.end(), std::make_pair(-42, 1));
+			ft_c0.insert(ft_c0.end(), ft::make_pair(-42, 1));
+			testMap(ft_c0, std_c0, NOPRINT);
+
+			std_c0.insert(std_c0.find(-42), std::make_pair(-43, 2));
+			ft_c0.insert(ft_c0.find(-42), ft::make_pair(-43, 2));
+			testMap(ft_c0, std_c0, NOPRINT);
+			std_c0.insert(std_c0.find(-42), std::make_pair(-41, -1));
+			ft_c0.insert(ft_c0.find(-42), ft::make_pair(-41, -1));
+			testMap(ft_c0, std_c0, NOPRINT);
+
+			std_c0.insert(std_c0.find(testSize * 2), std::make_pair((testSize * 2) + 1, 2));
+			ft_c0.insert(ft_c0.find(testSize * 2), ft::make_pair((testSize * 2) + 1, 2));
+			testMap(ft_c0, std_c0, NOPRINT);
+
+			std_c0.insert(std_c0.find(testSize * 2), std::make_pair((testSize * 2) - 1, -1));
+			ft_c0.insert(ft_c0.find(testSize * 2), ft::make_pair((testSize * 2) - 1, -1));
+			testMap(ft_c0, std_c0, NOPRINT);
+
+			for (int i = 0; i < 10; i++)	{
+				int	val_insert = rand() % testSize + 10;
+				int	val_remove = std_val_0[rand() % (testSize / 2)].first;
+				std::cout << HEADER_TITLE << "[Insert key: " << val_insert << " Remove key: " << val_remove << " ]" << RESET_COLOR << std::endl;
+
+				std_it = std_c0.find(val_insert);
+				ft_it = ft_c0.find(val_insert);
+				if (std_it == std_c0.end())
+					std::cout << TESTOK_TITLE << "[Hint position is end()]" << RESET_COLOR << std::endl;
+				std_c0.insert(std_it, std::make_pair(val_insert + 1, 42));
+				ft_c0.insert(ft_it, ft::make_pair(val_insert + 1, 42));
+				testMap(ft_c0, std_c0, NOPRINT);
+				std_it = std_c0.insert(std_it, std::make_pair(val_insert - 1, 21));
+				ft_it = ft_c0.insert(ft_it, ft::make_pair(val_insert - 1, 21));
+
+				if (std_it == std_c0.end())
+					testBool(ft_it == ft_c0.end(), __LINE__);
+				else if (testBool(ft_it != ft_c0.end(), __LINE__) == true)
+					testBool(ft_it->first == std_it->first
+						&& ft_it->second == std_it->second, __LINE__);
+				testMap(ft_c0, std_c0, NOPRINT);
+				std_c0.erase(val_remove);
+				ft_c0.erase(val_remove);
+				testMap(ft_c0, std_c0, NOPRINT);
+			}
+			std::cout << HEADER_TITLE << "[ Remove key 10000000 which does not exist ]" << RESET_COLOR << std::endl;
+			std_c0.erase(10000000);
+			ft_c0.erase(10000000);
+			testMap(ft_c0, std_c0, NOPRINT);
 		}
 }
 
@@ -239,11 +282,12 @@ test_map_insert_erase( void )	{
 
 		std::cout << TITLE << "[ INSERT ]" << RESET_COLOR << std::endl;
 
-		testBasicInsertMemberFunction();
 		testBracketsInsert();
 		testCppRefCode();
 		std::cout << TITLE << "[ ERASE ]" << RESET_COLOR << std::endl;
 		testBasicErase();
+		std::cout << TITLE << "[ INSERT / ERASE ]" << RESET_COLOR << std::endl;
+		testInserEraseAdvanced();
 
 		return (0);
 }

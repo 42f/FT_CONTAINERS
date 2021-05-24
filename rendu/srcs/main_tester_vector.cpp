@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:23:15 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/18 09:50:28 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/24 09:40:23 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,6 @@ main_tester_vector( void )	{
 		test_vector_iterator();
 		test_vector_reverseIterator();
 
-	/******* NOT USED ******
-
-		test_vector_splice();
-		test_vector_remove();
-		test_vector_remove_if();
-		test_vector_unique();
-		test_vector_merge();
-		test_vector_sort();
-		test_vector_reverse();
-
-	*/
 		if (DEBUG_MODE == 0)
 		{
 			std::cout << SUBTITLE << "ALL TESTS PASSED ~~~~~~> " << RESET_COLOR;

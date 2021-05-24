@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:48:58 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/18 09:50:28 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/24 09:42:53 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,16 @@ test_vector_capacities( void )	{
 		testBool(std.max_size() == ft.max_size(), __LINE__);
 
 	}
-		{
-		size_t		testSize = 0;
-		std::cout << SUBTITLE << "[ max_size for a vector of " << testSize << " elements ]" << RESET_COLOR << std::endl;
-		std::vector<bool>	std(testSize);
-		ft::vector<bool>		ft(testSize);
-		testBool(std.max_size() == ft.max_size(), __LINE__);
-		std::cout << "bool : max_size for std : " << std.max_size() << std::endl;
-		std::cout << "bool : max_size for ft  : " << ft.max_size() << std::endl;
+	// {
+	// 	size_t		testSize = 0;
+	// 	std::cout << SUBTITLE << "[ max_size for a vector of " << testSize << " elements ]" << RESET_COLOR << std::endl;
+	// 	std::vector<bool>	std(testSize);
+	// 	ft::vector<bool>		ft(testSize);
+	// 	testBool(std.max_size() == ft.max_size(), __LINE__);
+	// 	std::cout << "bool : max_size for std : " << std.max_size() << std::endl;
+	// 	std::cout << "bool : max_size for ft  : " << ft.max_size() << std::endl;
 
-	}
+	// }
 	{
 		std::vector<char>		std_c0;
 		ft::vector<char>		ft_c0;

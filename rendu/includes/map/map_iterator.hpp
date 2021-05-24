@@ -24,17 +24,14 @@ namespace ft	{
             typedef std::bidirectional_iterator_tag				iterator_category;
 			typedef std::ptrdiff_t								difference_type;
 
-			// typedef ft::map_iterator<Key, T, Compare, map_node, false> 						iterator;
-			// typedef ft::map_iterator<Key, T, Compare, map_node, true> 						const_iterator;
-
 			typedef ft::reverse_iterator< map_iterator<Key, T, Compare, map_node, false> >	reverse_iterator;
 			typedef ft::reverse_iterator< map_iterator<Key, T, Compare, map_node, true> >	const_reverse_iterator;
 
 			typedef	Compare									key_compare;
 			typedef typename ft::pair<const Key, T>			value_type;
+
 			typedef typename ft_enable_if<B, value_type&, const value_type&>::type       reference;
             typedef typename ft_enable_if<B, value_type*, const value_type*>::type       pointer;
-
 
 			map_iterator( map_node* ptr = NULL, map_node* dumbNode = NULL,
 				const key_compare& comp = key_compare() ) :	_ptr(ptr),

@@ -5,13 +5,7 @@
 # include "map_iterator.hpp"
 
 # include <iostream>
-# include <memory>
 # include <cstddef>
-# include <string>
-// # include <iterator>
-# include <limits>
-# include <algorithm>
-# include <stdexcept>
 
 #ifndef DEBUG_MODE
 # define DEBUG_MODE 0
@@ -194,8 +188,8 @@ namespace ft	{
 .******************************************************************************.
 .******************************************************************************/
 
-			// private:
-			public:
+			private:
+			// public:
 				void
 				debugPrintTree()	{
 
@@ -257,14 +251,14 @@ namespace ft	{
 
 		public:
 
-			size_type
-			max_size( void ) const	{ return this->_allocNode.max_size(); }
-
 			bool
 			empty( void ) const		{ return (_size == 0); }
 
 			size_type
 			size( void ) const 		{ return (_size); }
+
+			size_type
+			max_size( void ) const	{ return this->_allocNode.max_size(); }
 
 			iterator
 			begin( void ) 			{
@@ -403,17 +397,6 @@ namespace ft	{
 				return (ft::make_pair(lower_bound(k), upper_bound(k)));
 			}
 
-			void
-			clear( void )			{
-
-				if (DEBUG_MODE >= 3) std::cout << __func__ << std::endl;
-				freeAllNodes(_head);
-				freeNode(_dumbNode);
-				_size = 0;
-				_head = NULL;
-				_dumbNode = NULL;
-			}
-
 			/**
 			 * @brief insert single element
 			*/
@@ -542,21 +525,32 @@ namespace ft	{
 			}
 
 			mapped_type&
-			operator[]( const Key& key )	{
+			operator[]( const key_type& key )	{
 
 				value_type					insertValue(key, mapped_type());
 				ft::pair<iterator, bool>	ret = insert(insertValue);
 				return (ret.first->second);
 			}
 
-            value_compare	value_comp() const	{ return value_compare(_comp); }
-            key_compare		key_comp() const	{ return key_compare(_comp); }
+			void
+			clear( void )			{
 
-// /******************************************************************************.
-// .******************************************************************************.
-// .*********** PRIVATE MEMBER FUNCTIONS AND HELPERS  ****************************.
-// .******************************************************************************.
-// .******************************************************************************/
+				if (DEBUG_MODE >= 3) std::cout << __func__ << std::endl;
+				freeAllNodes(_head);
+				freeNode(_dumbNode);
+				_size = 0;
+				_head = NULL;
+				_dumbNode = NULL;
+			}
+
+            value_compare	value_comp( void ) const	{ return value_compare(_comp); }
+            key_compare		key_comp( void ) const		{ return key_compare(_comp); }
+
+/******************************************************************************.
+.******************************************************************************.
+.*********** PRIVATE MEMBER FUNCTIONS AND HELPERS  ****************************.
+.******************************************************************************.
+.******************************************************************************/
 
  		private:
 
@@ -829,13 +823,15 @@ namespace ft	{
 					return;
 				freeAllNodes(root->left);
 				freeAllNodes(root->right);
-				// freeItem(root->item);
 				freeNode(root);
 			}
 
+			allocator_type
+			get_allocator() const	{
+				return _allocNode();
+			}
+
 		}; // -------------------------------------------------------- Class map
-
-
 
 /******************************************************************************.
 .******************************************************************************.

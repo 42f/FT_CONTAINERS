@@ -44,6 +44,8 @@ namespace ft	{
 .******************************************************************************/
 		private:
 			struct	map_node;
+			typedef typename Allocator::template rebind<map_node>::other	_node_allocator_type;
+
 		public:
 
 			typedef Key										key_type;
@@ -64,14 +66,8 @@ namespace ft	{
 			typedef typename ft::map_iterator<Key, T, Compare, map_node, false>	iterator;
 			typedef typename ft::map_iterator<Key, T, Compare, map_node, true>	const_iterator;
 
-            // typedef typename std::reverse_iterator<map_iterator<Key, T, Compare, map_node, false> > reverse_iterator;
-            // typedef typename std::reverse_iterator<map_iterator<Key, T, Compare, map_node, true> >  const_reverse_iterator;
             typedef typename ft::reverse_iterator<map_iterator<Key, T, Compare, map_node, false> > reverse_iterator;
             typedef typename ft::reverse_iterator<map_iterator<Key, T, Compare, map_node, true> >  const_reverse_iterator;
-
-		private:
-			typedef typename Allocator::template rebind<map_node>::other	_node_allocator_type;
-
 
 /******************************************************************************.
 .******************************************************************************.
@@ -135,7 +131,8 @@ namespace ft	{
 																		_size(0),
 																		_allocNode(userAlloc),
 																		_comp(comp)				{
-				if (DEBUG_MODE >= 4) std::cout << "CONSTRUCTOR --> DEFAULT explicit " << __func__ << std::endl;
+				if (DEBUG_MODE == 1)
+					std::cout << "CONSTRUCTOR --> DEFAULT explicit " << __func__ << std::endl;
 			}
 
 
@@ -151,7 +148,8 @@ namespace ft	{
 																		_allocNode(userAlloc),
 																		_comp(comp)				{
 
-				if (DEBUG_MODE >= 4) std::cout << "CONSTRUCTOR --> range pre dispatcher ! " << __func__ << std::endl;
+				if (DEBUG_MODE == 1)
+					std::cout << "CONSTRUCTOR --> Range ! " << __func__ << std::endl;
 				insert(first, last);
 			}
 
@@ -164,7 +162,8 @@ namespace ft	{
 												_allocNode(src._allocNode),
 												_comp(src._comp)				{
 
-				if (DEBUG_MODE >= 4) std::cout << "CONSTRUCTOR --> copy " << __func__ << std::endl;
+				if (DEBUG_MODE == 1)
+					std::cout << "CONSTRUCTOR --> copy " << __func__ << std::endl;
 
 				insert(src.begin(), src.end());
 			}
@@ -172,7 +171,7 @@ namespace ft	{
 
 			~map( void )	{
 
-				if (DEBUG_MODE >= 4) std::cout << "DESTRUCTOR --> " << __func__ << std::endl;
+				if (DEBUG_MODE == 1) std::cout << "DESTRUCTOR --> " << __func__ << std::endl;
 				clear();
 			}
 
@@ -258,6 +257,55 @@ namespace ft	{
 
 		public:
 
+			size_type
+			max_size( void ) const	{ return this->_allocNode.max_size(); }
+
+			bool
+			empty( void ) const		{ return (_size == 0); }
+
+			size_type
+			size( void ) const 		{ return (_size); }
+
+			iterator
+			begin( void ) 			{
+				if (_dumbNode != NULL)
+					return (iterator(_dumbNode->left, _dumbNode, _comp));
+				return (iterator());
+			}
+
+			const_iterator
+			begin( void ) const		{
+				if (_dumbNode != NULL)
+					return (const_iterator(_dumbNode->left, _dumbNode, _comp));
+				return (const_iterator());
+			}
+
+			iterator
+			end( void ) 	 		{
+				if (_dumbNode != NULL)
+					return (iterator(_dumbNode, _dumbNode, _comp));
+				return (iterator());
+			}
+
+			const_iterator
+			end( void ) const 		{
+				if (_dumbNode != NULL)
+					return (const_iterator(_dumbNode, _dumbNode, _comp));
+				return (const_iterator());
+			}
+
+			reverse_iterator
+			rbegin( void ) 			{	return reverse_iterator(--end());	}
+
+			const_reverse_iterator
+			rbegin( void ) 	const	{	return const_reverse_iterator(--end());	}
+
+			reverse_iterator
+			rend( void ) 			{	return reverse_iterator(end());	}
+
+			const_reverse_iterator
+			rend( void ) 	const	{	return const_reverse_iterator(end());	}
+
 			iterator
 			find (const key_type& k)	{
 
@@ -273,7 +321,7 @@ namespace ft	{
 			find (const key_type& k) const	{
 
 				if (empty() == true)
-					return(iterator());
+					return(const_iterator());
 				map_node* const	nodeFound = locateNode(_head, k);
 				if (nodeFound == NULL)
 					return (end());
@@ -355,55 +403,6 @@ namespace ft	{
 				return (ft::make_pair(lower_bound(k), upper_bound(k)));
 			}
 
-			size_type
-			max_size( void ) const	{ return this->_allocNode.max_size(); }
-
-			bool
-			empty( void ) const		{ return (_size == 0); }
-
-			size_type
-			size( void ) const 		{ return (_size); }
-
-			iterator
-			begin( void ) 			{
-				if (_dumbNode != NULL)
-					return (iterator(_dumbNode->left, _dumbNode, _comp));
-				return (iterator());
-			}
-
-			iterator
-			begin( void ) const		{
-				if (_dumbNode != NULL)
-					return (iterator(_dumbNode->left, _dumbNode, _comp));
-				return (iterator());
-			}
-
-			iterator
-			end( void ) 	 		{
-				if (_dumbNode != NULL)
-					return (iterator(_dumbNode, _dumbNode, _comp));
-				return (iterator());
-			}
-
-			iterator
-			end( void ) const 		{
-				if (_dumbNode != NULL)
-					return (iterator(_dumbNode, _dumbNode, _comp));
-				return (iterator());
-			}
-
-			reverse_iterator
-			rbegin( void ) 			{	return reverse_iterator(--end());	}
-
-			const_reverse_iterator
-			rbegin( void ) 	const	{	return reverse_iterator(--end());	}
-
-			reverse_iterator
-			rend( void ) 			{	return reverse_iterator(end());	}
-
-			const_reverse_iterator
-			rend( void ) 	const	{	return reverse_iterator(end());	}
-
 			void
 			clear( void )			{
 
@@ -442,9 +441,9 @@ namespace ft	{
 					return (btree_insert_data(NULL, &_head, val).first);
 			}
 
-				/**
-				 * @brief Range insert from first to last element
-				*/
+			/**
+			 * @brief Range insert from first to last element
+			*/
 			template <class InputIterator>
  			void
 			insert (InputIterator first, InputIterator last)	{
@@ -503,6 +502,65 @@ namespace ft	{
 			}
 
 			void
+			swap (map& src)	{
+
+				if (this->_head != src._head)	{
+					map_node*				tmp_head = src._head;
+					map_node*				tmp_dumbNode = src._dumbNode;
+					size_t					tmp_size = src._size;
+					_node_allocator_type 	tmp_allocNode = src._allocNode;
+
+					src._head = this->_head;
+					src._dumbNode = this->_dumbNode;
+					src._size = this->_size;
+					src._allocNode = this->_allocNode;
+
+					this->_head = tmp_head;
+					this->_dumbNode = tmp_dumbNode;
+					this->_size = tmp_size;
+					this->_allocNode = tmp_allocNode;
+				}
+			}
+
+			map&
+			operator= (const map& src)	{
+
+				if (this->_head != src._head)	{
+					clear();
+
+					if (src.empty() == false)	{
+						if (src.size() > 2)	{
+							const_iterator	half = src.begin();
+							for (size_t i = 0; i < src.size() / 2; i++)
+								half++;
+							insert(*half);
+						}
+						insert(src.begin(), src.end());
+					}
+				}
+				return *this;
+			}
+
+			mapped_type&
+			operator[]( const Key& key )	{
+
+				value_type					insertValue(key, mapped_type());
+				ft::pair<iterator, bool>	ret = insert(insertValue);
+				return (ret.first->second);
+			}
+
+            value_compare	value_comp() const	{ return value_compare(_comp); }
+            key_compare		key_comp() const	{ return key_compare(_comp); }
+
+// /******************************************************************************.
+// .******************************************************************************.
+// .*********** PRIVATE MEMBER FUNCTIONS AND HELPERS  ****************************.
+// .******************************************************************************.
+// .******************************************************************************/
+
+ 		private:
+
+			void
 			detachFromParent( map_node* node, map_node* newChild = NULL )	{
 				map_node* parent = node->parent;
 				if (parent != NULL)	{
@@ -528,111 +586,6 @@ namespace ft	{
 				else
 					return (NULL);
 			}
-
-
-			// size_type
-			// erase (const key_type& k)	{
-
-			// }
-
-			// void
-			// erase (iterator first, iterator last);	{
-
-			// }
-
-
-			void
-			swap (map& src)	{
-
-				if (this->_head != src._head)	{
-					map_node*				tmp_head = src._head;
-					map_node*				tmp_dumbNode = src._dumbNode;
-					size_t					tmp_size = src._size;
-					_node_allocator_type 	tmp_allocNode = src._allocNode;
-
-					src._head = this->_head;
-					src._dumbNode = this->_dumbNode;
-					src._size = this->_size;
-					src._allocNode = this->_allocNode;
-
-					this->_head = tmp_head;
-					this->_dumbNode = tmp_dumbNode;
-					this->_size = tmp_size;
-					this->_allocNode = tmp_allocNode;
-				}
-			}
-
-// 			/**
-// 			 * @brief Here we use the same technic as for insert : the type
-// 			 *  integer is  used to call the right overload.
-// 			*/
-// 			template <class InputIterator>
-// 			void assign (InputIterator first, InputIterator last)	{
-
-// 				typename std::__is_integer<InputIterator>::__type	integer;
-// 				assign_dispatch(first, last, integer);
-// 			}
-
-// 			void assign(size_type n, const mapped_type& val)	{
-
-// 				clear();
-// 				insert(begin(), n, val);
-// 			}
-
-// 			/**
-// 			 * @brief Reserve: Requests that the map capacity be at
-// 			 * least enough to contain n elements.
-// 			*/
-// 			void
-// 			reserve (size_type n) {
-
-// 				if (n > max_size())	{
-// 					throw std::length_error("ft::map::reserve called with n > max_size");
-// 				}
-// 				else	{
-// 					doReserve(n);
-// 				}
-// 			}
-
-			map&
-			operator= (const map& src)	{
-
-				if (this->_head != src._head)	{
-					clear();
-
-					if (src.empty() == false)	{
-						if (src.size() > 2)	{
-							iterator	half = src.begin();
-							for (size_t i = 0; i < src.size() / 2; i++)
-								half++;
-							insert(*half);
-						}
-						insert(src.begin(), src.end());
-					}
-				}
-				return *this;
-			}
-
-			mapped_type&
-			operator[]( const Key& key )	{
-
-				// return (*((this->insert(make_pair(key,mapped_type()))).first).second);
-
-				value_type					insertValue(key, mapped_type());
-				ft::pair<iterator, bool>	ret = insert(insertValue);
-				return (ret.first->second);
-			}
-
-            value_compare	value_comp() const	{ return value_compare(_comp); }
-            key_compare		key_comp() const	{ return key_compare(_comp); }
-
-// /******************************************************************************.
-// .******************************************************************************.
-// .*********** PRIVATE MEMBER FUNCTIONS AND HELPERS  ****************************.
-// .******************************************************************************.
-// .******************************************************************************/
-
- 		private:
 
 			map_node*
 			locateBound( map_node* root, const key_type& key, bool (*isBound)(map_node*, const key_type&) ) const	{
@@ -825,24 +778,6 @@ namespace ft	{
 				return (root);
 			}
 
-			// size_t
-			// tree_nodes_count(map_node *root)	{
-
-			// }
-			// void
-			// btree_free_suffix(map_node *root)	{
-
-			// }
-			// size_t
-			// tree_level_count(map_node *root)	{
-
-			// }
-			// void
-			// btree_apply_by_level(map_node *root,
-// 			void (*applyf)(void *item, int current_level, int is_first_elem))	{
-
-// }
-
 			static map_node*
 			getFarLeft( map_node* cursor )  {
 
@@ -864,16 +799,6 @@ namespace ft	{
 				return (node->left == NULL && node->right == NULL);
 			}
 
-			// bool
-			// isRightEligible(pair_type& existingPair, pair_type& newPair)	{
-			// 	return (comp(existingPair.first, newPair.first));
-			// }
-
-			// bool
-			// isRightEligible(Key& existingKey, Key& newKey)	{
-			// 	return (comp(existingKey, newKey));
-			// }
-
 			static bool
 			isEqualKey(const Key& existingKey, const Key& newKey) {
 				typename ft::map<Key, T, Compare> tmpObj;
@@ -888,181 +813,6 @@ namespace ft	{
 
 			size_t
 			decSize( size_t inc = 1 ) { _size -= inc; return(_size); }
-
-
-
-
-
-
-
-// 			template <class InputIterator>
-// 			void
-// 			assign_dispatch (InputIterator first, InputIterator last, std::__false_type)	{
-
-// 				clear();
-// 				insert(begin(), first, last);
-// 			}
-
-// 			template<typename integer>
-// 			void
-// 			assign_dispatch (integer n, integer val, std::__true_type)	{
-
-// 				assign(static_cast<size_type>(n), static_cast<mapped_type>(val));
-// 			}
-
-
-// 			/**
-// 			 * @brief Fill Constructor actual function
-// 			*/
-// 			template <class integer>
-// 			void
-// 			map_constructor_dispatch (integer n, integer const & val,
-// 				allocator_type const &, std::__true_type)	{
-
-// 				if (DEBUG_MODE >= 1)	{
-// 					std::cout << "dispatch --> __true_type " << __func__ << std::endl;
-// 					std::cout << "CONSTRUCTOR --> fill " << __func__ << std::endl;
-// 				}
-// 				this->initStorage(n);
-// 				initFillmap(n, val);
-// 			}
-
-// 			/**
-// 			 * @brief Range Constructor actual function
-// 			*/
-// 			template <class InputIterator>
-// 			void
-// 			map_constructor_dispatch (InputIterator first, InputIterator last,
-// 				 allocator_type const &, std::__false_type)	{
-
-// 				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> range : " << __func__ << std::endl;
-
-// 				size_t	n = std::distance(first, last);
-// 				this->initStorage(n * 2);
-// 				fillmap(first, last);
-// 			}
-
-
-// 			template<typename integer>
-// 			void
-// 			insert_dispatch(iterator position, integer n, integer val,
-// 			std::__true_type)	{
-// 				insert(position, static_cast<size_type>(n),
-// 					static_cast<mapped_type>(val));
-// 			}
-
-// 			template<typename InputIterator>
-// 			void
-// 			insert_dispatch(iterator position, InputIterator first,
-// 			InputIterator last, std::__false_type)	{
-
-// 				if (capacity() == 0)	{
-// 					this->initStorage(1);
-// 					position = begin();
-// 				}
-
-// 				difference_type indexPos = position - begin();
-// 				size_type		n = last - first;
-// 				if (_size() + n >= capacity())	{
-// 					doReserve(capacity() + n + (capacity()>>1));
-// 				}
-
-// 				if (begin() + indexPos != end())	{
-// 					if (_size() > 1)	{
-// 						memMoveRight(begin() + indexPos, end(), n);
-// 					}
-// 					destroyObjects(this->_head + indexPos, _size() - indexPos);
-// 					this->tail += n;
-// 					constructObjects(this->_head + indexPos, first, last);
-// 				}
-// 				else {
-// 					constructObjects(this->_head + indexPos, first, last);
-// 					this->tail += n;
-// 				}
-// 			}
-
-// 			/**
-// 			 * @brief Construct objects at alocated memory, to be used by
-// 			 * constructors
-// 			*/
-// 			void
-// 			fillmap(iterator first, iterator last)	{
-
-// 				for (;first != last; first++)	{
-// 					this->_alloc.construct(this->tail, *first);
-// 					this->tail++;
-// 					if (this->tail == this->tailStorage)
-// 						std::cout << "RESIZE HERE" << std::endl;			// not fixed yet
-// 				}
-// 			}
-
-// 			/**
-// 			 * @brief Construct objects at alocated memory, to be used by
-// 			 * constructors
-// 			*/
-// 			void
-// 			initFillmap(size_type n, mapped_type const & val)	{
-
-// 				this->tail = this->_head + n;
-// 				for (size_t i = 0; i < n; i++){
-// 					this->_alloc.construct(this->_head + i, val);
-// 				}
-// 			}
-
-
-
-// 			/**
-// 			 * @brief doReserve: No throw version of Reserve.
-// 			*/
-// 			void
-// 			doReserve (size_type n) {
-
-// 				if (n > this->capacity())	{
-// 					pointer		oldHead = this->_head;
-// 					size_type	oldSize = this->_size();
-// 					size_type	oldCapacity = this->capacity();
-
-// 					reallocateBigger(n);
-
-// 					destroyObjects(oldHead, oldSize);
-// 					this->_alloc.deallocate(oldHead, oldCapacity);
-// 				}
-// 			}
-
-// 			void
-// 			reallocateBigger(size_type n)	{
-
-// 				if (n > this->capacity())	{
-
-// 					iterator	oldHeadIt = begin();
-// 					iterator	oldTailIt = end();
-
-// 					this->initStorage(n);
-// 					constructObjects(this->_head, oldHeadIt, oldTailIt);
-// 					this->tail += oldTailIt - oldHeadIt;
-// 				}
-// 			}
-
-// 			void
-// 			constructObjects(pointer p, size_t n, mapped_type val = mapped_type())	{
-// 				for (size_t i = 0; i < n; i++)	{
-// 					this->_alloc.construct(p + i, val);
-// 				}
-// 			}
-
-// 			void
-// 			constructObjects(pointer p, iterator first, iterator last)	{
-// 				for (size_t i = 0; first != last; i++, first++)	{
-// 					this->_alloc.construct(p + i, *first);
-// 				}
-// 			}
-
-			// void
-			// destroyObjects(pointer p, size_t n)	{
-				// for (size_t i = 0; i < n; i++)	{
-					// this->_alloc.destroy(p + i);
-				// }
-			// }
 
 			void
 			freeNode( map_node* node)	{
@@ -1083,38 +833,6 @@ namespace ft	{
 				freeNode(root);
 			}
 
-// 			/**
-// 			 * @brief Move [first, last] range by n memory blocks to theLeft
-// 			*/
-// 			void
-// 			memMoveLeft(iterator first, iterator last, size_t n)	{			// to be tested
-// 				while (first != last)	{
-// 					constructObjects(first._ptr - n, 1, *first);
-// 					destroyObjects(first._ptr, 1);
-// 					first++;
-// 				}
-// 			}
-
-
-// 			/**
-// 			 * @brief Move [first, last] range by n memory blocks to the right
-// 			*/
-// 			void
-// 			memMoveRight(iterator first, iterator last, size_t n)	{
-// 				while (last != first)	{
-// 					last--;
-// 					constructObjects(last._ptr + n, 1, *last);
-// 					destroyObjects(last._ptr, 1);
-// 				}
-// 			}
-
-// 			void
-// 			checkRange(size_type n)	const {
-// 				if (n > _size())	{
-// 					throw std::out_of_range("Out of map's range");
-// 				}
-// 			}
-
 		}; // -------------------------------------------------------- Class map
 
 
@@ -1125,10 +843,6 @@ namespace ft	{
 .******************************************************************************.
 .******************************************************************************/
 
-
-
-
-
 		template <class Key, class T, class Compare, class Alloc>
 		void
 		swap (map<Key,T,Compare,Alloc>& x, map<Key,T,Compare,Alloc>& y)	{
@@ -1136,49 +850,6 @@ namespace ft	{
 			x.swap(y);
 		};
 
-		// template <class T, class Alloc>
-		// bool
-		// operator== (const map<T,Alloc>& lhs, const map<T,Alloc>& rhs)	{
-
-		// 	if (lhs._size() != rhs._size())
-		// 		return false;
-		// 	if (lhs.front() != rhs.front() || lhs.back() != rhs.back())
-		// 		return false;
-		// 	return (std::equal(lhs.begin(), lhs.end(), rhs.begin()));
-		// };
-
-		// template <class T, class Alloc>
-		// bool
-		// operator!= (const map<T,Alloc>& lhs, const map<T,Alloc>& rhs)	{ return(!(lhs == rhs)); };
-
-
-		// template <class T, class Alloc>
-		// bool
-		// operator<  (const map<T,Alloc>& lhs, const map<T,Alloc>& rhs)	{
-
-		// 	return (std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
-
-		// };
-
-		// template <class T, class Alloc>
-		// bool
-		// operator<= (const map<T,Alloc>& lhs, const map<T,Alloc>& rhs)	{ return(!(lhs > rhs)); };
-
-		// template <class T, class Alloc>
-		// bool
-		// operator>  (const map<T,Alloc>& lhs, const map<T,Alloc>& rhs)	{
-
-		// 	return (std::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));
-
-		// };
-
-		// template <class T, class Alloc>
-		// bool
-		// operator>= (const map<T,Alloc>& lhs, const map<T,Alloc>& rhs)	{ return(!(lhs < rhs)); };
-
-
-
 } // -------------------------------------------------------------- ft namespace
-
 
 #endif /* *****BVALETTE****** MAP_HPP */

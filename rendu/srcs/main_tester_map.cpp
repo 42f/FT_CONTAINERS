@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:23:15 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/22 19:20:14 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/24 08:28:53 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,27 +20,27 @@ main_tester_map( void )	{
 
 	try {
 
-		// test_map_instantiation();
+		test_map_instantiation();
 		test_map_insert_erase();
-		// test_map_capacities();
-		// test_map_iterator();
-		// test_map_at_operatorBrackets();
-		// test_map_swap();
-		// test_map_clear();
-		// test_key_compare_value_compare();
-		// test_map_operatorEqual();
-		// test_map_find();
-		// test_map_count();
-		// test_map_lower_bound();
-		// test_map_upper_bound();
-		// test_map_equal_range();
+		test_map_capacities();
+		test_map_iterator();
+		test_map_at_operatorBrackets();
+		test_map_swap();
+		test_map_clear();
+		test_key_compare_value_compare();
+		test_map_operatorEqual();
+		test_map_find();
+		test_map_count();
+		test_map_lower_bound();
+		test_map_upper_bound();
+		test_map_equal_range();
 		test_map_reverseIterator();
 	/******* NOT TESTED ******
 
+		test_map_relational_operators();
 
 
 		test_map_element_access();
-		test_map_relational_operators();
 	*/
 	/******* NOT USED ******
 

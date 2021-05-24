@@ -24,6 +24,9 @@ namespace ft	{
             typedef std::bidirectional_iterator_tag				iterator_category;
 			typedef std::ptrdiff_t								difference_type;
 
+			// typedef ft::map_iterator<Key, T, Compare, map_node, false> 						iterator;
+			// typedef ft::map_iterator<Key, T, Compare, map_node, true> 						const_iterator;
+
 			typedef ft::reverse_iterator< map_iterator<Key, T, Compare, map_node, false> >	reverse_iterator;
 			typedef ft::reverse_iterator< map_iterator<Key, T, Compare, map_node, true> >	const_reverse_iterator;
 
@@ -39,11 +42,21 @@ namespace ft	{
 															_comp(comp)		{}
 
 
-			map_iterator(const map_iterator<Key, T, Compare, map_node, false>& itSrc) :	_ptr(itSrc.getPtr()),
-																						_btreeDumdNode(itSrc.getDumbNode()),
-																						_comp(itSrc.getComp())		{}
+			map_iterator(const map_iterator& itSrc) :	_ptr(itSrc.getPtr()),
+														_btreeDumdNode(itSrc.getDumbNode()),
+														_comp(itSrc.getComp())		{}
 
 			~map_iterator( void )	{}
+
+			map_iterator&
+			operator=( const map_iterator& src )	{
+				if (*this != src)	{
+					_ptr = src.getPtr();
+					_btreeDumdNode = src.getDumbNode();
+					_comp = src.getComp();
+				}
+				return (*this);
+			}
 
 			map_iterator&
 			operator++( void ) {
@@ -199,3 +212,4 @@ namespace ft	{
 } // ----------------- ft namespace
 
 #endif
+

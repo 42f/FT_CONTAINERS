@@ -16,8 +16,8 @@ putMap( ft::map<K, T, Compare, Alloc> const & container, int errorPos = -1 )	{
 	std::cout << PRINT_TITLE << "[ FT::map ]" << RESET_COLOR << std::endl;
 	std::cout << PRINT_TITLE << "[ size of map ]" << RESET_COLOR << " -> ";
 	std::cout << container.size() << std::endl;
-	typename ft::map<K, T, Compare, Alloc>::iterator it = container.begin();
-	typename ft::map<K, T, Compare, Alloc>::iterator ite = container.end();
+	typename ft::map<K, T, Compare, Alloc>::const_iterator it = container.begin();
+	typename ft::map<K, T, Compare, Alloc>::const_iterator ite = container.end();
 
 	int	printMax;
 
@@ -101,8 +101,8 @@ bool print, std::string message = "" )	{
 	if (ft_c.size() > 0)
 	{
 		int i = 0;
-		typename ft::map<K, T, Compare, ftAlloc>::iterator	ft_it = ft_c.begin();
-		typename ft::map<K, T, Compare, ftAlloc>::iterator	ft_ite = ft_c.end();
+		typename ft::map<K, T, Compare, ftAlloc>::const_iterator	ft_it = ft_c.begin();
+		typename ft::map<K, T, Compare, ftAlloc>::const_iterator	ft_ite = ft_c.end();
 
 		typename std::map<K, T, Compare, stdAlloc>::const_iterator	std_it = std_c.begin();
 		typename std::map<K, T, Compare, stdAlloc>::const_iterator	std_ite = std_c.end();

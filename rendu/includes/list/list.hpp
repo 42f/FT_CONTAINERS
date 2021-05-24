@@ -1,6 +1,8 @@
 #ifndef LIST_HPP
 # define LIST_HPP
 
+# include "../utils/ft_rev_iterator.hpp"
+
 # include <iostream>
 # include <memory>
 # include <cstddef>
@@ -139,9 +141,9 @@ namespace ft	{
 				std::cout << "data -> " << n.data << " @ " << &(n.data) << std::endl;
 				std::cout << "prev -> " << n.prev << std::endl;
 				std::cout << "next -> " << n.next << std::endl;
-				if (n.next != &(n))
-					putNodeInfos(*n.next);
-				else
+				// if (n != _tail && n.next != &(n))
+				// 	putNodeInfos(*n.next);
+				// else
 					std::cout << std::endl;
 			}
 		}; // ----------------- Class node
@@ -156,7 +158,10 @@ namespace ft	{
 			iterator(const iterator& itSrc) : _ptr(itSrc._ptr) {}
 
 			iterator&	operator++( void ) {
-				_ptr = _ptr->next;
+				// if (_ptr == _tail)
+				// 	_ptr == _head;
+				// else
+					_ptr = _ptr->next;
 				return *this;
 			}
 
@@ -167,7 +172,10 @@ namespace ft	{
 			}
 
 			iterator&	operator--( void ) {
-				_ptr = _ptr->prev;
+				// if (_ptr == _head)
+				// 	_ptr == _tail;
+				// else
+					_ptr = _ptr->prev;
 				return *this;
 			}
 
@@ -247,7 +255,7 @@ namespace ft	{
 		public:
 			typedef node<T>							node;
 			typedef iterator<T>						iterator;
-			typedef std::reverse_iterator<iterator> reverse_iterator;
+			typedef ft::reverse_iterator<iterator> reverse_iterator;
 			// typedef const_iterator<T>						const_iterator;
 			// typedef std::const_reverse_iterator<iterator>	const_reverse_iterator;
 			typedef T								value_type;
@@ -320,8 +328,10 @@ namespace ft	{
 			size_type			size( void ) const 		{ return (_size); }
 			iterator			begin( void ) const		{ return (_head); }
 			iterator			end( void ) const 		{ return (_tail); }
-			reverse_iterator	rbegin( void ) const	{ return reverse_iterator(end()); }
-			reverse_iterator	rend( void ) const 		{ return reverse_iterator(begin()); }
+			reverse_iterator	rbegin( void ) 			{ return reverse_iterator(--end()); }
+			reverse_iterator	rend( void )  			{ return reverse_iterator(end()); }
+			// const_reverse_iterator	rbegin( void ) const	{ return const_reverse_iterator(end()); }
+			// const_reverse_iterator	rend( void ) const 		{ return const_reverse_iterator(begin()); }
 			reference			front( void ) 			{ return (_head->data); }
 			reference			back( void ) 	 		{ return (_tail->prev->data); }
 			const_reference		front( void ) const		{ return (_head->data); }
@@ -351,13 +361,19 @@ namespace ft	{
 			/**
 			 * @brief insert single element
 			*/
-			iterator insert(iterator position, const value_type& val)	{
+			iterator
+			insert(iterator position, const value_type& val)	{
 
 				node *	newNode = getNode(val);
 				if (_size < max_size())	{
-					if (_head == _tail || position == begin())
+					if (_head == _tail || position == begin())	{
 						_head = newNode;
-					newNode->hook(position._ptr);
+						newNode->hook(position._ptr);
+						_tail->next = _head;
+						_head->prev = _tail;
+					}
+					else
+						newNode->hook(position._ptr);
 					incSize();
 				}
 				return newNode;
@@ -366,7 +382,8 @@ namespace ft	{
 			/**
 			 * @brief insert n elements of val
 			*/
-			void insert (iterator position, size_type n, const value_type& val)	{
+			void
+			insert (iterator position, size_type n, const value_type& val)	{
 
 				if (n + _size <= max_size())
 				{
@@ -404,8 +421,10 @@ namespace ft	{
 				node * cursor = position._ptr;
 				node * returnCursor = cursor->next;
 				if (_size > 0)	{
-					if (cursor == _head)
+					if (cursor == _head)	{
 						_head = _head->next;
+						_tail->next = _head;
+					}
 					cursor->unhook();
 					_alloc.destroy(cursor);
 					_alloc.deallocate(cursor, 1);
@@ -513,8 +532,7 @@ namespace ft	{
 					if (x.size() == 0)
 						x._head = x._tail;
 				}
-			}	// splice
-
+			}
 
 			void remove (const value_type& val)	{
 
@@ -522,8 +540,7 @@ namespace ft	{
 
 				while ((itFind = std::find(itFind, end(), val)) != end())
 					itFind = erase(itFind);
-			}	// remove
-
+			}
 			template <class Predicate>
 			void
 			remove_if (Predicate pred)	{
@@ -532,8 +549,7 @@ namespace ft	{
 
 				while ((itFind = std::find_if(itFind, end(), pred)) != end())
 					itFind = erase(itFind);
-			}	// remove
-
+			}
 
 			void
 			unique( void )	{ unique(equality()); }
@@ -580,7 +596,7 @@ namespace ft	{
 			sort (Compare comp)	{
 
 				std::sort(begin(), end(), comp);
-			} // sort
+			}
 
 			void
 			reverse( void )	{
@@ -609,7 +625,7 @@ namespace ft	{
 					ite = tmpIte;
 				}
 
-			} // reverse
+			}
 
 		protected:
 

@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:01:26 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/18 09:50:57 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/24 12:16:45 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,16 @@ test_list_instantiation( void )	{
 			testList(ftl1, stdl1, NOPRINT);
 
 		}
+		std::cout << SUBTITLE << "[ COPY CONSTRUCTOR from list with no elements]" << RESET_COLOR << std::endl;
+		{
+			ft::list<int>		ftl0;
+			std::list<int>		stdl0;
+
+			ft::list<int>		ftl1(ftl0);
+			std::list<int>		stdl1(stdl0);
+			testList(ftl0, stdl0, NOPRINT);
+			testList(ftl1, stdl1, NOPRINT);
+		}
 		std::cout << SUBTITLE << "[ COPY CONSTRUCTOR from list with 5 elements]" << RESET_COLOR << std::endl;
 		{
 			ft::list<int>		ftl0(5, 123);
@@ -75,16 +85,53 @@ test_list_instantiation( void )	{
 			std::cout << SUBTITLE << "[ check if begin points to a new elements ]" << RESET_COLOR << std::endl;
 			testBool(&(*ftl0.begin()) != &(*ftl1.begin()), __LINE__);
 			testBool(&(*stdl0.begin()) != &(*stdl1.begin()), __LINE__);
-		}
-		std::cout << SUBTITLE << "[ COPY CONSTRUCTOR from list with no elements]" << RESET_COLOR << std::endl;
-		{
-			ft::list<int>		ftl0;
-			std::list<int>		stdl0;
 
-			ft::list<int>		ftl1(ftl0);
-			std::list<int>		stdl1(stdl0);
-			testList(ftl0, stdl0, NOPRINT);
-			testList(ftl1, stdl1, NOPRINT);
+
+			ftl0.push_front(42);
+			stdl0.push_front(42);
+			ftl0.push_back(99);
+			stdl0.push_back(99);
+			ft::list<int>::iterator		ft_it = ftl0.end();
+			std::list<int>::iterator	std_it = stdl0.end();
+
+			ft_it++;
+			std_it++;
+			std::cout << "std= " << *std_it << std::endl;
+			std::cout << "ft = " << *ft_it << std::endl;
+			ft_it--;
+			std_it--;
+			std::cout << "std= " << *std_it << std::endl;
+			std::cout << "ft = " << *ft_it << std::endl;
+			ft_it--;
+			std_it--;
+			std::cout << "std= " << *std_it << std::endl;
+			std::cout << "ft = " << *ft_it << std::endl;
+			testBool(*ft_it == *std_it, __LINE__);
+
+			{
+				ft::list<int>::reverse_iterator		ft_it = ftl0.rbegin();
+				std::list<int>::reverse_iterator		std_it = stdl0.rbegin();
+
+				ft_it--;
+				std_it--;
+				ft_it--;
+				std_it--;
+				std::cout << "std= " << *std_it << std::endl;
+				std::cout << "ft = " << *ft_it << std::endl;
+				ft_it++;
+				std_it++;
+				std::cout << "std= " << *std_it << std::endl;
+				std::cout << "ft = " << *ft_it << std::endl;
+				ft_it++;
+				std_it++;
+				std::cout << "std= " << *std_it << std::endl;
+				std::cout << "ft = " << *ft_it << std::endl;
+				testBool(*ft_it == *std_it, __LINE__);
+		}
+
+
+
+
 		}
 	}
 	return (0);

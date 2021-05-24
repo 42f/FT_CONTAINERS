@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:02:26 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/18 09:50:28 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/24 10:40:05 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,12 @@ test_list_reverseIterator( void )	{
 
 		std::cout << SUBTITLE << "[ pushback " << testSize << " ASCENDING even values in list 0 ]" << RESET_COLOR << std::endl;
 
-		for (size_t i = 0; i < testSize; i++)	{
+		for (size_t i = 1; i <= testSize; i++)	{
 			ftl0.push_back(i);
 			stdl0.push_back(i);
 		}
+		ftl0.push_back(42);
+		stdl0.push_back(42);
 		testList(ftl0, stdl0, NOPRINT);
 
 		ft::list<int>::reverse_iterator		ft_it = ftl0.rbegin();
@@ -37,13 +39,29 @@ test_list_reverseIterator( void )	{
 		std::list<int>::reverse_iterator		std_it2 = stdl0.rbegin();
 		std::list<int>::reverse_iterator		std_itend = stdl0.rend();
 
-		std::cout << SUBTITLE << "[ test operator!= ]" << RESET_COLOR << std::endl;
-		testBool(ft_it != ft_itend && std_it != std_itend, __LINE__);
+
 		std::cout << SUBTITLE << "[ test operator== ]" << RESET_COLOR << std::endl;
 		testBool(ft_it == ft_it2 && std_it == std_it2, __LINE__);
+		std::cout << SUBTITLE << "[ test operator!= ]" << RESET_COLOR << std::endl;
+		testBool(ft_it != ft_itend && std_it != std_itend, __LINE__);
 	}
 	std::cout << HEADER_TITLE << "TEST REVERSE ITERATOR ARITHMETIC" << RESET_COLOR << std::endl;
 	{
+
+		std::list<int>			s;
+		s.push_back(0);
+		s.push_back(1);
+		s.push_back(2);
+		s.push_back(3);
+		s.push_back(4);
+		s.push_back(5);
+		std::list<int>::reverse_iterator s_rit = s.rbegin();
+		s_rit++;
+		s_rit++;
+		std::list<int>::reverse_iterator s_rite = s.rend();
+		s_rite--;
+		s_rite--;
+
 		ft::list<int>			l;
 		l.push_back(0);
 		l.push_back(1);
@@ -51,23 +69,17 @@ test_list_reverseIterator( void )	{
 		l.push_back(3);
 		l.push_back(4);
 		l.push_back(5);
-		ft::list<int>::reverse_iterator it1 = l.rbegin();
-		ft::list<int>::reverse_iterator it2 = l.rbegin();
-		it1++;
-		it1++;
-		it2++;
-		it2++;
-		ft::list<int>::reverse_iterator ite1 = l.rend();
-		ft::list<int>::reverse_iterator ite2 = l.rend();
-		ite1--;
-		ite1--;
-		ite2--;
-		ite2--;
+		ft::list<int>::reverse_iterator l_rit = l.rbegin();
+		l_rit++;
+		l_rit++;
+		ft::list<int>::reverse_iterator l_rite = l.rend();
+		l_rite--;
+		l_rite--;
 
-		testBool(*it1 == 3, __LINE__);
-		testBool(*ite1 == 1, __LINE__);
-		testBool(*it1 == *it2, __LINE__);
-		testBool(*ite1 == *ite2, __LINE__);
+		testBool(*(l_rit.base()) == *(s_rit.base()), __LINE__);
+		testBool(*(l_rite.base()) == *(s_rite.base()), __LINE__);
+		testBool(*l_rite == *s_rite, __LINE__);
+		testBool(*l_rit == *s_rit, __LINE__);
 	}
 	return (0);
 }

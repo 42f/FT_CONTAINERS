@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:23:15 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/24 09:40:23 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/24 09:51:45 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,9 @@ main_tester_vector( void )	{
 
 		if (DEBUG_MODE == 0)
 		{
-			std::cout << SUBTITLE << "ALL TESTS PASSED ~~~~~~> " << RESET_COLOR;
+			std::cout << SUBTITLE << "For :" << __func__ <<", ALL TESTS PASSED ~~~~~~> " << RESET_COLOR;
 			std::cout << BLINK << "\t \xF0\x9F\x8E\x89 \xF0\x9F\x8E\x8A" << RESET_COLOR << std::endl;
-			usleep(10);
 			std::cout << BLINK << "                         " << "\t \xF0\x9F\x8E\x89 \xF0\x9F\x8E\x8A" << RESET_COLOR << std::endl;
-			usleep(10);
 			std::cout << BLINK << "                         " << "\t \xF0\x9F\x8E\x89 \xF0\x9F\x8E\x8A" << RESET_COLOR << std::endl;
 		}
 	}

@@ -75,13 +75,16 @@ else ifeq ($(debug_mode), 4)
 	CFLAGS += -D DEBUG_MODE=4
 endif
 
-PROJECT_HEADER += ./list.hpp
+# PROJECT_HEADER += ./list.hpp
+# PROJECT_HEADER += ./list_iterator.hpp
 PROJECT_HEADER += ./vector.hpp
 PROJECT_HEADER += ./map.hpp
 PROJECT_HEADER += ./map_iterator.hpp
 
 PROJECT_HEADER += ./ft_pair.hpp
+PROJECT_HEADER += ./ft_node.hpp
 PROJECT_HEADER += ./ft_enable_if.hpp
+PROJECT_HEADER += ./ft_iterator_base.hpp
 PROJECT_HEADER += ./ft_rev_iterator.hpp
 
 HEADER += ./bvaletteTester.hpp
@@ -103,9 +106,9 @@ SRCS += ./main_utils.cpp
 #-------- LIST #################################################################
 ################################################################################
 
-SRCS += ./main_tester_list.cpp
+# SRCS += ./main_tester_list.cpp
 
-SRCS += ./test_list_instantiation.cpp
+# SRCS += ./test_list_instantiation.cpp
 # SRCS += ./test_list_push_back_push_front_pop_back_pop_front.cpp
 # SRCS += ./test_list_clear.cpp
 # SRCS += ./test_list_capacities.cpp
@@ -153,23 +156,23 @@ SRCS += ./test_list_instantiation.cpp
 # #-------- MAP    ###############################################################
 # ################################################################################
 
-# SRCS += ./main_tester_map.cpp
+SRCS += ./main_tester_map.cpp
 
-# SRCS += ./test_map_instantiation.cpp
-# SRCS += ./test_map_insert_erase.cpp
-# SRCS += ./test_map_capacities.cpp
-# SRCS += ./test_map_iterator.cpp
-# SRCS += ./test_map_at_operatorBrackets.cpp
-# SRCS += ./test_map_swap.cpp
-# SRCS += ./test_map_clear.cpp
-# SRCS += ./test_key_compare_value_compare.cpp
-# SRCS += ./test_map_operatorEqual.cpp
-# SRCS += ./test_map_find.cpp
-# SRCS += ./test_map_count.cpp
-# SRCS += ./test_map_lower_bound.cpp
-# SRCS += ./test_map_upper_bound.cpp
-# SRCS += ./test_map_equal_range.cpp
-# SRCS += ./test_map_reverseIterator.cpp
+SRCS += ./test_map_instantiation.cpp
+SRCS += ./test_map_insert_erase.cpp
+SRCS += ./test_map_capacities.cpp
+SRCS += ./test_map_iterator.cpp
+SRCS += ./test_map_at_operatorBrackets.cpp
+SRCS += ./test_map_swap.cpp
+SRCS += ./test_map_clear.cpp
+SRCS += ./test_key_compare_value_compare.cpp
+SRCS += ./test_map_operatorEqual.cpp
+SRCS += ./test_map_find.cpp
+SRCS += ./test_map_count.cpp
+SRCS += ./test_map_lower_bound.cpp
+SRCS += ./test_map_upper_bound.cpp
+SRCS += ./test_map_equal_range.cpp
+SRCS += ./test_map_reverseIterator.cpp
 
 vpath %.cpp ./srcs
 vpath %.cpp ./srcs/list_tests

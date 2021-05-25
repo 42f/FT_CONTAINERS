@@ -3,6 +3,7 @@
 
 # include "../utils/ft_pair.hpp"
 # include "../utils/ft_enable_if.hpp"
+# include "../utils/ft_iterator_base.hpp"
 # include "../utils/ft_rev_iterator.hpp"
 # include <iostream>
 # include <cstddef>
@@ -18,17 +19,15 @@ namespace ft	{
 				class T,
 				class Compare,
 				typename map_node, bool B>
-	class map_iterator	{
+	class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, ft::pair<const Key, T> > {
 
 		public:
-            typedef std::bidirectional_iterator_tag				iterator_category;
-			typedef std::ptrdiff_t								difference_type;
 
 			typedef ft::reverse_iterator< map_iterator<Key, T, Compare, map_node, false> >	reverse_iterator;
 			typedef ft::reverse_iterator< map_iterator<Key, T, Compare, map_node, true> >	const_reverse_iterator;
 
-			typedef	Compare									key_compare;
-			typedef typename ft::pair<const Key, T>			value_type;
+			typedef	Compare										key_compare;
+			typedef typename ft::pair<const Key, T>				value_type;
 
 			typedef typename ft_enable_if<B, value_type&, const value_type&>::type       reference;
             typedef typename ft_enable_if<B, value_type*, const value_type*>::type       pointer;

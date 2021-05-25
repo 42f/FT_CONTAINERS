@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:23:24 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/24 09:54:44 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/25 09:36:24 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@
 int main ( void )	{
 
 	try {
-		main_tester_list();
+		// main_tester_list();
 		// main_tester_vector();
-		// main_tester_map();
+		main_tester_map();
 
 		{
 			std::cout << SUBTITLE << " For ALL CONTAINERS, ALL TESTS PASSED ~~~~~~> " << RESET_COLOR;

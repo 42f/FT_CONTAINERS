@@ -4,6 +4,7 @@
 # include "./list_iterator.hpp"
 # include "../utils/ft_node.hpp"
 # include "../utils/ft_rev_iterator.hpp"
+# include "../utils/ft_algo.hpp"
 
 # include <iostream>
 # include <memory>
@@ -19,24 +20,41 @@
 
 namespace ft	{
 
-	template< typename T, typename alloc = std::allocator<T> >
+	template< typename T, typename Allocator = std::allocator<T> >
 	class list {
 
-		public:
-			typedef node<T>							node;
-			typedef list_iterator<T, false>				iterator;
-			typedef ft::reverse_iterator<iterator> reverse_iterator;
-			// typedef const_iterator<T, true>						const_iterator;
-			// typedef std::const_reverse_iterator<iterator, true>	const_reverse_iterator;
-			typedef T								value_type;
-			typedef size_t							size_type;
-			typedef std::ptrdiff_t					difference_type;
-			typedef typename alloc::reference		reference;
-			typedef typename alloc::const_reference	const_reference;
-			typedef typename alloc::pointer			pointer;
-			typedef typename alloc::const_pointer	const_pointer;
-			typedef typename alloc::template rebind<node>::other	allocator_type;
+/******************************************************************************.
+.******************************************************************************.
+.*********** MEMBER TYPES            ******************************************.
+.******************************************************************************.
+.******************************************************************************/
 
+		private:
+
+			typedef node<T>												node;
+
+		public:
+
+			typedef T													value_type;
+			typedef typename Allocator::template rebind<node>::other	allocator_type;
+			typedef size_t												size_type;
+			typedef std::ptrdiff_t										difference_type;
+			typedef typename Allocator::reference						reference;
+			typedef typename Allocator::const_reference					const_reference;
+			typedef typename Allocator::pointer							pointer;
+			typedef typename Allocator::const_pointer					const_pointer;
+
+			typedef ft::list_iterator<T, false>							iterator;
+			typedef ft::list_iterator<T, true>							const_iterator;
+
+			typedef ft::reverse_iterator<list_iterator<T, false> >		reverse_iterator;
+			typedef ft::reverse_iterator<list_iterator<T, true> >		const_reverse_iterator;
+
+/******************************************************************************.
+.******************************************************************************.
+.*********** CONSTRUCTORS DESTRUCTOR ******************************************.
+.******************************************************************************.
+.******************************************************************************/
 
 			/**
 			 * @brief Default Constructor
@@ -289,7 +307,8 @@ namespace ft	{
 
 				if (x.size() > 0)	{
 
-					size_type sizeSplice = std::distance(first, last);
+					// size_type sizeSplice = std::distance(first, last);
+					difference_type sizeSplice = last - first;
 
 					first._ptr->transfer(first._ptr, last._ptr);
 					first._ptr->hook(position._ptr);
@@ -308,16 +327,17 @@ namespace ft	{
 
 				iterator	itFind = begin();
 
-				while ((itFind = std::find(itFind, end(), val)) != end())
+				while ((itFind = ft::find(itFind, end(), val)) != end())
 					itFind = erase(itFind);
 			}
+
 			template <class Predicate>
 			void
 			remove_if (Predicate pred)	{
 
 				iterator	itFind = begin();
 
-				while ((itFind = std::find_if(itFind, end(), pred)) != end())
+				while ((itFind = ft::find_if(itFind, end(), pred)) != end())
 					itFind = erase(itFind);
 			}
 

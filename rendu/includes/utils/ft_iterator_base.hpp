@@ -1,6 +1,7 @@
 #ifndef ITERATOR_BASE_HPP
 # define ITERATOR_BASE_HPP
 
+# include "../utils/ft_enable_if.hpp"
 # include <cstddef>
 
 #ifndef DEBUG_MODE
@@ -11,25 +12,27 @@ namespace ft	{
 
 	struct output_iterator_tag {};
 	struct input_iterator_tag {};
-	struct forward_iterator_tag {};
-	struct bidirectional_iterator_tag {};
-	struct random_access_iterator_tag {};
+	struct forward_iterator_tag : public ft::input_iterator_tag {};
+	struct bidirectional_iterator_tag : public ft::forward_iterator_tag {} ;
+	struct random_access_iterator_tag : public ft::bidirectional_iterator_tag {};
 
 	template <class Category,            // iterator::iterator_category
 			class T,                     // iterator::value_type
-			class Distance = ptrdiff_t,  // iterator::difference_type
-			class Pointer = T*,          // iterator::pointer
-			class Reference = T&         // iterator::reference
+			bool B,						// false == non const, true == const
+			class Distance = ptrdiff_t  // iterator::difference_type
+			// class Pointer = T*,          // iterator::pointer
+			// class Reference = T&         // iterator::reference
 			> class iterator	{
 
 			public:
 				typedef Category					iterator_category;
 				typedef T							value_type;
 				typedef Distance					difference_type;
-				typedef Pointer						pointer;
-				typedef Reference					reference;
-
-			}; //------- iterator_base
+				typedef typename	ft::ft_enable_if<B, value_type&, const value_type&>::type	reference;
+				typedef typename	ft::ft_enable_if<B, value_type*, const value_type*>::type	pointer;
+				// typedef Pointer						pointer;
+				// typedef Reference					reference;
+	}; //-------------- iterator
 
 } // ----------------- ft namespace
 

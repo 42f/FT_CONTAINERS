@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:51:28 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/18 09:50:28 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/25 12:07:02 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,30 +63,51 @@ test_vector_reverseIterator( void )	{
 	}
 	std::cout << HEADER_TITLE << "TEST REVERSE ITERATOR ARITHMETIC" << RESET_COLOR << std::endl;
 	{
-		ft::vector<int>			l;
-		l.push_back(0);
-		l.push_back(1);
-		l.push_back(2);
-		l.push_back(3);
-		l.push_back(4);
-		l.push_back(5);
-		ft::vector<int>::reverse_iterator it1 = l.rbegin();
-		ft::vector<int>::reverse_iterator it2 = l.rbegin();
-		it1++;
-		it1++;
-		it2++;
-		it2++;
-		ft::vector<int>::reverse_iterator ite1 = l.rend();
-		ft::vector<int>::reverse_iterator ite2 = l.rend();
-		ite1--;
-		ite1--;
-		ite2--;
-		ite2--;
+		// std::vector<int>			s;
+		// s.reserve(20);
+		// s.push_back(42);
+		// s.push_back(1);
+		// s.push_back(2);
+		// s.push_back(3);
+		// s.push_back(4);
+		// s.push_back(5);
+		// std::vector<int>::reverse_iterator s_rit = s.rbegin();
+		// std::vector<int>::reverse_iterator s_rite = s.rend();
+		// std::cout << "BASE rev begin : " <<	*(s.begin()) << std::endl;
+		// std::cout << "BASE rev end   : " <<	*(s.end())	 << std::endl;
+		// std::cout << "BASE rev rbegin  : " <<	*s_rit	 << std::endl;
+		// std::cout << "BASE rev rend    : " <<	*s_rite	 << std::endl;
+		// s_rit++;
+		// s_rit++;
+		// s_rite--;
+		// s_rite--;
 
-		testBool(*it1 == 3, __LINE__);
-		testBool(*ite1 == 1, __LINE__);
-		testBool(*it1 == *it2, __LINE__);
-		testBool(*ite1 == *ite2, __LINE__);
+		// std::cout << "BASE rev rbegin ++ : " <<	*s_rit	 << std::endl;
+		// std::cout << "BASE rev rend --   : " <<	*s_rite	 << std::endl;
+		// std::cout << "BASE rev rbegin ++ base : " <<	*(s_rit.base())	 << std::endl;
+		// std::cout << "BASE rev rend -- base   : " <<	*(s_rite.base())	 << std::endl;
+
+
+		// exit(1);
+
+		// ft::vector<int>			l;
+		// l.push_back(0);
+		// l.push_back(1);
+		// l.push_back(2);
+		// l.push_back(3);
+		// l.push_back(4);
+		// l.push_back(5);
+		// ft::vector<int>::reverse_iterator l_rit = l.rbegin();
+		// l_rit++;
+		// l_rit++;
+		// ft::vector<int>::reverse_iterator l_rite = l.rend();
+		// l_rite--;
+		// l_rite--;
+
+		// testBool(*(l_rit.base()) == *(s_rit.base()), __LINE__);
+		// testBool(*(l_rite.base()) == *(s_rite.base()), __LINE__);
+		// testBool(*l_rite == *s_rite, __LINE__);
+		// testBool(*l_rit == *s_rit, __LINE__);
 	}
 	return (0);
 }

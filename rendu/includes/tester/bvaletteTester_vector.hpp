@@ -18,8 +18,8 @@ putVector( ft::vector<T> const & vct, int errorPos = -1 )	{
 	std::cout << vct.size() << std::endl;
 	std::cout << PRINT_TITLE << "[ size capacity vector ]" << RESET_COLOR << " -> ";
 	std::cout << vct.capacity() << std::endl;
-	typename ft::vector<T>::iterator it = vct.begin();
-	typename ft::vector<T>::iterator ite = vct.end();
+	typename ft::vector<T>::const_iterator it = vct.begin();
+	typename ft::vector<T>::const_iterator ite = vct.end();
 
 	int	printMax;
 
@@ -101,8 +101,8 @@ bool print, std::string message = "" )	{
 	if (ft_vct.size() > 0)
 	{
 		int i = 0;
-		typename ft::vector<T>::iterator	ft_it = ft_vct.begin();
-		typename ft::vector<T>::iterator	ft_ite = ft_vct.end();
+		typename ft::vector<T>::const_iterator	ft_it = ft_vct.begin();
+		typename ft::vector<T>::const_iterator	ft_ite = ft_vct.end();
 
 		typename std::vector<T>::const_iterator	std_it = std_vct.begin();
 		typename std::vector<T>::const_iterator	std_ite = std_vct.end();

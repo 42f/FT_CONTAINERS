@@ -37,6 +37,7 @@ namespace ft	{
 .******************************************************************************.
 .******************************************************************************/
 		private:
+
 			struct	map_node;
 			typedef typename Allocator::template rebind<map_node>::other	_node_allocator_type;
 

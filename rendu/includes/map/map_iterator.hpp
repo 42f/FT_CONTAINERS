@@ -19,12 +19,12 @@ namespace ft	{
 				class T,
 				class Compare,
 				typename map_node, bool B>
-	class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, ft::pair<const Key, T> > {
+	class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, ft::pair<const Key, T>, B > {
 
 		public:
 
-			typedef ft::reverse_iterator< map_iterator<Key, T, Compare, map_node, false> >	reverse_iterator;
-			typedef ft::reverse_iterator< map_iterator<Key, T, Compare, map_node, true> >	const_reverse_iterator;
+			// typedef ft::reverse_iterator< map_iterator<Key, T, Compare, map_node, false> >	reverse_iterator;
+			// typedef ft::reverse_iterator< map_iterator<Key, T, Compare, map_node, true> >	const_reverse_iterator;
 
 			typedef	Compare										key_compare;
 			typedef typename ft::pair<const Key, T>				value_type;
@@ -127,6 +127,7 @@ namespace ft	{
 			reference
 			operator*()	const		{ return (_ptr->item); }
 
+		// private:
 
 			map_node*			getPtr(void) const { return (_ptr);	}
 			map_node*			getPosParent(void) const {

@@ -1,6 +1,8 @@
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
+# include "./vector_iterator.hpp"
+
 # include <iostream>
 # include <memory>
 # include <cstddef>
@@ -17,7 +19,7 @@
 namespace ft	{
 
 	template< typename T, typename T_alloc>
-	class vectorBase	{
+	class vector_base	{
 
 		public:
 
@@ -27,29 +29,29 @@ namespace ft	{
 			typedef typename T_alloc::pointer								pointer;
 			typedef typename T_alloc::const_pointer							const_pointer;
 
-			vectorBase( void ) : head(NULL), tail(NULL), tailStorage(NULL), alloc(allocator_type()) {
+			vector_base( void ) : head(NULL), tail(NULL), tailStorage(NULL), alloc(allocator_type()) {
 
 				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> default " << __func__ << std::endl;
 			}
 
-			vectorBase( allocator_type const & userAlloc ) : head(NULL), tail(NULL), tailStorage(NULL), alloc(userAlloc) {
+			vector_base( allocator_type const & userAlloc ) : head(NULL), tail(NULL), tailStorage(NULL), alloc(userAlloc) {
 
 				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> defaut with alloc " << __func__ << std::endl;
 			}
 
-			vectorBase( size_t n ) : head(NULL), tail(NULL), tailStorage(NULL), alloc(allocator_type()) {
+			vector_base( size_t n ) : head(NULL), tail(NULL), tailStorage(NULL), alloc(allocator_type()) {
 
 				initStorage(n + (n>>1));
 				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> fill " << __func__ << std::endl;
 			}
 
-			vectorBase( size_t n, allocator_type const & userAlloc ) : head(NULL), tail(NULL), tailStorage(NULL), alloc(userAlloc) {
+			vector_base( size_t n, allocator_type const & userAlloc ) : head(NULL), tail(NULL), tailStorage(NULL), alloc(userAlloc) {
 
 				initStorage(n + (n>>1));
 				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> fill with alloc " << __func__ << std::endl;
 			}
 
-			~vectorBase( void )	{
+			~vector_base( void )	{
 
 				deleteStorage(tailStorage - head);
 				if (DEBUG_MODE >= 2) std::cout << "DESTRUCTOR --> " << __func__ << std::endl;
@@ -87,147 +89,39 @@ namespace ft	{
 				if (DEBUG_MODE >= 2) std::cout << __func__ << std::endl;
 			}
 
-		}; // ----------------- Class vectorBase
+		}; // ----------------- Classvector_base
 
-	template< typename T, class T_alloc = std::allocator<T> >
-	class vectorIterator : public std::iterator< std::random_access_iterator_tag, T >
-	{
-		public:
-			typedef vectorIterator<T, T_alloc>			iterator;
-			typedef const vectorIterator<T, T_alloc> 	const_iterator;
-			typedef ptrdiff_t							distance;
-			typedef typename T_alloc::reference			reference;
-			typedef typename T_alloc::const_reference	const_reference;
-			typedef typename T_alloc::pointer			pointer;
-			typedef typename T_alloc::const_pointer		const_pointer;
+	template< typename T, typename Allocator = std::allocator<T> >
+	class vector : protected vector_base<T, Allocator> {
 
-			vectorIterator( void ) :_ptr(NULL) {}
-			vectorIterator(T* src) :_ptr(src) {}
-			vectorIterator(const iterator& itSrc) : _ptr(itSrc._ptr) {}
-
-			iterator&
-			operator++( void ) {
-				_ptr++;
-				return *this;
-			}
-
-			iterator
-			operator++( int ) {
-				iterator tmp(*this);
-				operator++();
-				return tmp;
-			}
-
-			iterator&
-			operator--( void ) {
-				_ptr--;
-				return *this;
-			}
-
-			iterator
-			operator--( int ) {
-				iterator tmp(*this);
-				operator--();
-				return tmp;
-			}
-
-			distance
-			operator- ( iterator rhs ) { return this->_ptr - rhs._ptr; }
-
-			iterator
-			operator- ( distance n ) {
-
-				iterator tmpIt = *this;
-
-				while ( n > 0 )	{
-					tmpIt--;
-					n--;
-				}
-				return tmpIt;
-			}
-
-			const_iterator
-			operator- ( distance n ) const {
-
-				iterator tmpIt = *this;
-
-				while ( n > 0 )	{
-					tmpIt--;
-					n--;
-				}
-				return tmpIt;
-			}
-
-			iterator
-			operator+ ( distance n ) {
-
-				iterator tmpIt = *this;
-
-				while ( n > 0 )	{
-					tmpIt++;
-					n--;
-				}
-				return tmpIt;
-			}
-
-			const_iterator
-			operator+ ( distance n ) const {
-
-				iterator tmpIt = *this;
-
-				while ( n > 0 )	{
-					tmpIt++;
-					n--;
-				}
-				return tmpIt;
-			}
-
-			void
-			operator-= ( distance n )				{ *this = *this - n; }
-
-			void
-			operator+= ( distance n )				{ *this = *this + n; }
-
-			bool
-			operator==(const iterator& rhs) const	{ return _ptr==rhs._ptr; }
-
-			bool
-			operator!=(const iterator& rhs) const	{ return _ptr!=rhs._ptr; }
-
-			bool
-			operator<(const iterator& rhs) const	{ return _ptr< rhs._ptr; }
-
-			reference
-			operator*()								{ return *_ptr; }
-
-			const_reference
-			operator*()	const						{ return *_ptr; }
-
-			/**
-			 * @brief Pointer holding the address of the iterator element.
-			*/
-			pointer		_ptr;
-
-	}; //----------------- Class iterator
-
-	template< typename T, typename T_alloc = std::allocator<T> >
-	class vector : protected vectorBase<T, T_alloc> {
+/******************************************************************************.
+.******************************************************************************.
+.*********** MEMBER TYPES            ******************************************.
+.******************************************************************************.
+.******************************************************************************/
 
 		private:
-			typedef vectorBase<T, T_alloc>					vectorBase;
+
+			typedef vector_base<T, Allocator>				vector_base;
+
 		public:
+
 			typedef T										value_type;
-   			typedef typename vectorBase::allocator_type		allocator_type;
-			typedef typename T_alloc::reference				reference;
-			typedef typename T_alloc::const_reference		const_reference;
-			typedef typename T_alloc::pointer				pointer;
-			typedef typename T_alloc::const_pointer			const_pointer;
-			typedef vectorIterator<T>						iterator;
-			typedef const vectorIterator<T>					const_iterator;
-			typedef std::reverse_iterator<iterator> 		reverse_iterator;
-			typedef const reverse_iterator					const_reverse_iterator;
-			typedef std::ptrdiff_t							difference_type;
+
 			typedef size_t									size_type;
+			typedef std::ptrdiff_t							difference_type;
+
+   			typedef typename vector_base::allocator_type	allocator_type;
+			typedef typename Allocator::reference			reference;
+			typedef typename Allocator::const_reference		const_reference;
+			typedef typename Allocator::pointer				pointer;
+			typedef typename Allocator::const_pointer		const_pointer;
+
+			typedef typename ft::vector_iterator<T, false>	iterator;
+			typedef typename ft::vector_iterator<T, true>	const_iterator;
+
+            typedef typename ft::reverse_iterator<vector_iterator<T, false> > reverse_iterator;
+            typedef typename ft::reverse_iterator<vector_iterator<T, true> >  const_reverse_iterator;
 
 /******************************************************************************.
 .******************************************************************************.
@@ -235,12 +129,11 @@ namespace ft	{
 .******************************************************************************.
 .******************************************************************************/
 
-
 		public:
 			/**
 			 * @brief Default Constructor
 			*/
-			explicit vector( allocator_type const & userAlloc = allocator_type() ) : vectorBase(userAlloc) {
+			explicit vector( allocator_type const & userAlloc = allocator_type() ) : vector_base(userAlloc) {
 
 				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> DEFAULT " << __func__ << std::endl;
 			}
@@ -250,7 +143,7 @@ namespace ft	{
 			 * construct n objects val.
 			*/
 			explicit vector( size_type n, value_type const & val = value_type(),
-				allocator_type const & userAlloc = allocator_type() ) : vectorBase(n, userAlloc)	{
+				allocator_type const & userAlloc = allocator_type() ) : vector_base(n, userAlloc)	{
 
 				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> fill " << __func__ << std::endl;
 				initFillVector(n, val);
@@ -262,7 +155,7 @@ namespace ft	{
 			template <class InputIterator>
 			vector (InputIterator first, InputIterator last,
 				 allocator_type const & userAlloc = allocator_type() )
-				 : vectorBase(userAlloc)	{
+				 : vector_base(userAlloc)	{
 
 				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> range pre dispatcher ! " << __func__ << std::endl;
 
@@ -273,7 +166,7 @@ namespace ft	{
 			/**
 			 * @brief Copy Constructor
 			*/
-			explicit vector( vector const & src ) : vectorBase(src.size()) {
+			explicit vector( vector const & src ) : vector_base(src.size()) {
 
 				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> copy " << __func__ << std::endl;
 
@@ -316,16 +209,16 @@ namespace ft	{
 			end( void ) const 		{ return (this->tail); }
 
 			reverse_iterator
-			rbegin( void ) 			{ return reverse_iterator(end()); }
+			rbegin( void ) 			{ return reverse_iterator(--end()); }
 
 			const_reverse_iterator
-			rbegin( void ) const	{ return reverse_iterator(end()); }
+			rbegin( void ) const	{ return const_reverse_iterator(--end()); }
 
 			reverse_iterator
-			rend( void ) 	 		{ return reverse_iterator(begin()); }
+			rend( void ) 	 		{ return reverse_iterator(end()); }
 
 			const_reverse_iterator
-			rend( void ) const 		{ return reverse_iterator(begin()); }
+			rend( void ) const 		{ return const_reverse_iterator(end()); }
 
 			reference
 			front( void ) 			{ return (*(this->head)); }
@@ -427,7 +320,7 @@ namespace ft	{
 			iterator
 			erase (iterator position)	{
 
-				destroyObjects(position._ptr, 1);
+				destroyObjects(position.getPtr(), 1);
 				memMoveLeft(position + 1, end(), 1);
 				this->tail -= 1;
 				return position;
@@ -438,7 +331,7 @@ namespace ft	{
 
 				size_type			offset = first - begin();
 				difference_type		len = last - first;
-				destroyObjects(first._ptr, len);
+				destroyObjects(first.getPtr(), len);
 				memMoveLeft(last, end(), len);
 				this->tail -= len;
 				return begin() + offset;
@@ -571,7 +464,7 @@ namespace ft	{
 
 				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> range : " << __func__ << std::endl;
 
-				size_t	n = std::distance(first, last);
+				size_type	n = last - first;
 				this->initStorage(n * 2);
 				fillVector(first, last);
 			}
@@ -619,6 +512,7 @@ namespace ft	{
 			 * @brief Construct objects at alocated memory, to be used by
 			 * constructors
 			*/
+
 			void
 			fillVector(iterator first, iterator last)	{
 
@@ -630,6 +524,16 @@ namespace ft	{
 				}
 			}
 
+			void
+			fillVector(const_iterator first, const_iterator last)	{
+
+				for (;first != last; first++)	{
+					this->alloc.construct(this->tail, *first);
+					this->tail++;
+					if (this->tail == this->tailStorage)
+						std::cout << "RESIZE HERE" << std::endl;			// not fixed yet
+				}
+			}
 			/**
 			 * @brief Construct objects at alocated memory, to be used by
 			 * constructors
@@ -692,6 +596,13 @@ namespace ft	{
 			}
 
 			void
+			constructObjects(pointer p, const_iterator first, const_iterator last)	{
+				for (size_t i = 0; first != last; i++, first++)	{
+					this->alloc.construct(p + i, *first);
+				}
+			}
+
+			void
 			destroyObjects(pointer p, size_t n)	{
 				for (size_t i = 0; i < n; i++)	{
 					this->alloc.destroy(p + i);
@@ -711,8 +622,8 @@ namespace ft	{
 			void
 			memMoveLeft(iterator first, iterator last, size_t n)	{			// to be tested
 				while (first != last)	{
-					constructObjects(first._ptr - n, 1, *first);
-					destroyObjects(first._ptr, 1);
+					constructObjects(first.getPtr() - n, 1, *first);
+					destroyObjects(first.getPtr(), 1);
 					first++;
 				}
 			}
@@ -725,8 +636,8 @@ namespace ft	{
 			memMoveRight(iterator first, iterator last, size_t n)	{
 				while (last != first)	{
 					last--;
-					constructObjects(last._ptr + n, 1, *last);
-					destroyObjects(last._ptr, 1);
+					constructObjects(last.getPtr() + n, 1, *last);
+					destroyObjects(last.getPtr(), 1);
 				}
 			}
 

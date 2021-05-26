@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:23:15 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/25 09:54:08 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/26 13:37:00 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,12 @@ main_tester_map( void )	{
 	}
 	catch ( failedTest & )	{
 		std::cout << ERROR_TITLE << "SOME TEST FAILED !! \t \xE2\x9D\x8C" << RESET_COLOR << std::endl;
+		throw failedTest();
 		return (1);
 	}
 	catch ( std::exception & e )	{
 		std::cout << ERROR_TITLE << "Got exception: " << e.what() << RESET_COLOR << std::endl;
+		throw std::exception();
 		return (1);
 	}
 	return (0);

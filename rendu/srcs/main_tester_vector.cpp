@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:23:15 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/24 09:51:45 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/26 13:37:18 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ main_tester_vector( void )	{
 
 	try {
 
+		test_vector_instantiation();
+		test_vector_iterator();
 		test_vector_capacities();
 		test_vector_resize();
 		test_vector_insert_erase();
@@ -30,11 +32,9 @@ main_tester_vector( void )	{
 
 		test_vector_member_swap();
 		test_vector_nonmember_swap();
-		test_vector_instantiation();
 		test_vector_element_access();
 		test_vector_relational_operators();
 		test_vector_operatorEqual();
-		test_vector_iterator();
 		test_vector_reverseIterator();
 
 		if (DEBUG_MODE == 0)
@@ -47,10 +47,12 @@ main_tester_vector( void )	{
 	}
 	catch ( failedTest & )	{
 		std::cout << ERROR_TITLE << "SOME TEST FAILED !! \t \xE2\x9D\x8C" << RESET_COLOR << std::endl;
+		throw failedTest();
 		return (1);
 	}
 	catch ( std::exception & e )	{
 		std::cout << ERROR_TITLE << "Got exception: " << e.what() << RESET_COLOR << std::endl;
+		throw std::exception();
 		return (1);
 	}
 	return (0);

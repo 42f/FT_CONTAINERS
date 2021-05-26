@@ -17,8 +17,7 @@
 namespace ft	{
 
 	template< typename T, bool B >
-	// class list_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T>
-	class list_iterator : public std::iterator<std::bidirectional_iterator_tag, T>
+	class list_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T, B>
 	{
 		private:
 
@@ -26,13 +25,16 @@ namespace ft	{
 
 		public:
 
-			typedef ft::reverse_iterator< list_iterator<T, false> >	reverse_iterator;
-			typedef ft::reverse_iterator< list_iterator<T, true> >	const_reverse_iterator;
-
-			typedef typename	std::iterator<std::bidirectional_iterator_tag, T>::difference_type	difference_type;
-			typedef	T	value_type;
-			typedef typename ft_enable_if<B, value_type&, const value_type&>::type       reference;
-            typedef typename ft_enable_if<B, value_type*, const value_type*>::type       pointer;
+			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T, B>					iterator;
+			typedef typename iterator::value_type				value_type;
+			typedef typename iterator::difference_type			difference_type;
+			typedef typename iterator::difference_type			Distance;
+			typedef typename iterator::reference					reference;
+            typedef typename iterator::pointer					pointer;
+			// typedef T																		value_type;
+			// typedef std::ptrdiff_t															difference_type;
+			// typedef typename	ft::ft_enable_if<B, value_type&, const value_type&>::type	reference;
+            // typedef typename	ft::ft_enable_if<B, value_type*, const value_type*>::type	pointer;
 
 			list_iterator( void ) :_ptr(NULL) {}
 			list_iterator(node* src) :_ptr(src) {}

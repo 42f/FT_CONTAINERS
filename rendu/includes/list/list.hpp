@@ -305,7 +305,7 @@ namespace ft	{
 			void
 			splice (iterator position, list& x, iterator first, iterator last)	{
 
-				if (x.size() > 0)	{
+				if (first != last && x.size() > 0)	{
 
 					difference_type sizeSplice = 0;
 					for (iterator cursor = first; cursor != last; cursor++)
@@ -386,19 +386,19 @@ namespace ft	{
 			void
 			sort (Compare comp)	{
 
-				iterator	cursorBase;
+				iterator	cursorSrc;
 				list		tmpList;
 				iterator	cursorTmp;
 
 				while (this->empty() == false)	{
-					cursorBase = this->begin();
+					cursorSrc = this->begin();
 					if (tmpList.empty() == true)
-						tmpList.splice(tmpList.begin(), *this, cursorBase);
+						tmpList.splice(tmpList.begin(), *this, cursorSrc);
 					else {
 						cursorTmp = tmpList.begin();
-						while (cursorTmp != tmpList.end() && comp(*cursorTmp, *cursorBase) == true)
+						while (cursorTmp != tmpList.end() && comp(*cursorTmp, *cursorSrc) == true)
 							cursorTmp++;
-						tmpList.splice(cursorTmp, *this, cursorBase);
+						tmpList.splice(cursorTmp, *this, cursorSrc);
 					}
 				}
 				this->splice(this->begin(), tmpList);
@@ -497,7 +497,7 @@ namespace ft	{
 			void
 			insert_dispatch(iterator position, InputIterator first,
 			InputIterator last, std::__false_type)	{
-				for (; first != last; ++first)	{
+				for (; first != last; first++)	{
 					insert(position, *first);
 				}
 			}
@@ -578,11 +578,11 @@ namespace ft	{
 
 	template <class T, class Alloc>
 	bool
-	operator<= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)	{ return(!(lhs > rhs)); };
+	operator<=( const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)	{ return(!(lhs > rhs)); };
 
 	template <class T, class Alloc>
 	bool
-	operator>  (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)	{
+	operator>( const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)	{
 
 		return (ft::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));
 
@@ -590,7 +590,7 @@ namespace ft	{
 
 	template <class T, class Alloc>
 	bool
-	operator>= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)	{ return(!(lhs < rhs)); };
+	operator>=( const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)	{ return(!(lhs < rhs)); };
 
 
 } // ----------------- ft namespace

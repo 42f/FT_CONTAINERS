@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:02:32 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/18 09:50:28 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/27 15:36:14 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,11 @@ test_list_splice( void )	{
 		std::cout << SUBTITLE << "[ splice here ]" << RESET_COLOR << std::endl;
 		ftl1.splice(ftl1.begin(), ftl0, ft_itl0, ft_it_4_l0);
 		stdl1.splice(stdl1.begin(), stdl0, std_itl0, std_it_4_l0);
+		testList(ftl0, stdl0,  NOPRINT, "test on list 0");
+		testList(ftl1, stdl1,  NOPRINT, "test on list 1");
+		std::cout << HEADER_TITLE << "[ splice with twice the same iterator as arguments ]" << RESET_COLOR << std::endl;
+		ftl1.splice(ftl1.begin(), ftl0, ft_itl0, ft_itl0);
+		stdl1.splice(stdl1.begin(), stdl0, std_itl0, std_itl0);
 		testList(ftl0, stdl0,  NOPRINT, "test on list 0");
 		testList(ftl1, stdl1,  NOPRINT, "test on list 1");
 	}

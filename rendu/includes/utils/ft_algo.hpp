@@ -16,11 +16,14 @@ namespace ft	{
     {
         while (first1!=last1)
         {
-            if (first2==last2 || *first2<*first1) return false;
-            else if (*first1<*first2) return true;
-            ++first1; ++first2;
+            if (first2==last2 || *first2 < *first1)
+                return false;
+            else if (*first1 < *first2)
+                return true;
+            ++first1;
+            ++first2;
         }
-        return (first2!=last2);
+        return (first2 != last2);
     }
 
     template <class ForwardIterator>
@@ -46,7 +49,7 @@ namespace ft	{
         {
             ForwardIterator next=first; ++next;
             while (next != last) {
-                if (pred(*first, *next))     // or: if (pred(*first,*next)), for version (2)
+                if (pred(*first, *next))
                     return first;
                 ++first; ++next;
             }
@@ -65,6 +68,17 @@ namespace ft	{
         return true;
     }
 
+    template <class InputIterator1, class InputIterator2, class BinaryPredicate>
+    bool equal (InputIterator1 first1, InputIterator1 last1,
+    InputIterator2 first2, BinaryPredicate pred)    {
+
+        while (first1!=last1) {
+            if (!pred(*first1, *first2))
+                return false;
+            ++first1; ++first2;
+        }
+        return true;
+    }
 
     template<class InputIterator, class T>
     InputIterator find (InputIterator first, InputIterator last, const T& val)

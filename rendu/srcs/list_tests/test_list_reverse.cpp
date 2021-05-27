@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:02:22 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/18 09:50:28 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/27 15:49:18 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ test_list_reverse( void )	{
 	{
 		ft::list<int>		ftl0;
 		std::list<int>		stdl0;
-		size_t				testSize = 6;
+		size_t				testSize = 600;
 
 
 		for (size_t i = 1; i < testSize; i++)	{
@@ -43,7 +43,7 @@ test_list_reverse( void )	{
 		ft::list<int>		ftl0;
 		std::list<int>		stdl0;
 		srand(reinterpret_cast<long unsigned int>(&stdl0));
-		size_t				testSize = rand() % 5000000;
+		size_t				testSize = rand() % 500000;
 
 
 		for (size_t i = 1; i < testSize; i++)	{

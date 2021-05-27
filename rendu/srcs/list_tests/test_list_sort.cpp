@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:02:29 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/27 11:04:54 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/27 15:49:53 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ test_list_sort( void )	{
 		std::cout << SUBTITLE << "[ pushback " << testSize << " random values into list 0]" << RESET_COLOR << std::endl;
 
 		for (size_t i = 0; i < testSize; i++)	{
-			int val = rand() % 10000;
+			int val = rand() % 100;
 			ftl0.push_back(val);
 			stdl0.push_back(val);
 		}

@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:01:30 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/27 09:49:03 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/27 16:56:26 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,6 @@ test_list_iterator( void )	{
 		std::cout << SUBTITLE << "[ test operator= ]" << RESET_COLOR << std::endl;
 		ft_it2 = ft_it;
 		testBool(ft_it == ft_it2, __LINE__);
-		// std::cout << SUBTITLE << "[ loop test iterator increment vs. iterator + i ]" << RESET_COLOR << std::endl;
-		// for (size_t i = 0; i < ftl0.size(); i++)
-		// {
-		// 	testBool((*ft_it == *(ft_it2 - i)), __LINE__);
-		// 	ft_it--;
-		// }
-		// testBool(static_cast<size_t>(ft_itend - ft_it) == ftl0.size(), __LINE__);
 	}
 	std::cout << HEADER_TITLE << "TEST ITERATOR ARITHMETIC" << RESET_COLOR << std::endl;
 	{

@@ -251,14 +251,9 @@ namespace ft	{
 
 		public:
 
-			bool
-			empty( void ) const		{ return (_size == 0); }
-
-			size_type
-			size( void ) const 		{ return (_size); }
-
-			size_type
-			max_size( void ) const	{ return this->_allocNode.max_size(); }
+			bool		empty( void ) const		{ return (_size == 0); }
+			size_type	size( void ) const 		{ return (_size); }
+			size_type	max_size( void ) const	{ return this->_allocNode.max_size(); }
 
 			iterator
 			begin( void ) 			{
@@ -288,17 +283,10 @@ namespace ft	{
 				return (const_iterator());
 			}
 
-			reverse_iterator
-			rbegin( void ) 			{	return reverse_iterator(--end());	}
-
-			const_reverse_iterator
-			rbegin( void ) 	const	{	return const_reverse_iterator(--end());	}
-
-			reverse_iterator
-			rend( void ) 			{	return reverse_iterator(end());	}
-
-			const_reverse_iterator
-			rend( void ) 	const	{	return const_reverse_iterator(end());	}
+			reverse_iterator		rbegin( void ) 			{	return reverse_iterator(--end()); }
+			const_reverse_iterator	rbegin( void ) 	const	{	return const_reverse_iterator(--end()); }
+			reverse_iterator		rend( void ) 			{	return reverse_iterator(end()); }
+			const_reverse_iterator	rend( void ) 	const	{	return const_reverse_iterator(end()); }
 
 			iterator
 			find (const key_type& k)	{

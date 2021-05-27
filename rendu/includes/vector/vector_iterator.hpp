@@ -119,41 +119,21 @@ namespace ft	{
 				return tmpIt;
 			}
 
-			void
-			operator-= ( difference_type n )				{ *this = *this - n; }
+			void		operator-=( difference_type n )				{ *this = *this - n; }
+			void		operator+=( difference_type n )				{ *this = *this + n; }
+			bool		operator==(const vector_iterator& rhs) const	{ return _ptr==rhs._ptr; }
+			bool		operator!=(const vector_iterator& rhs) const	{ return _ptr!=rhs._ptr; }
+			bool		operator<(const vector_iterator& rhs) const		{ return _ptr < rhs._ptr; }
+			bool		operator>(const vector_iterator& rhs) const		{ return _ptr > rhs._ptr; }
+			bool		operator<=(const vector_iterator& rhs) const	{ return _ptr <= rhs._ptr; }
+			bool		operator>=(const vector_iterator& rhs) const	{ return _ptr >= rhs._ptr; }
 
-			void
-			operator+= ( difference_type n )				{ *this = *this + n; }
+			reference	operator[]( size_t n )	const					{ return _ptr[n]; }
 
-			bool
-			operator==(const vector_iterator& rhs) const	{ return _ptr==rhs._ptr; }
+			pointer		operator->()	const							{ return _ptr; }
+			reference	operator*()	const								{ return *_ptr; }
 
-			bool
-			operator!=(const vector_iterator& rhs) const	{ return _ptr!=rhs._ptr; }
-
-			bool
-			operator<(const vector_iterator& rhs) const	{ return _ptr < rhs._ptr; }
-
-			bool
-			operator>(const vector_iterator& rhs) const	{ return _ptr > rhs._ptr; }
-
-			bool
-			operator<=(const vector_iterator& rhs) const	{ return _ptr <= rhs._ptr; }
-
-			bool
-			operator>=(const vector_iterator& rhs) const	{ return _ptr >= rhs._ptr; }
-
-			reference
-			operator[]( size_t n )	const					{ return _ptr[n]; }
-
-			pointer
-			operator->()	const					{ return _ptr; }
-
-			reference
-			operator*()	const						{ return *_ptr; }
-
-			pointer
-			getPtr( void )	const					{ return _ptr; }
+			pointer		getPtr( void )	const							{ return _ptr; }
 
 		private:
 

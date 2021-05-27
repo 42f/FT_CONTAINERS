@@ -23,11 +23,8 @@ namespace ft	{
 
 		public:
 
-			typedef typename T_alloc::template rebind<T>::other				allocator_type;
-			typedef typename T_alloc::reference								reference;
-			typedef typename T_alloc::const_reference						const_reference;
-			typedef typename T_alloc::pointer								pointer;
-			typedef typename T_alloc::const_pointer							const_pointer;
+			typedef T_alloc								allocator_type;
+			typedef typename T_alloc::pointer			pointer;
 
 			vector_base( void ) : head(NULL), tail(NULL), tailStorage(NULL), alloc(allocator_type()) {
 
@@ -111,7 +108,7 @@ namespace ft	{
 			typedef size_t									size_type;
 			typedef std::ptrdiff_t							difference_type;
 
-   			typedef typename vector_base::allocator_type	allocator_type;
+   			typedef Allocator								allocator_type;
 			typedef typename Allocator::reference			reference;
 			typedef typename Allocator::const_reference		const_reference;
 			typedef typename Allocator::pointer				pointer;
@@ -166,7 +163,7 @@ namespace ft	{
 			/**
 			 * @brief Copy Constructor
 			*/
-			explicit vector( vector const & src ) : vector_base(src.size()) {
+			vector( vector const & src ) : vector_base(src.size()) {
 
 				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> copy " << __func__ << std::endl;
 

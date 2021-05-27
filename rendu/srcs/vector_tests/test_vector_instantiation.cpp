@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:50:31 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/18 09:50:57 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/27 17:07:30 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,19 +63,19 @@ test_vector_instantiation( void )	{
 			testVector(ft_c1, std_c1, NOPRINT);
 
 		}
-		std::cout << SUBTITLE << "[ COPY CONSTRUCTOR from vector with 5 elements]" << RESET_COLOR << std::endl;
+		std::cout << SUBTITLE << "[ COPY CONSTRUCTOR <double> from vector with 5 elements]" << RESET_COLOR << std::endl;
 		{
-			ft::vector<int>			ft_c0(5, 123);
-			std::vector<int>		std_c0(5, 123);
+			ft::vector<double>		ft_c0(5, 123);
+			std::vector<double>		std_c0(5, 123);
 			testVector(ft_c0, std_c0, NOPRINT);
 
-			ft::vector<int>			ft_c1(ft_c0);
-			std::vector<int>		std_c1(std_c0);
+			ft::vector<double>		ft_c1(ft_c0);
+			std::vector<double>		std_c1(std_c0);
 			testVector(ft_c1, std_c1, NOPRINT);
 
 			std::cout << SUBTITLE << "[ check if begin points to a new elements ]" << RESET_COLOR << std::endl;
-			testBool(&(*ft_c0.begin()) != &(*ft_c1.begin()), __LINE__);
-			testBool(&(*std_c0.begin()) != &(*std_c1.begin()), __LINE__);
+			testBool(&(*std_c0.begin()) != &(*std_c1.begin())
+				&& &(*ft_c0.begin()) != &(*ft_c1.begin()), __LINE__);
 		}
 		std::cout << SUBTITLE << "[ COPY CONSTRUCTOR from vector with no elements]" << RESET_COLOR << std::endl;
 		{
@@ -84,6 +84,20 @@ test_vector_instantiation( void )	{
 
 			ft::vector<int>		ft_c1(ft_c0);
 			std::vector<int>	std_c1(std_c0);
+			testVector(ft_c0, std_c0, NOPRINT);
+			testVector(ft_c1, std_c1, NOPRINT);
+		}
+		std::cout << SUBTITLE << "[ COPY ASSIGNATION from vector with no elements]" << RESET_COLOR << std::endl;
+		{
+			ft::vector<int>		ft_c0(42, 100);
+			std::vector<int>	std_c0(42, 100);
+
+			std::vector<int>	std_c1 = std_c0;
+			ft::vector<int>		ft_c1 = ft_c0;
+			testVector(ft_c0, std_c0, NOPRINT);
+			testVector(ft_c1, std_c1, NOPRINT);
+			ft_c1 = ft_c1;
+			std_c1 = std_c1;
 			testVector(ft_c0, std_c0, NOPRINT);
 			testVector(ft_c1, std_c1, NOPRINT);
 		}

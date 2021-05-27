@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:50:38 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/18 09:50:28 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/27 18:03:54 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ test_constIterator( ft::vector<int> const & ft_c0, std::vector<int> const & std_
 	std::vector<int>::const_iterator	std_it = std_c0.begin();
 	std::vector<int>::const_iterator	std_itend = (std_c0.end() - 1);
 
-	std::cout << "Test ft : operaotr * on const -> " << *ft_it << std::endl;//  !!!! ---> HINT:  IN CASE OF COMPILER ISSUE: const version is MISSING !
-	std::cout << "Test std: operaotr * on const -> " << *std_it << std::endl;
-	std::cout << "Test ft : operaotr * on const -> " << *ft_itend << std::endl;//  !!!! ---> HINT:  IN CASE OF COMPILER ISSUE: const version is MISSING !
-	std::cout << "Test std: operaotr * on const -> " << *std_itend << std::endl;
-	testBool(true);
+	testBool(*ft_it== *std_it, __LINE__);
+	testBool(*ft_itend == *std_itend, __LINE__);
+	ft_it++;
+	std_it++;
+	testBool(*ft_it== *std_it, __LINE__);
 }
 
 int
@@ -35,6 +35,7 @@ test_vector_iterator( void )	{
 	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with ints ~~~~~~~~~~~" << RESET_COLOR << std::endl;
 	std::cout << HEADER_TITLE << "ASCENDING ORDER VALUES" << RESET_COLOR << std::endl;
 	{
+		std::cout << SUBTITLE << "[ Iterator construction: default ]" << RESET_COLOR << std::endl;
 		ft::vector<int>		ft_c0;
 		std::vector<int>	std_c0;
 		size_t				testSize = 10;
@@ -71,29 +72,96 @@ test_vector_iterator( void )	{
 	}
 	std::cout << HEADER_TITLE << "TEST ITERATOR ARITHMETIC" << RESET_COLOR << std::endl;
 	{
-		ft::vector<int>			l;
-		l.push_back(0);
-		l.push_back(1);
-		l.push_back(2);
-		l.push_back(3);
-		l.push_back(4);
-		l.push_back(5);
-		ft::vector<int>::iterator it1 = ++l.begin();
-		ft::vector<int>::iterator it2 = l.begin() + 2;
-		it1++;
-		ft::vector<int>::iterator ite1 = --l.end();
-		ite1--;
-		ft::vector<int>::iterator ite2 = l.end() - 2;
 
-		testBool(*it1 == 2, __LINE__);
-		testBool(*ite1 == 4, __LINE__);
-		testBool(*(it1++) == 2, __LINE__);
-		testBool(*(ite1++) == 4, __LINE__);
-		it1--;
-		ite1--;
-		testBool(*it1 == *it2, __LINE__);
-		testBool(*ite1 == *ite2, __LINE__);
+		ft::vector<int>		ft_c0;
+		std::vector<int>	std_c0;
+		int testSize = 42;
 
+		for (int i = 0; i < testSize; i++)	{
+			ft_c0.insert(ft_c0.end(), i);
+			std_c0.insert(std_c0.end(), i);
+		}
+		testVector(ft_c0, std_c0, NOPRINT);
+
+		ft::vector<int>::iterator ft_it0;
+		std::vector<int>::iterator std_it0;
+
+		std::cout << SUBTITLE << "[ Iterator construction: copy assignation ]" << RESET_COLOR << std::endl;
+		ft_it0 = ft_c0.begin();
+		std_it0	= std_c0.begin();
+
+		std::cout << SUBTITLE << "[ Iterator construction: copye construction ]" << RESET_COLOR << std::endl;
+		ft::vector<int>::iterator ft_it1(ft_it0);
+		std::vector<int>::iterator std_it1(std_it0);
+
+		std::cout << SUBTITLE << "[ Pre post increment decrement of iterator ]" << RESET_COLOR << std::endl;
+		testBool(*ft_it0 == *std_it0, __LINE__);
+		ft_it0++;
+		std_it0++;
+		testBool(*ft_it0 == *std_it0, __LINE__);
+		ft_it0 += 21;
+		std_it0 += 21;
+		testBool(*ft_it0 == *std_it0, __LINE__);
+		ft_it0--;
+		std_it0--;
+		testBool(*ft_it0 == *std_it0, __LINE__);
+		std::cout << SUBTITLE << "[ operator[] ]" << RESET_COLOR << std::endl;
+		testBool(ft_it0[4] == std_it0[4], __LINE__);
+		testBool(ft_it0[-4] == std_it0[-4], __LINE__);
+		std::cout << SUBTITLE << "[ Pre post increment decrement of value with * ]" << RESET_COLOR << std::endl;
+		*ft_it0++;
+		*std_it0++;
+		testBool(*ft_it0 == *std_it0, __LINE__);
+		testVector(ft_c0, std_c0, NOPRINT);
+
+		ft_it1 = ft_it0;
+		std_it1 = std_it0;
+		std::cout << SUBTITLE << "[ Relational Operators ]" << RESET_COLOR << std::endl;
+		testBool(ft_it0 == ft_it1 && std_it0 == std_it1, __LINE__);
+		testBool(ft_it0 >= ft_it1 && std_it0 >= std_it1, __LINE__);
+		testBool(ft_it0 <= ft_it1 && std_it0 <= std_it1, __LINE__);
+		ft_it1 = ft_c0.begin();
+		std_it1 = std_c0.begin();
+		testBool(ft_it0 != ft_it1 && std_it0 != std_it1, __LINE__);
+		testBool(ft_it0 > ft_it1 && std_it0 > std_it1, __LINE__);
+		testBool(ft_it0 >= ft_it1 && std_it0 >= std_it1, __LINE__);
+		testBool(ft_it1 < ft_it0 && std_it1 < std_it0, __LINE__);
+		testBool(ft_it1 <= ft_it0 && std_it1 <= std_it0, __LINE__);
+		ft_it0 = ft_c0.begin();
+		std_it0 = std_c0.begin();
+		ft_it0 += 5;
+		std_it0 += 5;
+		std::cout << SUBTITLE << "[ iterator substraction ]" << RESET_COLOR << std::endl;
+		testBool(ft_it0 - ft_it1 == std_it0 - std_it1, __LINE__);
+		testBool(ft_it1 - ft_it0 == std_it1 - std_it0, __LINE__);
+
+		std::cout << SUBTITLE << "[ iterator addition ]" << RESET_COLOR << std::endl;
+		ft_it0 = ft_c0.begin() + 10;
+		std_it0 = std_c0.begin() + 10;
+		testBool(ft_it0 - ft_it1 == std_it0 - std_it1, __LINE__);
+		testBool(ft_it1 - ft_it0 == std_it1 - std_it0, __LINE__);
+
+		std::cout << SUBTITLE << "[ iterator's value changed but dereferencing with operator*]" << RESET_COLOR << std::endl;
+		*ft_it0 = 5000;
+		*std_it0 = 5000;
+		testBool(*ft_it0 == *std_it0, __LINE__);
+		testVector(ft_c0, std_c0, NOPRINT);
+		std::cout << SUBTITLE << "[ iterator's value changed but dereferencing with operator[] ]" << RESET_COLOR << std::endl;
+		ft_it0[1] = 42;
+		std_it0[1] = 42;
+		testBool(*ft_it0 == *std_it0, __LINE__);
+		testVector(ft_c0, std_c0, NOPRINT);
+	}
+	{
+		std::cout << SUBTITLE << "[ iterator's value changed but dereferencing with operator->]" << RESET_COLOR << std::endl;
+
+		ft::vector<std::pair<int, int> >				ft_c0(12, std::make_pair(1, 2));
+		std::vector<std::pair<int, int> >				std_c0(12, std::make_pair(1, 2));
+		ft::vector<std::pair<int, int> >::iterator 		ft_it0 = ft_c0.begin();
+		std::vector<std::pair<int, int> >::iterator 	std_it0 = std_c0.begin();
+
+		testBool(ft_it0->first == std_it0->first, __LINE__);
+		testBool(ft_it0->second == std_it0->second, __LINE__);
 	}
 
 	return (0);

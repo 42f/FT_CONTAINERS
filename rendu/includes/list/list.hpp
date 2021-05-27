@@ -120,8 +120,8 @@ namespace ft	{
 			iterator			end( void ) const 		{ return (_tail); }
 			reverse_iterator	rbegin( void ) 			{ return reverse_iterator(--end()); }
 			reverse_iterator	rend( void )  			{ return reverse_iterator(end()); }
-			// const_reverse_iterator	rbegin( void ) const	{ return const_reverse_iterator(end()); }
-			// const_reverse_iterator	rend( void ) const 		{ return const_reverse_iterator(begin()); }
+			const_reverse_iterator	rbegin( void ) const	{ return const_reverse_iterator(--end()); }
+			const_reverse_iterator	rend( void ) const 		{ return const_reverse_iterator(end()); }
 			reference			front( void ) 			{ return (_head->data); }
 			reference			back( void ) 	 		{ return (_tail->prev->data); }
 			const_reference		front( void ) const		{ return (_head->data); }

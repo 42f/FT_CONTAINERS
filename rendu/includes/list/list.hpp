@@ -94,7 +94,7 @@ namespace ft	{
 			/**
 			 * @brief Copy Constructor
 			*/
-			explicit list( list const & src ) : _head(NULL), _tail(NULL), _size(0) {
+			list( const list & src ) : _head(NULL), _tail(NULL), _size(0) {
 
 				if (DEBUG_MODE >= 1)
 					std::cout << "CONSTRUCTOR --> copy " << __func__ << std::endl;
@@ -156,12 +156,12 @@ namespace ft	{
 				if (_size < max_size())	{
 					if (_head == _tail || position == begin())	{
 						_head = newNode;
-						newNode->hook(position._ptr);
+						newNode->hook(position.getPtr());
 						_tail->next = _head;
 						_head->prev = _tail;
 					}
 					else
-						newNode->hook(position._ptr);
+						newNode->hook(position.getPtr());
 					incSize();
 				}
 				return newNode;
@@ -206,7 +206,7 @@ namespace ft	{
 			iterator
 			erase (iterator position)	{
 
-				node * cursor = position._ptr;
+				node * cursor = position.getPtr();
 				node * returnCursor = cursor->next;
 				if (_size > 0)	{
 					if (cursor == _head)	{
@@ -307,15 +307,16 @@ namespace ft	{
 
 				if (x.size() > 0)	{
 
-					// size_type sizeSplice = std::distance(first, last);
-					difference_type sizeSplice = last - first;
+					difference_type sizeSplice = 0;
+					for (iterator cursor = first; cursor != last; cursor++)
+						sizeSplice++;
 
-					first._ptr->transfer(first._ptr, last._ptr);
-					first._ptr->hook(position._ptr);
-					if (position._ptr == _head)
-						_head = first._ptr;
-					if (first._ptr == x._head)
-						x._head = last._ptr;
+					first.getPtr()->transfer(first.getPtr(), last.getPtr());
+					first.getPtr()->hook(position.getPtr());
+					if (position.getPtr() == _head)
+						_head = first.getPtr();
+					if (first.getPtr() == x._head)
+						x._head = last.getPtr();
 					this->incSize(sizeSplice);
 					x.decSize(sizeSplice);
 					if (x.size() == 0)
@@ -351,7 +352,7 @@ namespace ft	{
 				iterator	itFind = begin();
 				iterator	itEndGroup = begin();
 
-				while ((itFind = std::adjacent_find(itEndGroup, end(), binary_pred)) != end())	{
+				while ((itFind = ft::adjacent_find(itEndGroup, end(), binary_pred)) != end())	{
 					itEndGroup = itFind;
 					while (binary_pred(*itFind, *itEndGroup) == true && itEndGroup != end())
 						itEndGroup++;
@@ -385,36 +386,35 @@ namespace ft	{
 			void
 			sort (Compare comp)	{
 
-				std::sort(begin(), end(), comp);
+				iterator	cursorBase;
+				list		tmpList;
+				iterator	cursorTmp;
+
+				while (this->empty() == false)	{
+					cursorBase = this->begin();
+					if (tmpList.empty() == true)
+						tmpList.splice(tmpList.begin(), *this, cursorBase);
+					else {
+						cursorTmp = tmpList.begin();
+						while (cursorTmp != tmpList.end() && comp(*cursorTmp, *cursorBase) == true)
+							cursorTmp++;
+						tmpList.splice(cursorTmp, *this, cursorBase);
+					}
+				}
+				this->splice(this->begin(), tmpList);
 			}
 
 			void
 			reverse( void )	{
 
+				iterator	cursorBase;
+				list		tmpList;
 
-				node * lastElem = _tail->prev;
-				node * newHead = lastElem;
-				node::swap(*_head, *lastElem);
-				_head = newHead;
-
-				size_t		swapSize = ((size() / 2) % 2 == 0) ?
-							((size() - 2) / 2) : ((size() - 2) / 2);
-
-				iterator	it = begin() + 1;
-				iterator	ite = end() - 2;
-				iterator	tmpIt = it;
-				iterator	tmpIte = ite;
-				for (size_t i = 0; i < swapSize ; i++)	{
-
-					tmpIt = it + 1;
-					tmpIte = ite - 1;
-					if (DEBUG_MODE >= 2)
-						std::cout << "SWAP: " <<  *it << " ; " << *ite << std::endl;
-					node::swap(*it._ptr, *ite._ptr);
-					it = tmpIt;
-					ite = tmpIte;
+				while (this->empty() == false)	{
+					cursorBase = this->begin();
+					tmpList.splice(tmpList.begin(), *this, cursorBase);
 				}
-
+				this->splice(this->begin(), tmpList);
 			}
 
 		protected:
@@ -439,7 +439,6 @@ namespace ft	{
 				{ return (a==b); }
 			};
 
-
 			template <class InputIterator>
 			void
 			assign_dispatch (InputIterator first, InputIterator last, std::__false_type)	{
@@ -454,7 +453,6 @@ namespace ft	{
 
 				assign(static_cast<size_type>(n), static_cast<value_type>(val));
 			}
-
 
 			/**
 			 * @brief Fill Constructor actual function
@@ -562,7 +560,7 @@ namespace ft	{
 			return false;
 		if (lhs.front() != rhs.front() || lhs.back() != rhs.back())
 			return false;
-		return (std::equal(lhs.begin(), lhs.end(), rhs.begin()));
+		return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
 	};
 
 	template <class T, class Alloc>
@@ -574,7 +572,7 @@ namespace ft	{
 	bool
 	operator<  (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)	{
 
-		return (std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+		return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
 
 	};
 
@@ -586,7 +584,7 @@ namespace ft	{
 	bool
 	operator>  (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)	{
 
-		return (std::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));
+		return (ft::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));
 
 	};
 

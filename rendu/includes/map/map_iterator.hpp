@@ -118,16 +118,11 @@ namespace ft	{
 			bool
 			operator!=(const map_iterator& rhs) const	{ return _ptr!=rhs.getPtr(); }
 
-			bool
-			operator<(const map_iterator& rhs) const	{ return _ptr< rhs.getPtr(); }
-
 			pointer
 			operator->()	const		{ return (&_ptr->item); }
 
 			reference
-			operator*()	const		{ return (_ptr->item); }
-
-		// private:
+			operator*()	const			{ return (_ptr->item); }
 
 			map_node*			getPtr(void) const { return (_ptr);	}
 			map_node*			getPosParent(void) const {

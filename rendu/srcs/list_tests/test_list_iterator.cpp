@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:01:30 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/18 09:50:28 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/27 09:49:03 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,24 +29,16 @@ test_list_iterator( void )	{
 		ft::list<int>::iterator		ft_it2 = ftl0.begin();
 		ft::list<int>::iterator		ft_itend = ftl0.end();
 
-		std::cout << SUBTITLE << "[ test operator< with iterator to begin < end ]" << RESET_COLOR << std::endl;
-		testBool(ft_it < ft_itend, __LINE__);
-		std::cout << SUBTITLE << "[ loop test iterator increment vs. iterator + i ]" << RESET_COLOR << std::endl;
-		for (size_t i = 0; i < ftl0.size(); i++)
-		{
-			testBool((*ft_it == *(ft_it2 + i)), __LINE__);
-			ft_it++;
-		}
 		std::cout << SUBTITLE << "[ test operator= ]" << RESET_COLOR << std::endl;
 		ft_it2 = ft_it;
 		testBool(ft_it == ft_it2, __LINE__);
-		std::cout << SUBTITLE << "[ loop test iterator increment vs. iterator + i ]" << RESET_COLOR << std::endl;
-		for (size_t i = 0; i < ftl0.size(); i++)
-		{
-			testBool((*ft_it == *(ft_it2 - i)), __LINE__);
-			ft_it--;
-		}
-		testBool(static_cast<size_t>(ft_itend - ft_it) == ftl0.size(), __LINE__);
+		// std::cout << SUBTITLE << "[ loop test iterator increment vs. iterator + i ]" << RESET_COLOR << std::endl;
+		// for (size_t i = 0; i < ftl0.size(); i++)
+		// {
+		// 	testBool((*ft_it == *(ft_it2 - i)), __LINE__);
+		// 	ft_it--;
+		// }
+		// testBool(static_cast<size_t>(ft_itend - ft_it) == ftl0.size(), __LINE__);
 	}
 	std::cout << HEADER_TITLE << "TEST ITERATOR ARITHMETIC" << RESET_COLOR << std::endl;
 	{
@@ -58,12 +50,13 @@ test_list_iterator( void )	{
 		l.push_back(4);
 		l.push_back(5);
 		ft::list<int>::iterator it1 = ++l.begin();
-		ft::list<int>::iterator it2 = l.begin() + 2;
+		ft::list<int>::iterator it2 = ++l.begin();
+		it2++;
 		it1++;
 		ft::list<int>::iterator ite1 = --l.end();
 		ite1--;
-		ft::list<int>::iterator ite2 = l.end() - 2;
-
+		ft::list<int>::iterator ite2 = --l.end();
+		ite2--;
 		testBool(*it1 == 2, __LINE__);
 		testBool(*ite1 == 4, __LINE__);
 		testBool(*it1 == *it2, __LINE__);

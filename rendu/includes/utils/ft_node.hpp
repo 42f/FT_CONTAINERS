@@ -13,10 +13,13 @@ namespace ft	{
 	template< typename T>
 	class node	{
 
+		// private:
 		public:
+
 			node<T>	*next;
 			node<T>	*prev;
 			T		data;
+
 
 			node( void ) : next(this), prev(this) {
 
@@ -44,12 +47,8 @@ namespace ft	{
 			swap(node& x, node& y)	{
 
 				if (&x != &y)	{
-					node *posx;
-					if (&y != x.next)
-						posx = x.next;
-					else
-						posx = &x;
-					node	*posy = y.next;
+					node*	posx = (&y != x.next) ? x.next : &x;
+					node*	posy = y.next;
 					y.unhook();
 					y.hook(posx);
 					x.unhook();

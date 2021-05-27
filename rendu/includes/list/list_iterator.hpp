@@ -29,16 +29,21 @@ namespace ft	{
 			typedef typename iterator::value_type				value_type;
 			typedef typename iterator::difference_type			difference_type;
 			typedef typename iterator::difference_type			Distance;
-			typedef typename iterator::reference					reference;
+			typedef typename iterator::reference				reference;
             typedef typename iterator::pointer					pointer;
-			// typedef T																		value_type;
-			// typedef std::ptrdiff_t															difference_type;
-			// typedef typename	ft::ft_enable_if<B, value_type&, const value_type&>::type	reference;
-            // typedef typename	ft::ft_enable_if<B, value_type*, const value_type*>::type	pointer;
 
 			list_iterator( void ) :_ptr(NULL) {}
 			list_iterator(node* src) :_ptr(src) {}
 			list_iterator(const list_iterator& itSrc) : _ptr(itSrc._ptr) {}
+			~list_iterator( void ) {}
+
+			list_iterator&
+			operator=( const list_iterator& src )	{
+				if (*this != src)	{
+					_ptr = src._ptr;
+				}
+				return (*this);
+			}
 
 			list_iterator&	operator++( void ) {
 				_ptr = _ptr->next;
@@ -62,63 +67,15 @@ namespace ft	{
 				return tmp;
 			}
 
-			difference_type	operator- ( list_iterator rhs ) {
-
-				difference_type		ret = 0;
-				if (rhs < *this)	{
-					while (*this != rhs && rhs._ptr != rhs._ptr->next)	{
-						ret++;
-						rhs++;
-					}
-				}
-				return ret;
-			}
-
-			list_iterator	operator- ( difference_type n ) {
-
-				list_iterator tmpIt = *this;
-
-				while ( n > 0 )	{
-					tmpIt--;
-					n--;
-				}
-				return tmpIt;
-			}
-
-			list_iterator	operator+ ( difference_type n ) {
-
-				list_iterator tmpIt = *this;
-
-				while ( n > 0 )	{
-					tmpIt++;
-					n--;
-				}
-				return tmpIt;
-			}
-
-			void	operator-= ( difference_type n ) {
-
-				*this = *this - n;
-			}
-
-			void	operator+= ( difference_type n ) {
-
-				*this = *this + n;
-			}
-
 			bool 		operator==(const list_iterator& rhs) const { return _ptr==rhs._ptr; }
 			bool 		operator!=(const list_iterator& rhs) const { return _ptr!=rhs._ptr; }
-			bool 		operator<(const list_iterator& rhs) const {
 
-				if (*this == rhs)
-					return false;
-				list_iterator	tmpIt = *this;
-				while (tmpIt._ptr != tmpIt._ptr->next && tmpIt != rhs)
-					tmpIt++;
-				return (tmpIt == rhs);
-			}
+			pointer		operator->()	const	{ return &(_ptr->data); }
+			reference	operator*()	const		{ return _ptr->data; }
 
-			T &	operator*() { return _ptr->data; }
+			node*		getPtr(void) const 		{ return (_ptr);	}
+
+		private:
 
 			node*				_ptr;
 

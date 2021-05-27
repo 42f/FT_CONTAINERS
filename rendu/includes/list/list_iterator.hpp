@@ -25,12 +25,11 @@ namespace ft	{
 
 		public:
 
-			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T, B>					iterator;
-			typedef typename iterator::value_type				value_type;
-			typedef typename iterator::difference_type			difference_type;
-			typedef typename iterator::difference_type			Distance;
-			typedef typename iterator::reference				reference;
-            typedef typename iterator::pointer					pointer;
+			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T, B>	iterator;
+			typedef typename iterator::value_type								value_type;
+			typedef typename iterator::difference_type							difference_type;
+			typedef typename iterator::reference								reference;
+            typedef typename iterator::pointer									pointer;
 
 			list_iterator( void ) :_ptr(NULL) {}
 			list_iterator(node* src) :_ptr(src) {}

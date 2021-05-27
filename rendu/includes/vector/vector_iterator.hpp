@@ -24,17 +24,10 @@ namespace ft	{
 	class vector_iterator : public ft::iterator< ft::random_access_iterator_tag, T, B>
 	{
 		public:
-			typedef typename	ft::iterator<ft::random_access_iterator_tag, T, B>		iterator;
-			typedef typename	ft::vector_iterator<T, true>							const_iterator;
-
-			// typedef ft::reverse_iterator< vector_iterator<T, false> >					reverse_iterator;
-			// typedef ft::reverse_iterator< vector_iterator<T, true> >					const_reverse_iterator;
-
-			typedef typename 	iterator::difference_type								difference_type;
-			typedef typename 	iterator::value_type									value_type;
-			typedef typename	ft::ft_enable_if<B, value_type&, const value_type&>::type	reference;
-            typedef typename	ft::ft_enable_if<B, value_type*, const value_type*>::type	pointer;
-			typedef size_t																	size_type;
+			typedef typename ft::iterator<ft::random_access_iterator_tag, T, B>	iterator;
+			typedef typename iterator::difference_type							difference_type;
+			typedef typename iterator::reference								reference;
+            typedef typename iterator::pointer									pointer;
 
 			vector_iterator( void ) :_ptr(NULL) {}
 			vector_iterator(T* src) :_ptr(src) {}
@@ -90,7 +83,7 @@ namespace ft	{
 				return tmpIt;
 			}
 
-			const_iterator
+			vector_iterator
 			operator- ( difference_type n ) const {
 
 				vector_iterator tmpIt = *this;
@@ -114,7 +107,7 @@ namespace ft	{
 				return tmpIt;
 			}
 
-			const_iterator
+			vector_iterator
 			operator+ ( difference_type n ) const {
 
 				vector_iterator tmpIt = *this;
@@ -151,7 +144,7 @@ namespace ft	{
 			operator>=(const vector_iterator& rhs) const	{ return _ptr >= rhs._ptr; }
 
 			reference
-			operator[]( size_type n )	const					{ return _ptr[n]; }
+			operator[]( size_t n )	const					{ return _ptr[n]; }
 
 			pointer
 			operator->()	const					{ return _ptr; }

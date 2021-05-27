@@ -36,9 +36,11 @@ namespace ft	{
 		public:
 
 			typedef T													value_type;
-			typedef typename Allocator::template rebind<node>::other	allocator_type;
+
 			typedef size_t												size_type;
 			typedef std::ptrdiff_t										difference_type;
+
+			typedef typename Allocator::template rebind<node>::other	allocator_type;
 			typedef typename Allocator::reference						reference;
 			typedef typename Allocator::const_reference					const_reference;
 			typedef typename Allocator::pointer							pointer;

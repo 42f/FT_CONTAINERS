@@ -199,7 +199,7 @@ all :
 	@echo
 	@echo
 
-$(OBJS): $(OBJ_DIR)%.o: %.cpp $(HEADER) $(PROJECT_HEADER)
+$(OBJS): $(OBJ_DIR)%.o: %.cpp $(PROJECT_HEADER) $(HEADER)
 	$(CC) $(CFLAGS) $(OTHER_FLAGS) -c $<  -I $(INCLUDES) -o $@
 
 $(NAME): $(PCH_DIR) $(PCHS) $(OBJ_DIR) $(OBJS)

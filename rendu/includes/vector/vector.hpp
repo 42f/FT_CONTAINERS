@@ -120,8 +120,8 @@ namespace ft	{
 			typedef typename ft::vector_iterator<T, false>	iterator;
 			typedef typename ft::vector_iterator<T, true>	const_iterator;
 
-            typedef typename ft::reverse_iterator<vector_iterator<T, false> > reverse_iterator;
-            typedef typename ft::reverse_iterator<vector_iterator<T, true> >  const_reverse_iterator;
+            typedef typename ft::reverse_iterator<iterator> reverse_iterator;
+            typedef typename ft::reverse_iterator<const_iterator>  const_reverse_iterator;
 
 /******************************************************************************.
 .******************************************************************************.

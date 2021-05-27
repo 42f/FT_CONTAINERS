@@ -57,7 +57,6 @@ namespace ft	{
 			typedef typename Allocator::pointer				pointer;
 			typedef typename Allocator::const_pointer		const_pointer;
 
-
 			typedef typename ft::map_iterator<Key, T, Compare, map_node, false>	iterator;
 			typedef typename ft::map_iterator<Key, T, Compare, map_node, true>	const_iterator;
 

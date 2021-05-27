@@ -23,14 +23,13 @@ namespace ft	{
 
 		public:
 
-			// typedef ft::reverse_iterator< map_iterator<Key, T, Compare, map_node, false> >	reverse_iterator;
-			// typedef ft::reverse_iterator< map_iterator<Key, T, Compare, map_node, true> >	const_reverse_iterator;
-
 			typedef	Compare										key_compare;
-			typedef typename ft::pair<const Key, T>				value_type;
 
-			typedef typename ft_enable_if<B, value_type&, const value_type&>::type       reference;
-            typedef typename ft_enable_if<B, value_type*, const value_type*>::type       pointer;
+			typedef typename ft::iterator<ft::bidirectional_iterator_tag, ft::pair<const Key, T>, B>			iterator;
+			typedef typename iterator::value_type										value_type;
+			typedef typename iterator::difference_type									difference_type;
+			typedef typename iterator::reference										reference;
+            typedef typename iterator::pointer											pointer;
 
 			map_iterator( map_node* ptr = NULL, map_node* dumbNode = NULL,
 				const key_compare& comp = key_compare() ) :	_ptr(ptr),

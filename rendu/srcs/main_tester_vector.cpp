@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:23:15 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/28 10:25:27 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/28 11:17:47 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ main_tester_vector( void )	{
 		test_vector_instantiation();
 
 		test_vector_iterator();
-		// test_vector_reverseIterator();
+		test_vector_reverseIterator();
 
 		// test_vector_capacities();
 		// test_vector_resize();

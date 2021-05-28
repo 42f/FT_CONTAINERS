@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:23:15 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/27 17:10:45 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/28 09:00:25 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ main_tester_vector( void )	{
 		// test_vector_element_access();
 		// test_vector_relational_operators();
 		// test_vector_operatorEqual();
-		// test_vector_reverseIterator();
+		test_vector_reverseIterator();
 
 		if (DEBUG_MODE == 0)
 		{

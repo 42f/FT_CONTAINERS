@@ -36,7 +36,7 @@ namespace ft	{
 
 			~reverse_iterator()	{}
 
-			iterator_type		base() const		{	return iterator_type(_base);	}
+			iterator_type		base() const		{	return _base;	}
 			reference			operator*() const	{	return (--base()).operator*();	}
 			pointer				operator->() const							{	return &(operator*());	}
 			reference			operator[] (difference_type n) const		{	return base()[-n-1];	}
@@ -58,7 +58,6 @@ namespace ft	{
 				--(*this);
 				return tmp;
 			}
-
 
 	}; // ----------------- rev_iterator
 

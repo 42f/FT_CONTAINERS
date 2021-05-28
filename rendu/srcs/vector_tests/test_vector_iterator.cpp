@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:50:38 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/27 18:03:54 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/28 08:50:09 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,5 @@ test_vector_iterator( void )	{
 		testBool(ft_it0->first == std_it0->first, __LINE__);
 		testBool(ft_it0->second == std_it0->second, __LINE__);
 	}
-
 	return (0);
 }

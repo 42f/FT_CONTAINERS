@@ -19,7 +19,7 @@ namespace ft	{
 	template <class Category,            // iterator::iterator_category
 			class T,                     // iterator::value_type
 			bool B,						// false == non const, true == const
-			class Distance = ptrdiff_t>  // iterator::difference_type
+			class Distance = std::ptrdiff_t>  // iterator::difference_type
 	class iterator	{
 
 			public:

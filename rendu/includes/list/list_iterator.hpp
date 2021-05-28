@@ -33,13 +33,13 @@ namespace ft	{
 
 			list_iterator( void ) :_ptr(NULL) {}
 			list_iterator(node* src) :_ptr(src) {}
-			list_iterator(const list_iterator& itSrc) : _ptr(itSrc._ptr) {}
+			list_iterator(const list_iterator& itSrc) : _ptr(itSrc.getPtr()) {}
 			~list_iterator( void ) {}
 
 			list_iterator&
 			operator=( const list_iterator& src )	{
 				if (*this != src)	{
-					_ptr = src._ptr;
+					_ptr = src.getPtr();
 				}
 				return (*this);
 			}

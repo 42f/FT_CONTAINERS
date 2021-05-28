@@ -37,12 +37,12 @@ namespace ft	{
 			~reverse_iterator()	{}
 
 			iterator_type		base() const		{	return _base;	}
-			reference			operator*() const	{	return (--base()).operator*();	}
+			reference			operator*() const	{	return *(--base());	}
 			pointer				operator->() const							{	return &(operator*());	}
 			reference			operator[] (difference_type n) const		{	return base()[-n-1];	}
 
 			reverse_iterator&	operator+= (difference_type n)		{	_base.operator-=(n); return (*this);	}
-			reverse_iterator	operator+ (difference_type n) const	{	return reverse_iterator(_base.operator-(n));	}
+			reverse_iterator	operator+ (difference_type n) const	{	return reverse_iterator((--base()).operator-(n));	}
 			reverse_iterator&	operator++()		{	_base.operator--(); return *this;	}
 			reverse_iterator	operator++(int)		{
 				reverse_iterator tmp = *this;
@@ -51,7 +51,7 @@ namespace ft	{
 			}
 
 			reverse_iterator&	operator-= (difference_type n)		{	_base.operator+=(n); return (*this);	}
-			reverse_iterator	operator- (difference_type n) const	{	return reverse_iterator(_base.operator+(n));	}
+			reverse_iterator	operator- (difference_type n) const	{	return reverse_iterator((--base()).operator+(n));	}
 			reverse_iterator&	operator--()		{	_base.operator++(); return *this;	}
 			reverse_iterator	operator--(int)		{
 				reverse_iterator tmp = *this;

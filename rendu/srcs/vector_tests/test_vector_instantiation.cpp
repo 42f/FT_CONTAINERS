@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:50:31 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/27 17:07:30 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/28 10:25:52 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ test_vector_instantiation( void )	{
 	{
 		std::cout << SUBTITLE << "[ DEFAULT CONSTRUCTOR ]" << RESET_COLOR << std::endl;
 		{
-			ft::vector<std::string>	ft_c0;
+			ft::vector<std::string>		ft_c0;
 			std::vector<std::string>	std_c0;
 			testVector(ft_c0, std_c0, NOPRINT);
-			ft::vector<float>		ft_c1;
+			ft::vector<float>	ft_c1;
 			std::vector<float>	std_c1;
 			testVector(ft_c1, std_c1, NOPRINT);
 		}

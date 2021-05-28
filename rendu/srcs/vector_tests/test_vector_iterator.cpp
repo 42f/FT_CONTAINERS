@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:50:38 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/28 08:50:09 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/28 11:15:31 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,31 @@ test_vector_iterator( void )	{
 		ft::vector<int>::iterator		ft_it = ft_c0.begin();
 		ft::vector<int>::iterator		ft_it2 = ft_c0.begin();
 		ft::vector<int>::iterator		ft_itend = ft_c0.end();
+		std::vector<int>::iterator		std_it = std_c0.begin();
+		std::vector<int>::iterator		std_it2 = std_c0.begin();
 
 		std::cout << SUBTITLE << "[ test operator< with iterator to begin < end ]" << RESET_COLOR << std::endl;
 		testBool(ft_it < ft_itend, __LINE__);
 		std::cout << SUBTITLE << "[ loop test iterator increment vs. iterator + i ]" << RESET_COLOR << std::endl;
 		for (size_t i = 0; i < ft_c0.size(); i++)
 		{
-			testBool((*ft_it == *(ft_it2 + i)), __LINE__);
+			// std::cout << i << " ft . [i] -1     = " << &(ft_c0[i - 1]) << std::endl;
+			// std::cout << i << " ft . [i]        = " << &(ft_c0[i]) << std::endl;
+			std::cout << i << " ft . it         = " <<  *ft_it << " @ " <<&(  *ft_it )<< std::endl;
+			// std::cout << i << " ft . begin      = " <<  *(ft_c0.begin()) << " @ " <<&(  *(ft_c0.begin()) )<< std::endl;
+			// std::cout << i << " ft . begin + i  = " <<  *(ft_c0.begin() + i) << " @ " <<&(  *(ft_c0.begin() + i) )<< std::endl;
+			// std::cout << i << " ft . rend      = " <<  *(ft_c0.rend()) << " @ " <<&( *(ft_c0.rend()) )<< std::endl;
+			// std::cout << i << " ft . rend - i  = " <<  *(ft_c0.rend() - i) << " @ " <<&( *(ft_c0.rend() - i) )<< std::endl;
+			// std::cout << i << " std. [i]  -1    = " << &(std_c0[i - 1]) << std::endl;
+			// std::cout << i << " std. [i]        = " << &(std_c0[i]) << std::endl;
+			std::cout << i << " std. it         = " <<  *std_it << " @ " <<&(  *std_it )<< std::endl;
+			// std::cout << i << " std. begin      = " <<  *(std_c0.begin()) << " @ " <<&(  *(std_c0.begin()) )<< std::endl;
+			// std::cout << i << " std. begin + i  = " <<  *(std_c0.begin() + i) << " @ " <<&(  *(std_c0.begin() + i) )<< std::endl;
+			// std::cout << i << " std. rend      = " <<  *(std_c0.rend()) << " @ " <<&( *(std_c0.rend()) )<< std::endl;
+			// std::cout << i << " std. rend - i  = " <<  *(std_c0.rend() - i) << " @ " <<&( *(std_c0.rend() - i) )<< std::endl<< std::endl;
+			testBool(*ft_it == *(ft_it2 + i) && *std_it == *(std_it2 + i), __LINE__);
 			ft_it++;
+			std_it++;
 		}
 		std::cout << SUBTITLE << "[ test operator= ]" << RESET_COLOR << std::endl;
 		ft_it2 = ft_it;

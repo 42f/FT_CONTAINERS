@@ -87,7 +87,6 @@ namespace ft	{
 			operator- ( difference_type n ) const {
 
 				vector_iterator tmpIt = *this;
-
 				while ( n > 0 )	{
 					tmpIt--;
 					n--;

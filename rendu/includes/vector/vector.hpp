@@ -26,53 +26,53 @@ namespace ft	{
 			typedef T_alloc								allocator_type;
 			typedef typename T_alloc::pointer			pointer;
 
-			vector_base( void ) : head(NULL), tail(NULL), tailStorage(NULL), alloc(allocator_type()) {
+			vector_base( void ) : _head(NULL), _tail(NULL), _tailStorage(NULL), _alloc(allocator_type()) {
 
 				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> default " << __func__ << std::endl;
 			}
 
-			vector_base( allocator_type const & userAlloc ) : head(NULL), tail(NULL), tailStorage(NULL), alloc(userAlloc) {
+			vector_base( allocator_type const & userAlloc ) : _head(NULL), _tail(NULL), _tailStorage(NULL), _alloc(userAlloc) {
 
-				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> defaut with alloc " << __func__ << std::endl;
+				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> defaut with _alloc " << __func__ << std::endl;
 			}
 
-			vector_base( size_t n ) : head(NULL), tail(NULL), tailStorage(NULL), alloc(allocator_type()) {
+			vector_base( size_t n ) : _head(NULL), _tail(NULL), _tailStorage(NULL), _alloc(allocator_type()) {
 
 				initStorage(n + (n>>1));
 				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> fill " << __func__ << std::endl;
 			}
 
-			vector_base( size_t n, allocator_type const & userAlloc ) : head(NULL), tail(NULL), tailStorage(NULL), alloc(userAlloc) {
+			vector_base( size_t n, allocator_type const & userAlloc ) : _head(NULL), _tail(NULL), _tailStorage(NULL), _alloc(userAlloc) {
 
 				initStorage(n + (n>>1));
-				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> fill with alloc " << __func__ << std::endl;
+				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> fill with _alloc " << __func__ << std::endl;
 			}
 
 			~vector_base( void )	{
 
-				deleteStorage(tailStorage - head);
+				deleteStorage(_tailStorage - _head);
 				if (DEBUG_MODE >= 2) std::cout << "DESTRUCTOR --> " << __func__ << std::endl;
 			}
 
-			pointer			head;
-			pointer			tail;
-			pointer			tailStorage;
-			allocator_type	alloc;
+			pointer			_head;
+			pointer			_tail;
+			pointer			_tailStorage;
+			allocator_type	_alloc;
 
 		protected:
 
 			void
-			initStorage( size_t n )	{
+			initStorage( size_t n = 1 )	{
 
 				if (n > 0)	{
-					this->head = this->alloc.allocate(n);
-					this->tail = this->head;
-					this->tailStorage = this->head + n;
+					this->_head = this->_alloc.allocate(n);
+					this->_tail = this->_head;
+					this->_tailStorage = this->_head + n;
 					if (DEBUG_MODE >= 2) {
 						std::cout << __func__ << std::endl;
-						for (size_t i = 0; head + i != tailStorage; ++i)	{
+						for (size_t i = 0; _head + i != _tailStorage; ++i)	{
 							std::cout << "[" << i << "] uninitialized ";
-							std::cout << " @ " << head + i << std::endl;
+							std::cout << " @ " << _head + i << std::endl;
 						}
 					}
 				}
@@ -82,7 +82,7 @@ namespace ft	{
 
 			void
 			deleteStorage( size_t n )	{
-				this->alloc.deallocate(head, n);
+				this->_alloc.deallocate(_head, n);
 				if (DEBUG_MODE >= 2) std::cout << __func__ << std::endl;
 			}
 
@@ -185,25 +185,25 @@ namespace ft	{
 .******************************************************************************/
 
 			size_type
-			max_size( void ) const	{ return this->alloc.max_size();  }
+			max_size( void ) const	{ return this->_alloc.max_size();  }
 
 			bool
 			empty( void ) const		{ return (size() == 0); }
 
 			size_type
-			size( void ) const 		{ return (this->tail - this->head); }
+			size( void ) const 		{ return (this->_tail - this->_head); }
 
 			iterator
-			begin( void ) 			{ return (this->head); }
+			begin( void ) 			{ return (this->_head); }
 
 			const_iterator
-			begin( void ) const		{ return (this->head); }
+			begin( void ) const		{ return (this->_head); }
 
 			iterator
-			end( void ) 	 		{ return (this->tail); }
+			end( void ) 	 		{ return (this->_tail); }
 
 			const_iterator
-			end( void ) const 		{ return (this->tail); }
+			end( void ) const 		{ return (this->_tail); }
 
 			reverse_iterator
 			rbegin( void ) 			{ return reverse_iterator(--end()); }
@@ -212,25 +212,25 @@ namespace ft	{
 			rbegin( void ) const	{ return const_reverse_iterator(--end()); }
 
 			reverse_iterator
-			rend( void ) 	 		{ return reverse_iterator(--begin()); }
+			rend( void ) 	 		{ return reverse_iterator(begin() - 1); }
 
 			const_reverse_iterator
-			rend( void ) const 		{ return const_reverse_iterator(--begin()); }
+			rend( void ) const 		{ return const_reverse_iterator(begin() - 1); }
 
 			reference
-			front( void ) 			{ return (*(this->head)); }
+			front( void ) 			{ return (*(this->_head)); }
 
 			const_reference
-			front( void ) const		{ return (*(this->head)); }
+			front( void ) const		{ return (*(this->_head)); }
 
 			reference
-			back( void ) 	 		{ return (*(this->tail - 1)); }
+			back( void ) 	 		{ return (*(this->_tail - 1)); }
 
 			const_reference
-			back( void ) const 		{ return (*(this->tail - 1)); }
+			back( void ) const 		{ return (*(this->_tail - 1)); }
 
 			size_type
-			capacity( void ) const	{ return (this->tailStorage - this->head); }
+			capacity( void ) const	{ return (this->_tailStorage - this->_head); }
 
 			void
 			pop_back( void )		{ if (size() > 0) erase(--end()); }
@@ -257,7 +257,7 @@ namespace ft	{
 			void insert (iterator position, size_type n, const value_type& val)	{
 
 				if (capacity() == 0)	{
-					this->initStorage(1);
+					this->initStorage();
 					position = begin();
 				}
 
@@ -270,13 +270,13 @@ namespace ft	{
 					if (size() > 1)	{
 						memMoveRight(begin() + indexPos, end(), n);
 					}
-					destroyObjects(this->head + indexPos, size() - indexPos);
-					this->tail += n;
-					constructObjects(this->head + indexPos, n, val);
+					destroyObjects(this->_head + indexPos, size() - indexPos);
+					this->_tail += n;
+					constructObjects(this->_head + indexPos, n, val);
 				}
 				else {
-					constructObjects(this->tail, n, val);
-					this->tail += n;
+					constructObjects(this->_tail, n, val);
+					this->_tail += n;
 				}
 			}
 
@@ -319,7 +319,7 @@ namespace ft	{
 
 				destroyObjects(position.getPtr(), 1);
 				memMoveLeft(position + 1, end(), 1);
-				this->tail -= 1;
+				this->_tail -= 1;
 				return position;
 			}
 
@@ -330,7 +330,7 @@ namespace ft	{
 				difference_type		len = last - first;
 				destroyObjects(first.getPtr(), len);
 				memMoveLeft(last, end(), len);
-				this->tail -= len;
+				this->_tail -= len;
 				return begin() + offset;
 			}
 
@@ -348,17 +348,17 @@ namespace ft	{
 			void
 			swap (vector& src)	{
 
-				pointer 	headTmp = src.head;
-				pointer 	tailTmp = src.tail;
-				pointer		tailStorageTmp = src.tailStorage;
+				pointer 	headTmp = src._head;
+				pointer 	tailTmp = src._tail;
+				pointer		tailStorageTmp = src._tailStorage;
 
-				src.head = this->head;
-				src.tail = this->tail;
-				src.tailStorage = this->tailStorage;
+				src._head = this->_head;
+				src._tail = this->_tail;
+				src._tailStorage = this->_tailStorage;
 
-				this->head = headTmp;
-				this->tail = tailTmp;
-				this->tailStorage = tailStorageTmp;
+				this->_head = headTmp;
+				this->_tail = tailTmp;
+				this->_tailStorage = tailStorageTmp;
 			}
 
 			/**
@@ -403,12 +403,12 @@ namespace ft	{
 
 			reference
 			operator[] (size_type n)	{
-				return (*(this->head + n));
+				return (*(this->_head + n));
 			}
 
 			const_reference
 			operator[] (size_type n) const	{
-				return (*(this->head + n));
+				return (*(this->_head + n));
 			}
 
 /******************************************************************************.
@@ -481,7 +481,7 @@ namespace ft	{
 			InputIterator last, std::__false_type)	{
 
 				if (capacity() == 0)	{
-					this->initStorage(1);
+					this->initStorage();
 					position = begin();
 				}
 
@@ -495,13 +495,13 @@ namespace ft	{
 					if (size() > 1)	{
 						memMoveRight(begin() + indexPos, end(), n);
 					}
-					destroyObjects(this->head + indexPos, size() - indexPos);
-					this->tail += n;
-					constructObjects(this->head + indexPos, first, last);
+					destroyObjects(this->_head + indexPos, size() - indexPos);
+					this->_tail += n;
+					constructObjects(this->_head + indexPos, first, last);
 				}
 				else {
-					constructObjects(this->head + indexPos, first, last);
-					this->tail += n;
+					constructObjects(this->_head + indexPos, first, last);
+					this->_tail += n;
 				}
 			}
 
@@ -514,9 +514,9 @@ namespace ft	{
 			fillVector(iterator first, iterator last)	{
 
 				for (;first != last; first++)	{
-					this->alloc.construct(this->tail, *first);
-					this->tail++;
-					if (this->tail == this->tailStorage)
+					this->_alloc.construct(this->_tail, *first);
+					this->_tail++;
+					if (this->_tail == this->_tailStorage)
 						std::cout << "RESIZE HERE" << std::endl;			// not fixed yet
 				}
 			}
@@ -525,9 +525,9 @@ namespace ft	{
 			fillVector(const_iterator first, const_iterator last)	{
 
 				for (;first != last; first++)	{
-					this->alloc.construct(this->tail, *first);
-					this->tail++;
-					if (this->tail == this->tailStorage)
+					this->_alloc.construct(this->_tail, *first);
+					this->_tail++;
+					if (this->_tail == this->_tailStorage)
 						std::cout << "RESIZE HERE" << std::endl;			// not fixed yet
 				}
 			}
@@ -538,9 +538,9 @@ namespace ft	{
 			void
 			initFillVector(size_type n, value_type const & val)	{
 
-				this->tail = this->head + n;
+				this->_tail = this->_head + n;
 				for (size_t i = 0; i < n; i++){
-					this->alloc.construct(this->head + i, val);
+					this->_alloc.construct(this->_head + i, val);
 				}
 			}
 
@@ -553,14 +553,14 @@ namespace ft	{
 			doReserve (size_type n) {
 
 				if (n > this->capacity())	{
-					pointer		oldHead = this->head;
+					pointer		oldHead = this->_head;
 					size_type	oldSize = this->size();
 					size_type	oldCapacity = this->capacity();
 
 					reallocateBigger(n);
 
 					destroyObjects(oldHead, oldSize);
-					this->alloc.deallocate(oldHead, oldCapacity);
+					this->_alloc.deallocate(oldHead, oldCapacity);
 				}
 			}
 
@@ -573,36 +573,36 @@ namespace ft	{
 					iterator	oldTailIt = end();
 
 					this->initStorage(n);
-					constructObjects(this->head, oldHeadIt, oldTailIt);
-					this->tail += oldTailIt - oldHeadIt;
+					constructObjects(this->_head, oldHeadIt, oldTailIt);
+					this->_tail += oldTailIt - oldHeadIt;
 				}
 			}
 
 			void
 			constructObjects(pointer p, size_t n, value_type val = value_type())	{
 				for (size_t i = 0; i < n; i++)	{
-					this->alloc.construct(p + i, val);
+					this->_alloc.construct(p + i, val);
 				}
 			}
 
 			void
 			constructObjects(pointer p, iterator first, iterator last)	{
 				for (size_t i = 0; first != last; i++, first++)	{
-					this->alloc.construct(p + i, *first);
+					this->_alloc.construct(p + i, *first);
 				}
 			}
 
 			void
 			constructObjects(pointer p, const_iterator first, const_iterator last)	{
 				for (size_t i = 0; first != last; i++, first++)	{
-					this->alloc.construct(p + i, *first);
+					this->_alloc.construct(p + i, *first);
 				}
 			}
 
 			void
 			destroyObjects(pointer p, size_t n)	{
 				for (size_t i = 0; i < n; i++)	{
-					this->alloc.destroy(p + i);
+					this->_alloc.destroy(p + i);
 				}
 			}
 
@@ -610,7 +610,7 @@ namespace ft	{
 			clearObject( void )	{
 
 				if (DEBUG_MODE >= 3) std::cout << __func__ << std::endl;
-				destroyObjects(this->head, this->size());
+				destroyObjects(this->_head, this->size());
 			}
 
 			/**

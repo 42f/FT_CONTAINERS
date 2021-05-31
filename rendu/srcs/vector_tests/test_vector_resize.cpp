@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:51:42 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/31 09:53:56 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/31 11:17:17 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,9 @@ test_vector_resize( void )	{
 			testResize<exampleClass>(ft_c0, std_c0, ft_c0.capacity() + 1);
 			testResize<exampleClass>(ft_c0, std_c0, 0);
 		}
+
+		if (VALGRIND_MODE == true)
+			return 0 ;
 
 		size_t testResize = std_c0.max_size();
 		std::cout << SUBTITLE << "[ resize("<< testResize << ") Max size, will throw exception ]" << RESET_COLOR << std::endl;

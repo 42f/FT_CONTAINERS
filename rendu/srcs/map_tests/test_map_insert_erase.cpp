@@ -214,6 +214,10 @@ testBracketsInsert( void )	{
 		ft_c0['e']=50;
 		ft_c0['f']=60;
 		ft_c0['g'];
+
+		if (VALGRIND_MODE == true)
+			return ;
+
 		try {
 			testMap<char, exampleClass>(ft_c0, std_c0, NOPRINT);
 		}

@@ -13,10 +13,17 @@ PCH_DIR = ./pchs_$(NAME)/
 
 CFLAGS += -Wall
 CFLAGS += -Wextra
+CFLAGS += -g3
 CFLAGS += -fPIC
 
 ifeq ($(noassert), 1)
 	CFLAGS += -DNDEBUG=1
+endif
+
+ifeq ($(valgrind_mode), 1)
+	CFLAGS += -D VALGRIND_MODE=1
+else
+	CFLAGS += -D VALGRIND_MODE=0
 endif
 
 ifeq ($(print_all), 1)

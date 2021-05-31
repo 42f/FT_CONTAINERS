@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:51:35 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/31 10:35:26 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/31 11:15:05 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,17 +52,19 @@ test_vector_at_operatorBrackets( void )	{
 			 	success = testBool(false, __LINE__, i);
 		}
 		testBool(success, __LINE__);
-		try {
-			try { std_c0.at(testSize); } catch (std::out_of_range & e) {};
-			ft_c0.at(testSize);
-			std::cout << "No exception thrown ! Bad, it should have !! " << std::endl;
-			testBool(false, __LINE__);
-		}
-		catch ( std::out_of_range & e)	{
-			std::cout << "Catched exception, as  it should, Out of Range : " << e.what() << std::endl;
-			testBool(true, __LINE__);
-		}
 
+		if (VALGRIND_MODE != true)	{
+			try {
+				try { std_c0.at(testSize); } catch (std::out_of_range & e) {};
+				ft_c0.at(testSize);
+				std::cout << "No exception thrown ! Bad, it should have !! " << std::endl;
+				testBool(false, __LINE__);
+			}
+			catch ( std::out_of_range & e)	{
+				std::cout << "Catched exception, as  it should, Out of Range : " << e.what() << std::endl;
+				testBool(true, __LINE__);
+			}
+		}
 
 		success = true;
 		std::cout << SUBTITLE << " Going though the whole vector, with operator[]" << RESET_COLOR << std::endl;

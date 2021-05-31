@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:50:38 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/28 11:16:07 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/31 11:50:28 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,27 +57,28 @@ test_vector_iterator( void )	{
 		std::cout << SUBTITLE << "[ loop test iterator increment vs. iterator + i ]" << RESET_COLOR << std::endl;
 		for (size_t i = 0; i < ft_c0.size(); i++)
 		{
-			// std::cout << i << " ft . it         = " <<  *ft_it << " @ " <<&(  *ft_it )<< std::endl;
-			// std::cout << i << " std. it         = " <<  *std_it << " @ " <<&(  *std_it )<< std::endl;
 			testBool(*ft_it == *(ft_it2 + i) && *std_it == *(std_it2 + i), __LINE__);
 			ft_it++;
 			std_it++;
 		}
+
 		std::cout << SUBTITLE << "[ test operator= ]" << RESET_COLOR << std::endl;
+
+		ft_it--;
 		ft_it2 = ft_it;
 		testBool(ft_it == ft_it2, __LINE__);
+
 		std::cout << SUBTITLE << "[ loop test iterator increment vs. iterator + i ]" << RESET_COLOR << std::endl;
-		for (size_t i = 0; i < ft_c0.size(); i++)
-		{
-			testBool((*ft_it == *(ft_it2 - i)), __LINE__);
-			ft_it--;
-		}
+		for (size_t i = 0; i < ft_c0.size() - 1; ++i, --ft_it)
+			testBool((*ft_it == *(ft_it2 - i)), __LINE__, i);
+
 		testBool(static_cast<size_t>(ft_itend - ft_it) == ft_c0.size(), __LINE__);
 		test_constIterator(ft_c0, std_c0);
 	}
-	std::cout << HEADER_TITLE << "TEST ITERATOR ARITHMETIC" << RESET_COLOR << std::endl;
-	{
 
+	std::cout << HEADER_TITLE << "TEST ITERATOR ARITHMETIC" << RESET_COLOR << std::endl;
+
+	{
 		ft::vector<int>		ft_c0;
 		std::vector<int>	std_c0;
 		int testSize = 42;

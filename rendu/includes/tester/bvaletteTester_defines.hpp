@@ -5,6 +5,10 @@
 # define DEBUG_MODE 0
 #endif
 
+#ifndef VALGRIND_MODE
+# define VALGRIND_MODE 0
+#endif
+
 #ifndef RESET_COLOR
 # define RESET_COLOR   "\033[0m"
 #endif

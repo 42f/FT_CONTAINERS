@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:51:28 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/28 11:50:36 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/31 11:52:44 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,21 +57,19 @@ test_vector_reverseIterator( void )	{
 		std::cout << SUBTITLE << "[ test operator< with reverse_iterator to rbegin < rend ]" << RESET_COLOR << std::endl;
 		testBool(ft_it < ft_itend && std_it < std_itend, __LINE__);
 		std::cout << SUBTITLE << "[ loop test reverse_iterator increment vs. reverse_iterator + i ]" << RESET_COLOR << std::endl;
-		for (size_t i = 0; i <= ft_c0.size(); i++)
+		for (size_t i = 0; i < ft_c0.size(); i++)
 		{
 			testBool(*ft_it == *(ft_it2 + i) && *std_it == *(std_it2 + i), __LINE__, i);
 			ft_it++;
 			std_it++;
 		}
 		std::cout << SUBTITLE << "[ test operator= ]" << RESET_COLOR << std::endl;
+		ft_it--;
 		ft_it2 = ft_it;
 		testBool(ft_it == ft_it2, __LINE__);
 		std::cout << SUBTITLE << "[ loop test reverse_iterator increment vs. reverse_iterator + i ]" << RESET_COLOR << std::endl;
-		for (size_t i = 0; i < ft_c0.size(); i++)
-		{
-			testBool((*ft_it == *(ft_it2 - i)), __LINE__);
-			ft_it--;
-		}
+		for (size_t i = 0; i < ft_c0.size() - 1; ++i, --ft_it)
+			testBool((*ft_it == *(ft_it2 - i)), __LINE__, i);
 		std::cout << HEADER_TITLE << "[ test size() vs. rend() - rbeing() ] with size == " << std_c0.size() << RESET_COLOR << std::endl;
 		testBool(static_cast<size_t>(ft_c0.rend() - ft_c0.rbegin()) == ft_c0.size()
 			&& static_cast<size_t>(std_c0.rend() - std_c0.rbegin()) == std_c0.size(), __LINE__);
@@ -149,10 +147,12 @@ test_vector_reverseIterator( void )	{
 		testBool(ft_it1 - ft_it0 == std_it1 - std_it0, __LINE__);
 
 		std::cout << SUBTITLE << "[ reverse_iterator substraction ]" << RESET_COLOR << std::endl;
-		ft_it0 = ft_c0.rbegin() - 1;
-		std_it0 = std_c0.rbegin() - 1;
+		ft_it0 = ft_c0.rend() - 1;
+		std_it0 = std_c0.rend() - 1;
 		testBool(*ft_it0 == *std_it0, __LINE__);
 
+		ft_it0 = ft_c0.rbegin() + 10;
+		std_it0 = std_c0.rbegin() + 10;
 		std::cout << SUBTITLE << "[ reverse_iterator's value changed but dereferencing with operator*]" << RESET_COLOR << std::endl;
 		*ft_it0 = 5000;
 		*std_it0 = 5000;

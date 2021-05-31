@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:02:16 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/18 09:50:28 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/31 15:35:16 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ test_list_remove( void )	{
 		std::cout << HEADER_TITLE << "[ Instanciate empty list ]" << RESET_COLOR << std::endl;
 		ft::list<int>	ftl0;
 		std::list<int>	stdl0;
-		size_t			testSize = 3000000;
+		size_t			valgrind_factor = (VALGRIND_MODE == true) ? 10000 : 1;
+		size_t			testSize = 3000000 / valgrind_factor;
 		testList(ftl0, stdl0, NOPRINT);
 		std::cout << SUBTITLE << "[ remove with value = 42 (on empty list)]" << RESET_COLOR << std::endl;
 		ftl0.remove(42);

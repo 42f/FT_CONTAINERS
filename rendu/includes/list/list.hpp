@@ -116,8 +116,10 @@ namespace ft	{
 			size_type			max_size( void ) const	{ return _alloc.max_size();  }
 			bool				empty( void ) const		{ return (_size == 0); }
 			size_type			size( void ) const 		{ return (_size); }
-			iterator			begin( void ) const		{ return (_head); }
-			iterator			end( void ) const 		{ return (_tail); }
+			iterator			begin( void ) 			{ return (_head); }
+			iterator			end( void ) 	 		{ return (_tail); }
+			const_iterator		begin( void ) const		{ return (_head); }
+			const_iterator		end( void ) const 		{ return (_tail); }
 			reverse_iterator	rbegin( void ) 			{ return reverse_iterator(--end()); }
 			reverse_iterator	rend( void )  			{ return reverse_iterator(end()); }
 			const_reverse_iterator	rbegin( void ) const	{ return const_reverse_iterator(--end()); }
@@ -541,8 +543,6 @@ namespace ft	{
 					clearObject();
 					throw std::exception();
 				}
-				if (DEBUG_MODE >= 2)
-					std::cout << "Create " << val << " @ " << newNode << std::endl;
 				return newNode;
 			}
 		}; // ----------------- Class list

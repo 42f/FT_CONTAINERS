@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:51:28 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/31 11:52:44 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/31 14:42:35 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ test_vector_reverseIterator( void )	{
 		std::vector<int>::reverse_iterator		std_it2 = std_c0.rbegin();
 		std::vector<int>::reverse_iterator		std_itend = std_c0.rend();
 
-		std::cout << SUBTITLE << "[ size of int ]" << sizeof(int) << RESET_COLOR << std::endl;
 		std::cout << SUBTITLE << "[ test operator< with reverse_iterator to rbegin < rend ]" << RESET_COLOR << std::endl;
 		testBool(ft_it < ft_itend && std_it < std_itend, __LINE__);
 		std::cout << SUBTITLE << "[ loop test reverse_iterator increment vs. reverse_iterator + i ]" << RESET_COLOR << std::endl;

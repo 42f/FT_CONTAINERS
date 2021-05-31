@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:02:16 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/18 09:50:28 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/31 15:47:17 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ test_list_unique( void )	{
 	{
 		ft::list<double>	ftl0;
 		std::list<double>	stdl0;
-		size_t				testSize = 500000;
+		size_t			valgrind_factor = (VALGRIND_MODE == true) ? 10000 : 1;
+		size_t			testSize = 3000000 / valgrind_factor;
 
 		std::cout << SUBTITLE << "[ pushback " << testSize << " random float values in list (same value for ft and std list, 0 <= val < 5) ]" << RESET_COLOR << std::endl;
 		srand(reinterpret_cast<long unsigned int>(&stdl0));

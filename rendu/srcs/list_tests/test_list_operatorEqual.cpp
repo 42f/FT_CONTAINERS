@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:02:01 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/18 09:50:28 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/31 11:59:02 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,11 @@ test_list_operatorEqual( void )	{
 
 		testList(ftl0, stdl0, NOPRINT);
 		testList(ftl1, stdl1, NOPRINT);
+
+		std::cout << SUBTITLE << "[ list0=list0 ]" << RESET_COLOR << std::endl;
+		ftl0 = ftl0;
+		stdl0 = stdl0;
+		testList(ftl0, stdl0, NOPRINT);
 	}
 	return (0);
 }

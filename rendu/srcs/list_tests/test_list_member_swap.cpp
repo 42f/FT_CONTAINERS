@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:01:36 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/18 09:50:28 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/31 15:21:53 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,10 @@ test_list_member_swap( void )	{
 		stdl0.swap(stdl1);
 		testList(ftl0, stdl0, NOPRINT, "Test list0");
 		testList(ftl1, stdl1, NOPRINT, "Test list1");
+		std::cout << SUBTITLE << "[ swap with itself ]" << RESET_COLOR << std::endl;
+		ftl0.swap(ftl0);
+		stdl0.swap(stdl0);
+		testList(ftl0, stdl0, NOPRINT, "Test list0");
 	}
 	return (0);
 }

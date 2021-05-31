@@ -31,7 +31,7 @@ namespace ft	{
 
 			vector_iterator( void ) :_ptr(NULL) {}
 			vector_iterator(T* src) :_ptr(src) {}
-			vector_iterator(const vector_iterator& itSrc) : _ptr(itSrc._ptr) {}
+			vector_iterator(const vector_iterator& itSrc) : _ptr(itSrc.getPtr()) {}
 			~vector_iterator( void ) {}
 
 			vector_iterator&

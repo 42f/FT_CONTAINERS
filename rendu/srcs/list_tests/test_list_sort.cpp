@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:02:29 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/27 15:49:53 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/31 16:01:52 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ test_list_sort( void )	{
 		ft::list<int>		ftl0;
 		std::list<int>		stdl0;
 		srand(reinterpret_cast<long unsigned int>(&stdl0));
-		size_t				testSize = rand() % 10000;
+		size_t			valgrind_factor = (VALGRIND_MODE == true) ? 10000 : 1;
+		size_t			testSize = 3000000 / valgrind_factor;
 
 		std::cout << SUBTITLE << "[ pushback " << testSize << " random values into list 0]" << RESET_COLOR << std::endl;
 

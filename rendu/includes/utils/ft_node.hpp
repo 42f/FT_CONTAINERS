@@ -70,8 +70,6 @@ namespace ft	{
 						last->prev = last;
 					beforeLast->next = beforeLast;
 				}
-				if (DEBUG_MODE >= 3)
-					putNodeInfos(*this);
 			}
 
 			void
@@ -96,22 +94,11 @@ namespace ft	{
 						cursor->next = position;
 						position->prev = cursor;
 					}
-
-					if (DEBUG_MODE >= 3)
-					{
-						std::cout << __func__ << " at position: " << position << std::endl;
-						std::cout << __func__ << " prev = " << prev << std::endl;
-						std::cout << __func__ << " next = " << next << std::endl;
-						putNodeInfos(*this);
-					}
 				}
 			}
 
 			void
 			unhook( void )	{
-
-			if (DEBUG_MODE >= 3)
-				putNodeInfos(*this);
 
 				if (prev != this && next != this)	{
 					next->prev = prev;
@@ -123,21 +110,8 @@ namespace ft	{
 					prev->next = prev;
 				this->next = this;
 				this->prev = this;
-			if (DEBUG_MODE >= 3)
-				putNodeInfos(*this);
 			}
 
-			static void	putNodeInfos(node<T> const &n) {
-				std::cout << std::endl;
-				std::cout << "--NODE: " << &n << std::endl;
-				std::cout << "data -> " << n.data << " @ " << &(n.data) << std::endl;
-				std::cout << "prev -> " << n.prev << std::endl;
-				std::cout << "next -> " << n.next << std::endl;
-				// if (n != _tail && n.next != &(n))
-				// 	putNodeInfos(*n.next);
-				// else
-					std::cout << std::endl;
-			}
 		}; // ----------------- Class node
 
 } // ----------------- ft namespace

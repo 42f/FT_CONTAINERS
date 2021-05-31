@@ -17,8 +17,8 @@ putList( ft::list<T> const & lst, int errorPos = -1 )	{
 	std::cout << PRINT_TITLE << "[ FT::LIST ]" << RESET_COLOR << std::endl;
 	std::cout << PRINT_TITLE << "[ size of list ]" << RESET_COLOR << " -> ";
 	std::cout << lst.size() << std::endl;
-	typename ft::list<T>::iterator it = lst.begin();
-	typename ft::list<T>::iterator ite = lst.end();
+	typename ft::list<T>::const_iterator it = lst.begin();
+	typename ft::list<T>::const_iterator ite = lst.end();
 
 	int	printMax;
 
@@ -98,8 +98,8 @@ bool print, std::string message = "" )	{
 	if (ft_lst.size() > 0)
 	{
 		int i = 0;
-		typename ft::list<T>::iterator	ft_it = ft_lst.begin();
-		typename ft::list<T>::iterator	ft_ite = ft_lst.end();
+		typename ft::list<T>::const_iterator	ft_it = ft_lst.begin();
+		typename ft::list<T>::const_iterator	ft_ite = ft_lst.end();
 
 		typename std::list<T>::const_iterator	std_it = std_lst.begin();
 		typename std::list<T>::const_iterator	std_ite = std_lst.end();

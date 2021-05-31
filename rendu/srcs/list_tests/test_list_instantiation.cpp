@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:01:26 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/24 12:16:45 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/31 12:11:57 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,16 +96,16 @@ test_list_instantiation( void )	{
 
 			ft_it++;
 			std_it++;
-			std::cout << "std= " << *std_it << std::endl;
-			std::cout << "ft = " << *ft_it << std::endl;
+			// std::cout << "std= " << *std_it << std::endl;
+			// std::cout << "ft = " << *ft_it << std::endl;
 			ft_it--;
 			std_it--;
-			std::cout << "std= " << *std_it << std::endl;
-			std::cout << "ft = " << *ft_it << std::endl;
+			// std::cout << "std= " << *std_it << std::endl;
+			// std::cout << "ft = " << *ft_it << std::endl;
 			ft_it--;
 			std_it--;
-			std::cout << "std= " << *std_it << std::endl;
-			std::cout << "ft = " << *ft_it << std::endl;
+			// std::cout << "std= " << *std_it << std::endl;
+			// std::cout << "ft = " << *ft_it << std::endl;
 			testBool(*ft_it == *std_it, __LINE__);
 
 			{
@@ -116,16 +116,16 @@ test_list_instantiation( void )	{
 				std_it--;
 				ft_it--;
 				std_it--;
-				std::cout << "std= " << *std_it << std::endl;
-				std::cout << "ft = " << *ft_it << std::endl;
+				// std::cout << "std= " << *std_it << std::endl;
+				// std::cout << "ft = " << *ft_it << std::endl;
 				ft_it++;
 				std_it++;
-				std::cout << "std= " << *std_it << std::endl;
-				std::cout << "ft = " << *ft_it << std::endl;
+				// std::cout << "std= " << *std_it << std::endl;
+				// std::cout << "ft = " << *ft_it << std::endl;
 				ft_it++;
 				std_it++;
-				std::cout << "std= " << *std_it << std::endl;
-				std::cout << "ft = " << *ft_it << std::endl;
+				// std::cout << "std= " << *std_it << std::endl;
+				// std::cout << "ft = " << *ft_it << std::endl;
 				testBool(*ft_it == *std_it, __LINE__);
 		}
 

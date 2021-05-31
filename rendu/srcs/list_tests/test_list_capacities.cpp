@@ -6,11 +6,21 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 08:43:18 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/18 09:50:28 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/31 14:52:38 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+# include "./tester/exampleClass.hpp"
 # include "./tester/bvaletteTester_list.hpp"
+
+template < typename T>
+void
+test_max_size()	{
+	std::list<T>	std_c0;
+	ft::list<T>		ft_c0;
+	if (testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__) != true)
+		std::cout << ERROR_TITLE << "Sizes returned : ft("<< ft_c0.max_size() <<") std("<< std_c0.max_size() <<")" << RESET_COLOR << std::endl;
+}
 
 int
 test_list_capacities( void )	{
@@ -44,58 +54,14 @@ test_list_capacities( void )	{
 
 		testBool(std.empty() == ft.empty(), __LINE__);
 	}
-	{
-		size_t		testSize = 0;
-		std::cout << SUBTITLE << "[ max_size for a list of " << testSize << " elements ]" << RESET_COLOR << std::endl;
-		std::list<bool>	std(testSize);
-		ft::list<bool>		ft(testSize);
-		testBool(std.max_size() == ft.max_size(), __LINE__);
-		std::cout << "bool : max_size for std : " << std.max_size() << std::endl;
-		std::cout << "bool : max_size for ft  : " << ft.max_size() << std::endl;
-
-	}
-	{
-		std::list<char>		std_c0;
-		ft::list<char>		ft_c0;
-		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
-		std::cout << "char : MAX SIZE = std. " << std_c0.max_size() << std::endl;
-		std::cout << "char : MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
-	}
-	{
-		std::list<std::string>		std_c0;
-		ft::list<std::string>		ft_c0;
-		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
-		std::cout << "std::string : MAX SIZE = std. " << std_c0.max_size() << std::endl;
-		std::cout << "std::string : MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
-	}
-	{
-		std::list<float>		std_c0;
-		ft::list<float>		ft_c0;
-		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
-		std::cout << "float : MAX SIZE = std. " << std_c0.max_size() << std::endl;
-		std::cout << "float : MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
-	}
-	{
-		std::list<int>		std_c0;
-		ft::list<int>			ft_c0;
-		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
-		std::cout << "int : MAX SIZE = std. " << std_c0.max_size() << std::endl;
-		std::cout << "int : MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
-	}
-	{
-		std::list<short>		std_c0;
-		ft::list<short>			ft_c0;
-		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
-		std::cout << "short : MAX SIZE = std. " << std_c0.max_size() << std::endl;
-		std::cout << "short : MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
-	}
-	{
-		std::list<double>		std_c0;
-		ft::list<double>			ft_c0;
-		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
-		std::cout << "double : MAX SIZE = std. " << std_c0.max_size() << std::endl;
-		std::cout << "double : MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
-	}
-
+	std::cout << HEADER_TITLE << "[ Max Size with various types ]" << RESET_COLOR << std::endl;
+	test_max_size<bool>();
+	test_max_size<short>();
+	test_max_size<char>();
+	test_max_size<int>();
+	test_max_size<float>();
+	test_max_size<double>();
+	test_max_size<std::string>();
+	test_max_size<exampleClass>();
 	return (0);
 }

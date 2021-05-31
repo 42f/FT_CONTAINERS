@@ -6,43 +6,72 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 15:53:56 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/18 09:50:28 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/31 14:59:34 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "./tester/bvaletteTester_list.hpp"
 
+
+void
+testAssign(ft::list<int> & ft_c0, std::list<int> & std_c0, size_t n, int val)	{
+
+		std::cout << SUBTITLE << "[ assign "<< n <<" elements of value "<< val <<" ]" << RESET_COLOR << std::endl;
+		ft_c0.assign(n, val);
+		std_c0.assign(n, val);
+		testList(ft_c0, std_c0, NOPRINT);
+}
+
+void
+testAssign(ft::list<int> & ft_c0, std::list<int> & std_c0,
+	ft::list<int>::iterator ft_it, ft::list<int>::iterator ft_ite,
+	std::list<int>::iterator std_it, std::list<int>::iterator std_ite){
+
+		std::cout << SUBTITLE << "[ assign with iterators ]" << RESET_COLOR << std::endl;
+		ft_c0.assign(ft_it, ft_ite);
+		std_c0.assign(std_it, std_ite);
+		testList(ft_c0, std_c0, NOPRINT);
+}
+
 int
 test_list_assign( void )	{
 	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with ints ~~~~~~~~~~~" << RESET_COLOR << std::endl;
 	{
-		std::cout << SUBTITLE << "[ Instanciate list of 3 elements value -1 ]" << RESET_COLOR << std::endl;
-		ft::list<int>	ftl0(3, -1);
-		std::list<int>	stdl0(3, -1);
-		testList(ftl0, stdl0, NOPRINT);
-		std::cout << SUBTITLE << "[ assign 5 with value 42 ]" << RESET_COLOR << std::endl;
-		ftl0.assign(5, 42);
-		stdl0.assign(5, 42);
-		testList(ftl0, stdl0, NOPRINT);
-		std::cout << SUBTITLE << "[ assign 1 with value 99 ]" << RESET_COLOR << std::endl;
-		ftl0.assign(1, 99);
-		stdl0.assign(1, 99);
-		testList(ftl0, stdl0, NOPRINT);
-		std::cout << SUBTITLE << "[ assign 1 with value 100 ]" << RESET_COLOR << std::endl;
-		ftl0.assign(1, 100);
-		stdl0.assign(1, 100);
-		testList(ftl0, stdl0, NOPRINT);
-		std::cout << SUBTITLE << "[ assign with Iterators from list containing 3 times value -1 ]" << RESET_COLOR << std::endl;
-		ft::list<int>	ftl1(3, -1);
-		std::list<int>	stdl1(3, -1);
-		ftl1.push_front(42);
-		stdl1.push_front(42);
-		ftl1.push_back(99);
-		stdl1.push_back(99);
-		ftl0.assign(ftl1.begin(), ftl1.end());
-		stdl0.assign(stdl1.begin(), stdl1.end());
-		testList(ftl0, stdl0, NOPRINT);
+		std::cout << HEADER_TITLE << "[ Instanciate list of 3 elements value -1 ]" << RESET_COLOR << std::endl;
+		ft::list<int>		ft_c0(3, -1);
+		std::list<int>	std_c0(3, -1);
+		testList(ft_c0, std_c0, NOPRINT);
 
+		testAssign(ft_c0, std_c0, 5, 42);
+		testAssign(ft_c0, std_c0, ft_c0.size() + 1, 99);
+		testAssign(ft_c0, std_c0, 1,100);
+		testAssign(ft_c0, std_c0, 100,1);
+		testAssign(ft_c0, std_c0, 0, 42);
+
+		ft_c0.clear();
+		std_c0.clear();
+
+		testAssign(ft_c0, std_c0, 100,1);
+
+
+		ft::list<int>		ft_c1(10, -1);
+		std::list<int>	std_c1(10, -1);
+		ft_c1.insert(ft_c1.begin(), 111);
+		std_c1.insert(std_c1.begin(), 111);
+		ft_c1.push_back(99);
+		std_c1.push_back(99);
+
+		testList(ft_c1, std_c1, NOPRINT);
+		testAssign(ft_c0, std_c0, ft_c1.end(), ft_c1.end(), std_c1.end(), std_c1.end());
+		testList(ft_c1, std_c1, NOPRINT);
+		testAssign(ft_c0, std_c0, --ft_c1.end(), ft_c1.end(), --std_c1.end(), std_c1.end());
+		testList(ft_c1, std_c1, NOPRINT);
+		testAssign(ft_c0, std_c0, ft_c1.begin()++, --ft_c1.end(), std_c1.begin()++, --std_c1.end());
+		testList(ft_c1, std_c1, NOPRINT);
+		testAssign(ft_c0, std_c0, ft_c1.begin(), ft_c1.end(), std_c1.begin(), std_c1.end());
+		testList(ft_c1, std_c1, NOPRINT);
+		testAssign(ft_c0, std_c0, ft_c1.begin(), ft_c1.begin(), std_c1.begin(), std_c1.begin());
+		testList(ft_c1, std_c1, NOPRINT);
 	}
 	return (0);
 }

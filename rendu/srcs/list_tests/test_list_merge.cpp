@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:01:41 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/18 09:50:28 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/31 15:49:49 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,8 @@ test_list_merge( void )	{
 		std::list<int>		stdl0;
 		ft::list<int>		ftl1;
 		std::list<int>		stdl1;
-		size_t				testSize = 1000000;
+		size_t			valgrind_factor = (VALGRIND_MODE == true) ? 10000 : 1;
+		size_t			testSize = 3000000 / valgrind_factor;
 
 		std::cout << SUBTITLE << "[ pushback " << testSize << " random values into list 0 and list 1 (different values)]" << RESET_COLOR << std::endl;
 

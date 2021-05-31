@@ -1,6 +1,7 @@
 #ifndef LIST_ITERATOR_HPP
 # define LIST_ITERATOR_HPP
 
+// # include "./list.hpp"
 # include "../utils/ft_enable_if.hpp"
 # include "../utils/ft_iterator_base.hpp"
 # include "../utils/ft_rev_iterator.hpp"
@@ -19,6 +20,9 @@ namespace ft	{
 	template< typename T, bool B >
 	class list_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T, B>
 	{
+		template<typename U, typename V>
+		friend class list;
+
 		private:
 
 			typedef typename	ft::node<T>			node;
@@ -72,9 +76,9 @@ namespace ft	{
 			pointer		operator->()	const	{ return &(_ptr->data); }
 			reference	operator*()	const		{ return _ptr->data; }
 
+		private:
 			node*		getPtr(void) const 		{ return (_ptr);	}
 
-		private:
 
 			node*				_ptr;
 

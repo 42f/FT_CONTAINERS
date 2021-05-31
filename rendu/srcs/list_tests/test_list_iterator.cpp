@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:01:30 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/31 14:36:20 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/31 16:25:01 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ test_list_iterator( void )	{
 		ft::list<int>::iterator		ft_it = ft_c0.begin();
 		ft::list<int>::iterator		ft_it2 = ft_c0.begin();
 		ft::list<int>::iterator		ft_itend = ft_c0.end();
-
 		std::cout << SUBTITLE << "[ test operator= ]" << RESET_COLOR << std::endl;
 		ft_it--;
 		ft_it2 = ft_it;

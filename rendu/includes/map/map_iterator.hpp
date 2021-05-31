@@ -21,6 +21,9 @@ namespace ft	{
 				typename map_node, bool B>
 	class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, ft::pair<const Key, T>, B > {
 
+		template< typename _k, typename _t, typename _c, typename _a>
+		friend class map;
+
 		public:
 
 			typedef	Compare										key_compare;
@@ -123,25 +126,25 @@ namespace ft	{
 			reference
 			operator*()	const			{ return (_ptr->item); }
 
-			map_node*			getPtr(void) const { return (_ptr);	}
-			map_node*			getPosParent(void) const {
-
-				if (_ptr != NULL)
-					return (_ptr->parent);
-				return (NULL);
-			}
-
-			map_node*			getDumbNode(void) const { return (_btreeDumdNode);	}
-			Compare				getComp(void) const { return (_comp);	}
-
-
 		private:
+
 			/**
 			 * @brief Pointer holding the address of the map_iterator element.
 			*/
 			map_node*			_ptr;
 			map_node*			_btreeDumdNode;
 			Compare				_comp;
+
+			map_node*			getDumbNode(void) const { return (_btreeDumdNode);	}
+			Compare				getComp(void) const 	{ return (_comp);	}
+			map_node*			getPtr(void) const 		{ return (_ptr);	}
+			map_node*			getPosParent(void) const	{
+
+				if (_ptr != NULL)
+					return (_ptr->parent);
+				return (NULL);
+			}
+
 
 			void
 			getNextBranch( void )	{

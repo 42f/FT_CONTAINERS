@@ -545,6 +545,12 @@ namespace ft	{
 				}
 				return newNode;
 			}
+
+			allocator_type
+			get_allocator() const	{
+				return allocator_type();
+			}
+
 		}; // ----------------- Class list
 
 	template <class T, class Alloc >

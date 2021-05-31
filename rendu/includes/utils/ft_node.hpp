@@ -13,13 +13,13 @@ namespace ft	{
 	template< typename T>
 	class node	{
 
-		// private:
-		public:
+		private:
 
 			node<T>	*next;
 			node<T>	*prev;
 			T		data;
 
+		public:
 
 			node( void ) : next(this), prev(this) {
 

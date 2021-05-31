@@ -23,6 +23,9 @@ namespace ft	{
 	template< typename T, bool B>
 	class vector_iterator : public ft::iterator< ft::random_access_iterator_tag, T, B>
 	{
+		template< typename U, typename V>
+		friend class vector;
+
 		public:
 			typedef typename ft::iterator<ft::random_access_iterator_tag, T, B>	iterator;
 			typedef typename iterator::difference_type							difference_type;
@@ -132,9 +135,9 @@ namespace ft	{
 			pointer		operator->()	const							{ return _ptr; }
 			reference	operator*()	const								{ return *_ptr; }
 
-			pointer		getPtr( void )	const							{ return _ptr; }
-
 		private:
+
+			pointer		getPtr( void )	const							{ return _ptr; }
 
 			/**
 			 * @brief Pointer holding the address of the vector_iterator element.

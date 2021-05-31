@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:23:15 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/26 13:37:00 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/31 16:53:58 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,15 @@ main_tester_map( void )	{
 	std::cout << MAIN_TITLE << " CONTAINER TESTER ============= " << __func__ << " ||||||| " << RESET_COLOR << std::endl;
 
 	try {
-
+/*
 		test_map_instantiation();
 		test_map_insert_erase();
+
+*/
+
 		test_map_capacities();
+
+/*
 		test_map_iterator();
 		test_map_at_operatorBrackets();
 		test_map_swap();
@@ -35,7 +40,7 @@ main_tester_map( void )	{
 		test_map_upper_bound();
 		test_map_equal_range();
 		test_map_reverseIterator();
-
+*/
 		{
 			std::cout << SUBTITLE << "For :" << __func__ <<", ALL TESTS PASSED ~~~~~~> " << RESET_COLOR;
 			std::cout << BLINK << "\t \xF0\x9F\x8E\x89 \xF0\x9F\x8E\x8A" << RESET_COLOR << std::endl;

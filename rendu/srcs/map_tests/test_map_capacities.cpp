@@ -10,7 +10,17 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+# include "./tester/exampleClass.hpp"
 # include "./tester/bvaletteTester_map.hpp"
+
+template < typename T, typename U>
+void
+test_max_size()	{
+	std::map<T, U>	std_c0;
+	ft::map<T, U>		ft_c0;
+	if (testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__) != true)
+		std::cout << ERROR_TITLE << "Sizes returned : ft("<< ft_c0.max_size() <<") std("<< std_c0.max_size() <<")" << RESET_COLOR << std::endl;
+}
 
 int
 test_map_capacities( void )	{
@@ -33,46 +43,23 @@ test_map_capacities( void )	{
 			testBool(std_c0.empty() == ft_c0.empty(), __LINE__, i);
 			testBool(std_c0.size() == ft_c0.size(), __LINE__, i);
 		}
-
-		std::cout << HEADER_TITLE << "[ max_size, only test if present, values might differ ]" << RESET_COLOR << std::endl;
-		std::cout << "MAX SIZE = std. " << std_c0.max_size() << std::endl;
-		std::cout << "MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
-		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
 	}
-	{
-		std::map<char, std::string>		std_c0;
-		ft::map<char, std::string>		ft_c0;
-		std::cout << " <char, std::string> : MAX SIZE = std. " << std_c0.max_size() << std::endl;
-		std::cout << " <char, std::string> : MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
-		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
-	}
-	{
-		std::map<std::string, u_int64_t>		std_c0;
-		ft::map<std::string, u_int64_t>		ft_c0;
-		std::cout << " <std::string, u_int64_t> : MAX SIZE = std. " << std_c0.max_size() << std::endl;
-		std::cout << " <std::string, u_int64_t> : MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
-		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
-	}
-	{
-		std::map<float, double>		std_c0;
-		ft::map<float, double>		ft_c0;
-		std::cout << " <float, double> : MAX SIZE = std. " << std_c0.max_size() << std::endl;
-		std::cout << " <float, double> : MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
-		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
-	}
-	{
-		std::map<std::vector<float>, char*>		std_c0;
-		ft::map<std::vector<float>, char*>		ft_c0;
-		std::cout << " <std::vector<float>, char*> : MAX SIZE = std. " << std_c0.max_size() << std::endl;
-		std::cout << " <std::vector<float>, char*> : MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
-		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
-	}
-	{
-		std::map<short, int>		std_c0;
-		ft::map<short, int>			ft_c0;
-		std::cout << " <short, int> : MAX SIZE = std. " << std_c0.max_size() << std::endl;
-		std::cout << " <short, int> : MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
-		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
-	}
+	std::cout << HEADER_TITLE << "[ Max Size with various types ]" << RESET_COLOR << std::endl;
+	test_max_size<bool, int>();
+	test_max_size<short, int>();
+	test_max_size<char, int>();
+	test_max_size<int, int>();
+	test_max_size<float, int>();
+	test_max_size<double, int>();
+	test_max_size<std::string, int>();
+	test_max_size<exampleClass, int>();
+	test_max_size<int, bool>();
+	test_max_size<int, short>();
+	test_max_size<int, char>();
+	test_max_size<int, int>();
+	test_max_size<int, float>();
+	test_max_size<int, double>();
+	test_max_size<int, std::string>();
+	test_max_size<int, exampleClass>();
 	return (0);
 }

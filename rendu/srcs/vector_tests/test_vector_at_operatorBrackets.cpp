@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:51:35 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/18 09:50:28 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/31 10:35:26 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ test_constAt(ft::vector<int> const & ft_c0, std::vector<int> const & std_c0) {
 		const int & constVal_std = std_c0.at(1);
 		const int & constVal_ft = ft_c0.at(1); 				//  !!!! ---> HINT:  IN CASE OF COMPILER ISSUE: const version is MISSING !
 		testBool(constVal_std == constVal_ft, __LINE__);
-		testBool( ft_c0[1] ==  std_c0[1], __LINE__);	//  !!!! ---> HINT:  IN CASE OF COMPILER ISSUE: const version is MISSING !
+		testBool( ft_c0[1] == std_c0[1], __LINE__);	//  !!!! ---> HINT:  IN CASE OF COMPILER ISSUE: const version is MISSING !
 }
 
 int
@@ -55,7 +55,7 @@ test_vector_at_operatorBrackets( void )	{
 		try {
 			try { std_c0.at(testSize); } catch (std::out_of_range & e) {};
 			ft_c0.at(testSize);
-			std::cout << "No exception thrown ! Bad !! " << std::endl;
+			std::cout << "No exception thrown ! Bad, it should have !! " << std::endl;
 			testBool(false, __LINE__);
 		}
 		catch ( std::out_of_range & e)	{
@@ -74,6 +74,12 @@ test_vector_at_operatorBrackets( void )	{
 
 		test_constAt(ft_c0, std_c0);
 
+		std::cout << SUBTITLE << " Changing value at index with operator[]" << RESET_COLOR << std::endl;
+		for (size_t i = 0; i < testSize - 1 ; i++)	{
+			ft_c0[i] = i + 42;
+			std_c0[i] = i + 42;
+		}
+		testVector(ft_c0, std_c0, NOPRINT);
 	}
 	return (0);
 }

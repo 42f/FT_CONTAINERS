@@ -6,10 +6,11 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:51:42 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/18 09:50:28 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/31 09:53:56 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+# include "./tester/exampleClass.hpp"
 # include "./tester/bvaletteTester_vector.hpp"
 
 #define NOVALUE -1
@@ -25,8 +26,9 @@ testReserve(size_t testSize, ft::vector<int> & ft_c0, std::vector<int> & std_c0)
 		testBool(ft_c0.capacity() >= testSize && std_c0.capacity() >= testSize, __LINE__);
 }
 
+template < typename T >
 void
-testResize(ft::vector<int> & ft_c0, std::vector<int> & std_c0, size_t testSize, int value = NOVALUE)	 {
+testResize(ft::vector<T> & ft_c0, std::vector<T> & std_c0, size_t testSize, int value = NOVALUE)	 {
 
 		if (value == NOVALUE)
 			std::cout << SUBTITLE << "[ resize to " << testSize << " with no value ]" << RESET_COLOR << std::endl;
@@ -43,30 +45,48 @@ test_vector_resize( void )	{
 	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with ints ~~~~~~~~~~~" << RESET_COLOR << std::endl;
 	{
 		std::cout << HEADER_TITLE << "[ Resize() ]" << RESET_COLOR << std::endl;
-		std::cout << SUBTITLE << "[ Instanciate vector of 3 elements with no value ]" << RESET_COLOR << std::endl;
-		ft::vector<int>	ft_c0(3);
+		std::cout << HEADER_TITLE << "[ Instanciate vector<int> of 3 elements with no value ]" << RESET_COLOR << std::endl;
+		ft::vector<int>		ft_c0(3);
 		std::vector<int>	std_c0(3);
 		testVector(ft_c0, std_c0, NOPRINT);
 
-		testResize(ft_c0, std_c0, 3);
-		testResize(ft_c0, std_c0, 5);
-		testResize(ft_c0, std_c0, 7);
+		testResize<int>(ft_c0, std_c0, 3);
+		testResize<int>(ft_c0, std_c0, 5);
+		testResize<int>(ft_c0, std_c0, 7);
 		std::cout << SUBTITLE << "[ push back 999 ]" << RESET_COLOR << std::endl;
 		ft_c0.push_back(999);
 		std_c0.push_back(999);
 		testVector(ft_c0, std_c0, NOPRINT);
 
-		testResize(ft_c0, std_c0, 3);
-		testResize(ft_c0, std_c0, 3);
-		testResize(ft_c0, std_c0, 3, 21);
-		testResize(ft_c0, std_c0, 5, 42);
-		testResize(ft_c0, std_c0, 7, 42);
-		testResize(ft_c0, std_c0, 4, 99);
-		testResize(ft_c0, std_c0, 4, 42);
-		testResize(ft_c0, std_c0, 4);
-		testResize(ft_c0, std_c0, 1000000);
-		testResize(ft_c0, std_c0, ft_c0.capacity() + 1);
-		testResize(ft_c0, std_c0, 0);
+		testResize<int>(ft_c0, std_c0, 32);
+		testResize<int>(ft_c0, std_c0, 3);
+		testResize<int>(ft_c0, std_c0, 3, 21);
+		testResize<int>(ft_c0, std_c0, 5, 42);
+		testResize<int>(ft_c0, std_c0, 7, 42);
+		testResize<int>(ft_c0, std_c0, 4, 99);
+		testResize<int>(ft_c0, std_c0, 4, 42);
+		testResize<int>(ft_c0, std_c0, 4);
+		testResize<int>(ft_c0, std_c0, 1000000);
+		testResize<int>(ft_c0, std_c0, ft_c0.capacity() + 1);
+		testResize<int>(ft_c0, std_c0, 0);
+
+		{
+			std::cout << HEADER_TITLE << "[ Instanciate vector<exampleClass> of 3 elements with no value ]" << RESET_COLOR << std::endl;
+			ft::vector<exampleClass>	ft_c0(3);
+			std::vector<exampleClass>	std_c0(3);
+			testVector(ft_c0, std_c0, NOPRINT);
+			testResize<exampleClass>(ft_c0, std_c0, 32);
+			testResize<exampleClass>(ft_c0, std_c0, 3);
+			testResize<exampleClass>(ft_c0, std_c0, 3, 21);
+			testResize<exampleClass>(ft_c0, std_c0, 5, 42);
+			testResize<exampleClass>(ft_c0, std_c0, 7, 42);
+			testResize<exampleClass>(ft_c0, std_c0, 4, 99);
+			testResize<exampleClass>(ft_c0, std_c0, 4, 42);
+			testResize<exampleClass>(ft_c0, std_c0, 4);
+			testResize<exampleClass>(ft_c0, std_c0, 1000000);
+			testResize<exampleClass>(ft_c0, std_c0, ft_c0.capacity() + 1);
+			testResize<exampleClass>(ft_c0, std_c0, 0);
+		}
 
 		size_t testResize = std_c0.max_size();
 		std::cout << SUBTITLE << "[ resize("<< testResize << ") Max size, will throw exception ]" << RESET_COLOR << std::endl;
@@ -113,15 +133,15 @@ test_vector_resize( void )	{
 		}
 		catch (  std::length_error & e )	{
 			std::cout << "Exception thrown: std::length_error, as it should." << std::endl;
-			testBool( true, __LINE__);
+			testBool(true);
 		}
 		catch (  std::bad_alloc & e )	{
 			std::cout << "Exception thrown: std::bad_alloc, should be length_error but it's ok..." << std::endl;
-			testBool( true, __LINE__);
+			testBool(true);
 		}
 		catch (  std::exception & e )	{
 			std::cout << "Exception thrown: std::exception, should be length_error but it's ok..." << std::endl;
-			testBool( true, __LINE__);
+			testBool(true);
 		}
 		testVector(ft_c0, std_c0, NOPRINT);
 		std::cout << "New Capacities after reserve: ft(" << ft_c0.capacity() << ") ; std(" << std_c0.capacity() << ")" << std::endl;

@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:50:19 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/18 09:50:28 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/31 10:15:44 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,32 +18,40 @@ testInsert ( void )	{
 		std::cout << HEADER_TITLE << "[ Instanciate vector of 4 strings ]" << RESET_COLOR << std::endl;
 		ft::vector<std::string>		ft_c0(4, "___");
 		std::vector<std::string>	std_c0(4, "___");
+		ft::vector<std::string>::iterator	ft_ret;
+		std::vector<std::string>::iterator	std_ret;
 		testVector(ft_c0, std_c0, NOPRINT);
 
 		std::cout << SUBTITLE << "[ Insert with insert(iterator, value) ]" << RESET_COLOR << std::endl;
 
-		ft_c0.insert(ft_c0.begin(), "A");
-		std_c0.insert(std_c0.begin(), "A");
+		ft_ret = ft_c0.insert(ft_c0.begin(), "A");
+		std_ret = std_c0.insert(std_c0.begin(), "A");
+		testBool(*ft_ret == *std_ret, __LINE__);
 		testVector(ft_c0, std_c0, NOPRINT);
 
-		ft_c0.insert(ft_c0.begin(), "B");
-		std_c0.insert(std_c0.begin(), "B");
+		ft_ret = ft_c0.insert(ft_c0.begin(), "B");
+		std_ret = std_c0.insert(std_c0.begin(), "B");
+		testBool(*ft_ret == *std_ret, __LINE__);
 		testVector(ft_c0, std_c0, NOPRINT);
 
-		ft_c0.insert(++ft_c0.begin(), "42");
-		std_c0.insert(++std_c0.begin(), "42");
+		ft_ret = ft_c0.insert(++ft_c0.begin(), "42");
+		std_ret = std_c0.insert(++std_c0.begin(), "42");
+		testBool(*ft_ret == *std_ret, __LINE__);
 		testVector(ft_c0, std_c0, NOPRINT);
 
-		ft_c0.insert(--ft_c0.end(), "The End...");
-		std_c0.insert(--std_c0.end(), "The End...");
+		ft_ret = ft_c0.insert(--ft_c0.end(), "The End...");
+		std_ret = std_c0.insert(--std_c0.end(), "The End...");
+		testBool(*ft_ret == *std_ret, __LINE__);
 		testVector(ft_c0, std_c0, NOPRINT);
 
-		ft_c0.insert(ft_c0.end(), "End...");
-		std_c0.insert(std_c0.end(), "End...");
+		ft_ret = ft_c0.insert(ft_c0.end(), "End...");
+		std_ret = std_c0.insert(std_c0.end(), "End...");
+		testBool(*ft_ret == *std_ret, __LINE__);
 		testVector(ft_c0, std_c0, NOPRINT);
 
-		ft_c0.insert(ft_c0.begin() + ft_c0.size() / 2, "middle...");
-		std_c0.insert(std_c0.begin() + std_c0.size() / 2, "middle...");
+		ft_ret = ft_c0.insert(ft_c0.begin() + ft_c0.size() / 2, "middle...");
+		std_ret = std_c0.insert(std_c0.begin() + std_c0.size() / 2, "middle...");
+		testBool(*ft_ret == *std_ret, __LINE__);
 		testVector(ft_c0, std_c0, NOPRINT);
 
 
@@ -205,7 +213,7 @@ testErase (void )	{
 		size_t	testSize = 10;
 		std::cout << HEADER_TITLE << "[ Instanciate vector with "<< testSize <<" \"helloWorld\" ]" << RESET_COLOR << std::endl;
 
-		ft::vector<std::string>	ft_c0(testSize, "helloWorld");
+		ft::vector<std::string>		ft_c0(testSize, "helloWorld");
 		std::vector<std::string>	std_c0(testSize, "helloWorld");
 
 		for (size_t i = 0; i < 2; i++)	{
@@ -320,13 +328,11 @@ test_vector_insert_erase( void )	{
 			stdIte = std_c0.begin() + 1;
 			testEraseRange(ft_c0, std_c0, ftIt, ftIte, stdIt, stdIte);
 
-
 			ftIt = ft_c0.end() - 5;
 			ftIte = ft_c0.end() - 0;
 			stdIt = std_c0.end() - 5;
 			stdIte = std_c0.end() - 0;
 			testEraseRange(ft_c0, std_c0, ftIt, ftIte, stdIt, stdIte);
-
 
 			ftIt = ft_c0.begin() + 4;
 			ftIte = ft_c0.begin() + 11;

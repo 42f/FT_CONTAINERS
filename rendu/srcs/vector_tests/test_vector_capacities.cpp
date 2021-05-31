@@ -6,11 +6,20 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:48:58 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/24 09:42:53 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/31 09:43:04 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+# include "./tester/exampleClass.hpp"
 # include "./tester/bvaletteTester_vector.hpp"
+
+template < typename T>
+void
+test_max_size()	{
+	std::vector<T>		std_c0;
+	ft::vector<T>		ft_c0;
+	testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
+}
 
 int
 test_vector_capacities( void )	{
@@ -32,7 +41,7 @@ test_vector_capacities( void )	{
 		size_t		testSize = 5;
 		std::cout << HEADER_TITLE << "[ Size and capacity on vector with " << testSize << " elements ]" << RESET_COLOR << std::endl;
 		std::vector<int>	std(testSize);
-		ft::vector<int>	ft(testSize);
+		ft::vector<int>		ft(testSize);
 
 		std::cout << "Size of std : " << std.size() << std::endl;
 		std::cout << "Size of ft  : " << ft.size() << std::endl;
@@ -55,58 +64,27 @@ test_vector_capacities( void )	{
 		testBool(std.max_size() == ft.max_size(), __LINE__);
 
 	}
+	// ------------ bool specialization not tested
 	// {
 	// 	size_t		testSize = 0;
 	// 	std::cout << SUBTITLE << "[ max_size for a vector of " << testSize << " elements ]" << RESET_COLOR << std::endl;
 	// 	std::vector<bool>	std(testSize);
 	// 	ft::vector<bool>		ft(testSize);
+	// 	std::cout << "Bool ft: " << ft.max_size() << std::endl;
+	// 	std::cout << "Bool std:" << std.max_size() << std::endl;
 	// 	testBool(std.max_size() == ft.max_size(), __LINE__);
 	// 	std::cout << "bool : max_size for std : " << std.max_size() << std::endl;
 	// 	std::cout << "bool : max_size for ft  : " << ft.max_size() << std::endl;
 
 	// }
-	{
-		std::vector<char>		std_c0;
-		ft::vector<char>		ft_c0;
-		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
-		std::cout << "char : MAX SIZE = std. " << std_c0.max_size() << std::endl;
-		std::cout << "char : MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
-	}
-	{
-		std::vector<std::string>		std_c0;
-		ft::vector<std::string>		ft_c0;
-		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
-		std::cout << "std::string : MAX SIZE = std. " << std_c0.max_size() << std::endl;
-		std::cout << "std::string : MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
-	}
-	{
-		std::vector<float>		std_c0;
-		ft::vector<float>		ft_c0;
-		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
-		std::cout << "float : MAX SIZE = std. " << std_c0.max_size() << std::endl;
-		std::cout << "float : MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
-	}
-	{
-		std::vector<int>		std_c0;
-		ft::vector<int>			ft_c0;
-		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
-		std::cout << "int : MAX SIZE = std. " << std_c0.max_size() << std::endl;
-		std::cout << "int : MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
-	}
-	{
-		std::vector<short>		std_c0;
-		ft::vector<short>			ft_c0;
-		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
-		std::cout << "short : MAX SIZE = std. " << std_c0.max_size() << std::endl;
-		std::cout << "short : MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
-	}
-	{
-		std::vector<double>		std_c0;
-		ft::vector<double>			ft_c0;
-		testBool(std_c0.max_size() == ft_c0.max_size(), __LINE__);
-		std::cout << "double : MAX SIZE = std. " << std_c0.max_size() << std::endl;
-		std::cout << "double : MAX SIZE = ft . " << ft_c0.max_size() << std::endl;
-	}
 
+	std::cout << HEADER_TITLE << "[ Max Size with various types ]" << RESET_COLOR << std::endl;
+	test_max_size<short>();
+	test_max_size<char>();
+	test_max_size<int>();
+	test_max_size<float>();
+	test_max_size<double>();
+	test_max_size<std::string>();
+	test_max_size<exampleClass>();
 	return (0);
 }

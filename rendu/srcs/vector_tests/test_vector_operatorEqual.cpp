@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:52:23 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/18 09:50:28 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/31 10:54:14 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,12 @@ test_vector_operatorEqual( void )	{
 
 		testVector(ft_c0, std_c0, NOPRINT);
 		testVector(ft_c1, std_c1, NOPRINT);
+
+		std::cout << SUBTITLE << "[ vector0=vector0 ! same object ]" << RESET_COLOR << std::endl;
+		ft_c0 = ft_c0;
+		std_c0 = std_c0;
+
+		testVector(ft_c0, std_c0, NOPRINT);
 	}
 	return (0);
 }

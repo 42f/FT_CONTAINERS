@@ -248,7 +248,7 @@ namespace ft	{
 
 				difference_type indexPos = position - begin();
 				insert(position, 1, val);
-				return begin() + indexPos; 		// to change
+				return begin() + indexPos;
 			}
 
 			/**
@@ -411,6 +411,9 @@ namespace ft	{
 				return (*(this->_head + n));
 			}
 
+			allocator_type get_allocator() const { return allocator_type(); }
+
+
 /******************************************************************************.
 .******************************************************************************.
 .*********** PRIVATE MEMBER FUNCTIONS AND HELPERS  ****************************.
@@ -516,8 +519,6 @@ namespace ft	{
 				for (;first != last; first++)	{
 					this->_alloc.construct(this->_tail, *first);
 					this->_tail++;
-					if (this->_tail == this->_tailStorage)
-						std::cout << "RESIZE HERE" << std::endl;			// not fixed yet
 				}
 			}
 
@@ -527,8 +528,6 @@ namespace ft	{
 				for (;first != last; first++)	{
 					this->_alloc.construct(this->_tail, *first);
 					this->_tail++;
-					if (this->_tail == this->_tailStorage)
-						std::cout << "RESIZE HERE" << std::endl;			// not fixed yet
 				}
 			}
 			/**
@@ -617,7 +616,8 @@ namespace ft	{
 			 * @brief Move [first, last] range by n memory blocks to theLeft
 			*/
 			void
-			memMoveLeft(iterator first, iterator last, size_t n)	{			// to be tested
+			memMoveLeft(iterator first, iterator last, size_t n)	{
+
 				while (first != last)	{
 					constructObjects(first.getPtr() - n, 1, *first);
 					destroyObjects(first.getPtr(), 1);

@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:48:00 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/18 09:50:28 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/31 10:25:55 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void
 testAssign(ft::vector<int> & ft_c0, std::vector<int> & std_c0, size_t n, int val)	{
 
-		std::cout << SUBTITLE << "[ assign "<< n <<" with value "<< val <<" ]" << RESET_COLOR << std::endl;
+		std::cout << SUBTITLE << "[ assign "<< n <<" elements of value "<< val <<" ]" << RESET_COLOR << std::endl;
 		ft_c0.assign(n, val);
 		std_c0.assign(n, val);
 		testVector(ft_c0, std_c0, NOPRINT);
@@ -47,14 +47,20 @@ test_vector_assign( void )	{
 		testAssign(ft_c0, std_c0, 100,1);
 		testAssign(ft_c0, std_c0, 0, 42);
 
+		ft_c0.clear();
+		std_c0.clear();
+
+		testAssign(ft_c0, std_c0, 100,1);
+
+
 		ft::vector<int>		ft_c1(10, -1);
 		std::vector<int>	std_c1(10, -1);
 		ft_c1.insert(ft_c1.begin(), 111);
 		std_c1.insert(std_c1.begin(), 111);
 		ft_c1.push_back(99);
 		std_c1.push_back(99);
-		testVector(ft_c1, std_c1, NOPRINT);
 
+		testVector(ft_c1, std_c1, NOPRINT);
 		testAssign(ft_c0, std_c0, ft_c1.end(), ft_c1.end(), std_c1.end(), std_c1.end());
 		testVector(ft_c1, std_c1, NOPRINT);
 		testAssign(ft_c0, std_c0, --ft_c1.end(), ft_c1.end(), --std_c1.end(), std_c1.end());

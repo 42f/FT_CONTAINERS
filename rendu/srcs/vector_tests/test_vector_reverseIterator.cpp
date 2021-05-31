@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:51:28 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/28 11:23:50 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/28 11:50:36 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,6 @@ test_vector_reverseIterator( void )	{
 		std::cout << SUBTITLE << "[ loop test reverse_iterator increment vs. reverse_iterator + i ]" << RESET_COLOR << std::endl;
 		for (size_t i = 0; i <= ft_c0.size(); i++)
 		{
-			std::cout << i << " : ft ."<< *ft_it << std::endl;
-			std::cout << i << " : ft ."<< *(ft_it2 + i) << std::endl;
-			std::cout << i << " : std."<< *std_it << std::endl;
-			std::cout << i << " : std."<< *(std_it2 + i) << std::endl;
 			testBool(*ft_it == *(ft_it2 + i) && *std_it == *(std_it2 + i), __LINE__, i);
 			ft_it++;
 			std_it++;
@@ -152,19 +148,24 @@ test_vector_reverseIterator( void )	{
 		testBool(ft_it0 - ft_it1 == std_it0 - std_it1, __LINE__);
 		testBool(ft_it1 - ft_it0 == std_it1 - std_it0, __LINE__);
 
+		std::cout << SUBTITLE << "[ reverse_iterator substraction ]" << RESET_COLOR << std::endl;
+		ft_it0 = ft_c0.rbegin() - 1;
+		std_it0 = std_c0.rbegin() - 1;
+		testBool(*ft_it0 == *std_it0, __LINE__);
+
 		std::cout << SUBTITLE << "[ reverse_iterator's value changed but dereferencing with operator*]" << RESET_COLOR << std::endl;
 		*ft_it0 = 5000;
 		*std_it0 = 5000;
 		testBool(*ft_it0 == *std_it0, __LINE__);
 		testVector(ft_c0, std_c0, NOPRINT);
-		std::cout << SUBTITLE << "[ reverse_iterator's value changed but dereferencing with operator[] ]" << RESET_COLOR << std::endl;
+		std::cout << SUBTITLE << "[ reverse_iterator's value changed by dereferencing with operator[] ]" << RESET_COLOR << std::endl;
 		ft_it0[1] = 42;
 		std_it0[1] = 42;
 		testBool(*ft_it0 == *std_it0, __LINE__);
 		testVector(ft_c0, std_c0, NOPRINT);
 	}
 	{
-		std::cout << SUBTITLE << "[ reverse_iterator's value changed but dereferencing with operator->]" << RESET_COLOR << std::endl;
+		std::cout << SUBTITLE << "[ reverse_iterator's value changed by dereferencing with operator->]" << RESET_COLOR << std::endl;
 
 		ft::vector<std::pair<int, int> >				ft_c0(12, std::make_pair(1, 2));
 		std::vector<std::pair<int, int> >				std_c0(12, std::make_pair(1, 2));

@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:23:15 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/28 11:17:47 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/31 10:54:19 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,23 +21,20 @@ main_tester_vector( void )	{
 	try {
 
 		test_vector_instantiation();
-
 		test_vector_iterator();
 		test_vector_reverseIterator();
-
-		// test_vector_capacities();
-		// test_vector_resize();
-		// test_vector_insert_erase();
-		// test_vector_push_back_pop_back();
-		// test_vector_assign();
-		// test_vector_clear();
-		// test_vector_at_operatorBrackets();
-
-		// test_vector_member_swap();
-		// test_vector_nonmember_swap();
-		// test_vector_element_access();
-		// test_vector_relational_operators();
-		// test_vector_operatorEqual();
+		test_vector_capacities();
+		test_vector_resize();
+		test_vector_insert_erase();
+		test_vector_push_back_pop_back();
+		test_vector_assign();
+		test_vector_clear();
+		test_vector_at_operatorBrackets();
+		test_vector_element_access();
+		test_vector_member_swap();
+		test_vector_nonmember_swap();
+		test_vector_relational_operators();
+		test_vector_operatorEqual();
 
 		if (DEBUG_MODE == 0)
 		{

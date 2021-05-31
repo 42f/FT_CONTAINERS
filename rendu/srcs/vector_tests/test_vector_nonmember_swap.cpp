@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:52:27 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/18 09:50:28 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/05/31 10:52:03 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,14 @@ test_vector_nonmember_swap( void )	{
 		ft::swap(ft_c0, ft_c1);
 		std::swap(std_c0, std_c1);
 		testVector(ft_c0, std_c0, NOPRINT, "Test vector0");
+		testVector(ft_c1, std_c1, NOPRINT, "Test vector1");
+
+		std::cout << SUBTITLE << "[ call swap with the same object ]" << RESET_COLOR << std::endl;
+		ft::swap(ft_c0, ft_c0);
+		std::swap(std_c0, std_c0);
+		testVector(ft_c0, std_c0, NOPRINT, "Test vector0");
+		ft::swap(ft_c1, ft_c1);
+		std::swap(std_c1, std_c1);
 		testVector(ft_c1, std_c1, NOPRINT, "Test vector1");
 	}
 	return (0);

@@ -31,6 +31,9 @@ test_basic_brackets()	{
 		ft_c0[42];
 		std_c0[42];
 		testBool(ft_c0[42] == std_c0[42], __LINE__);
+		ft_c0[-42];
+		std_c0[-42];
+		testBool(ft_c0[-42] == std_c0[-42], __LINE__);
 }
 
 template<typename T_FT, typename T_STD>
@@ -40,7 +43,6 @@ test_brackets(void)	{
 		std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " ~~~~~~~~~~~" << RESET_COLOR << std::endl;
 		T_FT		ft_c0;
 		T_STD		std_c0;
-
 
 		srand(reinterpret_cast<long unsigned int>(&std_c0));
 		size_t	testSize = 20 + rand() % 10000;

@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 10:09:19 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/21 16:12:46 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/06/01 11:27:26 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,14 @@ int
 test_map_find( void )	{
 	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " ~~~~~~~~~~~" << RESET_COLOR << std::endl;
 	{
-		int testSize = 5000;
+		size_t			valgrind_factor = (VALGRIND_MODE == true) ? 100 : 1;
+		size_t			testSize = 3000 / valgrind_factor;
 		int findKey = 42;
 		std::cout << HEADER_TITLE << "[ Test find function with map of " << testSize << " int key and exampleClass mapped value ]" << RESET_COLOR << std::endl;
 
 		std::vector<ft::pair<int, exampleClass> >	ft_val_0(testSize);
 		std::vector<std::pair<int, exampleClass> >	std_val_0(testSize);
-		for (int i = 0; i < testSize; i++)	{
+		for (size_t i = 0; i < testSize; i++)	{
 			srand(i);
 			int val = rand() % testSize;
 			if (i == testSize / 2)

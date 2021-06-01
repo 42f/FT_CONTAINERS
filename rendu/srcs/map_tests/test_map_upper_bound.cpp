@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 15:37:34 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/22 08:54:54 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/06/01 11:30:18 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,14 @@ int
 test_map_upper_bound( void )	{
 	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " ~~~~~~~~~~~" << RESET_COLOR << std::endl;
 	{
-		int testSize = 5000;
+		size_t			valgrind_factor = (VALGRIND_MODE == true) ? 100 : 1;
+		size_t			testSize = 5000 / valgrind_factor;
 		int findKey = 42;
 		std::cout << HEADER_TITLE << "[ Test upper_bound function with map of " << testSize << " int key and exampleClass mapped value ]" << RESET_COLOR << std::endl;
 
 		std::vector<ft::pair<int, exampleClass> >	ft_val_0(testSize);
 		std::vector<std::pair<int, exampleClass> >	std_val_0(testSize);
-		for (int i = 0; i < testSize; i++)	{
+		for (size_t i = 0; i < testSize; i++)	{
 			int val = rand() % testSize;
 			if (i == testSize / 2)
 				findKey = val;

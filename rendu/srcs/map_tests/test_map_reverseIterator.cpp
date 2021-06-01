@@ -76,14 +76,15 @@ test_map_reverseIterator( void )	{
 	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " with ints ~~~~~~~~~~~" << RESET_COLOR << std::endl;
 
 	{
-		int testSize = 5000;
+		size_t			valgrind_factor = (VALGRIND_MODE == true) ? 100 : 1;
+		size_t			testSize = 5000 / valgrind_factor;
 		int findKey = 42;
 		std::cout << HEADER_TITLE << "[ Create a map of " << testSize << " int key and int mapped value ]" << RESET_COLOR << std::endl;
 
 		std::vector<ft::pair<int, int> >	ft_val_0(testSize);
 		std::vector<std::pair<int, int> >	std_val_0(testSize);
 		srand(time(NULL));
-		for (int i = 0; i < testSize; i++)	{
+		for (size_t i = 0; i < testSize; i++)	{
 			int val = rand() % testSize;
 			if (i == testSize / 2)
 				findKey = val;

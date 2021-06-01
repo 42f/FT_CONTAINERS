@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:50:31 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/28 10:25:52 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/06/01 11:49:34 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,21 @@ test_vector_instantiation( void )	{
 			ft::vector<exampleClass>	ft_c0(5);
 			std::vector<exampleClass>	std_c0(5);
 			testVector(ft_c0, std_c0, NOPRINT);
+		}
+		std::cout << SUBTITLE << "[ FILL CONSTRUCTOR with larger than max_size n value ]" << RESET_COLOR << std::endl;
+		{
+			try { std::vector<int>	std_c0(std::vector<int>().max_size() + 1);	}
+			catch(const std::exception& e)	{}
+
+			try {
+				ft::vector<int>		ft_c0(ft::vector<int>().max_size() + 1);
+				std::cout << ERROR_SOURCE << "SHOULD HAVE THROW A BAD ALLOC..." << RESET_COLOR << std::endl;
+				testBool(false, __LINE__);
+			}
+			catch(const std::bad_alloc& e)	{
+				std::cout << "Exception catched: " << e.what() << " -- ";
+				testBool(true);
+			}
 		}
 		std::cout << SUBTITLE << "[ RANGE CONSTRUCTOR test: vector0 with fill and vector1 with range ctor from vector0 iterators ]" << RESET_COLOR << std::endl;
 		{

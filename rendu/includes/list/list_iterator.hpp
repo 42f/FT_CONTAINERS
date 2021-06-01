@@ -1,7 +1,6 @@
 #ifndef LIST_ITERATOR_HPP
 # define LIST_ITERATOR_HPP
 
-// # include "./list.hpp"
 # include "../utils/ft_enable_if.hpp"
 # include "../utils/ft_iterator_base.hpp"
 # include "../utils/ft_rev_iterator.hpp"
@@ -20,12 +19,10 @@ namespace ft	{
 	template< typename T, bool B >
 	class list_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T, B>
 	{
-		template<typename U, typename V>
-		friend class list;
 
 		private:
 
-			typedef typename	ft::node<T>			node;
+			typedef typename ft::node<T>			node;
 
 		public:
 
@@ -35,14 +32,18 @@ namespace ft	{
 			typedef typename iterator::reference								reference;
             typedef typename iterator::pointer									pointer;
 
-			list_iterator( void ) :_ptr(NULL) {}
-			list_iterator(node* src) :_ptr(src) {}
-			list_iterator(const list_iterator& itSrc) : _ptr(itSrc.getPtr()) {}
+			typedef typename ft::ft_enable_if<B, node&, const node&>::type		node_reference;
+			typedef typename ft::ft_enable_if<B, node*, const node*>::type		node_pointer;
+
+			list_iterator( node_pointer src = NULL ) :_ptr(src) {}
+			// list_iterator( const list_iterator& itSrc ) { _ptr = itSrc.getPtr(); }
+			list_iterator( const list_iterator<T, false>& src ) { _ptr = src.getPtr(); }
+			list_iterator( const list_iterator<T, true>& src ) { _ptr = src.getPtr(); }
 			~list_iterator( void ) {}
 
 			list_iterator&
-			operator=( const list_iterator& src )	{
-				if (*this != src)	{
+			operator=( const list_iterator& src ) {
+				if (this != &src)	{
 					_ptr = src.getPtr();
 				}
 				return (*this);
@@ -70,17 +71,22 @@ namespace ft	{
 				return tmp;
 			}
 
-			bool 		operator==(const list_iterator& rhs) const { return _ptr==rhs._ptr; }
-			bool 		operator!=(const list_iterator& rhs) const { return _ptr!=rhs._ptr; }
+			// bool 		operator==(const list_iterator& rhs) const { return _ptr==rhs.getPtr(); }
+			// bool 		operator!=(const list_iterator& rhs) const { return _ptr!=rhs.getPtr(); }
+
+			bool 		operator==(const list_iterator<T, false>& rhs) const { return _ptr==rhs.getPtr(); }
+			bool 		operator==(const list_iterator<T, true>& rhs) const { return _ptr==rhs.getPtr(); }
+			bool 		operator!=(const list_iterator<T, false>& rhs) const { return _ptr!=rhs.getPtr(); }
+			bool 		operator!=(const list_iterator<T, true>& rhs) const { return _ptr!=rhs.getPtr(); }
 
 			pointer		operator->()	const	{ return &(_ptr->data); }
-			reference	operator*()	const		{ return _ptr->data; }
+			reference	operator*()		const	{ return _ptr->data; }
+
+			node_pointer		getPtr(void) const 		{ return (_ptr);	}
 
 		private:
-			node*		getPtr(void) const 		{ return (_ptr);	}
 
-
-			node*				_ptr;
+			node_pointer		_ptr;
 
 	}; //----------------- Classlist_iterator
 

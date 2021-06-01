@@ -2,6 +2,9 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "../containers_test"
 		}
 	],
 	"settings": {
@@ -74,7 +77,9 @@
 			"__cxx_version": "cpp",
 			"__tree": "cpp",
 			"map": "cpp",
-			"clocale": "cpp"
+			"clocale": "cpp",
+			"queue": "cpp",
+			"stack": "cpp"
 		}
 	},
 	"launch": {

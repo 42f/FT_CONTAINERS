@@ -46,11 +46,11 @@ namespace ft	{
 			typedef typename Allocator::pointer							pointer;
 			typedef typename Allocator::const_pointer					const_pointer;
 
-			typedef ft::list_iterator<T, false>							iterator;
-			typedef ft::list_iterator<T, true>							const_iterator;
+			typedef typename ft::list_iterator<T, false>						iterator;
+			typedef typename ft::list_iterator<T, true>							const_iterator;
 
-			typedef ft::reverse_iterator<list_iterator<T, false> >		reverse_iterator;
-			typedef ft::reverse_iterator<list_iterator<T, true> >		const_reverse_iterator;
+			typedef typename ft::reverse_iterator<list_iterator<T, false> >		reverse_iterator;
+			typedef typename ft::reverse_iterator<list_iterator<T, true> >		const_reverse_iterator;
 
 /******************************************************************************.
 .******************************************************************************.
@@ -237,7 +237,6 @@ namespace ft	{
 				}
 				return last;
 			}
-
 
 			void
 			resize (size_type n, value_type val = value_type())	{

@@ -29,7 +29,7 @@ namespace ft	{
 			reverse_iterator( void ) : _base(iterator_type())	{}
 
 			explicit
-			reverse_iterator( iterator_type it ) : _base(++it)	{}
+			reverse_iterator( iterator_type it ) : _base(it++)	{}
 
 			template<class U>
 			reverse_iterator( const reverse_iterator<U>& rev_it)	: _base(rev_it.base())	{}

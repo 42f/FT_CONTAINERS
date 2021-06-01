@@ -308,6 +308,8 @@ namespace ft	{
 			void
 			splice (iterator position, list& x, iterator first, iterator last)	{
 
+				// for(iterator it = begin(); it != end(); it++)
+				// 	std::cout << "node -> " << *it << " @ " << it.getPtr() << std::endl;
 				if (first != last && x.size() > 0)	{
 
 					difference_type sizeSplice = 0;
@@ -318,13 +320,18 @@ namespace ft	{
 					first.getPtr()->hook(position.getPtr());
 					if (position.getPtr() == _head)
 						_head = first.getPtr();
-					if (first.getPtr() == x._head)
-						x._head = last.getPtr();
-					this->incSize(sizeSplice);
-					x.decSize(sizeSplice);
-					if (x.size() == 0)
-						x._head = x._tail;
+					if (this != &x)	{
+						if (first.getPtr() == x._head)
+							x._head = last.getPtr();
+						this->incSize(sizeSplice);
+						x.decSize(sizeSplice);
+						if (x.size() == 0)
+							x._head = x._tail;
+					}
 				}
+				// std::cout << "========= node -> " << *(begin()) << " @ " << (begin()).getPtr() << std::endl;
+				// for(iterator it = begin(); it != end(); it++)
+				// 	std::cout << "node -> " << *it << " @ " << it.getPtr() << std::endl;
 			}
 
 			void remove (const value_type& val)	{

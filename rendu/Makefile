@@ -117,51 +117,51 @@ SRCS += ./main_utils.cpp
 #-------- LIST #################################################################
 ################################################################################
 
-SRCS += ./main_tester_list.cpp
+# SRCS += ./main_tester_list.cpp
 
-SRCS += ./test_list_instantiation.cpp
-SRCS += ./test_list_push_back_push_front_pop_back_pop_front.cpp
-SRCS += ./test_list_clear.cpp
-SRCS += ./test_list_capacities.cpp
-SRCS += ./test_list_insert_erase.cpp
-SRCS += ./test_list_operatorEqual.cpp
-SRCS += ./test_list_resize.cpp
-SRCS += ./test_list_assign.cpp
-SRCS += ./test_list_member_swap.cpp
-SRCS += ./test_list_nonmember_swap.cpp
-SRCS += ./test_list_relational_operators.cpp
-SRCS += ./test_list_splice.cpp
-SRCS += ./test_list_remove_if.cpp
-SRCS += ./test_list_remove.cpp
-SRCS += ./test_list_unique.cpp
-SRCS += ./test_list_merge.cpp
-SRCS += ./test_list_sort.cpp
-SRCS += ./test_list_iterator.cpp
-SRCS += ./test_list_reverseIterator.cpp
-SRCS += ./test_list_reverse.cpp
-SRCS += ./test_list_element_access.cpp
+# SRCS += ./test_list_instantiation.cpp
+# SRCS += ./test_list_push_back_push_front_pop_back_pop_front.cpp
+# SRCS += ./test_list_clear.cpp
+# SRCS += ./test_list_capacities.cpp
+# SRCS += ./test_list_insert_erase.cpp
+# SRCS += ./test_list_operatorEqual.cpp
+# SRCS += ./test_list_resize.cpp
+# SRCS += ./test_list_assign.cpp
+# SRCS += ./test_list_member_swap.cpp
+# SRCS += ./test_list_nonmember_swap.cpp
+# SRCS += ./test_list_relational_operators.cpp
+# SRCS += ./test_list_splice.cpp
+# SRCS += ./test_list_remove_if.cpp
+# SRCS += ./test_list_remove.cpp
+# SRCS += ./test_list_unique.cpp
+# SRCS += ./test_list_merge.cpp
+# SRCS += ./test_list_sort.cpp
+# SRCS += ./test_list_iterator.cpp
+# SRCS += ./test_list_reverseIterator.cpp
+# SRCS += ./test_list_reverse.cpp
+# SRCS += ./test_list_element_access.cpp
 
 # ################################################################################
 # #-------- VECTOR ###############################################################
 # ################################################################################
 
-# SRCS += ./main_tester_vector.cpp
+SRCS += ./main_tester_vector.cpp
 
-# SRCS += ./test_vector_instantiation.cpp
-# SRCS += ./test_vector_push_back_pop_back.cpp
-# SRCS += ./test_vector_clear.cpp
-# SRCS += ./test_vector_capacities.cpp
-# SRCS += ./test_vector_insert_erase.cpp
-# SRCS += ./test_vector_operatorEqual.cpp
-# SRCS += ./test_vector_resize.cpp
-# SRCS += ./test_vector_assign.cpp
-# SRCS += ./test_vector_at_operatorBrackets.cpp
-# SRCS += ./test_vector_member_swap.cpp
-# SRCS += ./test_vector_nonmember_swap.cpp
-# SRCS += ./test_vector_relational_operators.cpp
-# SRCS += ./test_vector_iterator.cpp
-# SRCS += ./test_vector_reverseIterator.cpp
-# SRCS += ./test_vector_element_access.cpp
+SRCS += ./test_vector_instantiation.cpp
+SRCS += ./test_vector_push_back_pop_back.cpp
+SRCS += ./test_vector_clear.cpp
+SRCS += ./test_vector_capacities.cpp
+SRCS += ./test_vector_insert_erase.cpp
+SRCS += ./test_vector_operatorEqual.cpp
+SRCS += ./test_vector_resize.cpp
+SRCS += ./test_vector_assign.cpp
+SRCS += ./test_vector_at_operatorBrackets.cpp
+SRCS += ./test_vector_member_swap.cpp
+SRCS += ./test_vector_nonmember_swap.cpp
+SRCS += ./test_vector_relational_operators.cpp
+SRCS += ./test_vector_iterator.cpp
+SRCS += ./test_vector_reverseIterator.cpp
+SRCS += ./test_vector_element_access.cpp
 
 # ################################################################################
 # #-------- MAP    ###############################################################

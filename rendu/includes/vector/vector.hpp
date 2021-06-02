@@ -206,16 +206,16 @@ namespace ft	{
 			end( void ) const 		{ return (this->_tail); }
 
 			reverse_iterator
-			rbegin( void ) 			{ return reverse_iterator(--end()); }
+			rbegin( void ) 			{ return reverse_iterator(end()); }
 
 			const_reverse_iterator
-			rbegin( void ) const	{ return const_reverse_iterator(--end()); }
+			rbegin( void ) const	{ return const_reverse_iterator(end()); }
 
 			reverse_iterator
-			rend( void ) 	 		{ return reverse_iterator(begin() - 1); }
+			rend( void ) 	 		{ return reverse_iterator(begin()); }
 
 			const_reverse_iterator
-			rend( void ) const 		{ return const_reverse_iterator(begin() - 1); }
+			rend( void ) const 		{ return const_reverse_iterator(begin()); }
 
 			reference
 			front( void ) 			{ return (*(this->_head)); }
@@ -378,6 +378,25 @@ namespace ft	{
 				insert(begin(), n, val);
 			}
 
+		private:
+
+			template <class InputIterator>
+			void
+			assign_dispatch (InputIterator first, InputIterator last, std::__false_type)	{
+
+				clear();
+				insert(begin(), first, last);
+			}
+
+			template<typename integer>
+			void
+			assign_dispatch (integer n, integer val, std::__true_type)	{
+
+				assign(static_cast<size_type>(n), static_cast<value_type>(val));
+			}
+
+		public:
+
 			/**
 			 * @brief Reserve: Requests that the vector capacity be at
 			 * least enough to contain n elements.
@@ -421,22 +440,6 @@ namespace ft	{
 
 		private:
 
-			template <class InputIterator>
-			void
-			assign_dispatch (InputIterator first, InputIterator last, std::__false_type)	{
-
-				clear();
-				insert(begin(), first, last);
-			}
-
-			template<typename integer>
-			void
-			assign_dispatch (integer n, integer val, std::__true_type)	{
-
-				assign(static_cast<size_type>(n), static_cast<value_type>(val));
-			}
-
-
 			/**
 			 * @brief Fill Constructor actual function
 			*/
@@ -463,8 +466,10 @@ namespace ft	{
 
 				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> range : " << __func__ << std::endl;
 
-				size_type	n = last - first;
-				this->initStorage(n * 2);
+				size_type	rangeSize = 0;
+				for (InputIterator cursor = first; cursor != last; cursor++)
+					rangeSize++;
+				this->initStorage(rangeSize * 2);
 				fillVector(first, last);
 			}
 
@@ -488,22 +493,24 @@ namespace ft	{
 				}
 
 				difference_type indexPos = position - begin();
-				size_type		n = last - first;
-				if (size() + n >= capacity())	{
-					doReserve(capacity() + n + (capacity()>>1));
+				size_type	rangeSize = 0;
+				for (InputIterator cursor = first; cursor != last; cursor++)
+					rangeSize++;
+				if (size() + rangeSize >= capacity())	{
+					doReserve(capacity() + rangeSize + (capacity()>>1));
 				}
 
 				if (begin() + indexPos != end())	{
 					if (size() > 1)	{
-						memMoveRight(begin() + indexPos, end(), n);
+						memMoveRight(begin() + indexPos, end(), rangeSize);
 					}
 					destroyObjects(this->_head + indexPos, size() - indexPos);
-					this->_tail += n;
+					this->_tail += rangeSize;
 					constructObjects(this->_head + indexPos, first, last);
 				}
 				else {
 					constructObjects(this->_head + indexPos, first, last);
-					this->_tail += n;
+					this->_tail += rangeSize;
 				}
 			}
 
@@ -512,8 +519,9 @@ namespace ft	{
 			 * constructors
 			*/
 
+			template<typename InputIterator>
 			void
-			fillVector(iterator first, iterator last)	{
+			fillVector(InputIterator first, InputIterator last)	{
 
 				for (;first != last; first++)	{
 					this->_alloc.construct(this->_tail, *first);
@@ -521,14 +529,14 @@ namespace ft	{
 				}
 			}
 
-			void
-			fillVector(const_iterator first, const_iterator last)	{
+			// void
+			// fillVector(const_iterator first, const_iterator last)	{
 
-				for (;first != last; first++)	{
-					this->_alloc.construct(this->_tail, *first);
-					this->_tail++;
-				}
-			}
+			// 	for (;first != last; first++)	{
+			// 		this->_alloc.construct(this->_tail, *first);
+			// 		this->_tail++;
+			// 	}
+			// }
 			/**
 			 * @brief Construct objects at alocated memory, to be used by
 			 * constructors
@@ -583,19 +591,27 @@ namespace ft	{
 				}
 			}
 
+			// void
+			// constructObjects(pointer p, iterator first, iterator last)	{
+			// 	for (size_t i = 0; first != last; i++, first++)	{
+			// 		this->_alloc.construct(p + i, first);
+			// 	}
+			// }
+
+			template<typename InputIterator>
 			void
-			constructObjects(pointer p, iterator first, iterator last)	{
+			constructObjects(pointer p, InputIterator first, InputIterator last)	{
 				for (size_t i = 0; first != last; i++, first++)	{
 					this->_alloc.construct(p + i, *first);
 				}
 			}
 
-			void
-			constructObjects(pointer p, const_iterator first, const_iterator last)	{
-				for (size_t i = 0; first != last; i++, first++)	{
-					this->_alloc.construct(p + i, *first);
-				}
-			}
+			// void
+			// constructObjects(pointer p, const_iterator first, const_iterator last)	{
+			// 	for (size_t i = 0; first != last; i++, first++)	{
+			// 		this->_alloc.construct(p + i, *first);
+			// 	}
+			// }
 
 			void
 			destroyObjects(pointer p, size_t n)	{
@@ -611,11 +627,9 @@ namespace ft	{
 				destroyObjects(this->_head, this->size());
 			}
 
-			/**
-			 * @brief Move [first, last] range by n memory blocks to theLeft
-			*/
+			template<typename InputIterator>
 			void
-			memMoveLeft(iterator first, iterator last, size_t n)	{
+			memMoveLeft(iterator first, InputIterator last, size_t n)	{
 
 				while (first != last)	{
 					constructObjects(first.getPtr() - n, 1, *first);

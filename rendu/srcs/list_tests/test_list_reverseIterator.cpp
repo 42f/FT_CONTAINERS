@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:02:26 by bvalette          #+#    #+#             */
-/*   Updated: 2021/06/02 08:26:19 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/06/02 10:40:50 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,7 @@ test_list_reverseIterator( void )	{
 		testBool(ft_it0->first == std_it0->first, __LINE__);
 		testBool(ft_it0->second == std_it0->second, __LINE__);
 	}
+
 	return (0);
 
 }

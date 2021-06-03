@@ -95,7 +95,7 @@ namespace ft	{
 
 	template <class Iterator>
 	ft::reverse_iterator<Iterator> operator+ (
-		typename ft::reverse_iterator<Iterator>::difference_type n,
+			typename ft::reverse_iterator<Iterator>::difference_type n,
 			const ft::reverse_iterator<Iterator>& rev_it)	{
 
 		ft::reverse_iterator<Iterator>	tmp = rev_it;

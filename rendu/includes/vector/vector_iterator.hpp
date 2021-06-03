@@ -26,6 +26,9 @@ namespace ft	{
 		template< typename U, typename V>
 		friend class vector;
 
+		private:
+            typedef T*													base_pointer;
+
 		public:
 			typedef typename ft::iterator<ft::random_access_iterator_tag, T, B>	iterator;
 			typedef typename iterator::size_type								size_type;
@@ -132,8 +135,9 @@ namespace ft	{
 				return tmpIt;
 			}
 
-			void		operator-=( difference_type n )				{ *this = *this - n; }
-			void		operator+=( difference_type n )				{ *this = *this + n; }
+
+			vector_iterator&	operator-=( difference_type n )				{ *this = *this - n; return *this;}
+			vector_iterator&	operator+=( difference_type n )				{ *this = *this + n; return *this;}
 			bool		operator==(const vector_iterator& rhs) const	{ return _ptr==rhs.getPtr(); }
 			bool		operator!=(const vector_iterator& rhs) const	{ return _ptr!=rhs.getPtr(); }
 			bool		operator<(const vector_iterator& rhs) const		{ return _ptr < rhs.getPtr(); }
@@ -146,16 +150,29 @@ namespace ft	{
 			pointer		operator->()	const							{ return _ptr; }
 			reference	operator*()	const								{ return *_ptr; }
 
-			pointer		getPtr( void )	const							{ return _ptr; }
+			base_pointer	getPtr( void )	const							{ return _ptr; }
 		private:
 
 
 			/**
 			 * @brief Pointer holding the address of the vector_iterator element.
 			*/
-			pointer		_ptr;
+			base_pointer	_ptr;
 
 	}; //----------------- Class iterator
+
+	template<class T, bool B>
+	vector_iterator<T, B>
+	operator+ ( size_t n, vector_iterator<T, B>rhs ) {
+
+		ft::vector_iterator<T,B> tmpIt = rhs;
+
+		while ( n > 0 )	{
+			tmpIt++;
+			n--;
+		}
+		return tmpIt;
+	}
 
 } // ----------------- ft namespace
 

@@ -1,6 +1,7 @@
 #ifndef LIST_HPP
 # define LIST_HPP
 
+# include "../utils/ft_is_integer.hpp"
 # include "./list_iterator.hpp"
 # include "../utils/ft_node.hpp"
 # include "../utils/ft_rev_iterator.hpp"
@@ -87,7 +88,7 @@ namespace ft	{
 			list (InputIterator first, InputIterator last,
 				 allocator_type const & userAlloc = allocator_type() ) : _size(0), _alloc(userAlloc)	{
 
-				typename std::__is_integer<InputIterator>::__type	integer;
+				typename ft::__is_integer<InputIterator>::__type	integer;
 				if (DEBUG_MODE >= 1)
 					std::cout << "CONSTRUCTOR --> range pre dispatcher ! " << __func__ << std::endl;
 				list_constructor_dispatch(first, last, userAlloc, integer);
@@ -203,7 +204,7 @@ namespace ft	{
 			insert (iterator position, InputIterator first,
 			InputIterator last)	{
 
-				typename std::__is_integer<InputIterator>::__type	integer;
+				typename ft::__is_integer<InputIterator>::__type	integer;
 				insert_dispatch(position, first, last, integer);
 			}
 
@@ -274,7 +275,7 @@ namespace ft	{
 			template <class InputIterator>
 			void assign (InputIterator first, InputIterator last)	{
 
-				typename std::__is_integer<InputIterator>::__type	integer;
+				typename ft::__is_integer<InputIterator>::__type	integer;
 				assign_dispatch(first, last, integer);
 			}
 
@@ -451,7 +452,7 @@ namespace ft	{
 
 			template <class InputIterator>
 			void
-			assign_dispatch (InputIterator first, InputIterator last, std::__false_type)	{
+			assign_dispatch (InputIterator first, InputIterator last, ft::__false_type)	{
 
 				clear();
 				insert(begin(), first, last);
@@ -459,7 +460,7 @@ namespace ft	{
 
 			template<typename integer>
 			void
-			assign_dispatch (integer n, integer val, std::__true_type)	{
+			assign_dispatch (integer n, integer val, ft::__true_type)	{
 
 				assign(static_cast<size_type>(n), static_cast<value_type>(val));
 			}
@@ -470,7 +471,7 @@ namespace ft	{
 			template <class integer>
 			void
 			list_constructor_dispatch (integer n, integer const & val,
-				allocator_type const &, std::__true_type)	{
+				allocator_type const &, ft::__true_type)	{
 
 				if (DEBUG_MODE >= 1)	{
 					std::cout << "dispatch --> __true_type " << __func__ << std::endl;
@@ -485,7 +486,7 @@ namespace ft	{
 			template <class InputIterator>
 			void
 			list_constructor_dispatch (InputIterator first, InputIterator last,
-				 allocator_type const & userAlloc, std::__false_type)	{
+				 allocator_type const & userAlloc, ft::__false_type)	{
 
 				if (DEBUG_MODE >= 1)
 					std::cout << "CONSTRUCTOR --> range " << __func__ << std::endl;
@@ -498,7 +499,7 @@ namespace ft	{
 			template<typename integer>
 			void
 			insert_dispatch(iterator position, integer n, integer val,
-			std::__true_type)	{
+			ft::__true_type)	{
 				insert(position, static_cast<size_type>(n),
 					static_cast<value_type>(val));
 			}
@@ -506,7 +507,7 @@ namespace ft	{
 			template<typename InputIterator>
 			void
 			insert_dispatch(iterator position, InputIterator first,
-			InputIterator last, std::__false_type)	{
+			InputIterator last, ft::__false_type)	{
 				for (; first != last; first++)	{
 					insert(position, *first);
 				}

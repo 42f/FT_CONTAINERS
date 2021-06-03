@@ -28,6 +28,7 @@ namespace ft	{
 
 		public:
 			typedef typename ft::iterator<ft::random_access_iterator_tag, T, B>	iterator;
+			typedef typename iterator::size_type								size_type;
 			typedef typename iterator::difference_type							difference_type;
 			typedef typename iterator::reference								reference;
             typedef typename iterator::pointer									pointer;
@@ -35,7 +36,21 @@ namespace ft	{
 			vector_iterator( void ) :_ptr(NULL) {}
 			vector_iterator(T* src) :_ptr(src) {}
 			vector_iterator(const vector_iterator& itSrc) : _ptr(itSrc.getPtr()) {}
+
+			template<typename otherT, bool otherB>
+			vector_iterator(const vector_iterator<otherT, otherB>& itSrc) : _ptr(itSrc.getPtr()) {}
+
 			~vector_iterator( void ) {}
+
+
+			template<typename otherT, bool otherB>
+			vector_iterator<T, B>&
+			operator=(const vector_iterator<otherT, otherB>& src) {
+				if (*this != src)	{
+					_ptr = src.getPtr();
+				}
+				return *this;
+			}
 
 			vector_iterator&
 			operator=( const vector_iterator& src )	{
@@ -72,7 +87,7 @@ namespace ft	{
 			}
 
 			difference_type
-			operator- ( vector_iterator rhs ) { return this->_ptr - rhs._ptr; }
+			operator- ( const vector_iterator rhs ) const	{ return this->_ptr - rhs.getPtr(); }
 
 			vector_iterator
 			operator- ( difference_type n ) {
@@ -123,21 +138,21 @@ namespace ft	{
 
 			void		operator-=( difference_type n )				{ *this = *this - n; }
 			void		operator+=( difference_type n )				{ *this = *this + n; }
-			bool		operator==(const vector_iterator& rhs) const	{ return _ptr==rhs._ptr; }
-			bool		operator!=(const vector_iterator& rhs) const	{ return _ptr!=rhs._ptr; }
-			bool		operator<(const vector_iterator& rhs) const		{ return _ptr < rhs._ptr; }
-			bool		operator>(const vector_iterator& rhs) const		{ return _ptr > rhs._ptr; }
-			bool		operator<=(const vector_iterator& rhs) const	{ return _ptr <= rhs._ptr; }
-			bool		operator>=(const vector_iterator& rhs) const	{ return _ptr >= rhs._ptr; }
+			bool		operator==(const vector_iterator& rhs) const	{ return _ptr==rhs.getPtr(); }
+			bool		operator!=(const vector_iterator& rhs) const	{ return _ptr!=rhs.getPtr(); }
+			bool		operator<(const vector_iterator& rhs) const		{ return _ptr < rhs.getPtr(); }
+			bool		operator>(const vector_iterator& rhs) const		{ return _ptr > rhs.getPtr(); }
+			bool		operator<=(const vector_iterator& rhs) const	{ return _ptr <= rhs.getPtr(); }
+			bool		operator>=(const vector_iterator& rhs) const	{ return _ptr >= rhs.getPtr(); }
 
-			reference	operator[]( size_t n )	const					{ return _ptr[n]; }
+			reference	operator[]( size_type n )	const					{ return _ptr[n]; }
 
 			pointer		operator->()	const							{ return _ptr; }
 			reference	operator*()	const								{ return *_ptr; }
 
+			pointer		getPtr( void )	const							{ return _ptr; }
 		private:
 
-			pointer		getPtr( void )	const							{ return _ptr; }
 
 			/**
 			 * @brief Pointer holding the address of the vector_iterator element.

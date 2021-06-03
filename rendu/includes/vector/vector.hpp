@@ -1,6 +1,7 @@
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
+# include "../utils/ft_is_integer.hpp"
 # include "./vector_iterator.hpp"
 
 # include <iostream>
@@ -156,7 +157,7 @@ namespace ft	{
 
 				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> range pre dispatcher ! " << __func__ << std::endl;
 
-				typename std::__is_integer<InputIterator>::__type	integer;
+				typename ft::__is_integer<InputIterator>::__type	integer;
 				vector_constructor_dispatch(first, last, userAlloc, integer);
 			}
 
@@ -310,7 +311,7 @@ namespace ft	{
 			insert (iterator position, InputIterator first,
 			InputIterator last)	{
 
-				typename std::__is_integer<InputIterator>::__type	integer;
+				typename ft::__is_integer<InputIterator>::__type	integer;
 				insert_dispatch(position, first, last, integer);
 			}
 
@@ -325,6 +326,26 @@ namespace ft	{
 
 			iterator
 			erase (iterator first, iterator last)	{
+
+				size_type			offset = first - begin();
+				difference_type		len = last - first;
+				destroyObjects(first.getPtr(), len);
+				memMoveLeft(last, end(), len);
+				this->_tail -= len;
+				return begin() + offset;
+			}
+
+			const_iterator
+			erase (iterator position)	const {
+
+				destroyObjects(position.getPtr(), 1);
+				memMoveLeft(position + 1, end(), 1);
+				this->_tail -= 1;
+				return position;
+			}
+
+			const_iterator
+			erase (iterator first, iterator last)	const {
 
 				size_type			offset = first - begin();
 				difference_type		len = last - first;
@@ -368,7 +389,7 @@ namespace ft	{
 			template <class InputIterator>
 			void assign (InputIterator first, InputIterator last)	{
 
-				typename std::__is_integer<InputIterator>::__type	integer;
+				typename ft::__is_integer<InputIterator>::__type	integer;
 				assign_dispatch(first, last, integer);
 			}
 
@@ -382,7 +403,7 @@ namespace ft	{
 
 			template <class InputIterator>
 			void
-			assign_dispatch (InputIterator first, InputIterator last, std::__false_type)	{
+			assign_dispatch (InputIterator first, InputIterator last, ft::__false_type)	{
 
 				clear();
 				insert(begin(), first, last);
@@ -390,7 +411,7 @@ namespace ft	{
 
 			template<typename integer>
 			void
-			assign_dispatch (integer n, integer val, std::__true_type)	{
+			assign_dispatch (integer n, integer val, ft::__true_type)	{
 
 				assign(static_cast<size_type>(n), static_cast<value_type>(val));
 			}
@@ -446,7 +467,7 @@ namespace ft	{
 			template <class integer>
 			void
 			vector_constructor_dispatch (integer n, integer const & val,
-				allocator_type const &, std::__true_type)	{
+				allocator_type const &, ft::__true_type)	{
 
 				if (DEBUG_MODE >= 1)	{
 					std::cout << "dispatch --> __true_type " << __func__ << std::endl;
@@ -462,7 +483,7 @@ namespace ft	{
 			template <class InputIterator>
 			void
 			vector_constructor_dispatch (InputIterator first, InputIterator last,
-				 allocator_type const &, std::__false_type)	{
+				 allocator_type const &, ft::__false_type)	{
 
 				if (DEBUG_MODE >= 1) std::cout << "CONSTRUCTOR --> range : " << __func__ << std::endl;
 
@@ -477,7 +498,7 @@ namespace ft	{
 			template<typename integer>
 			void
 			insert_dispatch(iterator position, integer n, integer val,
-			std::__true_type)	{
+			ft::__true_type)	{
 				insert(position, static_cast<size_type>(n),
 					static_cast<value_type>(val));
 			}
@@ -485,7 +506,7 @@ namespace ft	{
 			template<typename InputIterator>
 			void
 			insert_dispatch(iterator position, InputIterator first,
-			InputIterator last, std::__false_type)	{
+			InputIterator last, ft::__false_type)	{
 
 				if (capacity() == 0)	{
 					this->initStorage();
@@ -529,14 +550,6 @@ namespace ft	{
 				}
 			}
 
-			// void
-			// fillVector(const_iterator first, const_iterator last)	{
-
-			// 	for (;first != last; first++)	{
-			// 		this->_alloc.construct(this->_tail, *first);
-			// 		this->_tail++;
-			// 	}
-			// }
 			/**
 			 * @brief Construct objects at alocated memory, to be used by
 			 * constructors
@@ -584,34 +597,70 @@ namespace ft	{
 				}
 			}
 
+			template<typename InputIterator>
 			void
-			constructObjects(pointer p, size_t n, value_type val = value_type())	{
+			constructObjects(pointer p, InputIterator first, InputIterator last)	{
+
+				typename ft::__is_integer<InputIterator>::__type	integer;
+				constructObject_dispatch(integer, p, first, last);
+			}
+
+			void
+			constructObjects(pointer p, size_type n, value_type val = value_type())	{
 				for (size_t i = 0; i < n; i++)	{
 					this->_alloc.construct(p + i, val);
 				}
 			}
 
-			// void
-			// constructObjects(pointer p, iterator first, iterator last)	{
-			// 	for (size_t i = 0; first != last; i++, first++)	{
-			// 		this->_alloc.construct(p + i, first);
-			// 	}
-			// }
-
-			template<typename InputIterator>
+			template <class InputIterator>
 			void
-			constructObjects(pointer p, InputIterator first, InputIterator last)	{
+			constructObject_dispatch (ft::__false_type, pointer p, InputIterator first, InputIterator last)	{
+
 				for (size_t i = 0; first != last; i++, first++)	{
 					this->_alloc.construct(p + i, *first);
 				}
 			}
 
+			template<typename integer>
+			void
+			constructObject_dispatch (ft::__true_type, pointer p, integer n, value_type val = value_type())	{
+
+				constructObjects(static_cast<pointer>(p),
+					static_cast<size_type>(n), static_cast<value_type>(val));
+			}
+
+/*-----------------------------------*/
+
+			// template<typename InputIterator>
 			// void
-			// constructObjects(pointer p, const_iterator first, const_iterator last)	{
+			// constructObjects(pointer p, InputIterator first, InputIterator last)	{
+
+			// 	if (std::numeric_limits<InputIterator>::is_integer == true)	{
+			// 		constructObjects(p, first, last);
+			// 	}
+			// 	else	{
+			// 		constructObjects_b(true, p, first, last);
+			// 	}
+			// }
+
+			// void
+			// constructObjects(pointer p, size_type n, value_type val = value_type())	{
+			// 	for (size_t i = 0; i < n; i++)	{
+			// 		this->_alloc.construct(p + i, val);
+			// 	}
+			// }
+
+			// template<typename InputIterator>
+			// void
+			// constructObjects_b(bool, pointer p, InputIterator first, InputIterator last)	{
 			// 	for (size_t i = 0; first != last; i++, first++)	{
 			// 		this->_alloc.construct(p + i, *first);
 			// 	}
 			// }
+
+
+
+
 
 			void
 			destroyObjects(pointer p, size_t n)	{
@@ -632,7 +681,7 @@ namespace ft	{
 			memMoveLeft(iterator first, InputIterator last, size_t n)	{
 
 				while (first != last)	{
-					constructObjects(first.getPtr() - n, 1, *first);
+					constructObjects(first.getPtr() - n, static_cast<size_type>(1), *first);
 					destroyObjects(first.getPtr(), 1);
 					first++;
 				}
@@ -657,6 +706,7 @@ namespace ft	{
 					throw std::out_of_range("Out of vector's range");
 				}
 			}
+
 		}; // ----------------- Class Vector
 
 	template <class T, class Alloc >

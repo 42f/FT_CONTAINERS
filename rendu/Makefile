@@ -91,9 +91,10 @@ PROJECT_HEADER += ./vector_iterator.hpp
 PROJECT_HEADER += ./map.hpp
 PROJECT_HEADER += ./map_iterator.hpp
 
+PROJECT_HEADER += ./ft_enable_if.hpp
+PROJECT_HEADER += ./ft_is_integer.hpp
 PROJECT_HEADER += ./ft_pair.hpp
 PROJECT_HEADER += ./ft_node.hpp
-PROJECT_HEADER += ./ft_enable_if.hpp
 PROJECT_HEADER += ./ft_algo.hpp
 PROJECT_HEADER += ./ft_iterator_base.hpp
 PROJECT_HEADER += ./ft_rev_iterator.hpp

@@ -25,6 +25,7 @@ namespace ft	{
 			public:
 				typedef Category					iterator_category;
 				typedef T							value_type;
+				typedef size_t						size_type;
 				typedef Distance					difference_type;
 				typedef typename	ft::ft_enable_if<B, value_type&, const value_type&>::type	reference;
 				typedef typename	ft::ft_enable_if<B, value_type*, const value_type*>::type	pointer;

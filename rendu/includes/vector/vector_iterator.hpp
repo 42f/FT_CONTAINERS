@@ -35,25 +35,21 @@ namespace ft	{
 
 			vector_iterator( void ) :_ptr(NULL) {}
 			vector_iterator(T* src) :_ptr(src) {}
-			vector_iterator(const vector_iterator& itSrc) : _ptr(itSrc.getPtr()) {}
-
-			template<typename otherT, bool otherB>
-			vector_iterator(const vector_iterator<otherT, otherB>& itSrc) : _ptr(itSrc.getPtr()) {}
+			vector_iterator(const vector_iterator<T, false>& itSrc) : _ptr(itSrc.getPtr()) {}
+			vector_iterator(const vector_iterator<T, true>& itSrc) : _ptr(itSrc.getPtr()) {}
 
 			~vector_iterator( void ) {}
 
-
-			template<typename otherT, bool otherB>
-			vector_iterator<T, B>&
-			operator=(const vector_iterator<otherT, otherB>& src) {
+			vector_iterator&
+			operator=( const vector_iterator<T, true>& src )	{
 				if (*this != src)	{
 					_ptr = src.getPtr();
 				}
-				return *this;
+				return (*this);
 			}
 
 			vector_iterator&
-			operator=( const vector_iterator& src )	{
+			operator=( const vector_iterator<T, false>& src )	{
 				if (*this != src)	{
 					_ptr = src.getPtr();
 				}

@@ -36,7 +36,6 @@ namespace ft	{
 			typedef typename ft::ft_enable_if<B, node*, const node*>::type		node_pointer;
 
 			list_iterator( node_pointer src = NULL ) :_ptr(src) {}
-			// list_iterator( const list_iterator& itSrc ) { _ptr = itSrc.getPtr(); }
 			list_iterator( const list_iterator<T, false>& src ) { _ptr = src.getPtr(); }
 			list_iterator( const list_iterator<T, true>& src ) { _ptr = src.getPtr(); }
 			~list_iterator( void ) {}

@@ -40,14 +40,28 @@ namespace ft	{
 															_comp(comp)		{}
 
 
-			map_iterator(const map_iterator& itSrc) :	_ptr(itSrc.getPtr()),
+			map_iterator(const map_iterator<Key, T, Compare, map_node, true>& itSrc) :	_ptr(itSrc.getPtr()),
+														_btreeDumdNode(itSrc.getDumbNode()),
+														_comp(itSrc.getComp())		{}
+
+			map_iterator(const map_iterator<Key, T, Compare, map_node, false>& itSrc) :	_ptr(itSrc.getPtr()),
 														_btreeDumdNode(itSrc.getDumbNode()),
 														_comp(itSrc.getComp())		{}
 
 			~map_iterator( void )	{}
 
 			map_iterator&
-			operator=( const map_iterator& src )	{
+			operator=( const map_iterator<Key, T, Compare, map_node, true>& src )	{
+				if (*this != src)	{
+					_ptr = src.getPtr();
+					_btreeDumdNode = src.getDumbNode();
+					_comp = src.getComp();
+				}
+				return (*this);
+			}
+
+			map_iterator&
+			operator=( const map_iterator<Key, T, Compare, map_node, false>& src )	{
 				if (*this != src)	{
 					_ptr = src.getPtr();
 					_btreeDumdNode = src.getDumbNode();

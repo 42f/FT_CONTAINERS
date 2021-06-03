@@ -58,7 +58,7 @@ namespace ft	{
 				return tmp;
 			}
 
-			reverse_iterator&	operator-= (difference_type n)		{	_base.operator+=(n); return (*this);	}
+			reverse_iterator&	operator-= (difference_type n)		{ _base.operator+=(n); return (*this);	}
 			reverse_iterator	operator- (difference_type n) const	{	return reverse_iterator(_base.operator+(n));	}
 			reverse_iterator&	operator--()		{	_base.operator++(); return *this;	}
 			reverse_iterator	operator--(int)		{
@@ -99,15 +99,14 @@ namespace ft	{
 			const ft::reverse_iterator<Iterator>& rev_it)	{
 
 		ft::reverse_iterator<Iterator>	tmp = rev_it;
-		tmp.operator+(n);
-		return tmp;
+		return (tmp.operator+(n));
 	}
 
-	template <class Iterator>
-		typename ft::reverse_iterator<Iterator>::difference_type operator- (
-			const ft::reverse_iterator<Iterator>& lhs, const ft::reverse_iterator<Iterator>& rhs)	{
+	template <class Iterator1, class Iterator2>
+		typename ft::reverse_iterator<Iterator1>::difference_type operator- (
+			const ft::reverse_iterator<Iterator1>& lhs, const ft::reverse_iterator<Iterator2>& rhs)	{
 
-		return rhs.base().operator-(lhs.base());
+			return rhs.base() - lhs.base();
 	}
 
 } // ----------------- ft namespace

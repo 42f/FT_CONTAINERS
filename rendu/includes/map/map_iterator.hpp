@@ -24,6 +24,8 @@ namespace ft	{
 		template< typename _k, typename _t, typename _c, typename _a>
 		friend class map;
 
+		friend class map_iterator<Key, T, Compare, map_node, !B>;
+
 		public:
 
 			typedef	Compare										key_compare;

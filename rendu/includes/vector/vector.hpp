@@ -267,10 +267,8 @@ namespace ft	{
 					doReserve(capacity() + n + (capacity()>>1));
 				}
 
-				if (begin() + indexPos != end())	{
-					if (size() > 1)	{
-						memMoveRight(begin() + indexPos, end(), n);
-					}
+				if (empty()	== false && static_cast<size_type>(indexPos) < size()) {
+					memMoveRight(begin() + indexPos, end(), n);
 					destroyObjects(this->_head + indexPos, size() - indexPos);
 					this->_tail += n;
 					constructObjects(this->_head + indexPos, n, val);
@@ -280,7 +278,6 @@ namespace ft	{
 					this->_tail += n;
 				}
 			}
-
 
 			reference
 			at (size_type n)	{
@@ -318,7 +315,7 @@ namespace ft	{
 			iterator
 			erase (iterator position)	{
 
-				destroyObjects(position.getPtr(), 1);
+				destroyObjects(&(*position), 1);
 				memMoveLeft(position + 1, end(), 1);
 				this->_tail -= 1;
 				return position;
@@ -329,7 +326,7 @@ namespace ft	{
 
 				size_type			offset = first - begin();
 				difference_type		len = last - first;
-				destroyObjects(first.getPtr(), len);
+				destroyObjects(&(*first), len);
 				memMoveLeft(last, end(), len);
 				this->_tail -= len;
 				return begin() + offset;
@@ -338,7 +335,7 @@ namespace ft	{
 			const_iterator
 			erase (iterator position)	const {
 
-				destroyObjects(position.getPtr(), 1);
+				destroyObjects(&(*position), 1);
 				memMoveLeft(position + 1, end(), 1);
 				this->_tail -= 1;
 				return position;
@@ -349,7 +346,7 @@ namespace ft	{
 
 				size_type			offset = first - begin();
 				difference_type		len = last - first;
-				destroyObjects(first.getPtr(), len);
+				destroyObjects(&(*first), len);
 				memMoveLeft(last, end(), len);
 				this->_tail -= len;
 				return begin() + offset;
@@ -681,8 +678,8 @@ namespace ft	{
 			memMoveLeft(iterator first, InputIterator last, size_t n)	{
 
 				while (first != last)	{
-					constructObjects(first.getPtr() - n, static_cast<size_type>(1), *first);
-					destroyObjects(first.getPtr(), 1);
+					constructObjects(&(*first) - n, static_cast<size_type>(1), *first);
+					destroyObjects(&(*first), 1);
 					first++;
 				}
 			}
@@ -695,8 +692,8 @@ namespace ft	{
 			memMoveRight(iterator first, iterator last, size_t n)	{
 				while (last != first)	{
 					last--;
-					constructObjects(last.getPtr() + n, 1, *last);
-					destroyObjects(last.getPtr(), 1);
+					constructObjects(&(*last) + n, 1, *last);
+					destroyObjects(&(*last), 1);
 				}
 			}
 

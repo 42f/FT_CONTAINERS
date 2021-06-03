@@ -20,9 +20,16 @@ namespace ft	{
 	class list_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T, B>
 	{
 
+		template<typename X, typename Y>
+		friend class list;
+
+		friend class list_iterator<T, !B>;
+
 		private:
 
-			typedef typename ft::node<T>		node;
+			typedef typename ft::node<T>			node_type;
+			typedef  node_type&						node_reference;
+			typedef  node_type*						node_pointer;
 
 		public:
 
@@ -32,24 +39,13 @@ namespace ft	{
 			typedef typename iterator::reference								reference;
             typedef typename iterator::pointer									pointer;
 
-			typedef  node&		node_reference;
-			typedef  node*		node_pointer;
-
-			list_iterator( node_pointer src = NULL ) :_ptr(src) {}
-
-			list_iterator( const list_iterator<T, true>& src ) { _ptr = src.getPtr(); }
+			list_iterator( const node_pointer src = NULL ) :_ptr(src) {}
 			list_iterator( const list_iterator<T, false>& src ) { _ptr = src.getPtr(); }
 
 			~list_iterator( void ) {}
 
 			list_iterator&
-			operator=( const list_iterator<T, Node, true>& src ) {
-					_ptr = src.getPtr();
-				return (*this);
-			}
-
-			list_iterator&
-			operator=( const list_iterator<T, Node, false>& src ) {
+			operator=( const list_iterator& src ) {
 					_ptr = src.getPtr();
 				return (*this);
 			}
@@ -76,8 +72,11 @@ namespace ft	{
 				return tmp;
 			}
 
-			bool 		operator==(const list_iterator& rhs) const 					{ return _ptr==rhs.getPtr(); }
-			bool 		operator!=(const list_iterator& rhs) const 					{ return _ptr!=rhs.getPtr(); }
+			bool 		operator==(const list_iterator<T, true>& rhs) const 					{ return _ptr==rhs.getPtr(); }
+			bool 		operator!=(const list_iterator<T, true>& rhs) const 					{ return _ptr!=rhs.getPtr(); }
+
+			bool 		operator==(const list_iterator<T, false>& rhs) const 					{ return _ptr==rhs.getPtr(); }
+			bool 		operator!=(const list_iterator<T, false>& rhs) const 					{ return _ptr!=rhs.getPtr(); }
 
 			pointer		operator->()	const	{ return &(_ptr->data); }
 			reference	operator*()		const	{ return _ptr->data; }

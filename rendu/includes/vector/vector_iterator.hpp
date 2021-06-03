@@ -23,11 +23,13 @@ namespace ft	{
 	template< typename T, bool B>
 	class vector_iterator : public ft::iterator< ft::random_access_iterator_tag, T, B>
 	{
-		template< typename U, typename V>
-		friend class vector;
+		friend class vector_iterator<T, !B>;
 
 		private:
-            typedef T*													base_pointer;
+
+            typedef T				base_type;
+            typedef base_type&		base_reference;
+            typedef base_type*		base_pointer;
 
 		public:
 			typedef typename ft::iterator<ft::random_access_iterator_tag, T, B>	iterator;
@@ -36,26 +38,14 @@ namespace ft	{
 			typedef typename iterator::reference								reference;
             typedef typename iterator::pointer									pointer;
 
-			vector_iterator( void ) :_ptr(NULL) {}
-			vector_iterator(T* src) :_ptr(src) {}
-			vector_iterator(const vector_iterator<T, false>& itSrc) : _ptr(itSrc.getPtr()) {}
-			vector_iterator(const vector_iterator<T, true>& itSrc) : _ptr(itSrc.getPtr()) {}
+			vector_iterator( const base_pointer src = NULL ) :_ptr(src) {}
+			vector_iterator( const vector_iterator<T, false>& itSrc )  :_ptr(itSrc.getPtr()) {}
 
 			~vector_iterator( void ) {}
 
 			vector_iterator&
-			operator=( const vector_iterator<T, true>& src )	{
-				if (*this != src)	{
-					_ptr = src.getPtr();
-				}
-				return (*this);
-			}
-
-			vector_iterator&
-			operator=( const vector_iterator<T, false>& src )	{
-				if (*this != src)	{
-					_ptr = src.getPtr();
-				}
+			operator=( const vector_iterator& src )	{
+				_ptr = src.getPtr();
 				return (*this);
 			}
 
@@ -86,7 +76,9 @@ namespace ft	{
 			}
 
 			difference_type
-			operator- ( const vector_iterator rhs ) const	{ return this->_ptr - rhs.getPtr(); }
+			operator- ( const vector_iterator<T, true> rhs ) const	{ return this->_ptr - rhs.getPtr(); }
+			difference_type
+			operator- ( const vector_iterator<T, false> rhs ) const	{ return this->_ptr - rhs.getPtr(); }
 
 			vector_iterator
 			operator- ( difference_type n ) {
@@ -136,23 +128,31 @@ namespace ft	{
 			}
 
 
-			vector_iterator&	operator-=( difference_type n )				{ *this = *this - n; return *this;}
-			vector_iterator&	operator+=( difference_type n )				{ *this = *this + n; return *this;}
-			bool		operator==(const vector_iterator& rhs) const	{ return _ptr==rhs.getPtr(); }
-			bool		operator!=(const vector_iterator& rhs) const	{ return _ptr!=rhs.getPtr(); }
-			bool		operator<(const vector_iterator& rhs) const		{ return _ptr < rhs.getPtr(); }
-			bool		operator>(const vector_iterator& rhs) const		{ return _ptr > rhs.getPtr(); }
-			bool		operator<=(const vector_iterator& rhs) const	{ return _ptr <= rhs.getPtr(); }
-			bool		operator>=(const vector_iterator& rhs) const	{ return _ptr >= rhs.getPtr(); }
+			vector_iterator&	operator-=( difference_type n )		{ *this = *this - n; return *this;}
+			vector_iterator&	operator+=( difference_type n )		{ *this = *this + n; return *this;}
 
-			reference	operator[]( size_type n )	const					{ return _ptr[n]; }
+			bool		operator==(const vector_iterator<T, true>& rhs) const	{ return _ptr==rhs.getPtr(); }
+			bool		operator!=(const vector_iterator<T, true>& rhs) const	{ return _ptr!=rhs.getPtr(); }
+			bool		operator<(const vector_iterator<T, true>& rhs) const	{ return _ptr < rhs.getPtr(); }
+			bool		operator>(const vector_iterator<T, true>& rhs) const	{ return _ptr > rhs.getPtr(); }
+			bool		operator<=(const vector_iterator<T, true>& rhs) const	{ return _ptr <= rhs.getPtr(); }
+			bool		operator>=(const vector_iterator<T, true>& rhs) const	{ return _ptr >= rhs.getPtr(); }
 
-			pointer		operator->()	const							{ return _ptr; }
-			reference	operator*()	const								{ return *_ptr; }
+			bool		operator==(const vector_iterator<T, false>& rhs) const	{ return _ptr==rhs.getPtr(); }
+			bool		operator!=(const vector_iterator<T, false>& rhs) const	{ return _ptr!=rhs.getPtr(); }
+			bool		operator<(const vector_iterator<T, false>& rhs) const	{ return _ptr < rhs.getPtr(); }
+			bool		operator>(const vector_iterator<T, false>& rhs) const	{ return _ptr > rhs.getPtr(); }
+			bool		operator<=(const vector_iterator<T, false>& rhs) const	{ return _ptr <= rhs.getPtr(); }
+			bool		operator>=(const vector_iterator<T, false>& rhs) const	{ return _ptr >= rhs.getPtr(); }
 
-			base_pointer	getPtr( void )	const							{ return _ptr; }
+			reference	operator[]( size_type n )	const	{ return _ptr[n]; }
+
+			pointer		operator->()	const				{ return _ptr; }
+			reference	operator*()		const				{ return *_ptr; }
+
 		private:
 
+			base_pointer	getPtr( void )	const			{ return _ptr; }
 
 			/**
 			 * @brief Pointer holding the address of the vector_iterator element.
@@ -166,7 +166,6 @@ namespace ft	{
 	operator+ ( size_t n, vector_iterator<T, B>rhs ) {
 
 		ft::vector_iterator<T,B> tmpIt = rhs;
-
 		while ( n > 0 )	{
 			tmpIt++;
 			n--;

@@ -5,6 +5,7 @@
 # include "map_iterator.hpp"
 
 # include <iostream>
+# include <limits>
 # include <cstddef>
 
 #ifndef DEBUG_MODE
@@ -23,11 +24,27 @@ namespace ft	{
 /*############################################################################*/
 /*############################################################################*/
 
+	template< typename T>
+	class map_node	{
+
+		public:
+			map_node( const T& itemSrc ) :			item(itemSrc),
+													left(NULL),
+													parent(NULL),
+													right(NULL)	 {}
+			~map_node( void ) {}
+
+			T				item;
+			map_node*		left;
+			map_node*		parent;
+			map_node*		right;
+			bool			color;
+	};
 
 	template< 	class Key,
 				class T,
 				class Compare = std::less<Key>,
-				class Allocator = std::allocator< ft::pair<const Key, T> > >
+				class Allocator = std::allocator< ft::map_node<ft::pair<const Key, T> > > >
 	class map {
 
 
@@ -36,16 +53,12 @@ namespace ft	{
 .*********** MEMBER TYPES            ******************************************.
 .******************************************************************************.
 .******************************************************************************/
-		private:
-
-			struct	map_node;
-			typedef typename Allocator::template rebind<map_node>::other	_node_allocator_type;
 
 		public:
 
 			typedef Key										key_type;
 			typedef T										mapped_type;
-			typedef ft::pair<const Key, T>					value_type;
+			typedef ft::pair<const key_type, mapped_type>	value_type;
 			typedef	Compare									key_compare;
 
 			typedef size_t									size_type;
@@ -57,11 +70,15 @@ namespace ft	{
 			typedef typename Allocator::pointer				pointer;
 			typedef typename Allocator::const_pointer		const_pointer;
 
-			typedef typename ft::map_iterator<Key, T, Compare, map_node, false>	iterator;
-			typedef typename ft::map_iterator<Key, T, Compare, map_node, true>	const_iterator;
+			typedef typename ft::map_iterator<Key, T, Compare, ft::map_node<value_type>, false>	iterator;
+			typedef typename ft::map_iterator<Key, T, Compare, ft::map_node<value_type>, true>	const_iterator;
 
-            typedef typename ft::reverse_iterator<map_iterator<Key, T, Compare, map_node, false> > reverse_iterator;
-            typedef typename ft::reverse_iterator<map_iterator<Key, T, Compare, map_node, true> >  const_reverse_iterator;
+            typedef typename ft::reverse_iterator<map_iterator<Key, T, Compare, ft::map_node<value_type>, false> > reverse_iterator;
+            typedef typename ft::reverse_iterator<map_iterator<Key, T, Compare, ft::map_node<value_type>, true> >  const_reverse_iterator;
+
+		private:
+
+			typedef typename ft::map_node<value_type>		node_type;
 
 /******************************************************************************.
 .******************************************************************************.
@@ -69,28 +86,12 @@ namespace ft	{
 .******************************************************************************.
 .******************************************************************************/
 
-		private:
-
-			struct map_node	{
-
-				map_node( value_type itemSrc ) :	left(NULL),
-													parent(NULL),
-													right(NULL),
-													item(itemSrc) {}
-				~map_node( void ) {}
-
-				map_node*		left;
-				map_node*		parent;
-				map_node*		right;
-				value_type		item;
-				bool			color;
-			};
-
 		public:
 
 			class value_compare	{
 
 				friend class map<Key, T, Compare, Allocator>;
+
 				public:
 					typedef	bool		result_type;
 					typedef	value_type	first_argument_type;
@@ -176,10 +177,10 @@ namespace ft	{
 .******************************************************************************/
 
 			protected:
-				map_node*				_head;
-				map_node*				_dumbNode;
-				size_t					_size;
-				_node_allocator_type 	_allocNode;
+				node_type*				_head;
+				node_type*				_dumbNode;
+				size_type				_size;
+				allocator_type		 	_allocNode;
 				Compare	const			_comp;
 
 /******************************************************************************.
@@ -212,7 +213,7 @@ namespace ft	{
 				}
 
 				static void
-				debugPrintNode( map_node* node )	{
+				debugPrintNode( node_type* node )	{
 
 					if (DEBUG_MODE < 2)
 						return ;
@@ -283,17 +284,17 @@ namespace ft	{
 				return (const_iterator());
 			}
 
-			reverse_iterator		rbegin( void ) 			{	return reverse_iterator(--end()); }
-			const_reverse_iterator	rbegin( void ) 	const	{	return const_reverse_iterator(--end()); }
-			reverse_iterator		rend( void ) 			{	return reverse_iterator(end()); }
-			const_reverse_iterator	rend( void ) 	const	{	return const_reverse_iterator(end()); }
+			reverse_iterator		rbegin( void ) 			{	return reverse_iterator(end()); }
+			const_reverse_iterator	rbegin( void ) 	const	{	return const_reverse_iterator(end()); }
+			reverse_iterator		rend( void ) 			{	return reverse_iterator(begin()); }
+			const_reverse_iterator	rend( void ) 	const	{	return const_reverse_iterator(begin()); }
 
 			iterator
 			find (const key_type& k)	{
 
 				if (empty() == true)
 					return(iterator());
-				map_node*	nodeFound = locateNode(_head, k);
+				node_type*	nodeFound = locateNode(_head, k);
 				if (nodeFound == NULL)
 					return (end());
 				return (iterator(nodeFound, _dumbNode, _comp));
@@ -304,7 +305,7 @@ namespace ft	{
 
 				if (empty() == true)
 					return(const_iterator());
-				map_node* const	nodeFound = locateNode(_head, k);
+				node_type* const	nodeFound = locateNode(_head, k);
 				if (nodeFound == NULL)
 					return (end());
 				return (const_iterator(nodeFound, _dumbNode, _comp));
@@ -321,7 +322,7 @@ namespace ft	{
 				if (empty() == true)
 					return(iterator());
 
-				map_node* const	nodeFound = locateBound(_head, k, isLowerBoundNode);
+				node_type* const	nodeFound = locateBound(_head, k, isLowerBoundNode);
 
 				if (nodeFound == NULL)
 					return (end());
@@ -335,7 +336,7 @@ namespace ft	{
 				if (empty() == true)
 					return(const_iterator());
 
-				map_node* const	nodeFound = locateBound(_head, k, isLowerBoundNode);
+				node_type* const	nodeFound = locateBound(_head, k, isLowerBoundNode);
 
 				if (nodeFound == NULL)
 					return (end());
@@ -350,7 +351,7 @@ namespace ft	{
 				if (empty() == true)
 					return(iterator());
 
-				map_node* const	nodeFound = locateBound(_head, k, isUpperBoundNode);
+				node_type* const	nodeFound = locateBound(_head, k, isUpperBoundNode);
 
 				if (nodeFound == NULL)
 					return (end());
@@ -364,7 +365,7 @@ namespace ft	{
 				if (empty() == true)
 					return(const_iterator());
 
-				map_node* const	nodeFound = locateBound(_head, k, isUpperBoundNode);
+				node_type* const	nodeFound = locateBound(_head, k, isUpperBoundNode);
 
 				if (nodeFound == NULL)
 					return (end());
@@ -401,7 +402,7 @@ namespace ft	{
 			iterator
 			insert (iterator position, const value_type& val)	{
 
-				map_node*	posPtr = position.getPtr();
+				node_type*	posPtr = position.getPtr();
 				if (posPtr == NULL)
 					return (iterator());
 				if (position != end() && lower_bound(val.first) == position)	{
@@ -426,10 +427,10 @@ namespace ft	{
 			void
 			erase( iterator position )	{
 
-				map_node*	deadNode = position.getPtr();
-				map_node*	deadNodeLeft = deadNode->left;
-				map_node*	deadNodeRight = deadNode->right;
-				map_node*	singleChild = getSingleChild(deadNode);
+				node_type*	deadNode = position.getPtr();
+				node_type*	deadNodeLeft = deadNode->left;
+				node_type*	deadNodeRight = deadNode->right;
+				node_type*	singleChild = getSingleChild(deadNode);
 
 				if (deadNode == NULL)
 					return;
@@ -439,7 +440,7 @@ namespace ft	{
 					detachFromParent(deadNode, singleChild);
 				else	{
 					detachFromParent(deadNode, deadNodeLeft);
-					map_node*	farRight = getFarRight(deadNodeLeft);
+					node_type*	farRight = getFarRight(deadNodeLeft);
 					deadNodeRight->parent = farRight;
 					farRight->right = deadNodeRight;
 				}
@@ -451,7 +452,7 @@ namespace ft	{
 			size_type
 			erase( const key_type& k )	{
 
-				map_node*	target = btree_search_key(_head, k);
+				node_type*	target = btree_search_key(_head, k);
 				if (target == NULL)
 					return 0;
 				else	{
@@ -476,10 +477,10 @@ namespace ft	{
 			swap (map& src)	{
 
 				if (this->_head != src._head)	{
-					map_node*				tmp_head = src._head;
-					map_node*				tmp_dumbNode = src._dumbNode;
+					node_type*				tmp_head = src._head;
+					node_type*				tmp_dumbNode = src._dumbNode;
 					size_t					tmp_size = src._size;
-					_node_allocator_type 	tmp_allocNode = src._allocNode;
+					allocator_type 			tmp_allocNode = src._allocNode;
 
 					src._head = this->_head;
 					src._dumbNode = this->_dumbNode;
@@ -543,8 +544,8 @@ namespace ft	{
  		private:
 
 			void
-			detachFromParent( map_node* node, map_node* newChild = NULL )	{
-				map_node* parent = node->parent;
+			detachFromParent( node_type* node, node_type* newChild = NULL )	{
+				node_type* parent = node->parent;
 				if (parent != NULL)	{
 					if (parent->left == node)
 						parent->left = newChild;
@@ -558,8 +559,8 @@ namespace ft	{
 				node->parent = NULL;
 			}
 
-			static map_node*
-			getSingleChild( map_node* node )	{
+			static node_type*
+			getSingleChild( node_type* node )	{
 
 				if (node->right != NULL && node->left == NULL)
 					return (node->right);
@@ -569,16 +570,16 @@ namespace ft	{
 					return (NULL);
 			}
 
-			map_node*
-			locateBound( map_node* root, const key_type& key, bool (*isBound)(map_node*, const key_type&) ) const	{
+			node_type*
+			locateBound( node_type* root, const key_type& key, bool (*isBound)(node_type*, const key_type&) ) const	{
 
 				if (root == _head && isBound(_dumbNode->left, key) == true)
 					return (_dumbNode->left);
 				else if (root == _head && isBound(_dumbNode->right, key) == false)
 					return (NULL);
 
-				map_node* candidate = root;
-				map_node* bestCandidate = NULL;
+				node_type* candidate = root;
+				node_type* bestCandidate = NULL;
 				while (candidate != NULL)	{
 					if (isBound(candidate, key) == true)	{
 						bestCandidate = candidate;
@@ -590,8 +591,8 @@ namespace ft	{
 				return (bestCandidate);
 			}
 
-			map_node*
-			locateNode( map_node* root, const key_type& key ) const	{
+			node_type*
+			locateNode( node_type* root, const key_type& key ) const	{
 
 				if (root != NULL)	{
 					if (_comp(key, root->item.first) == true)
@@ -606,7 +607,7 @@ namespace ft	{
 			}
 
 			static bool
-			isLowerBoundNode( map_node* node, const key_type& key ) {
+			isLowerBoundNode( node_type* node, const key_type& key ) {
 
 			typename ft::map<Key, T, Compare> tmpObj;
 			typename ft::map<Key, T, Compare>::key_compare cmpFunc = tmpObj.key_comp();
@@ -617,14 +618,14 @@ namespace ft	{
 			}
 
 			static bool
-			isUpperBoundNode( map_node* node, const key_type& key ) {
+			isUpperBoundNode( node_type* node, const key_type& key ) {
 				typename ft::map<Key, T, Compare> tmpObj;
 				typename ft::map<Key, T, Compare>::key_compare cmpFunc = tmpObj.key_comp();
 				return (node != NULL && cmpFunc(key, node->item.first) == true);
 			}
 
 			void
-			btree_update_dumbNode( map_node* node )	{
+			btree_update_dumbNode( node_type* node )	{
 				if (_dumbNode == NULL)
 					btree_init_dumbNode();
 				if (node == getFarLeft(_head))
@@ -646,15 +647,15 @@ namespace ft	{
 
 				if (_dumbNode == NULL)	{
 					_dumbNode = _allocNode.allocate(1);
-					_allocNode.construct(_dumbNode, map_node(value_type()));
+					_allocNode.construct(_dumbNode, node_type(value_type()));
 				}
 			}
 
-			map_node*
-			btree_create_node(map_node* parent, key_type k, mapped_type val)	{
+			node_type*
+			btree_create_node(node_type* parent, key_type k, mapped_type val)	{
 
-				map_node*	newNode = _allocNode.allocate(1);
-				_allocNode.construct(newNode, map_node(value_type(k ,val)));
+				node_type*	newNode = _allocNode.allocate(1);
+				_allocNode.construct(newNode, node_type(value_type(k ,val)));
 				newNode->parent = parent;
 				return (newNode);
 			}
@@ -667,10 +668,10 @@ namespace ft	{
 				*/
 
 			ft::pair<iterator, bool>
-			btree_insert_data(map_node* parent, map_node **root, value_type pairSrc)	{
+			btree_insert_data(node_type* parent, node_type **root, value_type pairSrc)	{
 
 				if (*root != NULL)	{
-					map_node* tree = *root;
+					node_type* tree = *root;
 					if (_comp(pairSrc.first, tree->item.first) == true)
 						return (btree_insert_data(tree, &tree->left, pairSrc));
 					else if (isEqualKey(pairSrc.first, tree->item.first) == false)
@@ -686,70 +687,8 @@ namespace ft	{
 				}
 			}
 
-			void
-			btree_apply_item_prefix(map_node *root, void (*applyf)(value_type*))	{
-
-				if (root == NULL)
-					return;
-				applyf(root->item);
-				btree_apply_item_prefix(root->left, applyf);
-				btree_apply_item_prefix(root->right, applyf);
-			}
-
-
-			void
-			btree_apply_item_infix(map_node *root, void (*applyf)(value_type*))	{
-
-				if (root == NULL)
-					return;
-				btree_apply_item_prefix(root->left, applyf);
-				applyf(root->item);
-				btree_apply_item_prefix(root->right, applyf);
-			}
-
-			void
-			btree_apply_item_suffix(map_node *root, void (*applyf)(value_type*))	{
-
-				if (root == NULL)
-					return;
-				btree_apply_item_prefix(root->left, applyf);
-				btree_apply_item_prefix(root->right, applyf);
-				applyf(root->item);
-			}
-
-			void
-			btree_apply_node_prefix(map_node *root, void (*applyf)(map_node *))	{
-
-				if (root == NULL)
-					return;
-				applyf(root);
-				btree_apply_node_prefix(root->left, applyf);
-				btree_apply_node_prefix(root->right, applyf);
-			}
-
-			void
-			btree_apply_node_infix(map_node *root, void (*applyf)(map_node *))	{
-
-				if (root == NULL)
-					return;
-				btree_apply_node_prefix(root->left, applyf);
-				applyf(root);
-				btree_apply_node_prefix(root->right, applyf);
-			}
-
-			void
-			btree_apply_node_suffix(map_node *root, void (*applyf)(map_node *))	{
-
-				if (root == NULL)
-					return;
-				btree_apply_node_prefix(root->left, applyf);
-				btree_apply_node_prefix(root->right, applyf);
-				applyf(root);
-			}
-
-
-			map_node*
-			btree_search_key(map_node* root, const key_type& targetKey)	{
+			node_type*
+			btree_search_key(node_type* root, const key_type& targetKey)	{
 
 				if (root != NULL)	{
 					if (_comp(targetKey, root->item.first) == true)
@@ -760,16 +699,16 @@ namespace ft	{
 				return (root);
 			}
 
-			static map_node*
-			getFarLeft( map_node* cursor )  {
+			static node_type*
+			getFarLeft( node_type* cursor )  {
 
 				while (cursor != NULL && cursor->left != NULL)
 					cursor = cursor->left;
 				return (cursor);
 			}
 
-			static map_node*
-			getFarRight( map_node* cursor )  {
+			static node_type*
+			getFarRight( node_type* cursor )  {
 
 				while (cursor != NULL && cursor->right != NULL)
 					cursor = cursor->right;
@@ -777,7 +716,7 @@ namespace ft	{
 			}
 
 			static bool
-			isLeaf(map_node* node)  {
+			isLeaf(node_type* node)  {
 				return (node->left == NULL && node->right == NULL);
 			}
 
@@ -789,7 +728,6 @@ namespace ft	{
 				&& cmpFunc(newKey, existingKey) == false);
 			}
 
-
 			size_t
 			incSize( size_t inc = 1 ) { _size += inc; return(_size); }
 
@@ -797,7 +735,7 @@ namespace ft	{
 			decSize( size_t inc = 1 ) { _size -= inc; return(_size); }
 
 			void
-			freeNode( map_node* node)	{
+			freeNode( node_type* node)	{
 				if (node != NULL)	{
 					_allocNode.destroy(node);
 					_allocNode.deallocate(node, 1);
@@ -805,7 +743,7 @@ namespace ft	{
 			}
 
 			void
-			freeAllNodes( map_node* root )	{
+			freeAllNodes( node_type* root )	{
 
 				if (root == NULL)
 					return;

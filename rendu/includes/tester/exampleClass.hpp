@@ -11,14 +11,22 @@ class exampleClass	{
 
 		std::string a;
 		int			b;
+
 		exampleClass( void ) : a("HelloWorld"), b(42)	{
 
 			if (DEBUG_MODE >=3) std::cout << "Ctor exampleClass.." << std::endl;
 		};
+
 		exampleClass( int i ) : a("HelloWorld"), b(i)	{
 
 			if (DEBUG_MODE >=3) std::cout << "Ctor exampleClass.." << std::endl;
 		};
+
+		exampleClass( const exampleClass& src ) : a(src.a), b(src.b)	{
+
+			if (DEBUG_MODE >=3) std::cout << "Ctor exampleClass.." << std::endl;
+		};
+
 		~exampleClass( void ) {
 			if (DEBUG_MODE >=3) std::cout << "Dtor exampleClass.." << std::endl;
 		};

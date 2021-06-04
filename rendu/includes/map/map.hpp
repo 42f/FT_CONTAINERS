@@ -1,6 +1,8 @@
+
 #ifndef MAP_HPP
 # define MAP_HPP
 
+# include "../utils/ft_algo.hpp"
 # include "../utils/ft_pair.hpp"
 # include "map_iterator.hpp"
 
@@ -128,6 +130,8 @@ namespace ft	{
 																		_comp(comp)				{
 				if (DEBUG_MODE == 1)
 					std::cout << "CONSTRUCTOR --> DEFAULT explicit " << __func__ << std::endl;
+
+				btree_init_dumbNode();
 			}
 
 
@@ -178,7 +182,7 @@ namespace ft	{
 
 			protected:
 				node_type*				_head;
-				node_type*				_dumbNode;
+				node_type*				_dumbNode; // allow to point to element after last.
 				size_type				_size;
 				allocator_type		 	_allocNode;
 				Compare	const			_comp;
@@ -258,30 +262,26 @@ namespace ft	{
 
 			iterator
 			begin( void ) 			{
-				if (_dumbNode != NULL)
+				if (empty() == false && _dumbNode != NULL)
 					return (iterator(_dumbNode->left, _dumbNode, _comp));
-				return (iterator());
+				return (iterator(_dumbNode, _dumbNode, _comp));
 			}
 
 			const_iterator
 			begin( void ) const		{
-				if (_dumbNode != NULL)
+				if (empty() == false && _dumbNode != NULL)
 					return (const_iterator(_dumbNode->left, _dumbNode, _comp));
-				return (const_iterator());
+				return (const_iterator(_dumbNode, _dumbNode, _comp));
 			}
 
 			iterator
 			end( void ) 	 		{
-				if (_dumbNode != NULL)
-					return (iterator(_dumbNode, _dumbNode, _comp));
-				return (iterator());
+				return (iterator(_dumbNode, _dumbNode, _comp));
 			}
 
 			const_iterator
 			end( void ) const 		{
-				if (_dumbNode != NULL)
-					return (const_iterator(_dumbNode, _dumbNode, _comp));
-				return (const_iterator());
+				return (const_iterator(_dumbNode, _dumbNode, _comp));
 			}
 
 			reverse_iterator		rbegin( void ) 			{	return reverse_iterator(end()); }
@@ -457,7 +457,7 @@ namespace ft	{
 					return 0;
 				else	{
 					erase(iterator(target, _dumbNode, _comp));
-					return (1);
+					return 1;
 				}
 			}
 
@@ -498,6 +498,7 @@ namespace ft	{
 			operator= (const map& src)	{
 
 				if (this->_head != src._head)	{
+
 					clear();
 
 					if (src.empty() == false)	{
@@ -625,21 +626,17 @@ namespace ft	{
 			}
 
 			void
-			btree_update_dumbNode( node_type* node )	{
-				if (_dumbNode == NULL)
-					btree_init_dumbNode();
-				if (node == getFarLeft(_head))
-					_dumbNode->left = node;
-				if (node == getFarRight(_head))
-					_dumbNode->right = node;
-			}
-
-			void
 			btree_update_dumbNode( void )	{
 				if (_dumbNode == NULL)
 					btree_init_dumbNode();
-				_dumbNode->left = getFarLeft(_head);
-				_dumbNode->right = getFarRight(_head);
+				if (empty() == true)	{
+					_dumbNode->left = _head;
+					_dumbNode->right = _head;
+				}
+				else	{
+					_dumbNode->left = getFarLeft(_head);
+					_dumbNode->right = getFarRight(_head);
+				}
 			}
 
 			void
@@ -648,6 +645,8 @@ namespace ft	{
 				if (_dumbNode == NULL)	{
 					_dumbNode = _allocNode.allocate(1);
 					_allocNode.construct(_dumbNode, node_type(value_type()));
+					_dumbNode->left = _head;
+					_dumbNode->right = _head;
 				}
 			}
 
@@ -681,8 +680,8 @@ namespace ft	{
 				}
 				else	{
 					*root = btree_create_node(parent, pairSrc.first, pairSrc.second);
-					btree_update_dumbNode(*root);
 					incSize();
+					btree_update_dumbNode();
 					return (ft::pair<iterator, bool>(iterator(*root, _dumbNode, _comp), true));
 				}
 			}
@@ -771,6 +770,62 @@ namespace ft	{
 
 			x.swap(y);
 		};
+
+		template< class Key, class T, class Compare, class Alloc >
+		bool operator==( const map<Key,T,Compare,Alloc>& lhs,
+						const map<Key,T,Compare,Alloc>& rhs )	{
+
+			if (lhs.size() != rhs.size())
+				return false;
+
+			typename ft::map<Key,T,Compare,Alloc>::const_iterator lhs_it = lhs.begin();
+			typename ft::map<Key,T,Compare,Alloc>::const_iterator rhs_it = rhs.begin();
+
+			for (;lhs_it != lhs.end() && rhs_it != rhs.end(); lhs_it++, rhs_it++)	{
+				if (lhs_it->first != rhs_it->first || lhs_it->second != rhs_it->second)
+					return false;
+			}
+			if (lhs_it != lhs.end() || rhs_it != rhs.end())
+				return false;
+			return true;
+
+		}
+
+		template< class Key, class T, class Compare, class Alloc >
+		bool operator!=( const map<Key,T,Compare,Alloc>& lhs,
+						const map<Key,T,Compare,Alloc>& rhs )	{
+			return !(lhs == rhs);
+		}
+
+		template< class Key, class T, class Compare, class Alloc >
+		bool operator<( const map<Key,T,Compare,Alloc>& lhs,
+						const map<Key,T,Compare,Alloc>& rhs )	{
+
+			return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+		}
+
+		template< class Key, class T, class Compare, class Alloc >
+		bool operator>=( const map<Key,T,Compare,Alloc>& lhs,
+						const map<Key,T,Compare,Alloc>& rhs )	{
+
+			return !(lhs < rhs);
+		}
+
+		template< class Key, class T, class Compare, class Alloc >
+		bool operator<=( const map<Key,T,Compare,Alloc>& lhs,
+						const map<Key,T,Compare,Alloc>& rhs )	{
+			return (lhs < rhs || lhs == rhs);
+		}
+
+		template< class Key, class T, class Compare, class Alloc >
+		bool operator>( const map<Key,T,Compare,Alloc>& lhs,
+						const map<Key,T,Compare,Alloc>& rhs )	{
+
+			return !(lhs <= rhs);
+
+		}
+
+
 
 } // -------------------------------------------------------------- ft namespace
 

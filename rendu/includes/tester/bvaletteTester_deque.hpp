@@ -16,8 +16,6 @@ putDeque( ft::deque<T> const & vct, int errorPos = -1 )	{
 	std::cout << PRINT_TITLE << "[ FT::deque ]" << RESET_COLOR << std::endl;
 	std::cout << PRINT_TITLE << "[ size of deque ]" << RESET_COLOR << " -> ";
 	std::cout << vct.size() << std::endl;
-	std::cout << PRINT_TITLE << "[ size capacity deque ]" << RESET_COLOR << " -> ";
-	std::cout << vct.capacity() << std::endl;
 	typename ft::deque<T>::const_iterator it = vct.begin();
 	typename ft::deque<T>::const_iterator ite = vct.end();
 
@@ -140,9 +138,9 @@ bool print, std::string message = "" )	{
 	}
 
 	if (print == true && success == true)
-		std::cout << TESTOK_TITLE << "[ TEST PASSED: no diff ] deque size: ft(" << ft_vct.size() << ") std(--) / capacity: ft(" << ft_vct.capacity() << ") std(--)" << RESET_COLOR << "\t  \342\234\205" << std::endl;
+		std::cout << TESTOK_TITLE << "[ TEST PASSED: no diff ] deque size: ft(" << ft_vct.size() << ") std( " << std_vct.size() << ")" << RESET_COLOR << "\t  \342\234\205" << std::endl;
 	else if (success == true)
-		std::cout << "[ TEST PASSED: no diff ] deque size: ft(" << ft_vct.size() << ") std(" << std_vct.size() << ") / capacity: ft(" << ft_vct.capacity() << ") std(--) \t \342\234\205" << std::endl;
+		std::cout << "[ TEST PASSED: no diff ] deque size: ft(" << ft_vct.size() << ") std( " << std_vct.size() << ")" << RESET_COLOR << "\t  \342\234\205" << std::endl;
 	else
 		std::cout << ERROR_TITLE << "TEST FAILED !" << RESET_COLOR << std::endl;
 }

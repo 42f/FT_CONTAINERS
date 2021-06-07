@@ -5,6 +5,8 @@
 #include <vector>
 #include <deque>
 #include <map>
+#include <stack>
+#include <queue>
 
 #include <math.h>
 #include <unistd.h>

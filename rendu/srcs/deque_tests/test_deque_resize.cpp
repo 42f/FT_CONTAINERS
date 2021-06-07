@@ -56,7 +56,6 @@ test_deque_resize( void )	{
 		testResize<int>(ft_c0, std_c0, 4, 42);
 		testResize<int>(ft_c0, std_c0, 4);
 		testResize<int>(ft_c0, std_c0, 1000000);
-		testResize<int>(ft_c0, std_c0, ft_c0.capacity() + 1);
 		testResize<int>(ft_c0, std_c0, 0);
 
 		{
@@ -73,7 +72,6 @@ test_deque_resize( void )	{
 			testResize<exampleClass>(ft_c0, std_c0, 4, 42);
 			testResize<exampleClass>(ft_c0, std_c0, 4);
 			testResize<exampleClass>(ft_c0, std_c0, 1000000);
-			testResize<exampleClass>(ft_c0, std_c0, ft_c0.capacity() + 1);
 			testResize<exampleClass>(ft_c0, std_c0, 0);
 		}
 

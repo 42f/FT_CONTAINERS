@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 10:43:21 by bvalette          #+#    #+#             */
-/*   Updated: 2021/06/07 17:26:20 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/06/07 18:18:18 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ main_tester_deque( void )	{
 		test_deque_reverseIterator();
 		test_deque_capacities();
 		test_deque_resize();
-		test_deque_push_pop();
 		test_deque_at_operatorBrackets();
 		test_deque_element_access();
 		test_deque_member_swap();
 		test_deque_nonmember_swap();
 		test_deque_relational_operators();
 		test_deque_operatorEqual();
+		test_deque_push_pop();
 
 	/*
 	*/

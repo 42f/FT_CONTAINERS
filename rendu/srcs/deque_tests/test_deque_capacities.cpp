@@ -46,9 +46,6 @@ test_deque_capacities( void )	{
 		std::cout << "Size of std : " << std.size() << std::endl;
 		std::cout << "Size of ft  : " << ft.size() << std::endl;
 
-		// testBool(std.size() == ft.size(), __LINE__);
-		// testBool(std.capacity() >= std.size() && ft.capacity() >= ft.size(), __LINE__);
-
 		std::cout << "empty for std : " << std::boolalpha << std.empty() << std::endl;
 		std::cout << "empty for ft  : " << std::boolalpha << ft.empty() << std::endl;
 
@@ -64,19 +61,6 @@ test_deque_capacities( void )	{
 		testBool(std.max_size() == ft.max_size(), __LINE__);
 
 	}
-	// ------------ bool specialization not tested
-	// {
-	// 	size_t		testSize = 0;
-	// 	std::cout << SUBTITLE << "[ max_size for a deque of " << testSize << " elements ]" << RESET_COLOR << std::endl;
-	// 	std::deque<bool>	std(testSize);
-	// 	ft::deque<bool>		ft(testSize);
-	// 	std::cout << "Bool ft: " << ft.max_size() << std::endl;
-	// 	std::cout << "Bool std:" << std.max_size() << std::endl;
-	// 	testBool(std.max_size() == ft.max_size(), __LINE__);
-	// 	std::cout << "bool : max_size for std : " << std.max_size() << std::endl;
-	// 	std::cout << "bool : max_size for ft  : " << ft.max_size() << std::endl;
-
-	// }
 
 	std::cout << HEADER_TITLE << "[ Max Size with various types ]" << RESET_COLOR << std::endl;
 	test_max_size<short>();

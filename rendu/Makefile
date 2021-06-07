@@ -93,7 +93,7 @@ PROJECT_HEADER += ./map_iterator.hpp
 
 PROJECT_HEADER += ./deque.hpp
 
-# PROJECT_HEADER += ./stack.hpp
+PROJECT_HEADER += ./stack.hpp
 # PROJECT_HEADER += ./queue.hpp
 
 PROJECT_HEADER += ./ft_enable_if.hpp
@@ -171,26 +171,34 @@ SRCS += ./main_utils.cpp
 # SRCS += ./test_vector_element_access.cpp
 
 # ################################################################################
+# #-------- STACK  ###############################################################
+# ################################################################################
+
+SRCS += ./main_tester_stack.cpp
+
+SRCS += ./test_stack_general.cpp
+
+# ################################################################################
 # #-------- DEQUE  ###############################################################
 # ################################################################################
 
-SRCS += ./main_tester_deque.cpp
+# SRCS += ./main_tester_deque.cpp
 
-SRCS += ./test_deque_instantiation.cpp
-SRCS += ./test_deque_push_pop.cpp
-SRCS += ./test_deque_clear.cpp
-SRCS += ./test_deque_capacities.cpp
-SRCS += ./test_deque_insert_erase.cpp
-SRCS += ./test_deque_operatorEqual.cpp
-SRCS += ./test_deque_resize.cpp
-SRCS += ./test_deque_assign.cpp
-SRCS += ./test_deque_at_operatorBrackets.cpp
-SRCS += ./test_deque_member_swap.cpp
-SRCS += ./test_deque_nonmember_swap.cpp
-SRCS += ./test_deque_relational_operators.cpp
-SRCS += ./test_deque_iterator.cpp
-SRCS += ./test_deque_reverseIterator.cpp
-SRCS += ./test_deque_element_access.cpp
+# SRCS += ./test_deque_instantiation.cpp
+# SRCS += ./test_deque_push_pop.cpp
+# SRCS += ./test_deque_clear.cpp
+# SRCS += ./test_deque_capacities.cpp
+# SRCS += ./test_deque_insert_erase.cpp
+# SRCS += ./test_deque_operatorEqual.cpp
+# SRCS += ./test_deque_resize.cpp
+# SRCS += ./test_deque_assign.cpp
+# SRCS += ./test_deque_at_operatorBrackets.cpp
+# SRCS += ./test_deque_member_swap.cpp
+# SRCS += ./test_deque_nonmember_swap.cpp
+# SRCS += ./test_deque_relational_operators.cpp
+# SRCS += ./test_deque_iterator.cpp
+# SRCS += ./test_deque_reverseIterator.cpp
+# SRCS += ./test_deque_element_access.cpp
 
 # ################################################################################
 # #-------- MAP    ###############################################################
@@ -218,6 +226,8 @@ vpath %.cpp ./srcs
 vpath %.cpp ./srcs/list_tests
 vpath %.cpp ./srcs/vector_tests
 vpath %.cpp ./srcs/deque_tests
+vpath %.cpp ./srcs/stack_tests
+vpath %.cpp ./srcs/queue_tests
 vpath %.cpp ./srcs/map_tests
 
 vpath %.hpp ./includes

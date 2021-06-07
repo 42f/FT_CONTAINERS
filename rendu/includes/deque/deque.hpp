@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 08:48:54 by bvalette          #+#    #+#             */
-/*   Updated: 2021/06/07 17:45:29 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/06/07 21:29:15 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # define DEBUG_MODE 0
 #endif
 
+# include "../utils/ft_algo.hpp"
 # include "../utils/ft_is_integer.hpp"
 #include "../vector/vector_iterator.hpp"
 
@@ -236,24 +237,17 @@ namespace ft	{
 			const_reference
 			back( void ) const 		{ return (*(this->_tail - 1)); }
 
-			size_type
-			capacity( void ) const	{ return (this->_tailStorage - this->_headStorage); }
-
 			void
 			pop_back( void )		{ if (size() > 0) erase(--end()); }
 
 			void
 			push_back( value_type const & val)	{ insert(end(), val); }
 
-			/* --- Only Deque -- */
-
 			void
 			pop_front( void )		{ if (size() > 0) erase(begin()); }
 
 			void
 			push_front( value_type const & val)	{ insert(begin(), val); }
-
-			/* -----------------  */
 
 			void
 			clear( void )			{ erase(begin(), end()); }
@@ -293,32 +287,6 @@ namespace ft	{
 				constructObjects(this->_head + indexPos, n, val);
 				this->_tail += n;
 			}
-
-/** ----- to private */
-
-			private:
-
-			void
-			insertAtFront(size_t n, const value_type& val)	{
-
-				if (n > capacityBeforeHead())
-					doReserve(n * 2);
-				this->_head -= n;
-				constructObjects(this->_head, n, val);
-			}
-
-			void
-			insertAtBack(size_t n, const value_type& val)	{
-
-				if (n > capacityAfterTail())
-					doReserve(capacity() + (n * 2));
-				constructObjects(this->_tail, n, val);
-				this->_tail += n;
-			}
-
-			public:
-
-/* ------------------*/
 
 			reference
 			at (size_type n)	{
@@ -388,38 +356,13 @@ namespace ft	{
 				}
 			}
 
-/* --------- */
-
-	private:
-
-			iterator
-			eraseAtFront( void )	{
-
-				destroyObjects(&(*begin()), 1);
-				this->_head++;
-				return (begin());
-			}
-
-			iterator
-			eraseAll( void )	{
-
-				destroyObjects(&(*begin()), size());
-				this->_tail = this->_head;
-				return (end());
-			}
-
-	public:
-/* --------- */
-
 			void
 			resize (size_type n, value_type val = value_type())	{
 
-				if (n < size())	{
+				if (n < size())
 					erase(end() - (size() - n), end());
-				}
-				else if (n > size())	{
+				else if (n > size())
 					insert(end(), n - size(), val);
-				}
 			}
 
 			void
@@ -506,14 +449,47 @@ namespace ft	{
 		private:
 
 			size_type
+			capacity( void ) const	{ return (this->_tailStorage - this->_headStorage); }
+
+			iterator
+			eraseAtFront( void )	{
+
+				destroyObjects(&(*begin()), 1);
+				this->_head++;
+				return (begin());
+			}
+
+			iterator
+			eraseAll( void )	{
+
+				destroyObjects(&(*begin()), size());
+				this->_tail = this->_head;
+				return (end());
+			}
+
+			void
+			insertAtFront(size_t n, const value_type& val)	{
+
+				if (n > capacityBeforeHead())
+					doReserve(n * 2);
+				this->_head -= n;
+				constructObjects(this->_head, n, val);
+			}
+
+			void
+			insertAtBack(size_t n, const value_type& val)	{
+
+				if (n > capacityAfterTail())
+					doReserve(capacity() + (n * 2));
+				constructObjects(this->_tail, n, val);
+				this->_tail += n;
+			}
+
+			size_type
 			capacityBeforeHead( void ) const	{ return (this->_head - this->_headStorage); }
 
 			size_type
 			capacityAfterTail( void ) const		{ return (this->_tailStorage - this->_tail); }
-
-			/**
-			 * @brief Fill Constructor actual function
-			*/
 			template <class integer>
 			void
 			deque_constructor_dispatch (integer n, integer const & val,
@@ -621,7 +597,6 @@ namespace ft	{
 				iterator	oldHeadIt = begin();
 				iterator	oldTailIt = end();
 
-				std::cout << "BIGGER----------------------------------------------------------" << std::endl;
 				this->initStorage(n);
 				constructObjects(this->_head, oldHeadIt, oldTailIt);
 				this->_tail += oldTailIt - oldHeadIt;
@@ -721,7 +696,7 @@ namespace ft	{
 			return false;
 		if (lhs.front() != rhs.front() || lhs.back() != rhs.back())
 			return false;
-		return (std::equal(lhs.begin(), lhs.end(), rhs.begin()));
+		return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
 	};
 
 	template <class T, class Alloc>
@@ -733,8 +708,7 @@ namespace ft	{
 	bool
 	operator<  (const deque<T,Alloc>& lhs, const deque<T,Alloc>& rhs)	{
 
-		return (std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
-
+		return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
 	};
 
 	template <class T, class Alloc>
@@ -745,8 +719,7 @@ namespace ft	{
 	bool
 	operator>  (const deque<T,Alloc>& lhs, const deque<T,Alloc>& rhs)	{
 
-		return (std::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));
-
+		return (ft::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));
 	};
 
 	template <class T, class Alloc>

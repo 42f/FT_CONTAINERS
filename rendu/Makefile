@@ -91,6 +91,10 @@ PROJECT_HEADER += ./vector_iterator.hpp
 PROJECT_HEADER += ./map.hpp
 PROJECT_HEADER += ./map_iterator.hpp
 
+PROJECT_HEADER += ./deque.hpp
+# PROJECT_HEADER += ./stack.hpp
+# PROJECT_HEADER += ./queue.hpp
+
 PROJECT_HEADER += ./ft_enable_if.hpp
 PROJECT_HEADER += ./ft_is_integer.hpp
 PROJECT_HEADER += ./ft_pair.hpp
@@ -197,6 +201,11 @@ vpath %.hpp ./includes/tester
 vpath %.hpp ./includes/map
 vpath %.hpp ./includes/list
 vpath %.hpp ./includes/vector
+
+vpath %.hpp ./includes/deque
+vpath %.hpp ./includes/stack
+vpath %.hpp ./includes/queue
+
 vpath %.hpp ./includes/utils
 
 OBJS = $(patsubst %.cpp, $(OBJ_DIR)%.o, $(SRCS))

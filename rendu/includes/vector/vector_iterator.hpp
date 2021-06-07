@@ -6,12 +6,8 @@
 # include "../utils/ft_enable_if.hpp"
 
 # include <iostream>
-# include <memory>
 # include <cstddef>
-# include <string>
-# include <iterator>
 # include <limits>
-# include <algorithm>
 # include <stdexcept>
 
 #ifndef DEBUG_MODE
@@ -23,7 +19,6 @@ namespace ft	{
 	template< typename T, bool B>
 	class vector_iterator : public ft::iterator< ft::random_access_iterator_tag, T, B>
 	{
-		friend class vector_iterator<T, !B>;
 
 		private:
 

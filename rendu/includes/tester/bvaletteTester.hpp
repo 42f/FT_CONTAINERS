@@ -3,6 +3,7 @@
 
 #include <list>
 #include <vector>
+#include <deque>
 #include <map>
 
 #include <math.h>

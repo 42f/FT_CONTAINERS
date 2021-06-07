@@ -13,7 +13,7 @@ PCH_DIR = ./pchs_$(NAME)/
 
 CFLAGS += -Wall
 CFLAGS += -Wextra
-# CFLAGS += -g3
+CFLAGS += -g3
 CFLAGS += -fPIC
 
 ifeq ($(noassert), 1)
@@ -92,6 +92,7 @@ PROJECT_HEADER += ./map.hpp
 PROJECT_HEADER += ./map_iterator.hpp
 
 PROJECT_HEADER += ./deque.hpp
+
 # PROJECT_HEADER += ./stack.hpp
 # PROJECT_HEADER += ./queue.hpp
 
@@ -107,6 +108,7 @@ HEADER += ./bvaletteTester.hpp
 HEADER += ./bvaletteTester_defines.hpp
 HEADER += ./bvaletteTester_list.hpp
 HEADER += ./bvaletteTester_vector.hpp
+HEADER += ./bvaletteTester_deque.hpp
 HEADER += ./bvaletteTester_map.hpp
 HEADER += ./exampleClass.hpp
 HEADER += ./compClass.hpp
@@ -122,77 +124,100 @@ SRCS += ./main_utils.cpp
 #-------- LIST #################################################################
 ################################################################################
 
-SRCS += ./main_tester_list.cpp
+# SRCS += ./main_tester_list.cpp
 
-SRCS += ./test_list_instantiation.cpp
-SRCS += ./test_list_push_back_push_front_pop_back_pop_front.cpp
-SRCS += ./test_list_clear.cpp
-SRCS += ./test_list_capacities.cpp
-SRCS += ./test_list_insert_erase.cpp
-SRCS += ./test_list_operatorEqual.cpp
-SRCS += ./test_list_resize.cpp
-SRCS += ./test_list_assign.cpp
-SRCS += ./test_list_member_swap.cpp
-SRCS += ./test_list_nonmember_swap.cpp
-SRCS += ./test_list_relational_operators.cpp
-SRCS += ./test_list_splice.cpp
-SRCS += ./test_list_remove_if.cpp
-SRCS += ./test_list_remove.cpp
-SRCS += ./test_list_unique.cpp
-SRCS += ./test_list_merge.cpp
-SRCS += ./test_list_sort.cpp
-SRCS += ./test_list_iterator.cpp
-SRCS += ./test_list_reverseIterator.cpp
-SRCS += ./test_list_reverse.cpp
-SRCS += ./test_list_element_access.cpp
+# SRCS += ./test_list_instantiation.cpp
+# SRCS += ./test_list_push_back_push_front_pop_back_pop_front.cpp
+# SRCS += ./test_list_clear.cpp
+# SRCS += ./test_list_capacities.cpp
+# SRCS += ./test_list_insert_erase.cpp
+# SRCS += ./test_list_operatorEqual.cpp
+# SRCS += ./test_list_resize.cpp
+# SRCS += ./test_list_assign.cpp
+# SRCS += ./test_list_member_swap.cpp
+# SRCS += ./test_list_nonmember_swap.cpp
+# SRCS += ./test_list_relational_operators.cpp
+# SRCS += ./test_list_splice.cpp
+# SRCS += ./test_list_remove_if.cpp
+# SRCS += ./test_list_remove.cpp
+# SRCS += ./test_list_unique.cpp
+# SRCS += ./test_list_merge.cpp
+# SRCS += ./test_list_sort.cpp
+# SRCS += ./test_list_iterator.cpp
+# SRCS += ./test_list_reverseIterator.cpp
+# SRCS += ./test_list_reverse.cpp
+# SRCS += ./test_list_element_access.cpp
 
 # ################################################################################
 # #-------- VECTOR ###############################################################
 # ################################################################################
 
-SRCS += ./main_tester_vector.cpp
+# SRCS += ./main_tester_vector.cpp
 
-SRCS += ./test_vector_instantiation.cpp
-SRCS += ./test_vector_push_back_pop_back.cpp
-SRCS += ./test_vector_clear.cpp
-SRCS += ./test_vector_capacities.cpp
-SRCS += ./test_vector_insert_erase.cpp
-SRCS += ./test_vector_operatorEqual.cpp
-SRCS += ./test_vector_resize.cpp
-SRCS += ./test_vector_assign.cpp
-SRCS += ./test_vector_at_operatorBrackets.cpp
-SRCS += ./test_vector_member_swap.cpp
-SRCS += ./test_vector_nonmember_swap.cpp
-SRCS += ./test_vector_relational_operators.cpp
-SRCS += ./test_vector_iterator.cpp
-SRCS += ./test_vector_reverseIterator.cpp
-SRCS += ./test_vector_element_access.cpp
+# SRCS += ./test_vector_instantiation.cpp
+# SRCS += ./test_vector_push_back_pop_back.cpp
+# SRCS += ./test_vector_clear.cpp
+# SRCS += ./test_vector_capacities.cpp
+# SRCS += ./test_vector_insert_erase.cpp
+# SRCS += ./test_vector_operatorEqual.cpp
+# SRCS += ./test_vector_resize.cpp
+# SRCS += ./test_vector_assign.cpp
+# SRCS += ./test_vector_at_operatorBrackets.cpp
+# SRCS += ./test_vector_member_swap.cpp
+# SRCS += ./test_vector_nonmember_swap.cpp
+# SRCS += ./test_vector_relational_operators.cpp
+# SRCS += ./test_vector_iterator.cpp
+# SRCS += ./test_vector_reverseIterator.cpp
+# SRCS += ./test_vector_element_access.cpp
+
+# ################################################################################
+# #-------- DEQUE  ###############################################################
+# ################################################################################
+
+SRCS += ./main_tester_deque.cpp
+
+SRCS += ./test_deque_instantiation.cpp
+SRCS += ./test_deque_push_pop.cpp
+SRCS += ./test_deque_clear.cpp
+SRCS += ./test_deque_capacities.cpp
+SRCS += ./test_deque_insert_erase.cpp
+SRCS += ./test_deque_operatorEqual.cpp
+SRCS += ./test_deque_resize.cpp
+SRCS += ./test_deque_assign.cpp
+SRCS += ./test_deque_at_operatorBrackets.cpp
+SRCS += ./test_deque_member_swap.cpp
+SRCS += ./test_deque_nonmember_swap.cpp
+SRCS += ./test_deque_relational_operators.cpp
+SRCS += ./test_deque_iterator.cpp
+SRCS += ./test_deque_reverseIterator.cpp
+SRCS += ./test_deque_element_access.cpp
 
 # ################################################################################
 # #-------- MAP    ###############################################################
 # ################################################################################
 
-SRCS += ./main_tester_map.cpp
+# SRCS += ./main_tester_map.cpp
 
-SRCS += ./test_map_instantiation.cpp
-SRCS += ./test_map_insert_erase.cpp
-SRCS += ./test_map_capacities.cpp
-SRCS += ./test_map_iterator.cpp
-SRCS += ./test_map_at_operatorBrackets.cpp
-SRCS += ./test_map_swap.cpp
-SRCS += ./test_map_clear.cpp
-SRCS += ./test_key_compare_value_compare.cpp
-SRCS += ./test_map_operatorEqual.cpp
-SRCS += ./test_map_find.cpp
-SRCS += ./test_map_count.cpp
-SRCS += ./test_map_lower_bound.cpp
-SRCS += ./test_map_upper_bound.cpp
-SRCS += ./test_map_equal_range.cpp
-SRCS += ./test_map_reverseIterator.cpp
+# SRCS += ./test_map_instantiation.cpp
+# SRCS += ./test_map_insert_erase.cpp
+# SRCS += ./test_map_capacities.cpp
+# SRCS += ./test_map_iterator.cpp
+# SRCS += ./test_map_at_operatorBrackets.cpp
+# SRCS += ./test_map_swap.cpp
+# SRCS += ./test_map_clear.cpp
+# SRCS += ./test_key_compare_value_compare.cpp
+# SRCS += ./test_map_operatorEqual.cpp
+# SRCS += ./test_map_find.cpp
+# SRCS += ./test_map_count.cpp
+# SRCS += ./test_map_lower_bound.cpp
+# SRCS += ./test_map_upper_bound.cpp
+# SRCS += ./test_map_equal_range.cpp
+# SRCS += ./test_map_reverseIterator.cpp
 
 vpath %.cpp ./srcs
 vpath %.cpp ./srcs/list_tests
 vpath %.cpp ./srcs/vector_tests
+vpath %.cpp ./srcs/deque_tests
 vpath %.cpp ./srcs/map_tests
 
 vpath %.hpp ./includes
@@ -201,7 +226,6 @@ vpath %.hpp ./includes/tester
 vpath %.hpp ./includes/map
 vpath %.hpp ./includes/list
 vpath %.hpp ./includes/vector
-
 vpath %.hpp ./includes/deque
 vpath %.hpp ./includes/stack
 vpath %.hpp ./includes/queue

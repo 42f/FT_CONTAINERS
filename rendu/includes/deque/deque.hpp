@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 08:48:54 by bvalette          #+#    #+#             */
-/*   Updated: 2021/06/07 09:38:05 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/06/07 17:45:29 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,35 +17,36 @@
 # define DEBUG_MODE 0
 #endif
 
-#include "./deque_iterator.hpp"
+# include "../utils/ft_is_integer.hpp"
+#include "../vector/vector_iterator.hpp"
 
 namespace ft	{
 
 		template< typename T, typename T_alloc>
-		class dequeu_base	{
+		class deque_base	{
 
 		public:
 
 			typedef T_alloc								allocator_type;
 			typedef typename T_alloc::pointer			pointer;
 
-			deque_base( void ) : _head(NULL), _tail(NULL), _tailStorage(NULL), _alloc(allocator_type()) {
+			deque_base( void ) : _headStorage(NULL), _head(NULL), _tail(NULL), _tailStorage(NULL), _alloc(allocator_type()) {
 
 				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> default " << __func__ << std::endl;
 			}
 
-			deque_base( allocator_type const & userAlloc ) : _head(NULL), _tail(NULL), _tailStorage(NULL), _alloc(userAlloc) {
+			deque_base( allocator_type const & userAlloc ) : _headStorage(NULL), _head(NULL), _tail(NULL), _tailStorage(NULL), _alloc(userAlloc) {
 
 				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> defaut with _alloc " << __func__ << std::endl;
 			}
 
-			deque_base( size_t n ) : _head(NULL), _tail(NULL), _tailStorage(NULL), _alloc(allocator_type()) {
+			deque_base( size_t n ) : _headStorage(NULL), _head(NULL), _tail(NULL), _tailStorage(NULL), _alloc(allocator_type()) {
 
 				initStorage(n + (n>>1));
 				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> fill " << __func__ << std::endl;
 			}
 
-			deque_base( size_t n, allocator_type const & userAlloc ) : _head(NULL), _tail(NULL), _tailStorage(NULL), _alloc(userAlloc) {
+			deque_base( size_t n, allocator_type const & userAlloc ) : _headStorage(NULL), _head(NULL), _tail(NULL), _tailStorage(NULL), _alloc(userAlloc) {
 
 				initStorage(n + (n>>1));
 				if (DEBUG_MODE >= 2) std::cout << "CONSTRUCTOR --> fill with _alloc " << __func__ << std::endl;
@@ -57,8 +58,8 @@ namespace ft	{
 				if (DEBUG_MODE >= 2) std::cout << "DESTRUCTOR --> " << __func__ << std::endl;
 			}
 
-			pointer			_head;
 			pointer			_headStorage;
+			pointer			_head;
 			pointer			_tail;
 			pointer			_tailStorage;
 			allocator_type	_alloc;
@@ -74,7 +75,8 @@ namespace ft	{
 					this->_tail = this->_head = this->_headStorage + n;
 					this->_tailStorage = this->_headStorage + initSize;
 					if (DEBUG_MODE >= 2) {
-						std::cout << __func__ << std::endl;
+						std::cout << __func__ << "with n = " << n << std::endl;
+						std::cout << "Infos: _headStorage (" <<_headStorage << ") _head (" <<_head << "), _tail(" <<_tail << "), _tailStorage(" <<_tailStorage << ")" << std::endl;
 						for (size_t i = 0; _head + i != _tailStorage; ++i)	{
 							std::cout << "[" << i << "] uninitialized ";
 							std::cout << " @ " << _head + i << std::endl;
@@ -87,14 +89,14 @@ namespace ft	{
 
 			void
 			deleteStorage( void )	{
-				this->_alloc.deallocate(_headStorage, _tailStorage - _headStorage);
 				if (DEBUG_MODE >= 2) std::cout << __func__ << std::endl;
+				this->_alloc.deallocate(_headStorage, _tailStorage - _headStorage);
 			}
 
 		}; // ----------------- ClassDeque_base
 
-	template < class T, class Alloc = std::allocator<T> >
-	class deque	{
+	template < class T, class Allocator = std::allocator<T> >
+	class deque	: protected deque_base<T, Allocator> {
 
 /******************************************************************************.
 .******************************************************************************.
@@ -119,8 +121,8 @@ namespace ft	{
 			typedef typename Allocator::pointer				pointer;
 			typedef typename Allocator::const_pointer		const_pointer;
 
-			typedef typename ft::deque_iterator<T, false>	iterator;
-			typedef typename ft::deque_iterator<T, true>	const_iterator;
+			typedef typename ft::vector_iterator<T, false>	iterator;
+			typedef typename ft::vector_iterator<T, true>	const_iterator;
 
             typedef typename ft::reverse_iterator<iterator> reverse_iterator;
             typedef typename ft::reverse_iterator<const_iterator>  const_reverse_iterator;
@@ -278,23 +280,18 @@ namespace ft	{
 
 				if (position == begin())
 					return insertAtFront(n, val);
+				else if (position == end())
+					return insertAtBack(n, val);
 
 				difference_type indexPos = position - begin();
 
-				if (size() + n >= capacity())	{
-					doReserve(capacity() + n + (capacity()>>1));
-				}
+				if (size() + n >= capacityAfterTail())
+					doReserve(capacity() + (n * 2) + (capacity()>>1));
 
-				if (empty()	== false && static_cast<size_type>(indexPos) < size()) {
-					memMoveRight(begin() + indexPos, end(), n);
-					destroyObjects(this->_head + indexPos, size() - indexPos);
-					this->_tail += n;
-					constructObjects(this->_head + indexPos, n, val);
-				}
-				else {
-					constructObjects(this->_tail, n, val);
-					this->_tail += n;
-				}
+				memMoveRight(begin() + indexPos, end(), n);
+				destroyObjects(this->_head + indexPos, size() - indexPos);
+				constructObjects(this->_head + indexPos, n, val);
+				this->_tail += n;
 			}
 
 /** ----- to private */
@@ -305,9 +302,18 @@ namespace ft	{
 			insertAtFront(size_t n, const value_type& val)	{
 
 				if (n > capacityBeforeHead())
-					doReserveAtFront();
-				_head -= n;
-				constructObjects(_head, n, val);
+					doReserve(n * 2);
+				this->_head -= n;
+				constructObjects(this->_head, n, val);
+			}
+
+			void
+			insertAtBack(size_t n, const value_type& val)	{
+
+				if (n > capacityAfterTail())
+					doReserve(capacity() + (n * 2));
+				constructObjects(this->_tail, n, val);
+				this->_tail += n;
 			}
 
 			public:
@@ -350,42 +356,60 @@ namespace ft	{
 			iterator
 			erase (iterator position)	{
 
-				destroyObjects(&(*position), 1);
-				memMoveLeft(position + 1, end(), 1);
-				this->_tail -= 1;
-				return position;
+				if (position == begin())
+					return eraseAtFront();
+				else	{
+					destroyObjects(&(*position), 1);
+					memMoveLeft(position + 1, end(), 1);
+					this->_tail -= 1;
+					return position;
+				}
 			}
 
 			iterator
 			erase (iterator first, iterator last)	{
 
-				size_type			offset = first - begin();
-				difference_type		len = last - first;
-				destroyObjects(&(*first), len);
-				memMoveLeft(last, end(), len);
-				this->_tail -= len;
-				return begin() + offset;
+				if (first == begin() && last == end())
+					return eraseAll();
+				else if (first == begin())	{
+					for (; first != last; ++first)
+						eraseAtFront();
+					return (last + 1);
+				}
+				else	{
+					size_type			offset = first - begin();
+					difference_type		len = last - first;
+
+					destroyObjects(&(*first), len);
+					memMoveLeft(last, end(), len);
+					this->_tail -= len;
+
+					return begin() + offset;
+				}
 			}
 
-			const_iterator
-			erase (iterator position)	const {
+/* --------- */
 
-				destroyObjects(&(*position), 1);
-				memMoveLeft(position + 1, end(), 1);
-				this->_tail -= 1;
-				return position;
+	private:
+
+			iterator
+			eraseAtFront( void )	{
+
+				destroyObjects(&(*begin()), 1);
+				this->_head++;
+				return (begin());
 			}
 
-			const_iterator
-			erase (iterator first, iterator last)	const {
+			iterator
+			eraseAll( void )	{
 
-				size_type			offset = first - begin();
-				difference_type		len = last - first;
-				destroyObjects(&(*first), len);
-				memMoveLeft(last, end(), len);
-				this->_tail -= len;
-				return begin() + offset;
+				destroyObjects(&(*begin()), size());
+				this->_tail = this->_head;
+				return (end());
 			}
+
+	public:
+/* --------- */
 
 			void
 			resize (size_type n, value_type val = value_type())	{
@@ -401,14 +425,17 @@ namespace ft	{
 			void
 			swap (deque& src)	{
 
+				pointer 	headStorageTmp = src._headStorage;
 				pointer 	headTmp = src._head;
 				pointer 	tailTmp = src._tail;
 				pointer		tailStorageTmp = src._tailStorage;
 
+				src._headStorage = this->_headStorage;
 				src._head = this->_head;
 				src._tail = this->_tail;
 				src._tailStorage = this->_tailStorage;
 
+				this->_headStorage = headStorageTmp;
 				this->_head = headTmp;
 				this->_tail = tailTmp;
 				this->_tailStorage = tailStorageTmp;
@@ -449,21 +476,6 @@ namespace ft	{
 			}
 
 		public:
-
-			/**
-			 * @brief Reserve: Requests that the deque capacity be at
-			 * least enough to contain n elements.
-			*/
-			void
-			reserve (size_type n) {
-
-				if (n > max_size())	{
-					throw std::length_error("ft::deque::reserve called with n > max_size");
-				}
-				else	{
-					doReserve(n);
-				}
-			}
 
 			deque&
 			operator= (const deque& x)	{
@@ -546,31 +558,14 @@ namespace ft	{
 			insert_dispatch(iterator position, InputIterator first,
 			InputIterator last, ft::__false_type)	{
 
-				if (capacity() == 0)	{
-					this->initStorage();
-					position = begin();
-				}
-
-				difference_type indexPos = position - begin();
+				difference_type offset = position - begin();
 				size_type	rangeSize = 0;
 				for (InputIterator cursor = first; cursor != last; cursor++)
 					rangeSize++;
-				if (size() + rangeSize >= capacity())	{
-					doReserve(capacity() + rangeSize + (capacity()>>1));
-				}
-
-				if (begin() + indexPos != end())	{
-					if (size() > 1)	{
-						memMoveRight(begin() + indexPos, end(), rangeSize);
-					}
-					destroyObjects(this->_head + indexPos, size() - indexPos);
-					this->_tail += rangeSize;
-					constructObjects(this->_head + indexPos, first, last);
-				}
-				else {
-					constructObjects(this->_head + indexPos, first, last);
-					this->_tail += rangeSize;
-				}
+				insert(position, rangeSize, value_type());
+				position = begin() + offset;
+				for (difference_type n = 0; first != last; ++first, n++)
+					position[n] = *first;
 			}
 
 			/**
@@ -609,30 +604,27 @@ namespace ft	{
 			void
 			doReserve (size_type n) {
 
-				if (n > this->capacity())	{
-					pointer		oldHead = this->_head;
-					size_type	oldSize = this->size();
-					size_type	oldCapacity = this->capacity();
+				pointer		oldHead = this->_head;
+				pointer		oldHeadStorage = this->_headStorage;
+				size_type	oldSize = this->size();
+				size_type	oldCapacity = this->capacity();
 
-					reallocateBigger(n);
+				reallocateBigger(n);
 
-					destroyObjects(oldHead, oldSize);
-					this->_alloc.deallocate(oldHead, oldCapacity);
-				}
+				destroyObjects(oldHead, oldSize);
+				this->_alloc.deallocate(oldHeadStorage, oldCapacity);
 			}
 
 			void
 			reallocateBigger(size_type n)	{
 
-				if (n > this->capacity())	{
+				iterator	oldHeadIt = begin();
+				iterator	oldTailIt = end();
 
-					iterator	oldHeadIt = begin();
-					iterator	oldTailIt = end();
-
-					this->initStorage(n);
-					constructObjects(this->_head, oldHeadIt, oldTailIt);
-					this->_tail += oldTailIt - oldHeadIt;
-				}
+				std::cout << "BIGGER----------------------------------------------------------" << std::endl;
+				this->initStorage(n);
+				constructObjects(this->_head, oldHeadIt, oldTailIt);
+				this->_tail += oldTailIt - oldHeadIt;
 			}
 
 			template<typename InputIterator>
@@ -760,10 +752,6 @@ namespace ft	{
 	template <class T, class Alloc>
 	bool
 	operator>= (const deque<T,Alloc>& lhs, const deque<T,Alloc>& rhs)	{ return(!(lhs < rhs)); };
-
-
-	}; //------------------deque class
-
 
 } //-----------------namespace ft
 

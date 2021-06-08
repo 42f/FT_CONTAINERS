@@ -1,7 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_is_integer.hpp                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/08 15:51:25 by bvalette          #+#    #+#             */
+/*   Updated: 2021/06/08 15:51:26 by bvalette         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FT_IS_INTEGER_HPP
 # define FT_IS_INTEGER_HPP
-
-# include <iostream>
 
 #ifndef DEBUG_MODE
 # define DEBUG_MODE 0

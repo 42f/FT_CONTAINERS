@@ -1,7 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_enable_if.hpp                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/08 15:51:05 by bvalette          #+#    #+#             */
+/*   Updated: 2021/06/08 15:51:14 by bvalette         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FT_ENABLE_IF_HPP
 # define FT_ENABLE_IF_HPP
-
-# include <iostream>
 
 #ifndef DEBUG_MODE
 # define DEBUG_MODE 0

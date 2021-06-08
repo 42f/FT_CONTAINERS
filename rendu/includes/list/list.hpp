@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   list.hpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/08 15:47:50 by bvalette          #+#    #+#             */
+/*   Updated: 2021/06/08 15:47:51 by bvalette         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef LIST_HPP
 # define LIST_HPP
 
@@ -8,12 +20,8 @@
 # include "../utils/ft_algo.hpp"
 
 # include <iostream>
-# include <memory>
 # include <cstddef>
-# include <string>
-# include <iterator>
 # include <limits>
-# include <algorithm>
 
 #ifndef DEBUG_MODE
 # define DEBUG_MODE 0
@@ -309,8 +317,6 @@ namespace ft	{
 			void
 			splice (iterator position, list& x, iterator first, iterator last)	{
 
-				// for(iterator it = begin(); it != end(); it++)
-				// 	std::cout << "node -> " << *it << " @ " << it.getPtr() << std::endl;
 				if (first != last && x.size() > 0)	{
 
 					difference_type sizeSplice = 0;
@@ -330,9 +336,6 @@ namespace ft	{
 							x._head = x._tail;
 					}
 				}
-				// std::cout << "========= node -> " << *(begin()) << " @ " << (begin()).getPtr() << std::endl;
-				// for(iterator it = begin(); it != end(); it++)
-				// 	std::cout << "node -> " << *it << " @ " << it.getPtr() << std::endl;
 			}
 
 			void remove (const value_type& val)	{
@@ -428,14 +431,18 @@ namespace ft	{
 				this->splice(this->begin(), tmpList);
 			}
 
-		protected:
+			allocator_type
+			get_allocator() const	{
+				return allocator_type();
+			}
+
+		private:
 
 			node *			_head;
 			node *			_tail;
 			size_type		_size;
 			allocator_type	_alloc;
 
-		private:
 
 			void	incSize( size_type n = 1 )	{ _size += n; }
 			void	decSize( size_type n = 1 )	{ _size -= n; }
@@ -551,11 +558,6 @@ namespace ft	{
 					throw std::exception();
 				}
 				return newNode;
-			}
-
-			allocator_type
-			get_allocator() const	{
-				return allocator_type();
 			}
 
 		}; // ----------------- Class list

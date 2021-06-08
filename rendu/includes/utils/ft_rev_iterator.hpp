@@ -1,7 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_rev_iterator.hpp                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/08 15:52:44 by bvalette          #+#    #+#             */
+/*   Updated: 2021/06/08 15:52:55 by bvalette         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef REV_ITERATOR_HPP
 # define REV_ITERATOR_HPP
-
-# include <iostream>
 
 #ifndef DEBUG_MODE
 # define DEBUG_MODE 0

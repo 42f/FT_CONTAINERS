@@ -13,7 +13,7 @@ PCH_DIR = ./pchs_$(NAME)/
 
 CFLAGS += -Wall
 CFLAGS += -Wextra
-CFLAGS += -g3
+# CFLAGS += -g3
 CFLAGS += -fPIC
 
 ifeq ($(noassert), 1)

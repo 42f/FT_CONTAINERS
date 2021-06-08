@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:23:24 by bvalette          #+#    #+#             */
-/*   Updated: 2021/06/08 14:53:52 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/06/08 15:40:52 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,17 @@
 # include "./tester/bvaletteTester_stack.hpp"
 # include "./tester/bvaletteTester_queue.hpp"
 
+# include "./queue/queue.hpp"
+# include "./map/map.hpp"
+# include "./vector/vector.hpp"
+# include "./list/list.hpp"
+# include "./stack/stack.hpp"
+# include "./deque/deque.hpp"
+
 int main ( void )	{
 
 	try {
+
 		main_tester_vector();
 		main_tester_list();
 		main_tester_map();

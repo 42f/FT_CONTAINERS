@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   list_iterator.hpp                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/08 15:46:54 by bvalette          #+#    #+#             */
+/*   Updated: 2021/06/08 15:46:55 by bvalette         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef LIST_ITERATOR_HPP
 # define LIST_ITERATOR_HPP
 
@@ -80,7 +92,6 @@ namespace ft	{
 
 			pointer		operator->()	const	{ return &(_ptr->data); }
 			reference	operator*()		const	{ return _ptr->data; }
-
 
 		private:
 

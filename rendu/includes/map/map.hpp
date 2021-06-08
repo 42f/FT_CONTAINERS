@@ -6,10 +6,9 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 08:28:02 by bvalette          #+#    #+#             */
-/*   Updated: 2021/06/07 08:28:05 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/06/08 15:48:04 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef MAP_HPP
 # define MAP_HPP

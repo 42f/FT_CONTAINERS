@@ -1,12 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_pair.hpp                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/08 15:52:24 by bvalette          #+#    #+#             */
+/*   Updated: 2021/06/08 15:52:39 by bvalette         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FT_PAIR_HPP
 # define FT_PAIR_HPP
-
-# include <iostream>
 
 #ifndef DEBUG_MODE
 # define DEBUG_MODE 0
 #endif
-
 
 namespace ft	{
 

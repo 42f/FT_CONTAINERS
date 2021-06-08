@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 09:56:19 by bvalette          #+#    #+#             */
-/*   Updated: 2021/06/04 14:46:38 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/06/08 16:00:00 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,7 @@ template <typename T>
 class bar {
 	public:
 
-		bar(void) {
-			std::cout <<  std::endl;
-			std::cout << "______________________________________________________" << std::endl;
-			std::cout <<  std::endl;
-		 };
+		bar(void) {};
 		~bar(void) {};
 
 	private:

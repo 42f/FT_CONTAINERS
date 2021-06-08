@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 08:48:54 by bvalette          #+#    #+#             */
-/*   Updated: 2021/06/07 21:29:15 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/06/08 11:17:45 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,16 +238,16 @@ namespace ft	{
 			back( void ) const 		{ return (*(this->_tail - 1)); }
 
 			void
-			pop_back( void )		{ if (size() > 0) erase(--end()); }
+			pop_back( void )		{ if (size() > 0) eraseAtBack(); }
 
 			void
-			push_back( value_type const & val)	{ insert(end(), val); }
+			push_back( value_type const & val)	{ insertAtBack(1, val); }
 
 			void
-			pop_front( void )		{ if (size() > 0) erase(begin()); }
+			pop_front( void )		{ if (size() > 0) eraseAtFront(); }
 
 			void
-			push_front( value_type const & val)	{ insert(begin(), val); }
+			push_ront( value_type const & val)	{ insertAtFront(1, val); }
 
 			void
 			clear( void )			{ erase(begin(), end()); }
@@ -267,7 +267,7 @@ namespace ft	{
 			*/
 			void insert (iterator position, size_type n, const value_type& val)	{
 
-				if (capacity() == 0)	{
+				if (this->_head == NULL)	{
 					this->initStorage();
 					position = begin();
 				}
@@ -459,6 +459,13 @@ namespace ft	{
 				return (begin());
 			}
 
+			void
+			eraseAtBack( void )	{
+
+				destroyObjects(&(*end()), 1);
+				this->_tail--;
+			}
+
 			iterator
 			eraseAll( void )	{
 
@@ -480,7 +487,7 @@ namespace ft	{
 			insertAtBack(size_t n, const value_type& val)	{
 
 				if (n > capacityAfterTail())
-					doReserve(capacity() + (n * 2));
+					doReserve(capacity() + (n * 4));
 				constructObjects(this->_tail, n, val);
 				this->_tail += n;
 			}

@@ -230,10 +230,16 @@ namespace ft	{
 			capacity( void ) const	{ return (this->_tailStorage - this->_head); }
 
 			void
-			pop_back( void )		{ if (size() > 0) erase(--end()); }
-
+			pop_back( void )		{ if (size() > 0) eraseAtBack(); }
 			void
-			push_back (value_type const & val)	{ insert(end(), val); }
+			push_back (value_type const & val)	{ insertAtBack(1, val); }
+
+			// void
+			// pop_back( void )		{ if (size() > 0) erase(--end()); }
+
+			// void
+			// push_back (value_type const & val)	{ insert(end(), val); }
+
 
 			void
 			clear( void )			{ erase(begin(), end()); }
@@ -253,26 +259,23 @@ namespace ft	{
 			*/
 			void insert (iterator position, size_type n, const value_type& val)	{
 
-				if (capacity() == 0)	{
+				if (this->_head == NULL)	{
 					this->initStorage();
 					position = begin();
 				}
 
-				difference_type indexPos = position - begin();
-				if (size() + n >= capacity())	{
-					doReserve(capacity() + n + (capacity()>>1));
-				}
+				if (position == end())
+					return insertAtBack(n, val);
 
-				if (empty()	== false && static_cast<size_type>(indexPos) < size()) {
-					memMoveRight(begin() + indexPos, end(), n);
-					destroyObjects(this->_head + indexPos, size() - indexPos);
-					this->_tail += n;
-					constructObjects(this->_head + indexPos, n, val);
-				}
-				else {
-					constructObjects(this->_tail, n, val);
-					this->_tail += n;
-				}
+				difference_type indexPos = position - begin();
+
+				if (size() + n >= capacity())
+					doReserve(capacity() + (n * 2) + (capacity()>>1));
+
+				memMoveRight(begin() + indexPos, end(), n);
+				destroyObjects(this->_head + indexPos, size() - indexPos);
+				constructObjects(this->_head + indexPos, n, val);
+				this->_tail += n;
 			}
 
 			reference
@@ -453,6 +456,25 @@ namespace ft	{
 .******************************************************************************/
 
 		private:
+
+			void
+			eraseAtBack( void )	{
+
+				destroyObjects(&(*end()), 1);
+				this->_tail--;
+			}
+
+			void
+			insertAtBack(size_t n, const value_type& val)	{
+
+				if (size() + n > capacity())
+					doReserve(capacity() + (n * 4) + (capacity() * 2));
+				if (n == 1)
+					this->_alloc.construct(this->_tail, val);
+				else
+					constructObjects(this->_tail, n, val);
+				this->_tail += n;
+			}
 
 			/**
 			 * @brief Fill Constructor actual function

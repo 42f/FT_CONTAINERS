@@ -20,6 +20,8 @@ namespace ft	{
 	class vector_iterator : public ft::iterator< ft::random_access_iterator_tag, T, B>
 	{
 
+		friend class vector_iterator<T, !B>;
+
 		private:
 
             typedef T				base_type;
@@ -147,7 +149,7 @@ namespace ft	{
 
 		private:
 
-			base_pointer	getPtr( void )	const			{ return _ptr; }
+			base_pointer	getPtr( void )	const 	{ return _ptr; }
 
 			/**
 			 * @brief Pointer holding the address of the vector_iterator element.

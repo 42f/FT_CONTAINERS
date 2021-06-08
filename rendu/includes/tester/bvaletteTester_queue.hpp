@@ -1,7 +1,7 @@
-#ifndef BVALETTETESTER_STACK_HPP
-# define BVALETTETESTER_STACK_HPP
+#ifndef BVALETTETESTER_QUEUE_HPP
+# define BVALETTETESTER_QUEUE_HPP
 
-# include "../stack/stack.hpp"
+# include "../queue/queue.hpp"
 # include "./tester/bvaletteTester.hpp"
 
 
@@ -10,8 +10,8 @@
  **	===========================================================================+
 */
 
-int	main_tester_stack( void );
+int	main_tester_queue( void );
 
-int	test_stack_general( void );
+int	test_queue_general( void );
 
 #endif

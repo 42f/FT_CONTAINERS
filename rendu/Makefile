@@ -94,7 +94,7 @@ PROJECT_HEADER += ./map_iterator.hpp
 PROJECT_HEADER += ./deque.hpp
 
 PROJECT_HEADER += ./stack.hpp
-# PROJECT_HEADER += ./queue.hpp
+PROJECT_HEADER += ./queue.hpp
 
 PROJECT_HEADER += ./ft_enable_if.hpp
 PROJECT_HEADER += ./ft_is_integer.hpp
@@ -177,6 +177,14 @@ SRCS += ./main_utils.cpp
 SRCS += ./main_tester_stack.cpp
 
 SRCS += ./test_stack_general.cpp
+
+# ################################################################################
+# #-------- QUEUE  ###############################################################
+# ################################################################################
+
+SRCS += ./main_tester_queue.cpp
+
+SRCS += ./test_queue_general.cpp
 
 # ################################################################################
 # #-------- DEQUE  ###############################################################

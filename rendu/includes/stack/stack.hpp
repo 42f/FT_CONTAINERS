@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 08:28:25 by bvalette          #+#    #+#             */
-/*   Updated: 2021/06/08 11:36:17 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/06/08 11:57:57 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 #endif
 
 #include "../deque/deque.hpp"
-// #include "../vector/vector_iterator.hpp"
 
 namespace ft	{
 

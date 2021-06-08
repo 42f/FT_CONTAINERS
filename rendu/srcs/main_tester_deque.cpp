@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 10:43:21 by bvalette          #+#    #+#             */
-/*   Updated: 2021/06/08 14:02:44 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/06/08 17:12:56 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int
 main_tester_deque( void )	{
 
 	std::cout << std::endl << std::endl;
-	std::cout << MAIN_TITLE << " CONTAINER TESTER ============= " << __func__ << " ||||||| " << RESET_COLOR << std::endl;
+	std::cout << MAIN_TITLE << " CONTAINER TESTER ============= " << __func__ << RESET_COLOR << std::endl;
 
 	try {
 

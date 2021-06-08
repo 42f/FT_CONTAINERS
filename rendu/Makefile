@@ -258,6 +258,36 @@ all :
 	@echo
 	@echo
 
+vector : all
+	@echo
+	@echo "🎉 \033[32m Ready to test $@ !\033[0m ✅"
+	@./$(NAME) $@ | cat -n
+
+list : all
+	@echo
+	@echo "🎉 \033[32m Ready to test $@ !\033[0m ✅"
+	@./$(NAME) $@ | cat -n
+
+map : all
+	@echo
+	@echo "🎉 \033[32m Ready to test $@ !\033[0m ✅"
+	@./$(NAME) $@ | cat -n
+
+queue : all
+	@echo
+	@echo "🎉 \033[32m Ready to test $@ !\033[0m ✅"
+	@./$(NAME) $@ | cat -n
+
+stack : all
+	@echo
+	@echo "🎉 \033[32m Ready to test $@ !\033[0m ✅"
+	@./$(NAME) $@ | cat -n
+
+deque : all
+	@echo
+	@echo "🎉 \033[32m Ready to test $@ !\033[0m ✅"
+	@./$(NAME) $@ | cat -n
+
 $(OBJS): $(OBJ_DIR)%.o: %.cpp $(PROJECT_HEADER) $(HEADER)
 	$(CC) $(CFLAGS) $(OTHER_FLAGS) -c $<  -I $(INCLUDES) -o $@
 

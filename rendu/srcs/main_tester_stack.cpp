@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 10:43:21 by bvalette          #+#    #+#             */
-/*   Updated: 2021/06/07 21:00:34 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/06/08 14:02:34 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,8 @@ main_tester_stack( void )	{
 
 	try {
 
-	/*
-	*/
 		test_stack_general();
-	/*
 
-	*/
 		if (DEBUG_MODE == 0)
 		{
 			std::cout << SUBTITLE << "For :" << __func__ <<", ALL TESTS PASSED ~~~~~~> " << RESET_COLOR;

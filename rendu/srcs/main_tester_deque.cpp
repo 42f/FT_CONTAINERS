@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 10:43:21 by bvalette          #+#    #+#             */
-/*   Updated: 2021/06/07 18:18:18 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/06/08 14:02:44 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ main_tester_deque( void )	{
 
 	try {
 
-	/*
-	*/
 		test_deque_instantiation();
 		test_deque_insert_erase();
 		test_deque_clear();
@@ -38,8 +36,6 @@ main_tester_deque( void )	{
 		test_deque_operatorEqual();
 		test_deque_push_pop();
 
-	/*
-	*/
 		if (DEBUG_MODE == 0)
 		{
 			std::cout << SUBTITLE << "For :" << __func__ <<", ALL TESTS PASSED ~~~~~~> " << RESET_COLOR;

@@ -62,7 +62,8 @@ namespace ft	{
 			initStorage( size_t n = 1 )	{
 
 				if (n > 0)	{
-					this->_head = this->_alloc.allocate(n);
+					pointer tmp_mem_alloc = this->_alloc.allocate(n);
+					this->_head = tmp_mem_alloc;
 					this->_tail = this->_head;
 					this->_tailStorage = this->_head + n;
 					if (DEBUG_MODE >= 2) {
@@ -234,13 +235,6 @@ namespace ft	{
 			void
 			push_back (value_type const & val)	{ insertAtBack(1, val); }
 
-			// void
-			// pop_back( void )		{ if (size() > 0) erase(--end()); }
-
-			// void
-			// push_back (value_type const & val)	{ insert(end(), val); }
-
-
 			void
 			clear( void )			{ erase(begin(), end()); }
 
@@ -270,7 +264,7 @@ namespace ft	{
 				difference_type indexPos = position - begin();
 
 				if (size() + n >= capacity())
-					doReserve(capacity() + (n * 2) + (capacity()>>1));
+					reserve(capacity() + n);
 
 				memMoveRight(begin() + indexPos, end(), n);
 				destroyObjects(this->_head + indexPos, size() - indexPos);
@@ -421,11 +415,15 @@ namespace ft	{
 			void
 			reserve (size_type n) {
 
-				if (n > max_size())	{
-					throw std::length_error("ft::vector::reserve called with n > max_size");
-				}
-				else	{
-					doReserve(n);
+				if (n > this->capacity())	{
+					pointer		oldHead = this->_head;
+					size_type	oldSize = this->size();
+					size_type	oldCapacity = this->capacity();
+
+					reallocateBigger(n);
+
+					destroyObjects(oldHead, oldSize);
+					this->_alloc.deallocate(oldHead, oldCapacity);
 				}
 			}
 
@@ -468,7 +466,7 @@ namespace ft	{
 			insertAtBack(size_t n, const value_type& val)	{
 
 				if (size() + n > capacity())
-					doReserve(capacity() + (n * 4) + (capacity() * 2));
+					reserve(capacity() + n);
 				if (n == 1)
 					this->_alloc.construct(this->_tail, val);
 				else
@@ -533,7 +531,7 @@ namespace ft	{
 				for (InputIterator cursor = first; cursor != last; cursor++)
 					rangeSize++;
 				if (size() + rangeSize >= capacity())	{
-					doReserve(capacity() + rangeSize + (capacity()>>1));
+					reserve(capacity() + rangeSize);
 				}
 
 				if (begin() + indexPos != end())	{
@@ -578,26 +576,6 @@ namespace ft	{
 				}
 			}
 
-
-
-			/**
-			 * @brief doReserve: No throw version of Reserve.
-			*/
-			void
-			doReserve (size_type n) {
-
-				if (n > this->capacity())	{
-					pointer		oldHead = this->_head;
-					size_type	oldSize = this->size();
-					size_type	oldCapacity = this->capacity();
-
-					reallocateBigger(n);
-
-					destroyObjects(oldHead, oldSize);
-					this->_alloc.deallocate(oldHead, oldCapacity);
-				}
-			}
-
 			void
 			reallocateBigger(size_type n)	{
 
@@ -622,7 +600,7 @@ namespace ft	{
 
 			void
 			constructObjects(pointer p, size_type n, value_type val = value_type())	{
-				for (size_t i = 0; i < n; i++)	{
+				for (size_type i = 0; i < n; i++)	{
 					this->_alloc.construct(p + i, val);
 				}
 			}
@@ -631,7 +609,7 @@ namespace ft	{
 			void
 			constructObject_dispatch (ft::__false_type, pointer p, InputIterator first, InputIterator last)	{
 
-				for (size_t i = 0; first != last; i++, first++)	{
+				for (size_type i = 0; first != last; i++, first++)	{
 					this->_alloc.construct(p + i, *first);
 				}
 			}
@@ -644,42 +622,9 @@ namespace ft	{
 					static_cast<size_type>(n), static_cast<value_type>(val));
 			}
 
-/*-----------------------------------*/
-
-			// template<typename InputIterator>
-			// void
-			// constructObjects(pointer p, InputIterator first, InputIterator last)	{
-
-			// 	if (std::numeric_limits<InputIterator>::is_integer == true)	{
-			// 		constructObjects(p, first, last);
-			// 	}
-			// 	else	{
-			// 		constructObjects_b(true, p, first, last);
-			// 	}
-			// }
-
-			// void
-			// constructObjects(pointer p, size_type n, value_type val = value_type())	{
-			// 	for (size_t i = 0; i < n; i++)	{
-			// 		this->_alloc.construct(p + i, val);
-			// 	}
-			// }
-
-			// template<typename InputIterator>
-			// void
-			// constructObjects_b(bool, pointer p, InputIterator first, InputIterator last)	{
-			// 	for (size_t i = 0; first != last; i++, first++)	{
-			// 		this->_alloc.construct(p + i, *first);
-			// 	}
-			// }
-
-
-
-
-
 			void
 			destroyObjects(pointer p, size_t n)	{
-				for (size_t i = 0; i < n; i++)	{
+				for (size_type i = 0; i < n; i++)	{
 					this->_alloc.destroy(p + i);
 				}
 			}

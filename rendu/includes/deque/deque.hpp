@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 08:48:54 by bvalette          #+#    #+#             */
-/*   Updated: 2021/06/08 11:49:48 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/06/08 14:52:57 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ namespace ft	{
 
 				size_t	initSize = n * 2;
 				if (n > 0)	{
-					this->_headStorage = this->_alloc.allocate(initSize);
+					pointer tmp_mem_alloc = this->_alloc.allocate(initSize);
+					this->_headStorage = tmp_mem_alloc;
 					this->_tail = this->_head = this->_headStorage + n;
 					this->_tailStorage = this->_headStorage + initSize;
 					if (DEBUG_MODE >= 2) {

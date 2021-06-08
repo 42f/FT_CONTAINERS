@@ -72,11 +72,11 @@ namespace ft	{
 				return tmp;
 			}
 
-			bool 		operator==(const list_iterator<T, true>& rhs) const 					{ return _ptr==rhs.getPtr(); }
-			bool 		operator!=(const list_iterator<T, true>& rhs) const 					{ return _ptr!=rhs.getPtr(); }
+			bool 		operator==(const list_iterator<T, true>& rhs) const 	{ return _ptr==rhs.getPtr(); }
+			bool 		operator!=(const list_iterator<T, true>& rhs) const 	{ return _ptr!=rhs.getPtr(); }
 
-			bool 		operator==(const list_iterator<T, false>& rhs) const 					{ return _ptr==rhs.getPtr(); }
-			bool 		operator!=(const list_iterator<T, false>& rhs) const 					{ return _ptr!=rhs.getPtr(); }
+			bool 		operator==(const list_iterator<T, false>& rhs) const 	{ return _ptr==rhs.getPtr(); }
+			bool 		operator!=(const list_iterator<T, false>& rhs) const 	{ return _ptr!=rhs.getPtr(); }
 
 			pointer		operator->()	const	{ return &(_ptr->data); }
 			reference	operator*()		const	{ return _ptr->data; }

@@ -142,7 +142,7 @@ namespace ft	{
 			bool		operator<=(const vector_iterator<T, false>& rhs) const	{ return _ptr <= rhs.getPtr(); }
 			bool		operator>=(const vector_iterator<T, false>& rhs) const	{ return _ptr >= rhs.getPtr(); }
 
-			reference	operator[]( size_type n )	const	{ return _ptr[n]; }
+			reference	operator[]( difference_type n )	const	{ return _ptr[n]; }
 
 			pointer		operator->()	const				{ return _ptr; }
 			reference	operator*()		const				{ return *_ptr; }

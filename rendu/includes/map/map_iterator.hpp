@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 08:28:11 by bvalette          #+#    #+#             */
-/*   Updated: 2021/06/07 08:28:12 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/06/08 15:21:49 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,10 +128,14 @@ namespace ft	{
 			}
 
 			bool
-			operator==(const map_iterator& rhs) const	{ return _ptr==rhs.getPtr(); }
+			operator==(const map_iterator<Key, T, Compare, map_node, true>& rhs) const	{ return _ptr==rhs.getPtr(); }
+			bool
+			operator==(const map_iterator<Key, T, Compare, map_node, false>& rhs) const	{ return _ptr==rhs.getPtr(); }
 
 			bool
-			operator!=(const map_iterator& rhs) const	{ return _ptr!=rhs.getPtr(); }
+			operator!=(const map_iterator<Key, T, Compare, map_node, true>& rhs) const	{ return _ptr!=rhs.getPtr(); }
+			bool
+			operator!=(const map_iterator<Key, T, Compare, map_node, false>& rhs) const	{ return _ptr!=rhs.getPtr(); }
 
 			pointer
 			operator->()	const		{ return (&_ptr->item); }

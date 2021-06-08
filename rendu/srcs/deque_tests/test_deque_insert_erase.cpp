@@ -12,7 +12,7 @@
 
 # include "./tester/bvaletteTester_deque.hpp"
 
-void
+static void
 testInsert ( void )	{
 	{
 		std::cout << HEADER_TITLE << "[ Instanciate deque of 4 strings ]" << RESET_COLOR << std::endl;
@@ -82,7 +82,8 @@ testInsert ( void )	{
 	}
 
 }
-void
+
+static void
 testInsert ( size_t n )	{
 	{
 		std::cout << HEADER_TITLE << "[ Instanciate deque of 4 strings ]" << RESET_COLOR << std::endl;
@@ -142,7 +143,8 @@ testInsert ( size_t n )	{
 	}
 
 }
-void
+
+static void
 testInsert ( ft::deque<std::string>::iterator ft_it,
 			ft::deque<std::string>::iterator ft_ite,
 			std::deque<std::string>::iterator std_it,
@@ -207,7 +209,7 @@ testInsert ( ft::deque<std::string>::iterator ft_it,
 
 }
 
-void
+static void
 testErase (void )	{
 		std::cout << TITLE << "[ Erase ]" << RESET_COLOR << std::endl;
 		size_t	testSize = 10;
@@ -268,7 +270,7 @@ testErase (void )	{
 		}
 }
 
-void
+static void
 testEraseRange(
 			ft::deque<std::string> & ft_c0,
 			std::deque<std::string> & std_c0,

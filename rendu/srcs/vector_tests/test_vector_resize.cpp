@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:51:42 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/31 11:17:17 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/06/08 14:49:46 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,13 +91,13 @@ test_vector_resize( void )	{
 		if (VALGRIND_MODE == true)
 			return 0 ;
 
-		size_t testResize = std_c0.max_size();
-		std::cout << SUBTITLE << "[ resize("<< testResize << ") Max size, will throw exception ]" << RESET_COLOR << std::endl;
+		std::cout << SUBTITLE << "[ STD: resize("<< std_c0.max_size() << ") Max size, will throw exception ]" << RESET_COLOR << std::endl;
+			try { std_c0.resize(std_c0.max_size()); }
+				catch ( std::exception & e) { std::cout << "STD GOT EXCEPTION RIGHT: " << e.what() << std::endl;}
+				catch ( std::bad_alloc & e) { std::cout << "STD GOT EXCEPTION RIGHT: " << e.what() << std::endl;}
 		try {
-			try { std_c0.resize(testResize); }
-				catch ( std::exception & e) {}
-				catch ( std::bad_alloc & e) {}
-			ft_c0.resize(testResize);
+			std::cout << SUBTITLE << "[ FT: resize("<< ft_c0.max_size() << ") Max size, will throw exception ]" << RESET_COLOR << std::endl;
+			ft_c0.resize(ft_c0.max_size());
 			testBool( false, __LINE__);
 		}
 		catch (  std::bad_alloc & e )	{

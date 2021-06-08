@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 20:58:15 by bvalette          #+#    #+#             */
-/*   Updated: 2021/06/08 11:29:54 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/06/08 11:36:57 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,14 @@ testStack( const T1& ft_c0, const T2& std_c0, int _line) {
 
 		if (std_c0.empty() == false)
 			testBool(ft_c0.top() == std_c0.top(), _line);
+}
+
+template<typename T1, typename T2>
+void
+test_top( T1& ft_c0, T2& std_c0)	{
+
+		if (std_c0.empty() == false)
+			testBool(ft_c0.top() == std_c0.top(), __LINE__);
 }
 
 template<typename T1, typename T2>
@@ -127,8 +135,6 @@ test_stack_general( void )	{
 		std::cout << SUBTITLE<< "operator>=" << RESET_COLOR << std::endl;
 		testBool(ft_c1 >= ft_c1 && std_c1 >= std_c1, __LINE__);
 	}
-
-
 	{
 		std::cout << HEADER_TITLE << "Push/Pop on a stack made of DEFAULT container" << RESET_COLOR << std::endl;
 		ft::stack<int> 		ft_c0;
@@ -146,6 +152,9 @@ test_stack_general( void )	{
 		ft::stack<int, ft::vector<int> > 		ft_c0(ft::vector<int>(10, 42));
 		std::stack<int, ft::vector<int> > 	std_c0(ft::vector<int>(10, 42));
 		test_push_pop(ft_c0, std_c0);
+
+		std::cout << HEADER_TITLE << "Top() with non const value" << RESET_COLOR << std::endl;
+		test_top(ft_c0, std_c0);
 	}
 
 	return (0);

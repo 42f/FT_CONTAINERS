@@ -460,7 +460,7 @@ namespace ft	{
 			void
 			eraseAtBack( void )	{
 
-				destroyObjects(&(*end()), 1);
+				destroyObjects(&(back()), 1);
 				this->_tail--;
 			}
 

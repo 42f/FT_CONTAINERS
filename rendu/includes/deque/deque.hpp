@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 08:48:54 by bvalette          #+#    #+#             */
-/*   Updated: 2021/06/08 11:17:45 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/06/08 11:49:48 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,7 +247,7 @@ namespace ft	{
 			pop_front( void )		{ if (size() > 0) eraseAtFront(); }
 
 			void
-			push_ront( value_type const & val)	{ insertAtFront(1, val); }
+			push_front( value_type const & val)	{ insertAtFront(1, val); }
 
 			void
 			clear( void )			{ erase(begin(), end()); }
@@ -454,7 +454,7 @@ namespace ft	{
 			iterator
 			eraseAtFront( void )	{
 
-				destroyObjects(&(*begin()), 1);
+				destroyObjects(&front(), 1);
 				this->_head++;
 				return (begin());
 			}
@@ -462,14 +462,14 @@ namespace ft	{
 			void
 			eraseAtBack( void )	{
 
-				destroyObjects(&(*end()), 1);
+				destroyObjects(&back(), 1);
 				this->_tail--;
 			}
 
 			iterator
 			eraseAll( void )	{
 
-				destroyObjects(&(*begin()), size());
+				destroyObjects(&front(), size());
 				this->_tail = this->_head;
 				return (end());
 			}
@@ -643,7 +643,7 @@ namespace ft	{
 
 			void
 			destroyObjects(pointer p, size_t n)	{
-				for (size_t i = 0; i < n; i++)	{
+				for (size_t i = 0; i < n; ++i)	{
 					this->_alloc.destroy(p + i);
 				}
 			}

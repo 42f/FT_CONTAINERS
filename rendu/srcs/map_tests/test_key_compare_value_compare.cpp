@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/20 14:46:24 by bvalette          #+#    #+#             */
-/*   Updated: 2021/05/31 16:52:40 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/06/09 17:09:26 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ void
 test_key_compare(ft::map<Key, T>& ft_c0, std::map<Key, T>& std_c0)	{
 
 	std::cout << TITLE << "~~~~~~~~~~~ " << __func__ << " ~~~~~~~~~~~" << RESET_COLOR << std::endl;
-	std::map<char,int>::key_compare std_cmp = std_c0.key_comp();
-	std::map<char,int>::key_compare ft_cmp = ft_c0.key_comp();
+	typename std::map<Key, T>::key_compare std_cmp = std_c0.key_comp();
+	typename std::map<Key, T>::key_compare ft_cmp = ft_c0.key_comp();
 
 	char std_highest = (--std_c0.end())->first;  	// key value of last element
 	char ft_highest = (--ft_c0.end())->first;    	// key value of last element

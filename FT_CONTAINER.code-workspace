@@ -79,7 +79,9 @@
 			"map": "cpp",
 			"clocale": "cpp",
 			"queue": "cpp",
-			"stack": "cpp"
+			"stack": "cpp",
+			"set": "cpp",
+			"iomanip": "cpp"
 		}
 	},
 	"launch": {

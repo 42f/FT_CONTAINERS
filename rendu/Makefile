@@ -91,6 +91,9 @@ PROJECT_HEADER += ./vector_iterator.hpp
 PROJECT_HEADER += ./map.hpp
 PROJECT_HEADER += ./map_iterator.hpp
 
+PROJECT_HEADER += ./set.hpp
+PROJECT_HEADER += ./set_iterator.hpp
+
 PROJECT_HEADER += ./deque.hpp
 
 PROJECT_HEADER += ./stack.hpp
@@ -110,6 +113,7 @@ HEADER += ./bvaletteTester_list.hpp
 HEADER += ./bvaletteTester_vector.hpp
 HEADER += ./bvaletteTester_deque.hpp
 HEADER += ./bvaletteTester_map.hpp
+HEADER += ./bvaletteTester_set.hpp
 HEADER += ./exampleClass.hpp
 HEADER += ./compClass.hpp
 
@@ -230,6 +234,27 @@ SRCS += ./test_map_upper_bound.cpp
 SRCS += ./test_map_equal_range.cpp
 SRCS += ./test_map_reverseIterator.cpp
 
+################################################################################
+#-------- SET    ###############################################################
+################################################################################
+
+SRCS += ./main_tester_set.cpp
+
+SRCS += ./test_set_instantiation.cpp
+SRCS += ./test_set_insert_erase.cpp
+SRCS += ./test_set_capacities.cpp
+SRCS += ./test_set_iterator.cpp
+SRCS += ./test_set_swap.cpp
+SRCS += ./test_set_clear.cpp
+SRCS += ./test_set_key_compare_value_compare.cpp
+SRCS += ./test_set_operatorEqual.cpp
+SRCS += ./test_set_find.cpp
+SRCS += ./test_set_count.cpp
+SRCS += ./test_set_lower_bound.cpp
+SRCS += ./test_set_upper_bound.cpp
+SRCS += ./test_set_equal_range.cpp
+SRCS += ./test_set_reverseIterator.cpp
+
 vpath %.cpp ./srcs
 vpath %.cpp ./srcs/list_tests
 vpath %.cpp ./srcs/vector_tests
@@ -237,16 +262,18 @@ vpath %.cpp ./srcs/deque_tests
 vpath %.cpp ./srcs/stack_tests
 vpath %.cpp ./srcs/queue_tests
 vpath %.cpp ./srcs/map_tests
+vpath %.cpp ./srcs/set_tests
 
 vpath %.hpp ./includes
 vpath %.hpp ./includes/tester
 
-vpath %.hpp ./includes/map
 vpath %.hpp ./includes/list
 vpath %.hpp ./includes/vector
 vpath %.hpp ./includes/deque
 vpath %.hpp ./includes/stack
 vpath %.hpp ./includes/queue
+vpath %.hpp ./includes/map
+vpath %.hpp ./includes/set
 
 vpath %.hpp ./includes/utils
 
@@ -269,6 +296,11 @@ list : all
 	@./$(NAME) $@ | cat -n
 
 map : all
+	@echo
+	@echo "🎉 \033[32m Ready to test $@ !\033[0m ✅"
+	@./$(NAME) $@ | cat -n
+
+set : all
 	@echo
 	@echo "🎉 \033[32m Ready to test $@ !\033[0m ✅"
 	@./$(NAME) $@ | cat -n

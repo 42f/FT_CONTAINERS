@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:23:24 by bvalette          #+#    #+#             */
-/*   Updated: 2021/06/08 17:16:33 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/06/09 11:27:31 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include "./tester/bvaletteTester_deque.hpp"
 # include "./tester/bvaletteTester_stack.hpp"
 # include "./tester/bvaletteTester_queue.hpp"
+# include "./tester/bvaletteTester_set.hpp"
 
 #include <iostream>
 #include <iomanip>
@@ -43,9 +44,10 @@ bool checkArgs(std::string av, const std::string *containers, size_t nb_containe
 
 int main ( int ac, char** av )	{
 
-	size_t const 	nb_tests = 6;
-	int				(*tester[6])() = {&main_tester_vector, &main_tester_list,
-		&main_tester_map, &main_tester_deque, &main_tester_stack, &main_tester_queue};
+	size_t const 	nb_tests = 7;
+	std::string const	containers[7] = {"vector", "list", "map", "set", "deque", "stack", "queue"};
+	int				(*tester[7])() = {&main_tester_vector, &main_tester_list,
+		&main_tester_map, &main_tester_set, &main_tester_deque, &main_tester_stack, &main_tester_queue};
 
 	try {
 
@@ -63,7 +65,6 @@ int main ( int ac, char** av )	{
 		}
 		else	{
 
-			std::string const	containers[6] = {"vector", "list", "map", "deque", "stack", "queue"};
 			if (ac > 2 || checkArgs(std::string(av[1]), containers, nb_tests) == false) {
 				std::cout << "This tester takes no argument to test every container, or one argument to test a specific container. " << std::endl;
 				std::cout << "Containers avaiblable: " << std::endl;

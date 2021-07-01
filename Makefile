@@ -14,7 +14,17 @@ PCH_DIR = ./pchs_$(NAME)/
 CFLAGS += -Wall
 CFLAGS += -Wextra
 # CFLAGS += -g3
-CFLAGS += -fPIC
+
+UNAME_S := $(shell uname -s)
+
+ifeq ($(UNAME_S),Linux)
+	CFLAGS += -fPIC
+endif
+
+ifeq ($(UNAME_S),Darwin)
+	CFLAGS += -Wno-self-assign-overloaded
+	CFLAGS += -Wno-deprecated-copy
+endif
 
 ifeq ($(noassert), 1)
 	CFLAGS += -DNDEBUG=1
@@ -321,10 +331,10 @@ deque : all
 	@./$(NAME) $@ | cat -n
 
 $(OBJS): $(OBJ_DIR)%.o: %.cpp $(PROJECT_HEADER) $(HEADER)
-	$(CC) $(CFLAGS) $(OTHER_FLAGS) -c $<  -I $(INCLUDES) -o $@
+	$(CC) -std=c++11 $(CFLAGS) $(OTHER_FLAGS) -c $<  -I $(INCLUDES) -o $@
 
 $(NAME): $(PCH_DIR) $(PCHS) $(OBJ_DIR) $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -I $(INCLUDES) -o $@
+	$(CC) -std=c++11 $(CFLAGS) $(OBJS) -I $(INCLUDES) -o $@
 	@echo "🎉 \033[32m$@ is ready !\033[0m ✅"
 
 $(PCHS): $(PCH_DIR)%.pch: %.hpp $(PROJECT_HEADER)

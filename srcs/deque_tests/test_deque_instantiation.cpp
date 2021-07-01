@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 09:50:31 by bvalette          #+#    #+#             */
-/*   Updated: 2021/06/07 17:41:49 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/07/01 12:10:35 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ test_deque_instantiation( void )	{
 					std::cout << ERROR_SOURCE << "SHOULD HAVE THROW A BAD ALLOC..." << RESET_COLOR << std::endl;
 					testBool(false, __LINE__);
 				}
-				catch(const std::bad_alloc& e)	{
+				catch(const std::exception& e)	{
 					std::cout << "Exception catched: " << e.what() << " -- ";
 					testBool(true);
 				}

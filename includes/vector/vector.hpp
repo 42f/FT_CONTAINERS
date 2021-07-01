@@ -6,13 +6,14 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/08 15:53:25 by bvalette          #+#    #+#             */
-/*   Updated: 2021/06/08 15:53:26 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/07/01 11:26:30 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
+# include "../utils/ft_algo.hpp"
 # include "../utils/ft_is_integer.hpp"
 # include "./vector_iterator.hpp"
 
@@ -696,7 +697,7 @@ namespace ft	{
 			return false;
 		if (lhs.front() != rhs.front() || lhs.back() != rhs.back())
 			return false;
-		return (std::equal(lhs.begin(), lhs.end(), rhs.begin()));
+		return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
 	};
 
 	template <class T, class Alloc>
@@ -708,7 +709,7 @@ namespace ft	{
 	bool
 	operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)	{
 
-		return (std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+		return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
 
 	};
 
@@ -720,7 +721,7 @@ namespace ft	{
 	bool
 	operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)	{
 
-		return (std::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));
+		return (ft::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));
 
 	};
 

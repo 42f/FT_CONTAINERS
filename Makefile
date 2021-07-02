@@ -9,5 +9,6 @@ all:
 fclean:
 	@$(RM) -rf ./tester/includes/your_headers_files/*
 	@true > tester/includes/your_headers.hpp  
+	$(MAKE) -C ./tester fclean
 
 .PHONY: all

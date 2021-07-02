@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 09:56:19 by bvalette          #+#    #+#             */
-/*   Updated: 2021/07/01 12:09:17 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/07/02 09:06:41 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,36 +103,36 @@ test_set_capacities( void )	{
 	std::cout << HEADER_TITLE << "[ Max Size with various types ]" << RESET_COLOR << std::endl;
 	int error_line = __LINE__;
 	try {
-		std::cout << "Test <bar<bool> >		: " ;			test_max_size<bar<bool> >();
-		std::cout << "Test <bar<double> >		: " ;			test_max_size<bar<double> >();
-		std::cout << "Test <int >		: " ;			test_max_size<int>();
-		std::cout << "Test <int >		: " ;			test_max_size<int>();
-		std::cout << "Test <bar<int> >		: " ;			test_max_size<bar<int> >();
-		std::cout << "Test <foo<bool> >		: " ;			test_max_size<foo<bool> >();
-		std::cout << "Test <foo<double> >		: " ;			test_max_size<foo<double> >();
-		std::cout << "Test <foo<int> >		: " ;			test_max_size<foo<int> >();
-		std::cout << "Test <double>		: " ;			test_max_size<long>();
-		std::cout << "Test <int>			: " ;			test_max_size<int>();
-		std::cout << "Test <float>		: " ;			test_max_size<float>();
-		std::cout << "Test <double>		: " ;			test_max_size<double>();
-		std::cout << "Test <std::string>		: " ;	test_max_size<std::string>();
-		std::cout << "Test <exampleClass>	: " ;		test_max_size<exampleClass>();
-		std::cout << "Test <int>		: " ;				test_max_size<int>();
-		std::cout << "Test <int>		: " ;				test_max_size<int>();
-		std::cout << "Test <int>		: " ;				test_max_size<int>();
-		std::cout << "Test <int>		: " ;				test_max_size<int>();
-		std::cout << "Test <int>		: " ;				test_max_size<int>();
-		std::cout << "Test <int>	: " ;				test_max_size<int>();
-		std::cout << "Test <int>	: " ;		test_max_size<int>();
-		std::cout << "Test <int>	: " ;		test_max_size<int>();
-		std::cout << "Test <bool>			: " ;				test_max_size<bool>();
-		std::cout << "Test <short>			: " ;				test_max_size<short>();
-		std::cout << "Test <char>			: " ;				test_max_size<char>();
-		std::cout << "Test <int>			: " ;				test_max_size<int>();
-		std::cout << "Test <float>			: " ;				test_max_size<float>();
-		std::cout << "Test <double>		: " ;				test_max_size<double>();
-		std::cout << "Test <std::string>	: " ;		test_max_size<std::string>();
-		std::cout << "Test <exampleClass>	: " ;		test_max_size<exampleClass>();
+		std::cout << "Test <bar<bool> >		: " ;			test_max_size<bar<bool> >();		error_line = __LINE__ + 1;
+		std::cout << "Test <bar<double> >		: " ;			test_max_size<bar<double> >();		error_line = __LINE__ + 1;
+		std::cout << "Test <int >		: " ;			test_max_size<int>();		error_line = __LINE__ + 1;
+		std::cout << "Test <int >		: " ;			test_max_size<int>();		error_line = __LINE__ + 1;
+		std::cout << "Test <bar<int> >		: " ;			test_max_size<bar<int> >();		error_line = __LINE__ + 1;
+		std::cout << "Test <foo<bool> >		: " ;			test_max_size<foo<bool> >();		error_line = __LINE__ + 1;
+		std::cout << "Test <foo<double> >		: " ;			test_max_size<foo<double> >();		error_line = __LINE__ + 1;
+		std::cout << "Test <foo<int> >		: " ;			test_max_size<foo<int> >();		error_line = __LINE__ + 1;
+		std::cout << "Test <double>		: " ;			test_max_size<long>();		error_line = __LINE__ + 1;
+		std::cout << "Test <int>			: " ;			test_max_size<int>();		error_line = __LINE__ + 1;
+		std::cout << "Test <float>		: " ;			test_max_size<float>();		error_line = __LINE__ + 1;
+		std::cout << "Test <double>		: " ;			test_max_size<double>();		error_line = __LINE__ + 1;
+		std::cout << "Test <std::string>		: " ;	test_max_size<std::string>();		error_line = __LINE__ + 1;
+		std::cout << "Test <exampleClass>	: " ;		test_max_size<exampleClass>();		error_line = __LINE__ + 1;
+		std::cout << "Test <int>		: " ;				test_max_size<int>();		error_line = __LINE__ + 1;
+		std::cout << "Test <int>		: " ;				test_max_size<int>();		error_line = __LINE__ + 1;
+		std::cout << "Test <int>		: " ;				test_max_size<int>();		error_line = __LINE__ + 1;
+		std::cout << "Test <int>		: " ;				test_max_size<int>();		error_line = __LINE__ + 1;
+		std::cout << "Test <int>		: " ;				test_max_size<int>();		error_line = __LINE__ + 1;
+		std::cout << "Test <int>	: " ;				test_max_size<int>();		error_line = __LINE__ + 1;
+		std::cout << "Test <int>	: " ;		test_max_size<int>();		error_line = __LINE__ + 1;
+		std::cout << "Test <int>	: " ;		test_max_size<int>();		error_line = __LINE__ + 1;
+		std::cout << "Test <bool>			: " ;				test_max_size<bool>();		error_line = __LINE__ + 1;
+		std::cout << "Test <short>			: " ;				test_max_size<short>();		error_line = __LINE__ + 1;
+		std::cout << "Test <char>			: " ;				test_max_size<char>();		error_line = __LINE__ + 1;
+		std::cout << "Test <int>			: " ;				test_max_size<int>();		error_line = __LINE__ + 1;
+		std::cout << "Test <float>			: " ;				test_max_size<float>();		error_line = __LINE__ + 1;
+		std::cout << "Test <double>		: " ;				test_max_size<double>();		error_line = __LINE__ + 1;
+		std::cout << "Test <std::string>	: " ;		test_max_size<std::string>();		error_line = __LINE__ + 1;
+		std::cout << "Test <exampleClass>	: " ;		test_max_size<exampleClass>();		error_line = __LINE__ + 1;
 	}
 	catch (std::exception &e)	{
 
@@ -142,7 +142,6 @@ test_set_capacities( void )	{
 	}
 
 
-	// attention thrown exception is commented in test block !
 	// -- requires node specialization
 	// std::cout << "Test <bool, short>			: ";			test_max_size<bool, bool>();
 	// std::cout << "Test <bool, bool>			: ";				test_max_size<bool, bool>();

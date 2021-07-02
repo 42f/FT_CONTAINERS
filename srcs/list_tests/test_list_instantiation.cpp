@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:01:26 by bvalette          #+#    #+#             */
-/*   Updated: 2021/06/08 15:59:07 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/07/02 09:05:09 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,16 +96,10 @@ test_list_instantiation( void )	{
 
 			ft_it++;
 			std_it++;
-			// std::cout << "std= " << *std_it << std::endl;
-			// std::cout << "ft = " << *ft_it << std::endl;
 			ft_it--;
 			std_it--;
-			// std::cout << "std= " << *std_it << std::endl;
-			// std::cout << "ft = " << *ft_it << std::endl;
 			ft_it--;
 			std_it--;
-			// std::cout << "std= " << *std_it << std::endl;
-			// std::cout << "ft = " << *ft_it << std::endl;
 			testBool(*ft_it == *std_it, __LINE__);
 
 				{
@@ -113,22 +107,14 @@ test_list_instantiation( void )	{
 					std::list<int>::reverse_iterator	std_it = stdl0.rbegin();
 					testList(ftl0, stdl0, NOPRINT);
 
-					// std::cout << "std= " << *std_it << std::endl;
-					// std::cout << "ft = " << *ft_it << std::endl;
 					ft_it--;
 					std_it--;
 					ft_it--;
 					std_it--;
-					// std::cout << "std= " << *std_it << std::endl;
-					// std::cout << "ft = " << *ft_it << std::endl;
 					ft_it++;
 					std_it++;
-					// std::cout << "std= " << *std_it << std::endl;
-					// std::cout << "ft = " << *ft_it << std::endl;
 					ft_it++;
 					std_it++;
-					// std::cout << "std= " << *std_it << std::endl;
-					// std::cout << "ft = " << *ft_it << std::endl;
 					testBool(*ft_it == *std_it, __LINE__);
 			}
 		}

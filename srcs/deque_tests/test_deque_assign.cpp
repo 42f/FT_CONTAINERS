@@ -42,7 +42,6 @@ test_deque_assign( void )	{
 		testDeque(ft_c0, std_c0, NOPRINT);
 
 		testAssign(ft_c0, std_c0, 5, 42);
-		// testAssign(ft_c0, std_c0, ft_c0.capacity() + 1, 99);
 		testAssign(ft_c0, std_c0, 1,100);
 		testAssign(ft_c0, std_c0, 100,1);
 		testAssign(ft_c0, std_c0, 0, 42);

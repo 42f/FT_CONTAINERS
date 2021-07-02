@@ -6,7 +6,7 @@
 /*   By: bvalette <bvalette@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 09:56:19 by bvalette          #+#    #+#             */
-/*   Updated: 2021/07/01 12:07:36 by bvalette         ###   ########.fr       */
+/*   Updated: 2021/07/02 09:05:39 by bvalette         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,6 @@ test_map_capacities( void )	{
 
 	}
 
-	// attention thrown exception is commented in test block !
 	// -- requires node specialization
 	// std::cout << "Test <bool, short>			: ";			test_max_size<bool, bool>();
 	// std::cout << "Test <bool, bool>			: ";				test_max_size<bool, bool>();

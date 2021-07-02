@@ -1,8 +1,13 @@
 
 all:
 	@git submodule update --init --recursive
-	@ln -s project_headers/* tester/includes/your_headers_files
-	@cp project_headers/your_headers.hpp tester/includes/
-	$(MAKE) f -C $(LIBDIR)
+	@$(RM) -rf tester/includes/your_headers_files/*
+	@cp -rf ./project_headers/* ./tester/includes/your_headers_files/
+	@cp ./project_headers/your_headers.hpp ./tester/includes/
+	$(MAKE) -C ./tester f
+
+fclean:
+	@$(RM) -rf ./tester/includes/your_headers_files/*
+	@true > tester/includes/your_headers.hpp  
 
 .PHONY: all

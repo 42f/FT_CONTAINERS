@@ -1,0 +1,3 @@
+[submodule "tester"]
+	path = tester
+	url = git@github.com:42f/FT_CONTAINERS_42_tester.git
